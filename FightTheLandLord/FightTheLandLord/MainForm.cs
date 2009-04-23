@@ -12,7 +12,8 @@ namespace FightTheLandLord
 {
     public partial class MainForm : Form
     {
-        private List<Poker> allPoker = new List<Poker>();
+        private List<Poker> allPoker;
+    
         public MainForm()
         {
             InitializeComponent();
