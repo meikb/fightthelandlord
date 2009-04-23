@@ -39,7 +39,6 @@ namespace FightTheLandLord
         /// </summary>
         public void sort()
         {
-            throw new System.NotImplementedException();
         }
 
         /// <summary>
