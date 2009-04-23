@@ -101,6 +101,7 @@ namespace FightTheLandLord
 #endif
             shuffle(); //洗牌
             deal(); //发牌
+            player1.sort(); //把牌从大到小排序
         }
 
         private void MainForm_Load(object sender, EventArgs e)
