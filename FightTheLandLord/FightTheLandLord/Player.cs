@@ -7,7 +7,7 @@ namespace FightTheLandLord
 {
     public class Player
     {
-        private List<Poker> _pokers;
+        private List<Poker> _pokers = new List<Poker>();
         private bool _isLandLord;
 
         public List<Poker> pokers
@@ -32,6 +32,7 @@ namespace FightTheLandLord
                 this._isLandLord = value;
             }
         }
+
 
         /// <summary>
         /// 把牌从大到小重新排序
