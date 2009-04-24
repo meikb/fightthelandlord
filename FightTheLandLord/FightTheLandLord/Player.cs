@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Collections;
 using System.Drawing;
 
 namespace FightTheLandLord
@@ -11,6 +10,7 @@ namespace FightTheLandLord
         private List<Poker> _pokers = new List<Poker>();
         private List<Poker> _newPokers = new List<Poker>();
         private List<int> _selectPokers = new List<int>();
+        private List<Poker> _leadPokers = new List<Poker>();
         private Color _backColor;
         private Graphics _g;
         private bool _isLandLord;
@@ -81,31 +81,25 @@ namespace FightTheLandLord
                 this._backColor = value;
             }
         }
+        public List<Poker> leadPokers
+        {
+            get
+            {
+                return this._leadPokers;
+            }
+            set
+            {
+                this._leadPokers = value;
+            }
+        }
 
 
         /// <summary>
         /// 把牌从大到小重新排序
         /// </summary>
-        public void sort()  //自写从大到小排序算法
+        public void sort()  //排序玩家的牌
         {
-            int pokerAmount = this.pokers.Count;
-            for (int j = 0; j < pokerAmount; j++) //循环17次
-            {
-                Poker bestBigPoker = null; //目前this.pokers里最大的牌
-                for (int i = 0; i < this.pokers.Count; i++)  //找出目前this.pokers里最大的牌存在bestBigPoker里面
-                {
-                    if (bestBigPoker == null)
-                    {
-                        bestBigPoker = this.pokers[i];
-                    }
-                    if (this.pokers[i].pokerNum > bestBigPoker.pokerNum)
-                    {
-                        bestBigPoker = this.pokers[i];
-                    }
-                }
-                this.pokers.Remove(bestBigPoker); //从this.pokers里删除最大的牌
-                this.newPokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
-            }
+            sort(this.pokers, this.newPokers); //调用sort另一个版本
 #if DEBUG
             Console.WriteLine("排序后玩家一的牌");
             foreach (Poker onePoker in this.newPokers)
@@ -115,12 +109,50 @@ namespace FightTheLandLord
 #endif
         }
 
-        /// <summary>
-        /// 获取扑克牌下标,检测是否符合游戏规则,如果符合则出牌,否则返回flase
-        /// </summary>
-        public bool lead(int[] inargs)
+        public static void sort(List<Poker> oldPokers,List<Poker> newPokers)  //从大到小排序算法
         {
-            throw new System.NotImplementedException();
+            int pokerAmount = oldPokers.Count;
+            for (int j = 0; j < pokerAmount; j++) //循环17次
+            {
+                Poker bestBigPoker = null; //目前this.pokers里最大的牌
+                for (int i = 0; i < oldPokers.Count; i++)  //找出目前this.pokers里最大的牌存在bestBigPoker里面
+                {
+                    if (bestBigPoker == null)
+                    {
+                        bestBigPoker = oldPokers[i];
+                    }
+                    if (oldPokers[i].pokerNum > bestBigPoker.pokerNum)
+                    {
+                        bestBigPoker = oldPokers[i];
+                    }
+                }
+                oldPokers.Remove(bestBigPoker); //从this.pokers里删除最大的牌
+                newPokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
+            }
+        }
+
+        /// <summary>
+        /// 检测是否符合游戏规则,如果符合则出牌,否则返回flase
+        /// </summary>
+        public bool lead()
+        {
+            foreach (int selectPoker in this.selectPokers)
+            {
+                this.leadPokers.Add(this.newPokers[selectPoker]);
+            }
+            if (Rules.IsRules(this.leadPokers))
+            {
+                foreach (int selectPoker in this.selectPokers)
+                {
+                    this.newPokers.Remove(this.newPokers[selectPoker]);
+                }
+                this.selectPokers.Clear();
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
