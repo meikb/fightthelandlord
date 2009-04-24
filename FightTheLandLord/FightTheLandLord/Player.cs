@@ -10,6 +10,8 @@ namespace FightTheLandLord
     {
         private List<Poker> _pokers = new List<Poker>();
         private List<Poker> _newPokers = new List<Poker>();
+        private List<int> _selectPokers = new List<int>();
+        private Color _backColor;
         private Graphics _g;
         private bool _isLandLord;
 
@@ -55,6 +57,28 @@ namespace FightTheLandLord
             set
             {
                 this._g = value;
+            }
+        }
+        public List<int> selectPokers
+        {
+            get
+            {
+                return this._selectPokers;
+            }
+            set
+            {
+                this._selectPokers = value;
+            }
+        }
+        public Color backColor
+        {
+            get
+            {
+                return this._backColor;
+            }
+            set
+            {
+                this._backColor = value;
             }
         }
 
@@ -104,14 +128,55 @@ namespace FightTheLandLord
         /// </summary>
         public void Paint()
         {
-            for (int i = 0; i < newPokers.Count; i++)
+            for (int i = 0; i < newPokers.Count; i++)  //循环绘制所有的牌
             {
                 int x = i * 40;
-                Rectangle rt = new Rectangle(x, 0, 50, 95);
-                g.FillRectangle(Brushes.White, rt);
-                g.DrawRectangle(Pens.Black, rt);
-                g.DrawString(this.newPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                if (this.IndexIsHave(i) == false)  //当当前的牌没有被选中时,绘制如下图案
+                {
+                    Rectangle rt = new Rectangle(x, 50, 50, 95); //没有选中的牌的X比选中的牌的X多50
+                    g.FillRectangle(Brushes.White, rt);
+                    g.DrawRectangle(Pens.Black, rt);
+                    g.DrawString(this.newPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 55);
+                }
+                else  //当当前的牌已经被选中时,绘制如下图案
+                {
+                    Rectangle rt = new Rectangle(x, 0, 50, 95);
+                    g.FillRectangle(Brushes.White, rt);
+                    g.DrawRectangle(Pens.Black, rt);
+                    g.DrawString(this.newPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                }
             }
+        }
+        /// <summary>
+        /// 传入一个整型显示出牌的选中效果
+        /// </summary>
+        public void Paint(int index)  //牌的位置从左到右依次用0-16表示,对应this.newPokers[0-16]
+        {
+            this.g.Clear(this.backColor);
+            bool IndexIsHave = this.IndexIsHave(index); //返回一个值确定当前点击的牌是否已经被选中
+            if (IndexIsHave) 
+            {
+                this.selectPokers.Remove(index);  //如果已经被选中则删除它
+            }
+            else
+            {
+                this.selectPokers.Add(index);  //如果没有被选中则添加它
+            }
+            this.Paint(); //绘制当前的牌
+        }
+
+        public bool IndexIsHave(int index)  //判断选中的牌中是否有传入的值
+        {
+            bool indexIsHave = false;
+            foreach (int selectPoker in this.selectPokers)
+            {
+                if (selectPoker == index)
+                {
+                    indexIsHave = true;
+                    break;
+                }
+            }
+            return indexIsHave;
         }
     }
 }

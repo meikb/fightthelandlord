@@ -30,11 +30,12 @@
         {
             this.btnStart = new System.Windows.Forms.Button();
             this.panelPlayer1 = new System.Windows.Forms.Panel();
+            this.btnLead = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // btnStart
             // 
-            this.btnStart.Location = new System.Drawing.Point(360, 516);
+            this.btnStart.Location = new System.Drawing.Point(360, 381);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
@@ -46,15 +47,28 @@
             // 
             this.panelPlayer1.Location = new System.Drawing.Point(12, 410);
             this.panelPlayer1.Name = "panelPlayer1";
-            this.panelPlayer1.Size = new System.Drawing.Size(768, 100);
+            this.panelPlayer1.Size = new System.Drawing.Size(768, 150);
             this.panelPlayer1.TabIndex = 1;
             this.panelPlayer1.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer1_Paint);
+            // 
+            // btnLead
+            // 
+            this.btnLead.Enabled = false;
+            this.btnLead.Location = new System.Drawing.Point(360, 352);
+            this.btnLead.Name = "btnLead";
+            this.btnLead.Size = new System.Drawing.Size(75, 23);
+            this.btnLead.TabIndex = 2;
+            this.btnLead.Text = "出牌";
+            this.btnLead.UseVisualStyleBackColor = true;
+            this.btnLead.Visible = false;
+            this.btnLead.Click += new System.EventHandler(this.btnLead_Click);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 573);
+            this.Controls.Add(this.btnLead);
             this.Controls.Add(this.panelPlayer1);
             this.Controls.Add(this.btnStart);
             this.ImeMode = System.Windows.Forms.ImeMode.On;
@@ -72,6 +86,7 @@
 
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Panel panelPlayer1;
+        private System.Windows.Forms.Button btnLead;
     }
 }
 
