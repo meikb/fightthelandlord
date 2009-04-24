@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Collections;
+using System.Drawing;
 
 namespace FightTheLandLord
 {
     public class Player
     {
         private List<Poker> _pokers = new List<Poker>();
-        public List<Poker> newPokers = new List<Poker>();
+        private List<Poker> _newPokers = new List<Poker>();
+        private Graphics _g;
         private bool _isLandLord;
 
         public List<Poker> pokers
@@ -33,6 +35,28 @@ namespace FightTheLandLord
                 this._isLandLord = value;
             }
         }
+        public List<Poker> newPokers
+        {
+            get
+            {
+                return this._newPokers;
+            }
+            set
+            {
+                this._newPokers = value;
+            }
+        }
+        public Graphics g
+        {
+            get
+            {
+                return this._g;
+            }
+            set
+            {
+                this._g = value;
+            }
+        }
 
 
         /// <summary>
@@ -40,7 +64,8 @@ namespace FightTheLandLord
         /// </summary>
         public void sort()  //自写从大到小排序算法
         {
-            for (int j = 0; j < 17; j++) //循环17次
+            int pokerAmount = this.pokers.Count;
+            for (int j = 0; j < pokerAmount; j++) //循环17次
             {
                 Poker bestBigPoker = null; //目前this.pokers里最大的牌
                 for (int i = 0; i < this.pokers.Count; i++)  //找出目前this.pokers里最大的牌存在bestBigPoker里面
@@ -61,7 +86,7 @@ namespace FightTheLandLord
             Console.WriteLine("排序后玩家一的牌");
             foreach (Poker onePoker in this.newPokers)
             {
-                Console.WriteLine(onePoker.pokerNum.ToString()+onePoker.pokerColor.ToString());
+                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
             }
 #endif
         }
@@ -75,11 +100,18 @@ namespace FightTheLandLord
         }
 
         /// <summary>
-        /// 把牌从大到小从左至右绘制到容器上
+        /// 把牌从左至右绘制到容器上
         /// </summary>
         public void Paint()
         {
-            throw new System.NotImplementedException();
+            for (int i = 0; i < newPokers.Count; i++)
+            {
+                int x = i * 40;
+                Rectangle rt = new Rectangle(x, 0, 50, 95);
+                g.FillRectangle(Brushes.White, rt);
+                g.DrawRectangle(Pens.Black, rt);
+                g.DrawString(this.newPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+            }
         }
     }
 }

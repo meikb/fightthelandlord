@@ -48,6 +48,7 @@
             this.panelPlayer1.Name = "panelPlayer1";
             this.panelPlayer1.Size = new System.Drawing.Size(768, 100);
             this.panelPlayer1.TabIndex = 1;
+            this.panelPlayer1.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer1_Paint);
             // 
             // MainForm
             // 

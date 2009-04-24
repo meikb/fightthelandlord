@@ -67,7 +67,7 @@ namespace FightTheLandLord
             }
 
 #if DEBUG
-            Console.WriteLine("以玩家一的牌");
+            Console.WriteLine("玩家一的牌");
             foreach (Poker onePoker in player1.pokers)
             {
                 Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
@@ -101,11 +101,18 @@ namespace FightTheLandLord
 #endif
             shuffle(); //洗牌
             deal(); //发牌
-            player1.sort(); //把牌从大到小排序
+            this.player1.sort(); //把牌从大到小排序
+            this.player1.g = this.panelPlayer1.CreateGraphics();
+            this.player1.Paint();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+        }
+
+        private void panelPlayer1_Paint(object sender, PaintEventArgs e)
+        {
+            this.player1.Paint();
         }
     }
 }
