@@ -148,7 +148,15 @@ namespace FightTheLandLord
 
         private void 创建游戏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Server.listener.Start();
+            Server server = new Server();
+            server.listener.Start();
+            server.Connection();
+        }
+
+        private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            JoinForm joinForm = new JoinForm();
+            joinForm.ShowDialog();
         }
     }
 }

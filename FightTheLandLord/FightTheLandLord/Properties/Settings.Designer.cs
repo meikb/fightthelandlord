@@ -23,21 +23,27 @@ namespace FightTheLandLord.Properties {
             }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1991")]
         public int Port {
             get {
                 return ((int)(this["Port"]));
             }
+            set {
+                this["Port"] = value;
+            }
         }
         
-        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("192.168.31.88")]
         public string Host {
             get {
                 return ((string)(this["Host"]));
+            }
+            set {
+                this["Host"] = value;
             }
         }
     }

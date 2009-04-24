@@ -98,7 +98,7 @@
             this.加入游戏ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.游戏ToolStripMenuItem.Name = "游戏ToolStripMenuItem";
-            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.游戏ToolStripMenuItem.Text = "游戏";
             // 
             // 创建游戏ToolStripMenuItem
@@ -113,6 +113,7 @@
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
             this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
+            this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
@@ -125,7 +126,7 @@
             this.关于ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.关于作者ToolStripMenuItem});
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
-            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.关于ToolStripMenuItem.Text = "关于";
             // 
             // 关于作者ToolStripMenuItem
