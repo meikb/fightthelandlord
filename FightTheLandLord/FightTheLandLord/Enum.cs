@@ -19,8 +19,8 @@ namespace FightTheLandLord
         K = 13,
         A = 14,
         P2 = 15,
-        大王 = 16,
-        小王 = 17,
+        小王 = 16,
+        大王 = 17,
     }
 
     public enum PokerColor
