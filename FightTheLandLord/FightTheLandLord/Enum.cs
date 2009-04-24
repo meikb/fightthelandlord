@@ -14,13 +14,13 @@ namespace FightTheLandLord
         P8 = 8,
         P9 = 9,
         P10 = 10,
-        PJ = 11,
-        PQ = 12,
-        PK = 13,
-        PA = 14,
+        J = 11,
+        Q = 12,
+        K = 13,
+        A = 14,
         P2 = 15,
-        PSmallKing = 16,
-        PBigKing = 17,
+        大王 = 16,
+        小王 = 17,
     }
 
     public enum PokerColor
