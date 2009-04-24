@@ -2,10 +2,10 @@
 <SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="FightTheLandLord.Properties" GeneratedClassName="Settings">
   <Profiles />
   <Settings>
-    <Setting Name="Port" Type="System.Int32" Scope="Application">
+    <Setting Name="Port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">1991</Value>
     </Setting>
-    <Setting Name="Host" Type="System.String" Scope="Application">
+    <Setting Name="Host" Type="System.String" Scope="User">
       <Value Profile="(Default)">192.168.31.88</Value>
     </Setting>
   </Settings>

@@ -9,16 +9,20 @@ using System.IO;
 
 namespace FightTheLandLord
 {
-    class Server
+    public class Client
     {
-        public TcpListener listener = new TcpListener(IPAddress.Any ,Properties.Settings.Default.Port);
         public TcpClient client;
+
+        public Client()
+        {
+            client = new TcpClient();
+        }
 
         public bool Connection()
         {
             try
             {
-                client = listener.AcceptTcpClient();
+                client.Connect(IPAddress.Parse(Properties.Settings.Default.Host), Properties.Settings.Default.Port);
             }
             catch
             {
@@ -27,21 +31,16 @@ namespace FightTheLandLord
             return true;
         }
 
-        public bool AcceptPokers()
+        public bool SendPokers(List<Poker> pokers)
         {
             try
             {
-                const int bufferSize = 4096;
-                NetworkStream Ns = client.GetStream();
+                NetworkStream Ns = this.client.GetStream();
                 MemoryStream memStream = new MemoryStream();
-                byte[] bytePokers = new byte[bufferSize];
-                int bytesRead = 0;
-                do
-                {
-                    bytesRead = Ns.Read(bytePokers, 0, bufferSize);
-                } while (bytesRead > 0);
                 IFormatter serializer = new BinaryFormatter();
-                List<Poker> acceptPoker = (List<Poker>)serializer.Deserialize(memStream);
+                serializer.Serialize(memStream, pokers);
+                byte[] bytePokers = memStream.GetBuffer();
+                Ns.Write(bytePokers, 0, bytePokers.Length);
             }
             catch
             {
