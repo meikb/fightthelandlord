@@ -145,5 +145,10 @@ namespace FightTheLandLord
 
             }
         }
+
+        private void 创建游戏ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Server.listener.Start();
+        }
     }
 }

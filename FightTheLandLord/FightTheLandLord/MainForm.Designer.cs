@@ -32,6 +32,14 @@
             this.panelPlayer1 = new System.Windows.Forms.Panel();
             this.btnLead = new System.Windows.Forms.Button();
             this.lblIsRule = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.游戏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.创建游戏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.加入游戏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.关于作者ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
@@ -72,6 +80,60 @@
             this.lblIsRule.Size = new System.Drawing.Size(0, 12);
             this.lblIsRule.TabIndex = 3;
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.游戏ToolStripMenuItem,
+            this.关于ToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(792, 24);
+            this.menuStrip1.TabIndex = 4;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // 游戏ToolStripMenuItem
+            // 
+            this.游戏ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.创建游戏ToolStripMenuItem,
+            this.加入游戏ToolStripMenuItem,
+            this.退出ToolStripMenuItem});
+            this.游戏ToolStripMenuItem.Name = "游戏ToolStripMenuItem";
+            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.游戏ToolStripMenuItem.Text = "游戏";
+            // 
+            // 创建游戏ToolStripMenuItem
+            // 
+            this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.创建游戏ToolStripMenuItem.Text = "创建游戏";
+            this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
+            // 
+            // 加入游戏ToolStripMenuItem
+            // 
+            this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.加入游戏ToolStripMenuItem.Text = "加入游戏";
+            // 
+            // 退出ToolStripMenuItem
+            // 
+            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.退出ToolStripMenuItem.Text = "退出";
+            // 
+            // 关于ToolStripMenuItem
+            // 
+            this.关于ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.关于作者ToolStripMenuItem});
+            this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.关于ToolStripMenuItem.Text = "关于";
+            // 
+            // 关于作者ToolStripMenuItem
+            // 
+            this.关于作者ToolStripMenuItem.Name = "关于作者ToolStripMenuItem";
+            this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.关于作者ToolStripMenuItem.Text = "关于作者";
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -81,13 +143,17 @@
             this.Controls.Add(this.btnLead);
             this.Controls.Add(this.panelPlayer1);
             this.Controls.Add(this.btnStart);
+            this.Controls.Add(this.menuStrip1);
             this.ImeMode = System.Windows.Forms.ImeMode.On;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(800, 600);
             this.MinimumSize = new System.Drawing.Size(800, 600);
             this.Name = "MainForm";
             this.Text = "火拼斗地主";
             this.Load += new System.EventHandler(this.MainForm_Load);
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -99,6 +165,13 @@
         private System.Windows.Forms.Panel panelPlayer1;
         private System.Windows.Forms.Button btnLead;
         private System.Windows.Forms.Label lblIsRule;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem 游戏ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 创建游戏ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 加入游戏ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 关于ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 关于作者ToolStripMenuItem;
     }
 }
 
