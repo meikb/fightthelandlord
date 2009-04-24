@@ -9,6 +9,7 @@ namespace FightTheLandLord
     {
         private List<Poker> _pokers = new List<Poker>();
         private List<Poker> _newPokers = new List<Poker>();
+        private List<Poker> _bakPokers = new List<Poker>();
         private List<int> _selectPokers = new List<int>();
         private List<Poker> _leadPokers = new List<Poker>();
         private Color _backColor;
@@ -92,6 +93,17 @@ namespace FightTheLandLord
                 this._leadPokers = value;
             }
         }
+        public List<Poker> bakPokers
+        {
+            get
+            {
+                return this._bakPokers;
+            }
+            set
+            {
+                this._bakPokers = value;
+            }
+        }
 
 
         /// <summary>
@@ -130,6 +142,14 @@ namespace FightTheLandLord
                 newPokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
             }
         }
+        public void BakPoker()
+        {
+            this.bakPokers.Clear();
+            foreach (Poker poker in this.newPokers)  //备份已经洗好的牌
+            {
+                this.bakPokers.Add(poker);
+            }
+        }
 
         /// <summary>
         /// 检测是否符合游戏规则,如果符合则出牌,否则返回flase
@@ -142,9 +162,10 @@ namespace FightTheLandLord
             }
             if (Rules.IsRules(this.leadPokers))
             {
+                this.BakPoker();
                 foreach (int selectPoker in this.selectPokers)
                 {
-                    this.newPokers.Remove(this.newPokers[selectPoker]);
+                    this.newPokers.Remove(this.bakPokers[selectPoker]);
                 }
                 this.selectPokers.Clear();
                 return true;
