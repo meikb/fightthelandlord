@@ -102,8 +102,13 @@ namespace FightTheLandLord
             shuffle(); //洗牌
             deal(); //发牌
             this.player1.sort(); //把牌从大到小排序
-            this.player1.g = this.panelPlayer1.CreateGraphics();
-            this.player1.Paint();
+            this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
+            this.player1.Paint(); //在panelPlayer1中画出player1的牌
+            this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
+            this.btnStart.Enabled = false;
+            this.btnStart.Visible = false;
+            this.btnLead.Enabled = true;
+            this.btnLead.Visible = true;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -113,6 +118,22 @@ namespace FightTheLandLord
         private void panelPlayer1_Paint(object sender, PaintEventArgs e)
         {
             this.player1.Paint();
+        }
+
+        private void panelPlayer1_MouseClick(object sender, MouseEventArgs e)  //鼠标点击事件,处理选中牌的效果
+        {
+            int index;
+            this.player1.backColor = this.panelPlayer1.BackColor;
+            if ((int)(e.X / 40) < player1.newPokers.Count)
+            {
+                index = (int)(e.X / 40);
+                this.player1.Paint(index);
+            }
+        }
+
+        private void btnLead_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
