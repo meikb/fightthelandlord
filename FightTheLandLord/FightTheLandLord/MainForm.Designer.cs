@@ -31,6 +31,7 @@
             this.btnStart = new System.Windows.Forms.Button();
             this.panelPlayer1 = new System.Windows.Forms.Panel();
             this.btnLead = new System.Windows.Forms.Button();
+            this.lblIsRule = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnStart
@@ -63,11 +64,20 @@
             this.btnLead.Visible = false;
             this.btnLead.Click += new System.EventHandler(this.btnLead_Click);
             // 
+            // lblIsRule
+            // 
+            this.lblIsRule.AutoSize = true;
+            this.lblIsRule.Location = new System.Drawing.Point(358, 337);
+            this.lblIsRule.Name = "lblIsRule";
+            this.lblIsRule.Size = new System.Drawing.Size(0, 12);
+            this.lblIsRule.TabIndex = 3;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 573);
+            this.Controls.Add(this.lblIsRule);
             this.Controls.Add(this.btnLead);
             this.Controls.Add(this.panelPlayer1);
             this.Controls.Add(this.btnStart);
@@ -79,6 +89,7 @@
             this.Text = "火拼斗地主";
             this.Load += new System.EventHandler(this.MainForm_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -87,6 +98,7 @@
         private System.Windows.Forms.Button btnStart;
         private System.Windows.Forms.Panel panelPlayer1;
         private System.Windows.Forms.Button btnLead;
+        private System.Windows.Forms.Label lblIsRule;
     }
 }
 

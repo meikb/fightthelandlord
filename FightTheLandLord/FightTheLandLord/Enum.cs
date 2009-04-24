@@ -25,9 +25,9 @@ namespace FightTheLandLord
 
     public enum PokerColor
     {
-        spade = 4,
-        heart = 3,
-        club = 2,
-        diamond = 1,
+        黑桃 = 4,
+        红心 = 3,
+        梅花 = 2,
+        方块 = 1,
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
@@ -88,7 +87,7 @@ namespace FightTheLandLord
                 }
                 if (i >= 16)
                 {
-                    this.allPoker.Add(new Poker((PokerNum)i, PokerColor.spade));
+                    this.allPoker.Add(new Poker((PokerNum)i, PokerColor.黑桃));
                 }
             }                           //嵌套for循环初始化54张牌
 
@@ -133,7 +132,18 @@ namespace FightTheLandLord
 
         private void btnLead_Click(object sender, EventArgs e)
         {
+            if (player1.lead())
+            {
+                this.lblIsRule.Text = "";
+                player1.g.Clear(this.BackColor);
+                player1.Paint();
+            }
+            else
+            {
+                this.lblIsRule.ForeColor = Color.Red;
+                this.lblIsRule.Text = "您出的牌不符合规则";
 
+            }
         }
     }
 }
