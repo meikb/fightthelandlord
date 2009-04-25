@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+using System.Threading;
 
 namespace FightTheLandLord
 {
@@ -14,7 +15,7 @@ namespace FightTheLandLord
         public TcpListener listener = new TcpListener(IPAddress.Any ,Properties.Settings.Default.Port);
         public TcpClient client;
 
-        public bool Connection()
+        public void Connection()
         {
             try
             {
@@ -22,9 +23,9 @@ namespace FightTheLandLord
             }
             catch
             {
-                return false;
+               // return false;
             }
-            return true;
+            //return true;
         }
 
         public bool AcceptPokers()
