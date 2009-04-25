@@ -44,12 +44,14 @@
             // 
             // btnStart
             // 
+            this.btnStart.Enabled = false;
             this.btnStart.Location = new System.Drawing.Point(360, 381);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "开始游戏";
             this.btnStart.UseVisualStyleBackColor = true;
+            this.btnStart.Visible = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
             // 
             // panelPlayer1
@@ -98,7 +100,7 @@
             this.加入游戏ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.游戏ToolStripMenuItem.Name = "游戏ToolStripMenuItem";
-            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.游戏ToolStripMenuItem.Text = "游戏";
             // 
             // 创建游戏ToolStripMenuItem
@@ -126,13 +128,13 @@
             this.关于ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.关于作者ToolStripMenuItem});
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
-            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
             this.关于ToolStripMenuItem.Text = "关于";
             // 
             // 关于作者ToolStripMenuItem
             // 
             this.关于作者ToolStripMenuItem.Name = "关于作者ToolStripMenuItem";
-            this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.关于作者ToolStripMenuItem.Text = "关于作者";
             // 
             // MainForm

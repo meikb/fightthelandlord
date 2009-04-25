@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
 
 namespace FightTheLandLord
 {
@@ -150,7 +151,6 @@ namespace FightTheLandLord
         {
             Server server = new Server();
             server.listener.Start();
-            server.Connection();
         }
 
         private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
