@@ -40,8 +40,9 @@
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于作者ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timerCheckConn = new System.Windows.Forms.Timer(this.components);
+            this.timerServer = new System.Windows.Forms.Timer(this.components);
             this.btnOK = new System.Windows.Forms.Button();
+            this.timerClient = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -141,10 +142,10 @@
             this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.关于作者ToolStripMenuItem.Text = "关于作者";
             // 
-            // timerCheckConn
+            // timerServer
             // 
-            this.timerCheckConn.Interval = 2000;
-            this.timerCheckConn.Tick += new System.EventHandler(this.timerCheckConn_Tick);
+            this.timerServer.Interval = 2000;
+            this.timerServer.Tick += new System.EventHandler(this.timerCheckConn_Tick);
             // 
             // btnOK
             // 
@@ -157,6 +158,10 @@
             this.btnOK.UseVisualStyleBackColor = true;
             this.btnOK.Visible = false;
             this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
+            // timerClient
+            // 
+            this.timerClient.Tick += new System.EventHandler(this.timerClient_Tick);
             // 
             // MainForm
             // 
@@ -197,8 +202,9 @@
         private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关于ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关于作者ToolStripMenuItem;
-        private System.Windows.Forms.Timer timerCheckConn;
+        private System.Windows.Forms.Timer timerServer;
         private System.Windows.Forms.Button btnOK;
+        private System.Windows.Forms.Timer timerClient;
     }
 }
 
