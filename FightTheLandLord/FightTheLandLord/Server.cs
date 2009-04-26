@@ -62,9 +62,30 @@ namespace FightTheLandLord
                 if (strOk1.StartsWith("OK") && strOk2.StartsWith("OK"))
                 {
                     this.everyOneIsOk = true;
+                    byte[] byteStart = Encoding.Default.GetBytes("Start");
+                    NsOk1.Write(byteStart, 0, 4);
+                    NsOk2.Write(byteStart, 0, 4);
                     break;
                 }
             }
+        }
+
+        public bool SendPokerForClient(List<Poker> Pokers)  //未完成
+        {
+            try
+            {
+                NetworkStream Ns = this.client.GetStream();
+                MemoryStream memStream = new MemoryStream();
+                IFormatter serializer = new BinaryFormatter();
+                serializer.Serialize(memStream, pokers);
+                byte[] bytePokers = memStream.GetBuffer();
+                Ns.Write(bytePokers, 0, bytePokers.Length);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
         }
 
         public bool AcceptPokers()

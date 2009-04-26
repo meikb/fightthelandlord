@@ -12,6 +12,7 @@ namespace FightTheLandLord
     public class Client
     {
         public TcpClient client;
+        public bool isStart = false;
 
         public Client()
         {
@@ -29,6 +30,23 @@ namespace FightTheLandLord
                 return false;
             }
             return true;
+        }
+
+        public void AcceptStart()
+        {
+            NetworkStream NsStart = client.GetStream();
+            byte[] byteStart = new byte[5];
+            string strStart = "";
+            while (true)
+            {
+                NsStart.Read(byteStart, 0, 4);
+                strStart = Encoding.Default.GetString(byteStart);
+                if (strStart.StartsWith("Start"))
+                {
+                    this.isStart = true;
+                    break;
+                }
+            }
         }
 
         public bool SendOk()

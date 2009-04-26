@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
-
+// 再写把牌发给客户端以及处理客户端的出牌请求
 namespace FightTheLandLord
 {
     public partial class MainForm : Form
@@ -17,6 +17,7 @@ namespace FightTheLandLord
         private Server server;
         private Client client;
         private Thread acceptOk;
+        private Thread acceptStart;
         public MainForm()
         {
             InitializeComponent();
@@ -66,10 +67,37 @@ namespace FightTheLandLord
         {
             for (int i = 0; i < 17; i++)
             {
-                player1.pokers.Add(this.allPoker[i]);
+                this.player1.pokers.Add(this.allPoker[i]);
+            }
+            List<Poker> player2Pokers = new List<Poker>();
+            for (int i = 17; i < 34; i++)
+            {
+                player2Pokers.Add(this.allPoker[i]);
+            }
+            List<Poker> player3Pokers = new List<Poker>();
+            for (int i = 34; i < 51; i++)
+            {
+                player3Pokers.Add(this.allPoker[i]);
+            }
+            int LandLordNum = new Random().Next(0, 3);
+
+            for (int i = 51; i < 54; i++)
+            {
+                switch (LandLordNum)
+                {
+                    case 0:
+                        this.player1.pokers.Add(this.allPoker[i]);
+                        break;
+                    case 1:
+                        player2Pokers.Add(this.allPoker[i]);
+                        break;
+                    case 2:
+                        player3Pokers.Add(this.allPoker[i]);
+                        break;
+                }
             }
 
-#if DEBUG
+#if DEBUG //调试时在Console上显示的信息
             Console.WriteLine("玩家一的牌");
             foreach (Poker onePoker in player1.pokers)
             {
@@ -80,30 +108,33 @@ namespace FightTheLandLord
 
         private void btnStart_Click(object sender, EventArgs e)
         {
-            for (int i = 3; i < 18; i++)  //嵌套for循环初始化54张牌
+            if (this.server != null)
             {
-                for (int j = 1; j < 5; j++)
+                for (int i = 3; i < 18; i++)  //嵌套for循环初始化54张牌
                 {
-                    if (i <= 15)
+                    for (int j = 1; j < 5; j++)
                     {
-                        this.allPoker.Add(new Poker((PokerNum)i, (PokerColor)j));
+                        if (i <= 15)
+                        {
+                            this.allPoker.Add(new Poker((PokerNum)i, (PokerColor)j));
+                        }
                     }
-                }
-                if (i >= 16)
-                {
-                    this.allPoker.Add(new Poker((PokerNum)i, PokerColor.黑桃));
-                }
-            }                           //嵌套for循环初始化54张牌
+                    if (i >= 16)
+                    {
+                        this.allPoker.Add(new Poker((PokerNum)i, PokerColor.黑桃));
+                    }
+                }                           //嵌套for循环初始化54张牌
 
 #if DEBUG
-            Console.WriteLine(allPoker.Count);
-            foreach (Poker onePoker in this.allPoker)
-            {
-                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
-            }
+                Console.WriteLine(allPoker.Count);
+                foreach (Poker onePoker in this.allPoker)
+                {
+                    Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+                }
 #endif
-            shuffle(); //洗牌
-            deal(); //发牌
+                shuffle(); //洗牌
+                deal(); //发牌
+            }
             this.player1.sort(); //把牌从大到小排序
             this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
             this.player1.Paint(); //在panelPlayer1中画出player1的牌
@@ -157,7 +188,7 @@ namespace FightTheLandLord
             Thread th = new Thread(new ThreadStart(this.server.Connection)); //新建一个线程用于接受请求连接
             th.Start(); //开始线程
             this.lblIsRule.Text = "创建游戏成功,等待其他人链接";
-            this.timerCheckConn.Enabled = true;
+            this.timerServer.Enabled = true;
         }
 
         private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -205,10 +236,27 @@ namespace FightTheLandLord
             {
                 btnOK.Enabled = false;
                 btnOK.Visible = false;
+                this.timerClient.Enabled = true;
             }
             else
             {
                 MessageBox.Show("准备失败,请检查网络连接", "消息");
+            }
+        }
+
+        private void timerClient_Tick(object sender, EventArgs e)
+        {
+            if (this.acceptStart == null)
+            {
+                this.acceptStart = new Thread(new ThreadStart(client.AcceptStart));
+            }
+            if (this.acceptStart.ThreadState == ThreadState.Unstarted)
+            {
+                this.acceptStart.Start();
+            }
+            if (this.client.isStart)
+            {
+                //这里放接收Server发牌的代码.
             }
         }
     }
