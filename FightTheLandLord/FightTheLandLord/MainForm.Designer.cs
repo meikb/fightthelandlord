@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.btnStart = new System.Windows.Forms.Button();
             this.panelPlayer1 = new System.Windows.Forms.Panel();
             this.btnLead = new System.Windows.Forms.Button();
@@ -39,6 +40,8 @@
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于作者ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timerCheckConn = new System.Windows.Forms.Timer(this.components);
+            this.btnOK = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -77,7 +80,8 @@
             // lblIsRule
             // 
             this.lblIsRule.AutoSize = true;
-            this.lblIsRule.Location = new System.Drawing.Point(358, 337);
+            this.lblIsRule.ForeColor = System.Drawing.Color.Red;
+            this.lblIsRule.Location = new System.Drawing.Point(10, 392);
             this.lblIsRule.Name = "lblIsRule";
             this.lblIsRule.Size = new System.Drawing.Size(0, 12);
             this.lblIsRule.TabIndex = 3;
@@ -106,21 +110,21 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             // 
             // 关于ToolStripMenuItem
@@ -137,11 +141,29 @@
             this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.关于作者ToolStripMenuItem.Text = "关于作者";
             // 
+            // timerCheckConn
+            // 
+            this.timerCheckConn.Interval = 2000;
+            this.timerCheckConn.Tick += new System.EventHandler(this.timerCheckConn_Tick);
+            // 
+            // btnOK
+            // 
+            this.btnOK.Enabled = false;
+            this.btnOK.Location = new System.Drawing.Point(279, 381);
+            this.btnOK.Name = "btnOK";
+            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.TabIndex = 5;
+            this.btnOK.Text = "准备";
+            this.btnOK.UseVisualStyleBackColor = true;
+            this.btnOK.Visible = false;
+            this.btnOK.Click += new System.EventHandler(this.btnOK_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(792, 573);
+            this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lblIsRule);
             this.Controls.Add(this.btnLead);
             this.Controls.Add(this.panelPlayer1);
@@ -175,6 +197,8 @@
         private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关于ToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem 关于作者ToolStripMenuItem;
+        private System.Windows.Forms.Timer timerCheckConn;
+        private System.Windows.Forms.Button btnOK;
     }
 }
 
