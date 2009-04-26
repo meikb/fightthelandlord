@@ -20,10 +20,16 @@ namespace FightTheLandLord
 
         private void btnJoin_Click(object sender, EventArgs e)
         {
-            Properties.Settings.Default.Host = this.maskedTextBoxIP.Text;
-            Client client = new Client();
-            client.Connection();
-
+            IPAddress ip = IPAddress.Any;
+            if (IPAddress.TryParse(this.textBoxIP.Text, out ip))
+            {
+                Properties.Settings.Default.Host = this.textBoxIP.Text;
+                this.Close();
+            }
+            else
+            {
+                MessageBox.Show("请输入一个正确的IP", "错误");
+            }
         }
     }
 }

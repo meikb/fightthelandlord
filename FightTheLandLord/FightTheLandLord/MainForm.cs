@@ -14,6 +14,9 @@ namespace FightTheLandLord
     {
         private List<Poker> allPoker = new List<Poker>();
         private Player player1 = new Player();
+        private Server server;
+        private Client client;
+        private Thread acceptOk = new Thread(new ThreadStart(server.AccpetOk));  //此处错误
         public MainForm()
         {
             InitializeComponent();
@@ -131,7 +134,7 @@ namespace FightTheLandLord
             }
         }
 
-        private void btnLead_Click(object sender, EventArgs e)
+        private void btnLead_Click(object sender, EventArgs e) //出牌按钮的事件处理程序
         {
             if (player1.lead())
             {
@@ -149,14 +152,58 @@ namespace FightTheLandLord
 
         private void 创建游戏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Server server = new Server();
-            server.listener.Start();
+            this.server = new Server();  //创建服务器
+            this.server.listener.Start();  //开始监听
+            Thread th = new Thread(new ThreadStart(this.server.Connection)); //新建一个线程用于接受请求连接
+            th.Start(); //开始线程
+            this.lblIsRule.Text = "创建游戏成功,等待其他人链接";
+            this.timerCheckConn.Enabled = true;
+            Thread acceptOk = new Thread(new ThreadStart(this.server.AccpetOk));
         }
 
         private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             JoinForm joinForm = new JoinForm();
             joinForm.ShowDialog();
+            this.client = new Client();
+            if (this.client.Connection())
+            {
+                MessageBox.Show("连接成功","消息");
+                btnOK.Enabled = true;
+                btnOK.Visible = true;   //启用"准备"按钮
+            }
+            else
+            {
+                MessageBox.Show("连接失败","消息");
+            }
+        }
+
+        private void timerCheckConn_Tick(object sender, EventArgs e)
+        {
+            if (this.server.client1 != null && this.server.client2 != null)
+            {
+                this.lblIsRule.Text = "连接建立成功,等待其他人准备";
+                this.acceptOk.Start();
+                if (this.server.everyOneIsOk)
+                {
+                    this.lblIsRule.Text = "所有人已准备,可以开始游戏";
+                    this.btnStart.Enabled = true;
+                    this.btnStart.Visible = true;
+                }
+            }
+        }
+
+        private void btnOK_Click(object sender, EventArgs e)
+        {
+            if (this.client.SendOk())
+            {
+                btnOK.Enabled = false;
+                btnOK.Visible = false;
+            }
+            else
+            {
+                MessageBox.Show("准备失败,请检查网络连接", "消息");
+            }
         }
     }
 }

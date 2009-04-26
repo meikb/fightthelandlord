@@ -31,6 +31,21 @@ namespace FightTheLandLord
             return true;
         }
 
+        public bool SendOk()
+        {
+            try
+            {
+                NetworkStream NsOk = this.client.GetStream();
+                byte[] byteOk = Encoding.Default.GetBytes("OK");
+                NsOk.Write(byteOk, 0, byteOk.Length);
+            }
+            catch
+            {
+                return false;
+            }
+            return true;
+        }
+
         public bool SendPokers(List<Poker> pokers)
         {
             try
