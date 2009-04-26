@@ -16,7 +16,7 @@ namespace FightTheLandLord
         private Player player1 = new Player();
         private Server server;
         private Client client;
-        private Thread acceptOk = new Thread(new ThreadStart(server.AccpetOk));  //此处错误
+        private Thread acceptOk;
         public MainForm()
         {
             InitializeComponent();
@@ -158,7 +158,6 @@ namespace FightTheLandLord
             th.Start(); //开始线程
             this.lblIsRule.Text = "创建游戏成功,等待其他人链接";
             this.timerCheckConn.Enabled = true;
-            Thread acceptOk = new Thread(new ThreadStart(this.server.AccpetOk));
         }
 
         private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -183,8 +182,15 @@ namespace FightTheLandLord
             if (this.server.client1 != null && this.server.client2 != null)
             {
                 this.lblIsRule.Text = "连接建立成功,等待其他人准备";
-                this.acceptOk.Start();
-                if (this.server.everyOneIsOk)
+                if (this.acceptOk == null)  //如果线程没有初始化则先初始化
+                {
+                    this.acceptOk = new Thread(new ThreadStart(server.AccpetOk));
+                }
+                if (this.acceptOk.ThreadState == ThreadState.Unstarted)  //如果线程没有启动则先启动
+                {
+                    this.acceptOk.Start();
+                }
+                if (this.server.everyOneIsOk) //启动线程后,服务器循环获取客户端的NetworkStream,然后判断客户端是否发送"OK"信息,如果发送,则把everyOneIsOk设置为True.
                 {
                     this.lblIsRule.Text = "所有人已准备,可以开始游戏";
                     this.btnStart.Enabled = true;
