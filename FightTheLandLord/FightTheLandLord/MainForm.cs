@@ -98,6 +98,14 @@ namespace FightTheLandLord
                         break;
                 }
             }
+            if (server.SendPokerForClient(player2Pokers, player3Pokers))
+            {
+                MessageBox.Show("发牌成功", "火拼斗地主");
+            }
+            else
+            {
+                MessageBox.Show("发牌失败", "火拼斗地主");
+            }
 
 #if DEBUG //调试时在Console上显示的信息
             Console.WriteLine("玩家一的牌");
@@ -251,6 +259,7 @@ namespace FightTheLandLord
             if (this.acceptStart == null)
             {
                 this.acceptStart = new Thread(new ThreadStart(client.AcceptStart));
+                this.acceptStart.Name = "接受即将开始消息线程";
             }
             if (this.acceptStart.ThreadState == ThreadState.Unstarted)
             {
@@ -258,7 +267,19 @@ namespace FightTheLandLord
             }
             if (this.client.isStart)
             {
-                //这里放接收Server发牌的代码.
+                if (this.player1.newPokers.Count == 0)
+                {
+                    if (this.client.AcceptPokers() != null)
+                    {
+                        this.player1.pokers = this.client.Pokers;
+                        this.player1.sort(); //把牌从大到小排序
+                        this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
+                        this.player1.Paint(); //在panelPlayer1中画出player1的牌
+                        this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
+                        this.btnLead.Enabled = true;
+                        this.btnLead.Visible = true;
+                    }
+                }
             }
         }
     }

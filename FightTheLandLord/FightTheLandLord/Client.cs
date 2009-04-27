@@ -13,6 +13,7 @@ namespace FightTheLandLord
     {
         public TcpClient client;
         public bool isStart = false;
+        public List<Poker> Pokers;
 
         public Client()
         {
@@ -32,16 +33,16 @@ namespace FightTheLandLord
             return true;
         }
 
-        public void AcceptStart()
+        public void AcceptStart()  //循环检测server端是否发送过Start消息,如果发送则this.isStart = true;
         {
             NetworkStream NsStart = client.GetStream();
-            byte[] byteStart = new byte[5];
+            byte[] byteStart = new byte["Start".Length];
             string strStart = "";
             while (true)
             {
-                NsStart.Read(byteStart, 0, 4);
+                NsStart.Read(byteStart, 0, "Start".Length);
                 strStart = Encoding.Default.GetString(byteStart);
-                if (strStart.StartsWith("Start"))
+                if (strStart.StartsWith("St"))
                 {
                     this.isStart = true;
                     break;
@@ -49,22 +50,22 @@ namespace FightTheLandLord
             }
         }
 
-        public List<Poker> AcceptPokers()
+        public List<Poker> AcceptPokers() //接受server传送过来的已序列化的List<Poker>牌组对象并反序列化,然后把引用传给this.Pokers
         {
-            const int Readbyte = 4096;
-            NetworkStream NsPokers = client.GetStream();
-            byte[] bytePokers = new byte[Readbyte];
-            int ReadNum = 0;
-            do
+            try
             {
-                ReadNum = NsPokers.Read(bytePokers, ReadNum, Readbyte);
-            } while (Readbyte < 0);
-            IFormatter serializer = new BinaryFormatter();
-            List<Poker> Pokers = (List < Poker > serializer.Deserialize(bytePokers));
-            return Pokers;
+                NetworkStream NsPokers = client.GetStream();
+                IFormatter serializer = new BinaryFormatter();
+                this.Pokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+                return this.Pokers;
+            }
+            catch
+            {
+                return null;
+            }
         }
 
-        public bool SendOk()
+        public bool SendOk() //给服务器发送准备指令
         {
             try
             {
@@ -79,7 +80,7 @@ namespace FightTheLandLord
             return true;
         }
 
-        public bool SendPokers(List<Poker> pokers)
+        public bool SendPokers(List<Poker> pokers)  //出牌请求,暂未完成.
         {
             try
             {
