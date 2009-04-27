@@ -4,6 +4,7 @@ using System.Text;
 
 namespace FightTheLandLord
 {
+    [Serializable]
     public class Poker
     {
         /// <summary>

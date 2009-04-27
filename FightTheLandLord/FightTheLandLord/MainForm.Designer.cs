@@ -161,6 +161,7 @@
             // 
             // timerClient
             // 
+            this.timerClient.Interval = 1000;
             this.timerClient.Tick += new System.EventHandler(this.timerClient_Tick);
             // 
             // MainForm

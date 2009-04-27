@@ -63,28 +63,28 @@ namespace FightTheLandLord
                 {
                     this.everyOneIsOk = true;
                     byte[] byteStart = Encoding.Default.GetBytes("Start");
-                    NsOk1.Write(byteStart, 0, 4);
-                    NsOk2.Write(byteStart, 0, 4);
+                    NsOk1.Write(byteStart, 0, byteStart.Length);
+                    NsOk2.Write(byteStart, 0, byteStart.Length);
                     break;
                 }
             }
         }
 
-        public bool SendPokerForClient(List<Poker> player2Pokers, List<Poker> player3Pokers)  //未完成
+        public bool SendPokerForClient(List<Poker> player2Pokers, List<Poker> player3Pokers)  
         {
             try
             {
                 NetworkStream Ns1 = this.client1.GetStream();
-                NetworkStream Ns2 = this.client2.GetStream();
+                NetworkStream Ns2 = this.client2.GetStream(); //得到两个客户端的网络流对象
                 MemoryStream memStream1 = new MemoryStream();
-                MemoryStream memStream2 = new MemoryStream();
+                MemoryStream memStream2 = new MemoryStream();  
                 IFormatter serializer = new BinaryFormatter();
                 serializer.Serialize(memStream1, player2Pokers);
-                serializer.Serialize(memStream2, player3Pokers);
+                serializer.Serialize(memStream2, player3Pokers);  //把给客户端的2组牌序列化并写入2个 MemoryStream 对象
                 byte[] bytePlayer2Pokers = memStream1.GetBuffer();
-                byte[] bytePlayer3Pokers = memStream1.GetBuffer();
+                byte[] bytePlayer3Pokers = memStream2.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
                 Ns1.Write(bytePlayer2Pokers, 0, bytePlayer2Pokers.Length);
-                Ns2.Write(bytePlayer3Pokers, 0, bytePlayer3Pokers.Length);
+                Ns2.Write(bytePlayer3Pokers, 0, bytePlayer3Pokers.Length);  //把2个比特流对象写入server与client的连接管道中.
             }
             catch
             {
