@@ -18,6 +18,7 @@ namespace FightTheLandLord
         private Player player1 = new Player();
         private Server server;
         private Client client;
+        private Thread acceptConn;
         private Thread acceptOk;
         private Thread acceptStart;
         public MainForm()
@@ -179,15 +180,14 @@ namespace FightTheLandLord
         {
             if (player1.lead())
             {
-                this.lblIsRule.Text = "";
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
             }
             else
             {
-                this.lblIsRule.ForeColor = Color.Red;
-                this.lblIsRule.Text = "您出的牌不符合规则";
-
+                this.tbState.Text += "[系统消息]:您出的牌不符合规则!\r\n";
+                this.tbState.SelectionStart = this.tbState.Text.Length;
+                this.tbState.ScrollToCaret();
             }
         }
 
@@ -195,10 +195,16 @@ namespace FightTheLandLord
         {
             this.server = new Server();  //创建服务器
             this.server.listener.Start();  //开始监听
-            Thread th = new Thread(new ThreadStart(this.server.Connection)); //新建一个线程用于接受请求连接
-            th.Start(); //开始线程
-            this.lblIsRule.Text = "创建游戏成功,等待其他人链接";
+            this.acceptConn = new Thread(new ThreadStart(this.server.Connection)); //新建一个线程用于接受请求连接
+            this.acceptConn.IsBackground = true;
+            this.acceptConn.Name = "检测客户端的连接并接受的线程";
+            this.acceptConn.Start(); //开始线程
+            this.tbState.Text += "[系统消息]:创建游戏成功,等待其他人链接\r\n";
+            this.tbState.SelectionStart = this.tbState.Text.Length; //设置光标位置为最下方
+            this.tbState.ScrollToCaret();   //滚动到光标位置,实现用户看到的textbox滚动条永远滚动到最下方
             this.timerServer.Enabled = true;
+            //(ToolStripMenuItem)(this.menuStrip1.Items[).DropDownItems
+            //this.menuStrip1.Items["游戏ToolStripMenuItem"];
         }
 
         private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -218,22 +224,38 @@ namespace FightTheLandLord
             }
         }
 
-        private void timerCheckConn_Tick(object sender, EventArgs e)
+        private void timerServer_Tick(object sender, EventArgs e)
         {
             if (this.server.client1 != null && this.server.client2 != null)
             {
-                this.lblIsRule.Text = "连接建立成功,等待其他人准备";
+                if (this.tbState.Text.IndexOf("连接建立成功,等待其他人准备", 0, this.tbState.Text.Length) < 0) //防止向用户重复发送此消息
+                {
+                    this.tbState.Text += "[系统消息]:连接建立成功,等待其他人准备\r\n";
+                }
+                this.tbState.SelectionStart = this.tbState.Text.Length;
+                this.tbState.ScrollToCaret();
                 if (this.acceptOk == null)  //如果线程没有初始化则先初始化
                 {
                     this.acceptOk = new Thread(new ThreadStart(server.AccpetOk));
+                    this.acceptOk.IsBackground = true;
+                    this.acceptOk.Name = "服务器检测客户端是否发送准备消息";
                 }
-                if (this.acceptOk.ThreadState == ThreadState.Unstarted)  //如果线程没有启动则先启动
+                if (this.acceptOk.ThreadState == (ThreadState.Background | ThreadState.Unstarted))  //如果线程没有启动则先启动,由于之前把线程的IsBackGround设置为true,所以这里要这样写
                 {
-                    this.acceptOk.Start();
+                    try
+                    {
+                        this.acceptOk.Start();
+                    }
+                    catch
+                    {
+                    }
                 }
                 if (this.server.everyOneIsOk) //启动线程后,服务器循环获取客户端的NetworkStream,然后判断客户端是否发送"OK"信息,如果发送,则把everyOneIsOk设置为True.
                 {
-                    this.lblIsRule.Text = "所有人已准备,可以开始游戏";
+                    this.server.everyOneIsOk = false; //为下一局做准备
+                    this.tbState.Text += "[系统消息]:所有人已准备,可以开始游戏\r\n";
+                    this.tbState.SelectionStart = this.tbState.Text.Length;
+                    this.tbState.ScrollToCaret();
                     this.btnStart.Enabled = true;
                     this.btnStart.Visible = true;
                 }
@@ -247,6 +269,9 @@ namespace FightTheLandLord
                 btnOK.Enabled = false;
                 btnOK.Visible = false;
                 this.timerClient.Enabled = true;
+                this.tbState.Text += "[系统消息]:已向服务器发送准备消息,正在等待响应...\r\n";
+                this.tbState.SelectionStart = this.tbState.Text.Length;
+                this.tbState.ScrollToCaret();
             }
             else
             {
@@ -259,9 +284,10 @@ namespace FightTheLandLord
             if (this.acceptStart == null)
             {
                 this.acceptStart = new Thread(new ThreadStart(client.AcceptStart));
+                this.acceptStart.IsBackground = true;
                 this.acceptStart.Name = "接受即将开始消息线程";
             }
-            if (this.acceptStart.ThreadState == ThreadState.Unstarted)
+            if (this.acceptStart.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
             {
                 this.acceptStart.Start();
             }
@@ -271,6 +297,9 @@ namespace FightTheLandLord
                 {
                     if (this.client.AcceptPokers() != null)
                     {
+                        this.tbState.Text += "[系统消息]:正在起牌...\r\n起牌完成\r\n";
+                        this.tbState.SelectionStart = this.tbState.Text.Length;
+                        this.tbState.ScrollToCaret();
                         this.player1.pokers = this.client.Pokers;
                         this.player1.sort(); //把牌从大到小排序
                         this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
