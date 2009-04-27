@@ -43,6 +43,7 @@
             this.timerServer = new System.Windows.Forms.Timer(this.components);
             this.btnOK = new System.Windows.Forms.Button();
             this.timerClient = new System.Windows.Forms.Timer(this.components);
+            this.tbState = new System.Windows.Forms.TextBox();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -60,9 +61,9 @@
             // 
             // panelPlayer1
             // 
-            this.panelPlayer1.Location = new System.Drawing.Point(12, 410);
+            this.panelPlayer1.Location = new System.Drawing.Point(10, 411);
             this.panelPlayer1.Name = "panelPlayer1";
-            this.panelPlayer1.Size = new System.Drawing.Size(768, 150);
+            this.panelPlayer1.Size = new System.Drawing.Size(800, 150);
             this.panelPlayer1.TabIndex = 1;
             this.panelPlayer1.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer1_Paint);
             // 
@@ -94,7 +95,7 @@
             this.关于ToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(792, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(822, 24);
             this.menuStrip1.TabIndex = 4;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -144,8 +145,8 @@
             // 
             // timerServer
             // 
-            this.timerServer.Interval = 2000;
-            this.timerServer.Tick += new System.EventHandler(this.timerCheckConn_Tick);
+            this.timerServer.Interval = 1000;
+            this.timerServer.Tick += new System.EventHandler(this.timerServer_Tick);
             // 
             // btnOK
             // 
@@ -164,11 +165,22 @@
             this.timerClient.Interval = 1000;
             this.timerClient.Tick += new System.EventHandler(this.timerClient_Tick);
             // 
+            // tbState
+            // 
+            this.tbState.ForeColor = System.Drawing.Color.Red;
+            this.tbState.Location = new System.Drawing.Point(594, 314);
+            this.tbState.Multiline = true;
+            this.tbState.Name = "tbState";
+            this.tbState.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
+            this.tbState.Size = new System.Drawing.Size(216, 90);
+            this.tbState.TabIndex = 6;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(792, 573);
+            this.ClientSize = new System.Drawing.Size(822, 573);
+            this.Controls.Add(this.tbState);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lblIsRule);
             this.Controls.Add(this.btnLead);
@@ -178,8 +190,8 @@
             this.ImeMode = System.Windows.Forms.ImeMode.On;
             this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(800, 600);
-            this.MinimumSize = new System.Drawing.Size(800, 600);
+            this.MaximumSize = new System.Drawing.Size(830, 600);
+            this.MinimumSize = new System.Drawing.Size(830, 600);
             this.Name = "MainForm";
             this.Text = "火拼斗地主";
             this.Load += new System.EventHandler(this.MainForm_Load);
@@ -206,6 +218,7 @@
         private System.Windows.Forms.Timer timerServer;
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Timer timerClient;
+        private System.Windows.Forms.TextBox tbState;
     }
 }
 
