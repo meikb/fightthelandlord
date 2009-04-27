@@ -49,6 +49,21 @@ namespace FightTheLandLord
             }
         }
 
+        public List<Poker> AcceptPokers()
+        {
+            const int Readbyte = 4096;
+            NetworkStream NsPokers = client.GetStream();
+            byte[] bytePokers = new byte[Readbyte];
+            int ReadNum = 0;
+            do
+            {
+                ReadNum = NsPokers.Read(bytePokers, ReadNum, Readbyte);
+            } while (Readbyte < 0);
+            IFormatter serializer = new BinaryFormatter();
+            List<Poker> Pokers = (List < Poker > serializer.Deserialize(bytePokers));
+            return Pokers;
+        }
+
         public bool SendOk()
         {
             try

@@ -70,16 +70,21 @@ namespace FightTheLandLord
             }
         }
 
-        public bool SendPokerForClient(List<Poker> Pokers)  //未完成
+        public bool SendPokerForClient(List<Poker> player2Pokers, List<Poker> player3Pokers)  //未完成
         {
             try
             {
-                NetworkStream Ns = this.client.GetStream();
-                MemoryStream memStream = new MemoryStream();
+                NetworkStream Ns1 = this.client1.GetStream();
+                NetworkStream Ns2 = this.client2.GetStream();
+                MemoryStream memStream1 = new MemoryStream();
+                MemoryStream memStream2 = new MemoryStream();
                 IFormatter serializer = new BinaryFormatter();
-                serializer.Serialize(memStream, pokers);
-                byte[] bytePokers = memStream.GetBuffer();
-                Ns.Write(bytePokers, 0, bytePokers.Length);
+                serializer.Serialize(memStream1, player2Pokers);
+                serializer.Serialize(memStream2, player3Pokers);
+                byte[] bytePlayer2Pokers = memStream1.GetBuffer();
+                byte[] bytePlayer3Pokers = memStream1.GetBuffer();
+                Ns1.Write(bytePlayer2Pokers, 0, bytePlayer2Pokers.Length);
+                Ns2.Write(bytePlayer3Pokers, 0, bytePlayer3Pokers.Length);
             }
             catch
             {
