@@ -7,6 +7,9 @@ namespace FightTheLandLord
     public static class Rules
     {
         public static List<Poker> orderingPokers = new List<Poker>();
+        /// <summary>
+        /// 验证所出牌组是否符合游戏规则
+        /// </summary>
         public static bool IsRules(List<Poker> leadPokers)
         {
             bool isRule = false;

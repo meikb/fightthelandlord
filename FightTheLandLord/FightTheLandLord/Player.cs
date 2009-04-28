@@ -15,6 +15,7 @@ namespace FightTheLandLord
         private Color _backColor;
         private Graphics _g;
         private bool _isLandLord;
+        private bool _haveOrder;
 
         public List<Poker> pokers
         {
@@ -105,6 +106,18 @@ namespace FightTheLandLord
             }
         }
 
+        public bool haveOrder
+        {
+            get
+            {
+                return this._haveOrder;
+            }
+            set
+            {
+                this._haveOrder = value;
+            }
+        }
+
 
         /// <summary>
         /// 把牌从大到小重新排序
@@ -156,18 +169,18 @@ namespace FightTheLandLord
         /// </summary>
         public bool lead()
         {
-            foreach (int selectPoker in this.selectPokers)
+            foreach (int selectPoker in this.selectPokers)  //迭代循环把已选中的牌添加到leadPokers
             {
                 this.leadPokers.Add(this.newPokers[selectPoker]);
             }
             if (Rules.IsRules(this.leadPokers))
             {
-                this.BakPoker();
-                foreach (int selectPoker in this.selectPokers)
+                this.BakPoker();  //备份现有newPokers,下次出牌时需要用到
+                foreach (int selectPoker in this.selectPokers)  //在newPokers里移除已经出过的牌
                 {
                     this.newPokers.Remove(this.bakPokers[selectPoker]);
                 }
-                this.selectPokers.Clear();
+                this.selectPokers.Clear();  //清空已选牌
                 return true;
             }
             else

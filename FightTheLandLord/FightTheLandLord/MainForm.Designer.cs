@@ -128,6 +128,7 @@
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
             this.退出ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.退出ToolStripMenuItem.Text = "退出";
+            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
             // 关于ToolStripMenuItem
             // 
@@ -142,6 +143,7 @@
             this.关于作者ToolStripMenuItem.Name = "关于作者ToolStripMenuItem";
             this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
             this.关于作者ToolStripMenuItem.Text = "关于作者";
+            this.关于作者ToolStripMenuItem.Click += new System.EventHandler(this.关于作者ToolStripMenuItem_Click);
             // 
             // timerServer
             // 

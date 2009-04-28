@@ -21,6 +21,8 @@ namespace FightTheLandLord
         private Thread acceptConn;
         private Thread acceptOk;
         private Thread acceptStart;
+        private Thread acceptPokers;
+        private Thread acceptOrder;
         public MainForm()
         {
             InitializeComponent();
@@ -82,19 +84,18 @@ namespace FightTheLandLord
             {
                 player3Pokers.Add(this.allPoker[i]);
             }
-            int LandLordNum = new Random().Next(0, 3);
-
+            int LandLordNum = new Random().Next(1, 4);
             for (int i = 51; i < 54; i++)
             {
                 switch (LandLordNum)
                 {
-                    case 0:
+                    case 1:
                         this.player1.pokers.Add(this.allPoker[i]);
                         break;
-                    case 1:
+                    case 2:
                         player2Pokers.Add(this.allPoker[i]);
                         break;
-                    case 2:
+                    case 3:
                         player3Pokers.Add(this.allPoker[i]);
                         break;
                 }
@@ -102,6 +103,7 @@ namespace FightTheLandLord
             if (server.SendPokerForClient(player2Pokers, player3Pokers))
             {
                 MessageBox.Show("发牌成功", "火拼斗地主");
+                this.server.SendOrder(LandLordNum);
             }
             else
             {
@@ -152,8 +154,6 @@ namespace FightTheLandLord
             this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
             this.btnStart.Enabled = false;
             this.btnStart.Visible = false;
-            this.btnLead.Enabled = true;
-            this.btnLead.Visible = true;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -203,8 +203,9 @@ namespace FightTheLandLord
             this.tbState.SelectionStart = this.tbState.Text.Length; //设置光标位置为最下方
             this.tbState.ScrollToCaret();   //滚动到光标位置,实现用户看到的textbox滚动条永远滚动到最下方
             this.timerServer.Enabled = true;
-            //(ToolStripMenuItem)(this.menuStrip1.Items[).DropDownItems
-            //this.menuStrip1.Items["游戏ToolStripMenuItem"];
+            ToolStripMenuItem tsmi =(ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
+            tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
+            tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
         }
 
         private void 加入游戏ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -217,6 +218,9 @@ namespace FightTheLandLord
                 MessageBox.Show("连接成功","消息");
                 btnOK.Enabled = true;
                 btnOK.Visible = true;   //启用"准备"按钮
+                ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
+                tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
+                tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
             }
             else
             {
@@ -259,6 +263,13 @@ namespace FightTheLandLord
                     this.btnStart.Enabled = true;
                     this.btnStart.Visible = true;
                 }
+                this.player1.haveOrder = this.server.haveOrder;
+                if (this.player1.haveOrder)
+                {
+                    this.btnLead.Enabled = true;
+                    this.btnLead.Visible = true;
+                    this.server.haveOrder = false;
+                }
             }
         }
 
@@ -268,7 +279,17 @@ namespace FightTheLandLord
             {
                 btnOK.Enabled = false;
                 btnOK.Visible = false;
-                this.timerClient.Enabled = true;
+                this.timerClient.Enabled = true; 
+                if (this.acceptStart == null)
+                {
+                    this.acceptStart = new Thread(new ThreadStart(client.AcceptStart));
+                    this.acceptStart.IsBackground = true;
+                    this.acceptStart.Name = "接受即将开始消息线程";
+                }
+                if (this.acceptStart.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
+                {
+                    this.acceptStart.Start();
+                }
                 this.tbState.Text += "[系统消息]:已向服务器发送准备消息,正在等待响应...\r\n";
                 this.tbState.SelectionStart = this.tbState.Text.Length;
                 this.tbState.ScrollToCaret();
@@ -281,23 +302,23 @@ namespace FightTheLandLord
 
         private void timerClient_Tick(object sender, EventArgs e)
         {
-            if (this.acceptStart == null)
-            {
-                this.acceptStart = new Thread(new ThreadStart(client.AcceptStart));
-                this.acceptStart.IsBackground = true;
-                this.acceptStart.Name = "接受即将开始消息线程";
-            }
-            if (this.acceptStart.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
-            {
-                this.acceptStart.Start();
-            }
             if (this.client.isStart)
             {
                 if (this.player1.newPokers.Count == 0)
                 {
-                    if (this.client.AcceptPokers() != null)
+                    if (this.acceptPokers == null)
                     {
-                        this.tbState.Text += "[系统消息]:正在起牌...\r\n起牌完成\r\n";
+                        this.acceptPokers = new Thread(new ThreadStart(this.client.AcceptPokers));
+                        this.acceptPokers.Name = "接收牌组";
+                        this.acceptPokers.IsBackground = true;
+                    }
+                    if (this.acceptPokers.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
+                    {
+                        this.acceptPokers.Start();
+                    }
+                    if (this.client.Pokers != null)
+                    {
+                        this.tbState.Text += "[系统消息]:接收到服务器分配的牌组";
                         this.tbState.SelectionStart = this.tbState.Text.Length;
                         this.tbState.ScrollToCaret();
                         this.player1.pokers = this.client.Pokers;
@@ -305,11 +326,30 @@ namespace FightTheLandLord
                         this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
                         this.player1.Paint(); //在panelPlayer1中画出player1的牌
                         this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
-                        this.btnLead.Enabled = true;
-                        this.btnLead.Visible = true;
+                        this.acceptOrder = new Thread(new ThreadStart(this.client.AcceptOrder));
+                        this.acceptOrder.Name = "检测是否可以出牌";
+                        this.acceptOrder.IsBackground = true;
+                        this.acceptOrder.Start();
                     }
                 }
             }
+            this.player1.haveOrder = this.client.haveOrder;
+            if (this.player1.haveOrder)
+            {
+                this.btnLead.Enabled = true;
+                this.btnLead.Visible = true;
+                this.client.haveOrder = false;
+            }
+        }
+
+        private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
+        }
+
+        private void 关于作者ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("作者:李达", "火拼斗地主");
         }
     }
 }
