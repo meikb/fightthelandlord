@@ -12,11 +12,31 @@ namespace FightTheLandLord
 {
     class Server
     {
+        /// <summary>
+        /// 监听对象
+        /// </summary>
         public TcpListener listener = new TcpListener(IPAddress.Any ,Properties.Settings.Default.Port);
+        /// <summary>
+        /// 客户端1
+        /// </summary>
         public TcpClient client1;
+        /// <summary>
+        /// 客户端2
+        /// </summary>
         public TcpClient client2;
+        /// <summary>
+        /// 所有用户是否已准备
+        /// </summary>
         public bool everyOneIsOk = false;
+        /// <summary>
+        /// 已出的牌组的集合
+        /// </summary>
+        public List<List<Poker>> leadedPokers;
+        public bool haveOrder = false;
 
+        /// <summary>
+        /// 寻远接收客户端的连接请求，当连接2个客户端后关闭端口监听。
+        /// </summary>
         public void Connection() //循环检测是否有连接请求,接受最先请求的两个连接,得到两个TcpClient,然后拒绝其他的所有连接
         {
             try
@@ -45,6 +65,9 @@ namespace FightTheLandLord
             //return true;
         }
 
+        /// <summary>
+        /// 循环接收客户端的准备请求，一旦所有客户端准备完毕，就向客户端发送Start命令
+        /// </summary>
         public void AccpetOk()
         {
             NetworkStream NsOk1 = client1.GetStream();
@@ -70,6 +93,9 @@ namespace FightTheLandLord
             }
         }
 
+        /// <summary>
+        /// 把Poker的集合对象序列化后发送给2个客户端
+        /// </summary>
         public bool SendPokerForClient(List<Poker> player2Pokers, List<Poker> player3Pokers)  
         {
             try
@@ -93,7 +119,10 @@ namespace FightTheLandLord
             return true;
         }
 
-        public bool AcceptPokers()
+        /// <summary>
+        /// 循环接收客户端出牌
+        /// </summary>
+        public void AcceptPokers()
         {
             try
             {
@@ -111,9 +140,28 @@ namespace FightTheLandLord
             }
             catch
             {
-                return false;
+                //return false;
             }
-            return true;
+            //return true;
+        }
+
+        public void SendOrder(int Num)
+        {
+            NetworkStream Ns1 = client1.GetStream();
+            NetworkStream Ns2 = client2.GetStream();
+            byte[] byteOrder = Encoding.Default.GetBytes("lead");
+            switch (Num)
+            {
+                case 1:
+                    this.haveOrder = true;
+                    break;
+                case 2:
+                    Ns1.Write(byteOrder, 0, byteOrder.Length);
+                    break;
+                case 3:
+                    Ns2.Write(byteOrder, 0, byteOrder.Length);
+                    break;
+            }
         }
     }
 }
