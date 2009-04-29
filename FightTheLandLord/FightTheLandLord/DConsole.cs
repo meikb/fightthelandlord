@@ -4,9 +4,10 @@ using System.Text;
 
 namespace FightTheLandLord
 {
-    public static class Rules
+    public static class DConsole
     {
         public static List<Poker> orderingPokers = new List<Poker>();
+        public static System.Windows.Forms.TextBox tb;
 
         /// <summary>
         /// 已出的牌组的集合
@@ -49,35 +50,57 @@ namespace FightTheLandLord
                     }
                     break;
             }
-            if (isRule)
-            {
-                if (leadedPokers[leadedPokers.Count] != null)
-                {
-                    if (leadedPokers[leadedPokers.Count].Count == orderingPokers.Count)
-                    {
-                        if (leadedPokers[leadedPokers.Count][0].pokerNum < orderingPokers[0].pokerNum)
-                        {
-                            isRule = true;
-                        }
-                        else
-                        {
-                            isRule = false;
-                        }
-                    }
-                    else
-                    {
-                        isRule = false;
-                    }
-                }
-            }
+            //if (isRule)
+            //{
+            //    if (leadedPokers.Count != 0)
+            //    {
+            //        if (leadedPokers[leadedPokers.Count] != null)
+            //        {
+            //            if (leadedPokers[leadedPokers.Count].Count == orderingPokers.Count)
+            //            {
+            //                if (leadedPokers[leadedPokers.Count][0].pokerNum < orderingPokers[0].pokerNum)
+            //                {
+            //                    isRule = true;
+            //                }
+            //                else
+            //                {
+            //                    isRule = false;
+            //                }
+            //            }
+            //            else
+            //            {
+            //                isRule = false;
+            //            }
+            //        }
+            //    }
+            //    else
+            //    {
+            //        return true;
+            //    }
+            //}
 #if DEBUG
             Console.WriteLine("玩家出的牌:");
             foreach (Poker Poker in orderingPokers)
             {
-                Console.WriteLine(Poker.pokerColor.ToString() + Poker.pokerNum.ToString());
+                Write(Poker.pokerColor.ToString() + Poker.pokerNum.ToString());
+            }
+            foreach (List<Poker> onePokers in leadedPokers)
+            {
+                Write("已接收到的牌组:");
+                foreach (Poker onePoker in onePokers)
+                {
+                    Write(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+                }
             }
 #endif
             return isRule;
+        }
+
+        public static void Write(string str)
+        {
+            tb.Text += str + "\r\n";
+            tb.SelectionStart = tb.Text.Length;
+            tb.ScrollToCaret();
         }
     }
 }

@@ -102,10 +102,11 @@ namespace FightTheLandLord
                         break;
                 }
             }
-            if (server.SendPokerForClient(player2Pokers, player3Pokers))
+            if (server.SendPokerForClient(player2Pokers,1) && server.SendPokerForClient(player3Pokers,2))
             {
                 MessageBox.Show("发牌成功", "火拼斗地主");
-                this.server.SendOrder(LandLordNum);
+                //this.server.SendOrder(LandLordNum);
+                this.server.SendOrder(1);
             }
             else
             {
@@ -160,6 +161,7 @@ namespace FightTheLandLord
 
         private void MainForm_Load(object sender, EventArgs e)
         {
+            DConsole.tb = this.tbState;
         }
 
         private void panelPlayer1_Paint(object sender, PaintEventArgs e)
@@ -182,14 +184,21 @@ namespace FightTheLandLord
         {
             if (player1.lead())
             {
+                if (this.server != null)
+                {
+                    server.SendPokerForClient(player1.leadPokers, 1);
+                    server.SendPokerForClient(player1.leadPokers, 2);
+                }
+                if (this.client != null)
+                {
+                    client.SendPokers(player1.leadPokers);
+                }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
             }
             else
             {
-                this.tbState.Text += "[系统消息]:您出的牌不符合规则!\r\n";
-                this.tbState.SelectionStart = this.tbState.Text.Length;
-                this.tbState.ScrollToCaret();
+                DConsole.Write("[系统消息]:您出的牌不符合规则!");
             }
         }
 
@@ -201,9 +210,7 @@ namespace FightTheLandLord
             this.acceptConn.IsBackground = true;
             this.acceptConn.Name = "检测客户端的连接并接受的线程";
             this.acceptConn.Start(); //开始线程
-            this.tbState.Text += "[系统消息]:创建游戏成功,等待其他人链接\r\n";
-            this.tbState.SelectionStart = this.tbState.Text.Length; //设置光标位置为最下方
-            this.tbState.ScrollToCaret();   //滚动到光标位置,实现用户看到的textbox滚动条永远滚动到最下方
+            DConsole.Write("[系统消息]:创建游戏成功,等待其他人链接");
             this.timerServer.Enabled = true;
             ToolStripMenuItem tsmi =(ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
             tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
@@ -236,10 +243,8 @@ namespace FightTheLandLord
             {
                 if (this.tbState.Text.IndexOf("连接建立成功,等待其他人准备", 0, this.tbState.Text.Length) < 0) //防止向用户重复发送此消息
                 {
-                    this.tbState.Text += "[系统消息]:连接建立成功,等待其他人准备\r\n";
+                    DConsole.Write("[系统消息]:连接建立成功,等待其他人准备");
                 }
-                this.tbState.SelectionStart = this.tbState.Text.Length;
-                this.tbState.ScrollToCaret();
                 if (this.acceptOk == null)  //如果线程没有初始化则先初始化
                 {
                     this.acceptOk = new Thread(new ThreadStart(server.AccpetOk));
@@ -263,9 +268,7 @@ namespace FightTheLandLord
                 if (this.server.everyOneIsOk) //启动线程后,服务器循环获取客户端的NetworkStream,然后判断客户端是否发送"OK"信息,如果发送,则把everyOneIsOk设置为True.
                 {
                     this.server.everyOneIsOk = false; //为下一局做准备
-                    this.tbState.Text += "[系统消息]:所有人已准备,可以开始游戏\r\n";
-                    this.tbState.SelectionStart = this.tbState.Text.Length;
-                    this.tbState.ScrollToCaret();
+                    DConsole.Write("[系统消息]:所有人已准备,可以开始游戏");
                     this.btnStart.Enabled = true;
                     this.btnStart.Visible = true;
                 }
@@ -296,9 +299,7 @@ namespace FightTheLandLord
                 {
                     this.acceptStart.Start();
                 }
-                this.tbState.Text += "[系统消息]:已向服务器发送准备消息,正在等待响应...\r\n";
-                this.tbState.SelectionStart = this.tbState.Text.Length;
-                this.tbState.ScrollToCaret();
+                DConsole.Write("[系统消息]:已向服务器发送准备消息,正在等待响应...");
             }
             else
             {
@@ -324,9 +325,7 @@ namespace FightTheLandLord
                     }
                     if (this.client.Pokers != null)
                     {
-                        this.tbState.Text += "[系统消息]:接收到服务器分配的牌组";
-                        this.tbState.SelectionStart = this.tbState.Text.Length;
-                        this.tbState.ScrollToCaret();
+                        DConsole.Write("[系统消息]:接收到服务器分配的牌组.");
                         this.player1.pokers = this.client.Pokers;
                         this.player1.sort(); //把牌从大到小排序
                         this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
@@ -336,7 +335,7 @@ namespace FightTheLandLord
                         this.acceptOrder.Name = "检测是否可以出牌";
                         this.acceptOrder.IsBackground = true;
                         this.acceptOrder.Start();
-                        this.cacceptLeadPokers = new Thread(new ThreadStart(this.client.AcceptPokers));
+                        this.cacceptLeadPokers = new Thread(new ThreadStart(this.client.AcceptLeadPokers));
                         this.cacceptLeadPokers.Name = "接收服务器发送的牌组线程";
                         this.cacceptLeadPokers.IsBackground = true;
                         this.cacceptLeadPokers.Start();

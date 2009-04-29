@@ -84,13 +84,13 @@ namespace FightTheLandLord
         /// </summary>
         public void AcceptLeadPokers()
         {
-                while (true)
-                {
-                    NetworkStream NsPokers = client.GetStream();
-                    IFormatter serializer = new BinaryFormatter();
-                    List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
-                    Rules.leadedPokers.Add(leadedPokers);
-                }
+            NetworkStream NsPokers = client.GetStream();
+            while (true)
+            {
+                IFormatter serializer = new BinaryFormatter();
+                List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+                DConsole.leadedPokers.Add(leadedPokers);
+            }
         }
 
         /// <summary>
@@ -98,16 +98,16 @@ namespace FightTheLandLord
         /// </summary>
         public bool SendOk() //给服务器发送准备指令
         {
-            try
-            {
+            //try
+            //{
                 NetworkStream NsOk = this.client.GetStream();
                 byte[] byteOk = Encoding.Default.GetBytes("OK");
                 NsOk.Write(byteOk, 0, byteOk.Length);
-            }
-            catch
-            {
-                return false;
-            }
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
             return true;
         }
 
@@ -116,19 +116,19 @@ namespace FightTheLandLord
         /// </summary>
         public bool SendPokers(List<Poker> pokers)  //出牌请求
         {
-            try
-            {
+            //try
+            //{
                 NetworkStream Ns = this.client.GetStream();
                 MemoryStream memStream = new MemoryStream();
                 IFormatter serializer = new BinaryFormatter();
                 serializer.Serialize(memStream, pokers);
                 byte[] bytePokers = memStream.GetBuffer();
                 Ns.Write(bytePokers, 0, bytePokers.Length);
-            }
-            catch
-            {
-                return false;
-            }
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
             return true;
         }
 
