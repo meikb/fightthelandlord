@@ -7,6 +7,11 @@ namespace FightTheLandLord
     public static class Rules
     {
         public static List<Poker> orderingPokers = new List<Poker>();
+
+        /// <summary>
+        /// 已出的牌组的集合
+        /// </summary>
+        public static List<List<Poker>> leadedPokers = new List<List<Poker>>();
         /// <summary>
         /// 验证所出牌组是否符合游戏规则
         /// </summary>
@@ -43,6 +48,27 @@ namespace FightTheLandLord
                         isRule = false;
                     }
                     break;
+            }
+            if (isRule)
+            {
+                if (leadedPokers[leadedPokers.Count] != null)
+                {
+                    if (leadedPokers[leadedPokers.Count].Count == orderingPokers.Count)
+                    {
+                        if (leadedPokers[leadedPokers.Count][0].pokerNum < orderingPokers[0].pokerNum)
+                        {
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    else
+                    {
+                        isRule = false;
+                    }
+                }
             }
 #if DEBUG
             Console.WriteLine("玩家出的牌:");

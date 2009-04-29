@@ -28,10 +28,6 @@ namespace FightTheLandLord
         /// 所有用户是否已准备
         /// </summary>
         public bool everyOneIsOk = false;
-        /// <summary>
-        /// 已出的牌组的集合
-        /// </summary>
-        public List<List<Poker>> leadedPokers;
         public bool haveOrder = false;
 
         /// <summary>
@@ -124,25 +120,13 @@ namespace FightTheLandLord
         /// </summary>
         public void AcceptPokers()
         {
-            try
+            while (true)
             {
-                const int bufferSize = 4096;
-                NetworkStream Ns = client1.GetStream();
-                MemoryStream memStream = new MemoryStream();
-                byte[] bytePokers = new byte[bufferSize];
-                int bytesRead = 0;
-                do
-                {
-                    bytesRead = Ns.Read(bytePokers, 0, bufferSize);
-                } while (bytesRead > 0);
+                NetworkStream NsPokers = client.GetStream();
                 IFormatter serializer = new BinaryFormatter();
-                List<Poker> acceptPoker = (List<Poker>)serializer.Deserialize(memStream);
+                List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+                Rules.leadedPokers.Add(leadedPokers);
             }
-            catch
-            {
-                //return false;
-            }
-            //return true;
         }
 
         public void SendOrder(int Num)

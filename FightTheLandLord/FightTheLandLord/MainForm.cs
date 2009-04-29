@@ -23,6 +23,8 @@ namespace FightTheLandLord
         private Thread acceptStart;
         private Thread acceptPokers;
         private Thread acceptOrder;
+        private Thread cacceptLeadPokers;
+        private Thread sacceptLeadPokers;
         public MainForm()
         {
             InitializeComponent();
@@ -246,13 +248,17 @@ namespace FightTheLandLord
                 }
                 if (this.acceptOk.ThreadState == (ThreadState.Background | ThreadState.Unstarted))  //如果线程没有启动则先启动,由于之前把线程的IsBackGround设置为true,所以这里要这样写
                 {
-                    try
-                    {
                         this.acceptOk.Start();
-                    }
-                    catch
-                    {
-                    }
+                }
+                if (this.sacceptLeadPokers == null)
+                {
+                    this.sacceptLeadPokers = new Thread(new ThreadStart(this.server.AcceptPokers));
+                    this.sacceptLeadPokers.IsBackground = true;
+                    this.sacceptLeadPokers.Name = "循环接收客户端出牌线程";
+                }
+                if (this.sacceptLeadPokers.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
+                {
+                    this.sacceptLeadPokers.Start();
                 }
                 if (this.server.everyOneIsOk) //启动线程后,服务器循环获取客户端的NetworkStream,然后判断客户端是否发送"OK"信息,如果发送,则把everyOneIsOk设置为True.
                 {
@@ -330,6 +336,10 @@ namespace FightTheLandLord
                         this.acceptOrder.Name = "检测是否可以出牌";
                         this.acceptOrder.IsBackground = true;
                         this.acceptOrder.Start();
+                        this.cacceptLeadPokers = new Thread(new ThreadStart(this.client.AcceptPokers));
+                        this.cacceptLeadPokers.Name = "接收服务器发送的牌组线程";
+                        this.cacceptLeadPokers.IsBackground = true;
+                        this.cacceptLeadPokers.Start();
                     }
                 }
             }

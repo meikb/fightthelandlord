@@ -61,7 +61,7 @@ namespace FightTheLandLord
             {
                 NsStart.Read(byteStart, 0, "Start".Length);
                 strStart = Encoding.Default.GetString(byteStart);
-                if (strStart.StartsWith("St"))
+                if (strStart.StartsWith("Start"))
                 {
                     this.isStart = true;
                     break;
@@ -72,17 +72,25 @@ namespace FightTheLandLord
         /// <summary>
         /// 接收服务器发送的牌组
         /// </summary>
-        public void AcceptPokers() //接受server传送过来的已序列化的List<Poker>牌组对象并反序列化,然后把引用传给this.Pokers
+        public void AcceptPokers() //接受server传送过来的已序列化的List<Poker>牌组对象并将其反序列化,然后把它的引用传给this.Pokers
         {
-            try
-            {
                 NetworkStream NsPokers = client.GetStream();
                 IFormatter serializer = new BinaryFormatter();
                 this.Pokers = (List<Poker>)(serializer.Deserialize(NsPokers));
-            }
-            catch
-            {
-            }
+        }
+
+        /// <summary>
+        /// 接收其他人的出牌
+        /// </summary>
+        public void AcceptLeadPokers()
+        {
+                while (true)
+                {
+                    NetworkStream NsPokers = client.GetStream();
+                    IFormatter serializer = new BinaryFormatter();
+                    List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+                    Rules.leadedPokers.Add(leadedPokers);
+                }
         }
 
         /// <summary>
@@ -106,7 +114,7 @@ namespace FightTheLandLord
         /// <summary>
         /// 向服务器发送出牌请求
         /// </summary>
-        public bool SendPokers(List<Poker> pokers)  //出牌请求,暂未完成.
+        public bool SendPokers(List<Poker> pokers)  //出牌请求
         {
             try
             {
