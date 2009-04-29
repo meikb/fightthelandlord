@@ -173,9 +173,10 @@ namespace FightTheLandLord
             {
                 this.leadPokers.Add(this.newPokers[selectPoker]);
             }
-            if (Rules.IsRules(this.leadPokers))
+            if (DConsole.IsRules(this.leadPokers))
             {
                 this.BakPoker();  //备份现有newPokers,下次出牌时需要用到
+                //this.leadPokers = DConsole.orderingPokers;
                 foreach (int selectPoker in this.selectPokers)  //在newPokers里移除已经出过的牌
                 {
                     this.newPokers.Remove(this.bakPokers[selectPoker]);
