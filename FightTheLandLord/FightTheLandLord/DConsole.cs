@@ -84,14 +84,6 @@ namespace FightTheLandLord
             {
                 Write(Poker.pokerColor.ToString() + Poker.pokerNum.ToString());
             }
-            foreach (List<Poker> onePokers in leadedPokers)
-            {
-                Write("已接收到的牌组:");
-                foreach (Poker onePoker in onePokers)
-                {
-                    Write(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
-                }
-            }
 #endif
             return isRule;
         }
@@ -101,6 +93,18 @@ namespace FightTheLandLord
             tb.Text += str + "\r\n";
             tb.SelectionStart = tb.Text.Length;
             tb.ScrollToCaret();
+        }
+
+        public static void WriteLeadedPokers()
+        {
+            foreach (List<Poker> onePokers in leadedPokers)
+            {
+                Write("已接收到的牌组:");
+                foreach (Poker onePoker in onePokers)
+                {
+                    Write(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+                }
+            }
         }
     }
 }
