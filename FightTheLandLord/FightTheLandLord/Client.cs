@@ -12,10 +12,11 @@ namespace FightTheLandLord
     public class Client
     {
         public TcpClient client;
+        public UdpClient uClient;
         /// <summary>
         /// 所有用户是否已准备
         /// </summary>
-        public bool isStart = false;
+        public bool everyIsOk = false;
         /// <summary>
         /// 引用服务器发送的牌组对象
         /// </summary>
@@ -24,6 +25,8 @@ namespace FightTheLandLord
         /// 是否有出牌权限
         /// </summary>
         public bool haveOrder;
+        public bool AcceptedPokers;
+        public bool AcceptedLeadPokers;
 
         /// <summary>
         /// 构造函数
@@ -31,6 +34,7 @@ namespace FightTheLandLord
         public Client()
         {
             client = new TcpClient();
+            uClient = new UdpClient();
         }
 
         /// <summary>
@@ -52,46 +56,97 @@ namespace FightTheLandLord
         /// <summary>
         /// 循环检测服务器的Start命令
         /// </summary>
-        public void AcceptStart()  //循环检测server端是否发送过Start消息,如果发送则this.isStart = true;
+        public void AcceptMessage()  //循环检测server端是否发送过Start消息,如果发送则this.isStart = true;
         {
-            NetworkStream NsStart = client.GetStream();
-            byte[] byteStart = new byte["Start".Length];
-            string strStart = "";
+            NetworkStream Ns = client.GetStream();
+            Stream stream = new MemoryStream();
+            string str = "";
+            IFormatter serializer = new BinaryFormatter();
+            List<Poker> pokers;
             while (true)
             {
-                NsStart.Read(byteStart, 0, "Start".Length);
-                strStart = Encoding.Default.GetString(byteStart);
-                if (strStart.StartsWith("Start"))
+                byte[] byteMessage = new byte[2048];
+                Ns.Read(byteMessage, 0, 2048);
+                str = Encoding.Default.GetString(byteMessage);
+                if (str.StartsWith("EveryOneIsOk"))
                 {
-                    this.isStart = true;
-                    break;
+                    this.everyIsOk = true;
                 }
+                if (str.StartsWith("lead"))
+                {
+                    this.haveOrder = true;
+                }
+                if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
+                {
+                    stream.Write(byteMessage, 0, byteMessage.Length);
+                    stream.Seek(0, SeekOrigin.Begin);
+                    pokers = (List<Poker>)(serializer.Deserialize(stream));
+                    if (pokers.Count == 17 | pokers.Count == 20)
+                    {
+                        this.Pokers = pokers;
+                    }
+                    else
+                    {
+                        DConsole.leadedPokers.Add(pokers);
+                        DConsole.WriteLeadedPokers();
+                    }
+                }
+                stream.Flush();
+                //switch (str)
+                //{
+                //    case "EveryOneIsOk":
+                //        this.everyIsOk = true;
+                //        break;
+                //    case "lead":
+                //        this.haveOrder = true;
+                //        break;
+                //    default:
+                //        memStream.Write(byteMessage, 0, byteMessage.Length);
+                //        this.Pokers = (List<Poker>)(serializer.Deserialize(memStream));
+                //        break;
+                //}
+                //if (str.StartsWith("EveryOneIsOk"))
+                //{
+                //    this.everyIsOk = true;
+                //} 
+                //if (str.StartsWith("lead"))
+                //{
+                //    this.haveOrder = true;
+                //}
             }
         }
 
         /// <summary>
         /// 接收服务器发送的牌组
         /// </summary>
-        public void AcceptPokers() //接受server传送过来的已序列化的List<Poker>牌组对象并将其反序列化,然后把它的引用传给this.Pokers
-        {
-                NetworkStream NsPokers = client.GetStream();
-                IFormatter serializer = new BinaryFormatter();
-                this.Pokers = (List<Poker>)(serializer.Deserialize(NsPokers));
-        }
+        //public void AcceptPokers() //接受server传送过来的已序列化的List<Poker>牌组对象并将其反序列化,然后把它的引用传给this.Pokers
+        //{
+        //    NetworkStream NsPokers = client.GetStream();
+        //    IFormatter serializer = new BinaryFormatter();
+        //    this.Pokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+        //    //NsPokers.Flush();
+        //}
 
         /// <summary>
         /// 接收其他人的出牌
         /// </summary>
-        public void AcceptLeadPokers()
-        {
-            NetworkStream NsPokers = client.GetStream();
-            while (true)
-            {
-                IFormatter serializer = new BinaryFormatter();
-                List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
-                DConsole.leadedPokers.Add(leadedPokers);
-            }
-        }
+        //public void AcceptLeadPokers()
+        //{
+        //    NetworkStream NsPokers = client.GetStream();
+        //    while (true)
+        //    {
+        //        IFormatter serializer = new BinaryFormatter();
+        //        try
+        //        {
+        //            List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+        //            DConsole.leadedPokers.Add(leadedPokers);
+        //            DConsole.WriteLeadedPokers();
+        //        }
+        //        catch
+        //        {
+        //        }
+        //    }
+        //}
 
         /// <summary>
         /// 向服务器发送准备请求
@@ -135,20 +190,20 @@ namespace FightTheLandLord
         /// <summary>
         /// 循环检测服务器是否发送允许出牌消息
         /// </summary>
-        public void AcceptOrder()
-        {
-            NetworkStream Ns = this.client.GetStream();
-            byte[] byteOrder = new byte["lead".Length];
-            string strOrder = "";
-            while (true)
-            {
-                Ns.Read(byteOrder, 0, "lead".Length);
-                strOrder = Encoding.Default.GetString(byteOrder);
-                if (strOrder.StartsWith("lead"))
-                {
-                    this.haveOrder = true;
-                }
-            }
-        }
+        //public void AcceptOrder()
+        //{
+        //    NetworkStream Ns = this.client.GetStream();
+        //    byte[] byteOrder = new byte["lead".Length];
+        //    string strOrder = "";
+        //    while (true)
+        //    {
+        //        Ns.Read(byteOrder, 0, "lead".Length);
+        //        strOrder = Encoding.Default.GetString(byteOrder);
+        //        if (strOrder.StartsWith("lead"))
+        //        {
+        //            this.haveOrder = true;
+        //        }
+        //    }
+        //}
     }
 }

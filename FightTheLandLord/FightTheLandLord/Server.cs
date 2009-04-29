@@ -29,6 +29,8 @@ namespace FightTheLandLord
         /// </summary>
         public bool everyOneIsOk = false;
         public bool haveOrder = false;
+        public bool AcceptedLeadPokers;
+        public bool AcceptedPokers;
 
         /// <summary>
         /// 寻远接收客户端的连接请求，当连接2个客户端后关闭端口监听。
@@ -64,27 +66,34 @@ namespace FightTheLandLord
         /// <summary>
         /// 循环接收客户端的准备请求，一旦所有客户端准备完毕，就向客户端发送Start命令
         /// </summary>
-        public void AccpetOk()
+        public void AccpetMessage()
         {
             NetworkStream NsOk1 = client1.GetStream();
             NetworkStream NsOk2 = client2.GetStream();
-            byte[] byteOk1 = new byte[4];
-            string strOk1 = "";
-            byte[] byteOk2 = new byte[4];
-            string strOk2 = "";
+            byte[] byte1 = new byte[20];
+            string str1 = "";
+            byte[] byte2 = new byte[20];
+            string str2 = "";
             while (true)
             {
-                NsOk1.Read(byteOk1, 0, 3);
-                NsOk2.Read(byteOk2, 0, 3);
-                strOk1 = Encoding.Default.GetString(byteOk1);
-                strOk2 = Encoding.Default.GetString(byteOk2);
-                if (strOk1.StartsWith("OK") && strOk2.StartsWith("OK"))
+                NsOk1.Read(byte1, 0, 3);
+                NsOk2.Read(byte2, 0, 3);
+                str1 = Encoding.Default.GetString(byte1);
+                str2 = Encoding.Default.GetString(byte2);
+                if (str1.StartsWith("OK") && str2.StartsWith("OK"))
                 {
                     this.everyOneIsOk = true;
-                    byte[] byteStart = Encoding.Default.GetBytes("Start");
+                    byte[] byteStart = Encoding.Default.GetBytes("EveryOneIsOk");
                     NsOk1.Write(byteStart, 0, byteStart.Length);
                     NsOk2.Write(byteStart, 0, byteStart.Length);
-                    break;
+                }
+                if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
+                {
+                    this.AcceptedPokers = true;
+                }
+                if (str1.StartsWith("AcceptedLeadPokers") && str2.StartsWith("AcceptedLeadPokers"))
+                {
+                    this.AcceptedLeadPokers = true;
                 }
             }
         }
@@ -136,7 +145,8 @@ namespace FightTheLandLord
                 IFormatter serializer = new BinaryFormatter();
                 serializer.Serialize(memStream, playerPokers);  //把给客户端的2组牌序列化并写入 MemoryStream 对象
                 byte[] bytePlayerPokers = memStream.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
-                Ns.Write(bytePlayerPokers, 0, bytePlayerPokers.Length);  //把2个比特流对象写入server与client的连接管道中.
+                Ns.Write(bytePlayerPokers, 0, bytePlayerPokers.Length);  //把2个比特流对象写入server与client的连接管道中
+
             //}
             //catch
             //{
