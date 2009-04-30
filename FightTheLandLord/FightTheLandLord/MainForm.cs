@@ -102,8 +102,8 @@ namespace FightTheLandLord
                         break;
                 }
             }
-            //if (server.SendMessageForClient(player2Pokers,1) && server.SendMessageForClient(player3Pokers,2))
-            //{
+            if (server.SendMessageForClient(player2Pokers,1) && server.SendMessageForClient(player3Pokers,2))
+            {
                 MessageBox.Show("发牌成功", "火拼斗地主");
                 byte[] bytePoker = player1.pokers.GetBuffer();
                 string str = Encoding.Default.GetString(bytePoker);
@@ -115,11 +115,11 @@ namespace FightTheLandLord
                 }
                 //this.server.SendOrder(LandLordNum);
                 this.server.SendOrder(1);
-            //}
-            //else
-            //{
-            //    MessageBox.Show("发牌失败", "火拼斗地主");
-            //}
+            }
+            else
+            {
+                MessageBox.Show("发牌失败", "火拼斗地主");
+            }
 
 #if DEBUG //调试时在Console上显示的信息
             Console.WriteLine("玩家一的牌");
@@ -242,19 +242,22 @@ namespace FightTheLandLord
         {
             JoinForm joinForm = new JoinForm();
             joinForm.ShowDialog();
-            this.client = new Client();
-            if (this.client.Connection())
+            if (Properties.Settings.Default.Host != "")
             {
-                MessageBox.Show("连接成功","消息");
-                btnOK.Enabled = true;
-                btnOK.Visible = true;   //启用"准备"按钮
-                ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
-                tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
-                tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
-            }
-            else
-            {
-                MessageBox.Show("连接失败","消息");
+                this.client = new Client();
+                if (this.client.Connection())
+                {
+                    MessageBox.Show("连接成功", "消息");
+                    btnOK.Enabled = true;
+                    btnOK.Visible = true;   //启用"准备"按钮
+                    ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
+                    tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
+                    tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
+                }
+                else
+                {
+                    MessageBox.Show("连接失败", "消息");
+                }
             }
         }
 

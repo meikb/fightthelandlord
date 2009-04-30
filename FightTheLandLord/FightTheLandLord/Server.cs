@@ -76,18 +76,13 @@ namespace FightTheLandLord
             string str2 = "";
             while (true)
             {
-                str1 = Encoding.Default.GetString(Ns1.Read
-                str2 = 
-                //Ns1.Read(byte1, 0, 2048);
-                //Ns2.Read(byte2, 0, 2048);
-                //str1 = Encoding.Default.GetString(byte1);
-                //str2 = Encoding.Default.GetString(byte2);
+                Ns1.Read(bytes1, 0, 108);
+                Ns2.Read(bytes2, 0, 108);
+                str1 = Encoding.Default.GetString(bytes1);
+                str2 = Encoding.Default.GetString(bytes2);
                 if (str1.StartsWith("OK") && str2.StartsWith("OK"))
                 {
                     this.everyOneIsOk = true;
-                    //byte[] byteStart = Encoding.Default.GetBytes("EveryOneIsOk");
-                    //NsOk1.Write(byteStart, 0, byteStart.Length);
-                    //NsOk2.Write(byteStart, 0, byteStart.Length);
                     this.SendMessageForClient("EveryOneIsOk", 1);
                     this.SendMessageForClient("EveryOneIsOk", 2);
                 }

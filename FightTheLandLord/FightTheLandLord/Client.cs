@@ -61,36 +61,31 @@ namespace FightTheLandLord
             NetworkStream Ns = client.GetStream();
            // Stream stream = new MemoryStream();
             string str = "";
-            IFormatter serializer = new BinaryFormatter();
-            PokerGroup pokers;
             while (true)
             {
-                object obj = serializer.Deserialize(Ns);
-                if (obj is string)
+                byte[] bytes = new byte[108];
+                Ns.Read(bytes, 0, 108);
+                str = Encoding.Default.GetString(bytes);
+                if (str.StartsWith("EveryOneIsOk"))
                 {
-                    if (str.StartsWith("EveryOneIsOk"))
-                    {
-                        this.everyIsOk = true;
-                    }
-                    if (str.StartsWith("lead"))
-                    {
-                        this.haveOrder = true;
-                    }
+                    this.everyIsOk = true;
                 }
-                if (obj is PokerGroup)
+                if (str.StartsWith("lead"))
                 {
-                    if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
+                    this.haveOrder = true;
+                }
+                if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
+                {
+                    PokerGroup pokers = new PokerGroup();
+                    pokers.GetPokerGroup(bytes);
+                    if (pokers.Count == 17 | pokers.Count == 20)
                     {
-                        pokers = (PokerGroup)obj;
-                        if (pokers.Count == 17 | pokers.Count == 20)
-                        {
-                            this.Pokers = pokers;
-                        }
-                        else
-                        {
-                            DConsole.leadedPokers.Add(pokers);
-                            DConsole.WriteLeadedPokers();
-                        }
+                        this.Pokers = pokers;
+                    }
+                    else
+                    {
+                        DConsole.leadedPokers.Add(pokers);
+                        DConsole.WriteLeadedPokers();
                     }
                 }
                 //switch (str)
@@ -154,17 +149,7 @@ namespace FightTheLandLord
         /// </summary>
         public bool SendOk() //给服务器发送准备指令
         {
-            //try
-            //{
-                //NetworkStream NsOk = this.client.GetStream();
-                //byte[] byteOk = Encoding.Default.GetBytes("OK");
-                //NsOk.Write(byteOk, 0, byteOk.Length);
-                this.SendMessageForServer("OK");
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+            this.SendMessageForServer("OK");
             return true;
         }
 
@@ -173,37 +158,26 @@ namespace FightTheLandLord
         /// </summary>
         public bool SendPokers(PokerGroup pokers)  //出牌请求
         {
-            //try
-            //{
-                NetworkStream Ns = this.client.GetStream();
-                MemoryStream memStream = new MemoryStream();
-                IFormatter serializer = new BinaryFormatter();
-                serializer.Serialize(memStream, pokers);
-                byte[] bytePokers = memStream.GetBuffer();
-                Ns.Write(bytePokers, 0, bytePokers.Length);
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
-            return true;
-        }
-        public bool SendMessageForServer(object obj)
-        {
-            //try
-            //{
             NetworkStream Ns = this.client.GetStream();
             MemoryStream memStream = new MemoryStream();
             IFormatter serializer = new BinaryFormatter();
-            serializer.Serialize(memStream, obj);  //把给客户端的2组牌序列化并写入 MemoryStream 对象
-            byte[] byteobj = memStream.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
-            Ns.Write(byteobj, 0, byteobj.Length);  //把2个比特流对象写入server与client的连接管道中
-
-            //}
-            //catch
-            //{
-            //    return false;
-            //}
+            serializer.Serialize(memStream, pokers);
+            byte[] bytePokers = memStream.GetBuffer();
+            Ns.Write(bytePokers, 0, bytePokers.Length);
+            return true;
+        }
+        public bool SendMessageForServer(string str)
+        {
+            NetworkStream Ns = this.client.GetStream();
+            byte[] bytes = Encoding.Default.GetBytes(str);
+            Ns.Write(bytes, 0, bytes.Length);  
+            return true;
+        }
+        public bool SendMessageForServer(PokerGroup pg)
+        {
+            NetworkStream Ns = this.client.GetStream();
+            byte[] bytes = pg.GetBuffer();
+            Ns.Write(bytes, 0, bytes.Length); 
             return true;
         }
 
