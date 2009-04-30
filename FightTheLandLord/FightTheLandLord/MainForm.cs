@@ -19,12 +19,13 @@ namespace FightTheLandLord
         private Server server;
         private Client client;
         private Thread acceptConn;
-        private Thread cAcceptMessage;
-        private Thread sAcceptMessage;
-        private Thread acceptPokers;
+        private Thread AcceptClient1Data;
+        private Thread AcceptClient2Data;
+        private Thread AcceptServerData;
+        //private Thread acceptPokers;
         //private Thread acceptOrder;
-        private Thread cacceptLeadPokers;
-        private Thread sacceptLeadPokers;
+        //private Thread cacceptLeadPokers;
+        //private Thread sacceptLeadPokers;
         public MainForm()
         {
             InitializeComponent();
@@ -102,23 +103,14 @@ namespace FightTheLandLord
                         break;
                 }
             }
-            if (server.SendMessageForClient(player2Pokers,1) && server.SendMessageForClient(player3Pokers,2))
+            if (server.SendDataForClient(player2Pokers,1) && server.SendDataForClient(player3Pokers,2))
             {
-                MessageBox.Show("发牌成功", "火拼斗地主");
-                byte[] bytePoker = player1.pokers.GetBuffer();
-                string str = Encoding.Default.GetString(bytePoker);
-                Console.WriteLine(str);
-                PokerGroup pg = new PokerGroup(bytePoker);
-                foreach (Poker onepoker in pg)
-                {
-                    Console.WriteLine(onepoker.pokerColor.ToString() + onepoker.pokerNum.ToString());
-                }
-                //this.server.SendOrder(LandLordNum);
-                this.server.SendOrder(1);
+                DConsole.Write("[系统消息]发牌成功!");
+                this.server.SendOrder(2);
             }
             else
             {
-                MessageBox.Show("发牌失败", "火拼斗地主");
+                DConsole.Write("[系统消息]发牌失败!");
             }
 
 #if DEBUG //调试时在Console上显示的信息
@@ -170,19 +162,6 @@ namespace FightTheLandLord
         private void MainForm_Load(object sender, EventArgs e)
         {
             DConsole.tb = this.tbState;
-            //PokerGroup pg = new PokerGroup();
-            //pg.Add(new Poker(PokerNum.大王, PokerColor.黑桃));
-            //pg.Add(new Poker(PokerNum.P8, PokerColor.方块));
-            //pg.Add(new Poker(PokerNum.P3, PokerColor.红心));
-            //pg.Add(new Poker(PokerNum.K, PokerColor.梅花));
-            //pg.Add(new Poker(PokerNum.A, PokerColor.黑桃));
-            //pg.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
-            //pg.Add(new Poker(PokerNum.P8, PokerColor.黑桃));
-            //pg.Add(new Poker(PokerNum.小王, PokerColor.黑桃));
-            //pg.Add(new Poker(PokerNum.Q, PokerColor.黑桃));
-            //pg.Add(new Poker(PokerNum.J, PokerColor.黑桃));
-            //byte[] bytePoker = pg.GetBuffer();
-            //DConsole.Write(Encoding.Default.GetString(bytePoker));
         }
 
         private void panelPlayer1_Paint(object sender, PaintEventArgs e)
@@ -207,12 +186,12 @@ namespace FightTheLandLord
             {
                 if (this.server != null)
                 {
-                    server.SendMessageForClient(DConsole.orderingPokers, 1);
-                    server.SendMessageForClient(DConsole.orderingPokers, 2);
+                    server.SendDataForClient(DConsole.orderingPokers, 1);
+                    server.SendDataForClient(DConsole.orderingPokers, 2);
                 }
                 if (this.client != null)
                 {
-                    client.SendPokers(player1.leadPokers);
+                    client.SendDataForServer(player1.leadPokers);
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
@@ -269,26 +248,34 @@ namespace FightTheLandLord
                 {
                     DConsole.Write("[系统消息]:连接建立成功,等待其他人准备");
                 }
-                if (this.cAcceptMessage == null)  //如果线程没有初始化则先初始化
+                if (this.AcceptClient1Data == null)  //如果线程没有初始化则先初始化
                 {
-                    this.cAcceptMessage = new Thread(new ThreadStart(server.AccpetMessage));
-                    this.cAcceptMessage.IsBackground = true;
-                    this.cAcceptMessage.Name = "服务器检测客户端是否发送准备消息";
+                    this.AcceptClient1Data = new Thread(new ThreadStart(server.AccpetClient1Data));
+                    this.AcceptClient1Data.IsBackground = true;
+                    this.AcceptClient1Data.Name = "服务器检测客户端1是否发送准备消息";
                 }
-                if (this.cAcceptMessage.ThreadState == (ThreadState.Background | ThreadState.Unstarted))  //如果线程没有启动则先启动,由于之前把线程的IsBackGround设置为true,所以这里要这样写
+                if (this.AcceptClient1Data.ThreadState == (ThreadState.Background | ThreadState.Unstarted))  //如果线程没有启动则先启动,由于之前把线程的IsBackGround设置为true,所以这里要这样写
                 {
-                        this.cAcceptMessage.Start();
+                        this.AcceptClient1Data.Start();
                 }
-                //if (this.sacceptLeadPokers == null)
-                //{
-                //    this.sacceptLeadPokers = new Thread(new ThreadStart(this.server.AcceptPokers));
-                //    this.sacceptLeadPokers.IsBackground = true;
-                //    this.sacceptLeadPokers.Name = "循环接收客户端出牌线程";
-                //}
-                //if (this.sacceptLeadPokers.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
-                //{
-                //    this.sacceptLeadPokers.Start();
-                //}
+                if (this.AcceptClient2Data == null)  //如果线程没有初始化则先初始化
+                {
+                    this.AcceptClient2Data = new Thread(new ThreadStart(server.AccpetClient2Data));
+                    this.AcceptClient2Data.IsBackground = true;
+                    this.AcceptClient2Data.Name = "服务器检测客户端2是否发送准备消息";
+                }
+                if (this.AcceptClient2Data.ThreadState == (ThreadState.Background | ThreadState.Unstarted))  //如果线程没有启动则先启动,由于之前把线程的IsBackGround设置为true,所以这里要这样写
+                {
+                    this.AcceptClient2Data.Start();
+                }
+                if (this.server.client1IsOk && this.server.client2IsOk)
+                {
+                    this.server.client1IsOk = false;
+                    this.server.client2IsOk = false;
+                    this.server.SendDataForClient("EveryOneIsOk", 1);
+                    this.server.SendDataForClient("EveryOneIsOk", 2);
+                    this.server.everyOneIsOk = true;
+                }
                 if (this.server.everyOneIsOk) //启动线程后,服务器循环获取客户端的NetworkStream,然后判断客户端是否发送"OK"信息,如果发送,则把everyOneIsOk设置为True.
                 {
                     this.server.everyOneIsOk = false; //为下一局做准备
@@ -313,15 +300,15 @@ namespace FightTheLandLord
                 btnOK.Enabled = false;
                 btnOK.Visible = false;
                 this.timerClient.Enabled = true; 
-                if (this.sAcceptMessage == null)
+                if (this.AcceptServerData == null)
                 {
-                    this.sAcceptMessage = new Thread(new ThreadStart(client.AcceptMessage));
-                    this.sAcceptMessage.IsBackground = true;
-                    this.sAcceptMessage.Name = "接受即将开始消息线程";
+                    this.AcceptServerData = new Thread(new ThreadStart(client.AcceptServerData));
+                    this.AcceptServerData.IsBackground = true;
+                    this.AcceptServerData.Name = "接受即将开始消息线程";
                 }
-                if (this.sAcceptMessage.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
+                if (this.AcceptServerData.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
                 {
-                    this.sAcceptMessage.Start();
+                    this.AcceptServerData.Start();
                 }
                 DConsole.Write("[系统消息]:已向服务器发送准备消息,正在等待响应...");
             }
@@ -337,16 +324,6 @@ namespace FightTheLandLord
             {
                 if (this.player1.newPokers.Count == 0)
                 {
-                    //if (this.acceptPokers == null)
-                    //{
-                    //    this.acceptPokers = new Thread(new ThreadStart(this.client.AcceptPokers));
-                    //    this.acceptPokers.Name = "接收牌组";
-                    //    this.acceptPokers.IsBackground = true;
-                    //}
-                    //if (this.acceptPokers.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
-                    //{
-                    //    this.acceptPokers.Start();
-                    //}
                     if (this.client.Pokers != null)
                     {
                         DConsole.Write("[系统消息]:接收到服务器分配的牌组.");
@@ -355,14 +332,6 @@ namespace FightTheLandLord
                         this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
                         this.player1.Paint(); //在panelPlayer1中画出player1的牌
                         this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
-                        //this.acceptOrder = new Thread(new ThreadStart(this.client.AcceptOrder));
-                        //this.acceptOrder.Name = "检测是否可以出牌";
-                        //this.acceptOrder.IsBackground = true;
-                        //this.acceptOrder.Start();
-                        //this.cacceptLeadPokers = new Thread(new ThreadStart(this.client.AcceptLeadPokers));
-                        //this.cacceptLeadPokers.Name = "接收服务器发送的牌组线程";
-                        //this.cacceptLeadPokers.IsBackground = true;
-                        //this.cacceptLeadPokers.Start();
                     }
                 }
             }
