@@ -12,7 +12,6 @@ namespace FightTheLandLord
     public class Client
     {
         public TcpClient client;
-        public UdpClient uClient;
         /// <summary>
         /// 所有用户是否已准备
         /// </summary>
@@ -34,7 +33,6 @@ namespace FightTheLandLord
         public Client()
         {
             client = new TcpClient();
-            uClient = new UdpClient();
         }
 
         /// <summary>
@@ -54,12 +52,11 @@ namespace FightTheLandLord
         }
 
         /// <summary>
-        /// 循环检测服务器的Start命令
+        /// 接收服务器发送的数据
         /// </summary>
-        public void AcceptMessage()  //循环检测server端是否发送过Start消息,如果发送则this.isStart = true;
+        public void AcceptServerData() 
         {
             NetworkStream Ns = client.GetStream();
-           // Stream stream = new MemoryStream();
             string str = "";
             while (true)
             {
@@ -88,116 +85,34 @@ namespace FightTheLandLord
                         DConsole.WriteLeadedPokers();
                     }
                 }
-                //switch (str)
-                //{
-                //    case "EveryOneIsOk":
-                //        this.everyIsOk = true;
-                //        break;
-                //    case "lead":
-                //        this.haveOrder = true;
-                //        break;
-                //    default:
-                //        memStream.Write(byteMessage, 0, byteMessage.Length);
-                //        this.Pokers = (PokerGroup)(serializer.Deserialize(memStream));
-                //        break;
-                //}
-                //if (str.StartsWith("EveryOneIsOk"))
-                //{
-                //    this.everyIsOk = true;
-                //} 
-                //if (str.StartsWith("lead"))
-                //{
-                //    this.haveOrder = true;
-                //}
             }
         }
-
-        /// <summary>
-        /// 接收服务器发送的牌组
-        /// </summary>
-        //public void AcceptPokers() //接受server传送过来的已序列化的PokerGroup牌组对象并将其反序列化,然后把它的引用传给this.Pokers
-        //{
-        //    NetworkStream NsPokers = client.GetStream();
-        //    IFormatter serializer = new BinaryFormatter();
-        //    this.Pokers = (PokerGroup)(serializer.Deserialize(NsPokers));
-        //    //NsPokers.Flush();
-        //}
-
-        /// <summary>
-        /// 接收其他人的出牌
-        /// </summary>
-        //public void AcceptLeadPokers()
-        //{
-        //    NetworkStream NsPokers = client.GetStream();
-        //    while (true)
-        //    {
-        //        IFormatter serializer = new BinaryFormatter();
-        //        try
-        //        {
-        //            PokerGroup leadedPokers = (PokerGroup)(serializer.Deserialize(NsPokers));
-        //            DConsole.leadedPokers.Add(leadedPokers);
-        //            DConsole.WriteLeadedPokers();
-        //        }
-        //        catch
-        //        {
-        //        }
-        //    }
-        //}
 
         /// <summary>
         /// 向服务器发送准备请求
         /// </summary>
         public bool SendOk() //给服务器发送准备指令
         {
-            this.SendMessageForServer("OK");
+            this.SendDataForServer("OK");
             return true;
         }
 
         /// <summary>
         /// 向服务器发送出牌请求
         /// </summary>
-        public bool SendPokers(PokerGroup pokers)  //出牌请求
-        {
-            NetworkStream Ns = this.client.GetStream();
-            MemoryStream memStream = new MemoryStream();
-            IFormatter serializer = new BinaryFormatter();
-            serializer.Serialize(memStream, pokers);
-            byte[] bytePokers = memStream.GetBuffer();
-            Ns.Write(bytePokers, 0, bytePokers.Length);
-            return true;
-        }
-        public bool SendMessageForServer(string str)
+        public bool SendDataForServer(string str)
         {
             NetworkStream Ns = this.client.GetStream();
             byte[] bytes = Encoding.Default.GetBytes(str);
             Ns.Write(bytes, 0, bytes.Length);  
             return true;
         }
-        public bool SendMessageForServer(PokerGroup pg)
+        public bool SendDataForServer(PokerGroup pg)
         {
             NetworkStream Ns = this.client.GetStream();
             byte[] bytes = pg.GetBuffer();
             Ns.Write(bytes, 0, bytes.Length); 
             return true;
         }
-
-        /// <summary>
-        /// 循环检测服务器是否发送允许出牌消息
-        /// </summary>
-        //public void AcceptOrder()
-        //{
-        //    NetworkStream Ns = this.client.GetStream();
-        //    byte[] byteOrder = new byte["lead".Length];
-        //    string strOrder = "";
-        //    while (true)
-        //    {
-        //        Ns.Read(byteOrder, 0, "lead".Length);
-        //        strOrder = Encoding.Default.GetString(byteOrder);
-        //        if (strOrder.StartsWith("lead"))
-        //        {
-        //            this.haveOrder = true;
-        //        }
-        //    }
-        //}
     }
 }
