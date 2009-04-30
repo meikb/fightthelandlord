@@ -7,17 +7,17 @@ namespace FightTheLandLord
 {
     public class Player
     {
-        private List<Poker> _pokers = new List<Poker>();
-        private List<Poker> _newPokers = new List<Poker>();
-        private List<Poker> _bakPokers = new List<Poker>();
+        private PokerGroup _pokers = new PokerGroup();
+        private PokerGroup _newPokers = new PokerGroup();
+        private PokerGroup _bakPokers = new PokerGroup();
         private List<int> _selectPokers = new List<int>();
-        private List<Poker> _leadPokers = new List<Poker>();
+        private PokerGroup _leadPokers = new PokerGroup();
         private Color _backColor;
         private Graphics _g;
         private bool _isLandLord;
         private bool _haveOrder;
 
-        public List<Poker> pokers
+        public PokerGroup pokers
         {
             get
             {
@@ -39,7 +39,7 @@ namespace FightTheLandLord
                 this._isLandLord = value;
             }
         }
-        public List<Poker> newPokers
+        public PokerGroup newPokers
         {
             get
             {
@@ -83,7 +83,7 @@ namespace FightTheLandLord
                 this._backColor = value;
             }
         }
-        public List<Poker> leadPokers
+        public PokerGroup leadPokers
         {
             get
             {
@@ -94,7 +94,7 @@ namespace FightTheLandLord
                 this._leadPokers = value;
             }
         }
-        public List<Poker> bakPokers
+        public PokerGroup bakPokers
         {
             get
             {
@@ -134,7 +134,7 @@ namespace FightTheLandLord
 #endif
         }
 
-        public static void sort(List<Poker> oldPokers,List<Poker> newPokers)  //从大到小排序算法
+        public static void sort(PokerGroup oldPokers,PokerGroup newPokers)  //从大到小排序算法
         {
             int pokerAmount = oldPokers.Count;
             for (int j = 0; j < pokerAmount; j++) //循环17次

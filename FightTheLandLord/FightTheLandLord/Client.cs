@@ -20,7 +20,7 @@ namespace FightTheLandLord
         /// <summary>
         /// 引用服务器发送的牌组对象
         /// </summary>
-        public List<Poker> Pokers;
+        public PokerGroup Pokers;
         /// <summary>
         /// 是否有出牌权限
         /// </summary>
@@ -59,39 +59,40 @@ namespace FightTheLandLord
         public void AcceptMessage()  //循环检测server端是否发送过Start消息,如果发送则this.isStart = true;
         {
             NetworkStream Ns = client.GetStream();
-            Stream stream = new MemoryStream();
+           // Stream stream = new MemoryStream();
             string str = "";
             IFormatter serializer = new BinaryFormatter();
-            List<Poker> pokers;
+            PokerGroup pokers;
             while (true)
             {
-                byte[] byteMessage = new byte[2048];
-                Ns.Read(byteMessage, 0, 2048);
-                str = Encoding.Default.GetString(byteMessage);
-                if (str.StartsWith("EveryOneIsOk"))
+                object obj = serializer.Deserialize(Ns);
+                if (obj is string)
                 {
-                    this.everyIsOk = true;
-                }
-                if (str.StartsWith("lead"))
-                {
-                    this.haveOrder = true;
-                }
-                if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
-                {
-                    stream.Write(byteMessage, 0, byteMessage.Length);
-                    stream.Seek(0, SeekOrigin.Begin);
-                    pokers = (List<Poker>)(serializer.Deserialize(stream));
-                    if (pokers.Count == 17 | pokers.Count == 20)
+                    if (str.StartsWith("EveryOneIsOk"))
                     {
-                        this.Pokers = pokers;
+                        this.everyIsOk = true;
                     }
-                    else
+                    if (str.StartsWith("lead"))
                     {
-                        DConsole.leadedPokers.Add(pokers);
-                        DConsole.WriteLeadedPokers();
+                        this.haveOrder = true;
                     }
                 }
-                stream.Flush();
+                if (obj is PokerGroup)
+                {
+                    if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
+                    {
+                        pokers = (PokerGroup)obj;
+                        if (pokers.Count == 17 | pokers.Count == 20)
+                        {
+                            this.Pokers = pokers;
+                        }
+                        else
+                        {
+                            DConsole.leadedPokers.Add(pokers);
+                            DConsole.WriteLeadedPokers();
+                        }
+                    }
+                }
                 //switch (str)
                 //{
                 //    case "EveryOneIsOk":
@@ -102,7 +103,7 @@ namespace FightTheLandLord
                 //        break;
                 //    default:
                 //        memStream.Write(byteMessage, 0, byteMessage.Length);
-                //        this.Pokers = (List<Poker>)(serializer.Deserialize(memStream));
+                //        this.Pokers = (PokerGroup)(serializer.Deserialize(memStream));
                 //        break;
                 //}
                 //if (str.StartsWith("EveryOneIsOk"))
@@ -119,11 +120,11 @@ namespace FightTheLandLord
         /// <summary>
         /// 接收服务器发送的牌组
         /// </summary>
-        //public void AcceptPokers() //接受server传送过来的已序列化的List<Poker>牌组对象并将其反序列化,然后把它的引用传给this.Pokers
+        //public void AcceptPokers() //接受server传送过来的已序列化的PokerGroup牌组对象并将其反序列化,然后把它的引用传给this.Pokers
         //{
         //    NetworkStream NsPokers = client.GetStream();
         //    IFormatter serializer = new BinaryFormatter();
-        //    this.Pokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+        //    this.Pokers = (PokerGroup)(serializer.Deserialize(NsPokers));
         //    //NsPokers.Flush();
         //}
 
@@ -138,7 +139,7 @@ namespace FightTheLandLord
         //        IFormatter serializer = new BinaryFormatter();
         //        try
         //        {
-        //            List<Poker> leadedPokers = (List<Poker>)(serializer.Deserialize(NsPokers));
+        //            PokerGroup leadedPokers = (PokerGroup)(serializer.Deserialize(NsPokers));
         //            DConsole.leadedPokers.Add(leadedPokers);
         //            DConsole.WriteLeadedPokers();
         //        }
@@ -155,9 +156,10 @@ namespace FightTheLandLord
         {
             //try
             //{
-                NetworkStream NsOk = this.client.GetStream();
-                byte[] byteOk = Encoding.Default.GetBytes("OK");
-                NsOk.Write(byteOk, 0, byteOk.Length);
+                //NetworkStream NsOk = this.client.GetStream();
+                //byte[] byteOk = Encoding.Default.GetBytes("OK");
+                //NsOk.Write(byteOk, 0, byteOk.Length);
+                this.SendMessageForServer("OK");
             //}
             //catch
             //{
@@ -169,7 +171,7 @@ namespace FightTheLandLord
         /// <summary>
         /// 向服务器发送出牌请求
         /// </summary>
-        public bool SendPokers(List<Poker> pokers)  //出牌请求
+        public bool SendPokers(PokerGroup pokers)  //出牌请求
         {
             //try
             //{
@@ -179,6 +181,24 @@ namespace FightTheLandLord
                 serializer.Serialize(memStream, pokers);
                 byte[] bytePokers = memStream.GetBuffer();
                 Ns.Write(bytePokers, 0, bytePokers.Length);
+            //}
+            //catch
+            //{
+            //    return false;
+            //}
+            return true;
+        }
+        public bool SendMessageForServer(object obj)
+        {
+            //try
+            //{
+            NetworkStream Ns = this.client.GetStream();
+            MemoryStream memStream = new MemoryStream();
+            IFormatter serializer = new BinaryFormatter();
+            serializer.Serialize(memStream, obj);  //把给客户端的2组牌序列化并写入 MemoryStream 对象
+            byte[] byteobj = memStream.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
+            Ns.Write(byteobj, 0, byteobj.Length);  //把2个比特流对象写入server与client的连接管道中
+
             //}
             //catch
             //{

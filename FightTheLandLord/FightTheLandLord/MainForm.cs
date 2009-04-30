@@ -14,7 +14,7 @@ namespace FightTheLandLord
 {
     public partial class MainForm : Form
     {
-        private List<Poker> allPoker = new List<Poker>();
+        private PokerGroup allPoker = new PokerGroup();
         private Player player1 = new Player();
         private Server server;
         private Client client;
@@ -76,12 +76,12 @@ namespace FightTheLandLord
             {
                 this.player1.pokers.Add(this.allPoker[i]);
             }
-            List<Poker> player2Pokers = new List<Poker>();
+            PokerGroup player2Pokers = new PokerGroup();
             for (int i = 17; i < 34; i++)
             {
                 player2Pokers.Add(this.allPoker[i]);
             }
-            List<Poker> player3Pokers = new List<Poker>();
+            PokerGroup player3Pokers = new PokerGroup();
             for (int i = 34; i < 51; i++)
             {
                 player3Pokers.Add(this.allPoker[i]);
@@ -102,16 +102,24 @@ namespace FightTheLandLord
                         break;
                 }
             }
-            if (server.SendPokerForClient(player2Pokers,1) && server.SendPokerForClient(player3Pokers,2))
-            {
+            //if (server.SendMessageForClient(player2Pokers,1) && server.SendMessageForClient(player3Pokers,2))
+            //{
                 MessageBox.Show("发牌成功", "火拼斗地主");
+                byte[] bytePoker = player1.pokers.GetBuffer();
+                string str = Encoding.Default.GetString(bytePoker);
+                Console.WriteLine(str);
+                PokerGroup pg = new PokerGroup(bytePoker);
+                foreach (Poker onepoker in pg)
+                {
+                    Console.WriteLine(onepoker.pokerColor.ToString() + onepoker.pokerNum.ToString());
+                }
                 //this.server.SendOrder(LandLordNum);
                 this.server.SendOrder(1);
-            }
-            else
-            {
-                MessageBox.Show("发牌失败", "火拼斗地主");
-            }
+            //}
+            //else
+            //{
+            //    MessageBox.Show("发牌失败", "火拼斗地主");
+            //}
 
 #if DEBUG //调试时在Console上显示的信息
             Console.WriteLine("玩家一的牌");
@@ -162,6 +170,19 @@ namespace FightTheLandLord
         private void MainForm_Load(object sender, EventArgs e)
         {
             DConsole.tb = this.tbState;
+            //PokerGroup pg = new PokerGroup();
+            //pg.Add(new Poker(PokerNum.大王, PokerColor.黑桃));
+            //pg.Add(new Poker(PokerNum.P8, PokerColor.方块));
+            //pg.Add(new Poker(PokerNum.P3, PokerColor.红心));
+            //pg.Add(new Poker(PokerNum.K, PokerColor.梅花));
+            //pg.Add(new Poker(PokerNum.A, PokerColor.黑桃));
+            //pg.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
+            //pg.Add(new Poker(PokerNum.P8, PokerColor.黑桃));
+            //pg.Add(new Poker(PokerNum.小王, PokerColor.黑桃));
+            //pg.Add(new Poker(PokerNum.Q, PokerColor.黑桃));
+            //pg.Add(new Poker(PokerNum.J, PokerColor.黑桃));
+            //byte[] bytePoker = pg.GetBuffer();
+            //DConsole.Write(Encoding.Default.GetString(bytePoker));
         }
 
         private void panelPlayer1_Paint(object sender, PaintEventArgs e)
@@ -186,8 +207,8 @@ namespace FightTheLandLord
             {
                 if (this.server != null)
                 {
-                    server.SendPokerForClient(DConsole.orderingPokers, 1);
-                    server.SendPokerForClient(DConsole.orderingPokers, 2);
+                    server.SendMessageForClient(DConsole.orderingPokers, 1);
+                    server.SendMessageForClient(DConsole.orderingPokers, 2);
                 }
                 if (this.client != null)
                 {
