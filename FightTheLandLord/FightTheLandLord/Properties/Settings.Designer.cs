@@ -37,7 +37,7 @@ namespace FightTheLandLord.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("192.168.31.88")]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
         public string Host {
             get {
                 return ((string)(this["Host"]));

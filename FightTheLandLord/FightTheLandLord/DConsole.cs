@@ -97,13 +97,10 @@ namespace FightTheLandLord
 
         public static void WriteLeadedPokers()
         {
-            foreach (PokerGroup onePokers in leadedPokers)
+            foreach (Poker poker in leadedPokers[leadedPokers.Count - 1])
             {
-                Write("已接收到的牌组:");
-                foreach (Poker onePoker in onePokers)
-                {
-                    Write(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
-                }
+                Write("对方出的牌");
+                Write(poker.pokerColor.ToString() + poker.pokerNum.ToString());
             }
         }
     }

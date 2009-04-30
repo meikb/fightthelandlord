@@ -75,7 +75,7 @@
             this.textBoxIP.Location = new System.Drawing.Point(70, 47);
             this.textBoxIP.Name = "textBoxIP";
             this.textBoxIP.Size = new System.Drawing.Size(100, 21);
-            this.textBoxIP.TabIndex = 5;
+            this.textBoxIP.TabIndex = 2;
             // 
             // JoinForm
             // 
@@ -92,6 +92,7 @@
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(200, 200);
             this.Name = "JoinForm";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
             this.Text = "加入游戏";
             this.ResumeLayout(false);
             this.PerformLayout();
