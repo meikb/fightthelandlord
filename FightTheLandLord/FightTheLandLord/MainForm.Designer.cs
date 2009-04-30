@@ -106,27 +106,27 @@
             this.加入游戏ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.游戏ToolStripMenuItem.Name = "游戏ToolStripMenuItem";
-            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.游戏ToolStripMenuItem.Text = "游戏";
             // 
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -135,13 +135,13 @@
             this.关于ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.关于作者ToolStripMenuItem});
             this.关于ToolStripMenuItem.Name = "关于ToolStripMenuItem";
-            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.关于ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
             this.关于ToolStripMenuItem.Text = "关于";
             // 
             // 关于作者ToolStripMenuItem
             // 
             this.关于作者ToolStripMenuItem.Name = "关于作者ToolStripMenuItem";
-            this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(122, 22);
+            this.关于作者ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.关于作者ToolStripMenuItem.Text = "关于作者";
             this.关于作者ToolStripMenuItem.Click += new System.EventHandler(this.关于作者ToolStripMenuItem_Click);
             // 
@@ -181,7 +181,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(822, 573);
+            this.ClientSize = new System.Drawing.Size(822, 566);
             this.Controls.Add(this.tbState);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lblIsRule);

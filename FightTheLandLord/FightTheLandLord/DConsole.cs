@@ -6,17 +6,17 @@ namespace FightTheLandLord
 {
     public static class DConsole
     {
-        public static List<Poker> orderingPokers = new List<Poker>();
+        public static PokerGroup orderingPokers = new PokerGroup();
         public static System.Windows.Forms.TextBox tb;
 
         /// <summary>
         /// 已出的牌组的集合
         /// </summary>
-        public static List<List<Poker>> leadedPokers = new List<List<Poker>>();
+        public static List<PokerGroup> leadedPokers = new List<PokerGroup>();
         /// <summary>
         /// 验证所出牌组是否符合游戏规则
         /// </summary>
-        public static bool IsRules(List<Poker> leadPokers)
+        public static bool IsRules(PokerGroup leadPokers)
         {
             bool isRule = false;
             orderingPokers.Clear();
@@ -97,7 +97,7 @@ namespace FightTheLandLord
 
         public static void WriteLeadedPokers()
         {
-            foreach (List<Poker> onePokers in leadedPokers)
+            foreach (PokerGroup onePokers in leadedPokers)
             {
                 Write("已接收到的牌组:");
                 foreach (Poker onePoker in onePokers)

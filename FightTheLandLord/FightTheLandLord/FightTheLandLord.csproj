@@ -79,6 +79,7 @@
     </Compile>
     <Compile Include="Player.cs" />
     <Compile Include="Poker.cs" />
+    <Compile Include="PokerGroup.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="JoinForm.resx">
