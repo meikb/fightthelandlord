@@ -151,7 +151,7 @@ namespace FightTheLandLord
                         bestBigPoker = oldPokers[i];
                     }
                 }
-                oldPokers.Remove(bestBigPoker); //从this.pokers里删除最大的牌
+                oldPokers.Remove(bestBigPoker); //
                 newPokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
             }
         }

@@ -29,6 +29,7 @@ namespace FightTheLandLord
         public MainForm()
         {
             InitializeComponent();
+            CheckForIllegalCrossThreadCalls = false;
         }
 
         /// <summary>
@@ -191,7 +192,7 @@ namespace FightTheLandLord
                 }
                 if (this.client != null)
                 {
-                    client.SendDataForServer(player1.leadPokers);
+                    client.SendDataForServer(DConsole.orderingPokers);
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
