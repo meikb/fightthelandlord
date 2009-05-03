@@ -82,6 +82,7 @@ namespace FightTheLandLord
                     else
                     {
                         DConsole.leadedPokers.Add(pokers);
+                        
                         DConsole.WriteLeadedPokers();
                     }
                 }
