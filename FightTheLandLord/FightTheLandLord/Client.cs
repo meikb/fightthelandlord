@@ -63,13 +63,29 @@ namespace FightTheLandLord
                 byte[] bytes = new byte[108];
                 Ns.Read(bytes, 0, 108);
                 str = Encoding.Default.GetString(bytes);
+                if (str.StartsWith("SPokerCount"))
+                {
+                    str = str.Replace("SPokerCount","");
+                    int pokerCount = Convert.ToInt32(str);
+                    DConsole.PaintServer(pokerCount);
+                    continue;
+                }
+                if (str.StartsWith("PokerCount"))
+                {
+                    str = str.Replace("PokerCount","");
+                    int pokerCount = Convert.ToInt32(str);
+                    DConsole.PaintClient(pokerCount);
+                    continue;
+                }
                 if (str.StartsWith("EveryOneIsOk"))
                 {
                     this.everyIsOk = true;
+                    continue;
                 }
                 if (str.StartsWith("lead"))
                 {
                     this.haveOrder = true;
+                    continue;
                 }
                 if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
                 {
@@ -78,12 +94,13 @@ namespace FightTheLandLord
                     if (pokers.Count == 17 | pokers.Count == 20)
                     {
                         this.Pokers = pokers;
+                        continue;
                     }
                     else
                     {
                         DConsole.leadedPokers.Add(pokers);
-                        
                         DConsole.WriteLeadedPokers();
+                        continue;
                     }
                 }
             }

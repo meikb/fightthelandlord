@@ -71,11 +71,22 @@ namespace FightTheLandLord
                 if (str1.StartsWith("OK"))
                 {
                     this.client1IsOk = true;
+                    continue;
+                }
+                if (str1.StartsWith("PokerCount"))
+                {
+                    str1 = str1.Replace("0", "");
+                    SendDataForClient(str1, 2);
+                    str1 = str1.Replace("PokerCount", "");
+                    int PokerCount = Convert.ToInt32(str1);
+                    DConsole.PaintClient(PokerCount, 1);
+                    continue;
                 }
                 if (!str1.StartsWith("OK"))
                 {
                     pg.GetPokerGroup(bytes1);
                     DConsole.leadedPokers.Add(pg);
+                    SendDataForClient(pg, 2);
                     DConsole.WriteLeadedPokers();
                 }
                 //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
@@ -101,11 +112,22 @@ namespace FightTheLandLord
                 if (str2.StartsWith("OK"))
                 {
                     this.client2IsOk = true;
+                    continue;
+                }
+                if (str2.StartsWith("PokerCount"))
+                {
+                    str2 = str2.Replace("0", "");
+                    SendDataForClient(str2, 1);
+                    str2 = str2.Replace("PokerCount", "");
+                    int PokerCount = Convert.ToInt32(str2);
+                    DConsole.PaintClient(PokerCount, 2);
+                    continue;
                 }
                 if (!str2.StartsWith("OK"))
                 {
                     pg.GetPokerGroup(bytes2);
                     DConsole.leadedPokers.Add(pg);
+                    SendDataForClient(pg, 1);
                     DConsole.WriteLeadedPokers();
                 }
                 //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))

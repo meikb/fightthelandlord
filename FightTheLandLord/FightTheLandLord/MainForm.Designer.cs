@@ -44,6 +44,8 @@
             this.btnOK = new System.Windows.Forms.Button();
             this.timerClient = new System.Windows.Forms.Timer(this.components);
             this.tbState = new System.Windows.Forms.TextBox();
+            this.panelPlayer2 = new System.Windows.Forms.Panel();
+            this.panelPlayer3 = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -170,18 +172,37 @@
             // tbState
             // 
             this.tbState.ForeColor = System.Drawing.Color.Red;
-            this.tbState.Location = new System.Drawing.Point(594, 314);
+            this.tbState.Location = new System.Drawing.Point(293, 27);
             this.tbState.Multiline = true;
             this.tbState.Name = "tbState";
+            this.tbState.ReadOnly = true;
             this.tbState.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbState.Size = new System.Drawing.Size(216, 90);
+            this.tbState.Size = new System.Drawing.Size(212, 47);
             this.tbState.TabIndex = 6;
+            // 
+            // panelPlayer2
+            // 
+            this.panelPlayer2.Location = new System.Drawing.Point(10, 27);
+            this.panelPlayer2.Name = "panelPlayer2";
+            this.panelPlayer2.Size = new System.Drawing.Size(100, 378);
+            this.panelPlayer2.TabIndex = 7;
+            this.panelPlayer2.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer2_Paint);
+            // 
+            // panelPlayer3
+            // 
+            this.panelPlayer3.Location = new System.Drawing.Point(710, 27);
+            this.panelPlayer3.Name = "panelPlayer3";
+            this.panelPlayer3.Size = new System.Drawing.Size(100, 378);
+            this.panelPlayer3.TabIndex = 8;
+            this.panelPlayer3.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer3_Paint);
             // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 566);
+            this.Controls.Add(this.panelPlayer3);
+            this.Controls.Add(this.panelPlayer2);
             this.Controls.Add(this.tbState);
             this.Controls.Add(this.btnOK);
             this.Controls.Add(this.lblIsRule);
@@ -221,6 +242,8 @@
         private System.Windows.Forms.Button btnOK;
         private System.Windows.Forms.Timer timerClient;
         private System.Windows.Forms.TextBox tbState;
+        private System.Windows.Forms.Panel panelPlayer2;
+        private System.Windows.Forms.Panel panelPlayer3;
     }
 }
 

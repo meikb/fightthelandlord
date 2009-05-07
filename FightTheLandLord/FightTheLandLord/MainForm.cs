@@ -16,6 +16,8 @@ namespace FightTheLandLord
     {
         private PokerGroup allPoker = new PokerGroup();
         private Player player1 = new Player();
+        private Player player2;
+        private Player player3;
         private Server server;
         private Client client;
         private Thread acceptConn;
@@ -78,15 +80,13 @@ namespace FightTheLandLord
             {
                 this.player1.pokers.Add(this.allPoker[i]);
             }
-            PokerGroup player2Pokers = new PokerGroup();
             for (int i = 17; i < 34; i++)
             {
-                player2Pokers.Add(this.allPoker[i]);
+                this.player2.pokers.Add(this.allPoker[i]);
             }
-            PokerGroup player3Pokers = new PokerGroup();
             for (int i = 34; i < 51; i++)
             {
-                player3Pokers.Add(this.allPoker[i]);
+                this.player3.pokers.Add(this.allPoker[i]);
             }
             int LandLordNum = new Random().Next(1, 4);
             for (int i = 51; i < 54; i++)
@@ -97,17 +97,23 @@ namespace FightTheLandLord
                         this.player1.pokers.Add(this.allPoker[i]);
                         break;
                     case 2:
-                        player2Pokers.Add(this.allPoker[i]);
+                        this.player2.pokers.Add(this.allPoker[i]);
                         break;
                     case 3:
-                        player3Pokers.Add(this.allPoker[i]);
+                        this.player3.pokers.Add(this.allPoker[i]);
                         break;
                 }
             }
-            if (server.SendDataForClient(player2Pokers,1) && server.SendDataForClient(player3Pokers,2))
+            if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
             {
                 DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(2);
+                this.server.SendOrder(LandLordNum);
+                //DConsole.PaintClient(player2Pokers.Count, 1);
+                //DConsole.PaintClient(player3Pokers.Count, 2);
+                //server.SendDataForClient("PokerCount" + Convert.ToString(player2Pokers.Count), 2);
+                //server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
+                //server.SendDataForClient("PokerCount" + Convert.ToString(player3Pokers.Count), 1);
+                //server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
             }
             else
             {
@@ -151,18 +157,29 @@ namespace FightTheLandLord
 #endif
                 shuffle(); //洗牌
                 deal(); //发牌
+                this.player1.sort(); //把牌从大到小排序
+                this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
+                this.player1.Paint(); //在panelPlayer1中画出player1的牌
+                this.player2.sort();
+                this.player3.sort();
+                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
+                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
+                server.SendDataForClient("PokerCount" + Convert.ToString(this.player2.newPokers.Count), 2);
+                server.SendDataForClient("PokerCount" + Convert.ToString(this.player3.newPokers.Count), 1);
+                DConsole.PaintClient(this.player2.newPokers.Count, 1);
+                DConsole.PaintClient(this.player3.newPokers.Count, 2);
+                this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
+                this.btnStart.Enabled = false;
+                this.btnStart.Visible = false;
             }
-            this.player1.sort(); //把牌从大到小排序
-            this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
-            this.player1.Paint(); //在panelPlayer1中画出player1的牌
-            this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
-            this.btnStart.Enabled = false;
-            this.btnStart.Visible = false;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
             DConsole.tb = this.tbState;
+            DConsole.g1 = this.panelPlayer2.CreateGraphics();
+            DConsole.g2 = this.panelPlayer3.CreateGraphics();
+            DConsole.backColor = this.BackColor;
         }
 
         private void panelPlayer1_Paint(object sender, PaintEventArgs e)
@@ -187,12 +204,15 @@ namespace FightTheLandLord
             {
                 if (this.server != null)
                 {
+                    server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
+                    server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
                     server.SendDataForClient(DConsole.orderingPokers, 1);
                     server.SendDataForClient(DConsole.orderingPokers, 2);
                 }
                 if (this.client != null)
                 {
                     client.SendDataForServer(DConsole.orderingPokers);
+                    client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.newPokers.Count));
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
@@ -207,6 +227,8 @@ namespace FightTheLandLord
         {
             this.server = new Server();  //创建服务器
             this.server.listener.Start();  //开始监听
+            this.player2 = new Player();
+            this.player3 = new Player();
             this.acceptConn = new Thread(new ThreadStart(this.server.Connection)); //新建一个线程用于接受请求连接
             this.acceptConn.IsBackground = true;
             this.acceptConn.Name = "检测客户端的连接并接受的线程";
@@ -354,5 +376,32 @@ namespace FightTheLandLord
         {
             MessageBox.Show("作者:李达", "火拼斗地主");
         }
+
+        private void panelPlayer2_Paint(object sender, PaintEventArgs e)
+        {
+            if (this.server != null)
+            {
+                DConsole.PaintClient(true);
+            }
+            if (this.client != null)
+            {
+                DConsole.PaintServer();
+            }
+        }
+
+        private void panelPlayer3_Paint(object sender, PaintEventArgs e)
+        {
+            if (this.server != null)
+            {
+                DConsole.PaintClient(true);
+                DConsole.PaintClient(true);
+            }
+            if (this.client != null)
+            {
+                DConsole.PaintClient();
+                DConsole.PaintServer();
+            }
+        }
+
     }
 }
