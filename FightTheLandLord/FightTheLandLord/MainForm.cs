@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.Threading;
+using Microsoft.VisualBasic;
 
 
 // 再写把牌发给客户端以及处理客户端的出牌请求
@@ -107,7 +108,7 @@ namespace FightTheLandLord
             if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
             {
                 DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(LandLordNum);
+                this.server.SendOrder(1);
                 //DConsole.PaintClient(player2Pokers.Count, 1);
                 //DConsole.PaintClient(player3Pokers.Count, 2);
                 //server.SendDataForClient("PokerCount" + Convert.ToString(player2Pokers.Count), 2);
@@ -179,7 +180,13 @@ namespace FightTheLandLord
             DConsole.tb = this.tbState;
             DConsole.g1 = this.panelPlayer2.CreateGraphics();
             DConsole.g2 = this.panelPlayer3.CreateGraphics();
+            DConsole.gPlayer1LeadPoker = this.panelPlayer1LeadPoker.CreateGraphics();
+            DConsole.gPlayer2LeadPoker = this.panelPlayer2LeadPoker.CreateGraphics();
+            DConsole.gPlayer3LeadPoker = this.panelPlayer3LeadPoker.CreateGraphics();
             DConsole.backColor = this.BackColor;
+            DConsole.lblClient1Name = this.lblClient1Name;
+            DConsole.lblClient2Name = this.lblClient2Name;
+
         }
 
         private void panelPlayer1_Paint(object sender, PaintEventArgs e)
@@ -206,8 +213,8 @@ namespace FightTheLandLord
                 {
                     server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
                     server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
-                    server.SendDataForClient(DConsole.orderingPokers, 1);
-                    server.SendDataForClient(DConsole.orderingPokers, 2);
+                    server.SendDataForClient("server", DConsole.orderingPokers, 1);
+                    server.SendDataForClient("server", DConsole.orderingPokers, 2);
                 }
                 if (this.client != null)
                 {
@@ -216,6 +223,7 @@ namespace FightTheLandLord
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
+                DConsole.PaintPlayer1LeadPoker();
             }
             else
             {
@@ -235,7 +243,7 @@ namespace FightTheLandLord
             this.acceptConn.Start(); //开始线程
             DConsole.Write("[系统消息]:创建游戏成功,等待其他人链接");
             this.timerServer.Enabled = true;
-            ToolStripMenuItem tsmi =(ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
+            ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
             tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
             tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
         }
@@ -244,12 +252,14 @@ namespace FightTheLandLord
         {
             JoinForm joinForm = new JoinForm();
             joinForm.ShowDialog();
-            if (Properties.Settings.Default.Host != "")
+            if (Properties.Settings.Default.Host != "" && Properties.Settings.Default.Name != "")
             {
                 this.client = new Client();
                 if (this.client.Connection())
                 {
                     MessageBox.Show("连接成功", "消息");
+                    client.Name = Properties.Settings.Default.Name;
+                    this.lblClient1Name.Text = "server";
                     btnOK.Enabled = true;
                     btnOK.Visible = true;   //启用"准备"按钮
                     ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
@@ -271,6 +281,11 @@ namespace FightTheLandLord
                 {
                     DConsole.Write("[系统消息]:连接建立成功,等待其他人准备");
                 }
+                if (this.lblClient1Name.Text == "" && this.lblClient2Name.Text == "")
+                {
+                    this.lblClient1Name.Text = server.client1Name;
+                    this.lblClient2Name.Text = server.client2Name;
+                }
                 if (this.AcceptClient1Data == null)  //如果线程没有初始化则先初始化
                 {
                     this.AcceptClient1Data = new Thread(new ThreadStart(server.AccpetClient1Data));
@@ -279,7 +294,7 @@ namespace FightTheLandLord
                 }
                 if (this.AcceptClient1Data.ThreadState == (ThreadState.Background | ThreadState.Unstarted))  //如果线程没有启动则先启动,由于之前把线程的IsBackGround设置为true,所以这里要这样写
                 {
-                        this.AcceptClient1Data.Start();
+                    this.AcceptClient1Data.Start();
                 }
                 if (this.AcceptClient2Data == null)  //如果线程没有初始化则先初始化
                 {
@@ -337,7 +352,7 @@ namespace FightTheLandLord
             }
             else
             {
-                MessageBox.Show("准备失败,请检查网络连接", "消息");
+                MessageBox.Show("准备失败,请检查网络连接", "火拼斗地主");
             }
         }
 
@@ -345,6 +360,7 @@ namespace FightTheLandLord
         {
             if (this.client.everyIsOk)
             {
+                client.SendDataForServer("Name" + client.Name); //发送名字到服务器,不能这样写...
                 if (this.player1.newPokers.Count == 0)
                 {
                     if (this.client.Pokers != null)
@@ -401,6 +417,16 @@ namespace FightTheLandLord
                 DConsole.PaintClient();
                 DConsole.PaintServer();
             }
+        }
+
+        private void panelPlayer2LeadPoker_Paint(object sender, PaintEventArgs e)
+        {
+            DConsole.PaintPlayer2LeadPoker();
+        }
+
+        private void panelPlayer3LeadPoker_Paint(object sender, PaintEventArgs e)
+        {
+            DConsole.PaintPlayer3LeadPoker();
         }
 
     }

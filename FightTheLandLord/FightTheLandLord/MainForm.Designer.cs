@@ -46,6 +46,11 @@
             this.tbState = new System.Windows.Forms.TextBox();
             this.panelPlayer2 = new System.Windows.Forms.Panel();
             this.panelPlayer3 = new System.Windows.Forms.Panel();
+            this.panelPlayer1LeadPoker = new System.Windows.Forms.Panel();
+            this.panelPlayer2LeadPoker = new System.Windows.Forms.Panel();
+            this.panelPlayer3LeadPoker = new System.Windows.Forms.Panel();
+            this.lblClient1Name = new System.Windows.Forms.Label();
+            this.lblClient2Name = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -72,7 +77,7 @@
             // btnLead
             // 
             this.btnLead.Enabled = false;
-            this.btnLead.Location = new System.Drawing.Point(360, 352);
+            this.btnLead.Location = new System.Drawing.Point(430, 381);
             this.btnLead.Name = "btnLead";
             this.btnLead.Size = new System.Drawing.Size(75, 23);
             this.btnLead.TabIndex = 2;
@@ -114,21 +119,21 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -155,7 +160,7 @@
             // btnOK
             // 
             this.btnOK.Enabled = false;
-            this.btnOK.Location = new System.Drawing.Point(279, 381);
+            this.btnOK.Location = new System.Drawing.Point(293, 381);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 5;
@@ -172,12 +177,12 @@
             // tbState
             // 
             this.tbState.ForeColor = System.Drawing.Color.Red;
-            this.tbState.Location = new System.Drawing.Point(293, 27);
+            this.tbState.Location = new System.Drawing.Point(222, 27);
             this.tbState.Multiline = true;
             this.tbState.Name = "tbState";
             this.tbState.ReadOnly = true;
             this.tbState.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbState.Size = new System.Drawing.Size(212, 47);
+            this.tbState.Size = new System.Drawing.Size(376, 242);
             this.tbState.TabIndex = 6;
             // 
             // panelPlayer2
@@ -196,11 +201,55 @@
             this.panelPlayer3.TabIndex = 8;
             this.panelPlayer3.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer3_Paint);
             // 
+            // panelPlayer1LeadPoker
+            // 
+            this.panelPlayer1LeadPoker.Location = new System.Drawing.Point(219, 275);
+            this.panelPlayer1LeadPoker.Name = "panelPlayer1LeadPoker";
+            this.panelPlayer1LeadPoker.Size = new System.Drawing.Size(379, 100);
+            this.panelPlayer1LeadPoker.TabIndex = 9;
+            // 
+            // panelPlayer2LeadPoker
+            // 
+            this.panelPlayer2LeadPoker.Location = new System.Drawing.Point(116, 57);
+            this.panelPlayer2LeadPoker.Name = "panelPlayer2LeadPoker";
+            this.panelPlayer2LeadPoker.Size = new System.Drawing.Size(100, 348);
+            this.panelPlayer2LeadPoker.TabIndex = 10;
+            this.panelPlayer2LeadPoker.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer2LeadPoker_Paint);
+            // 
+            // panelPlayer3LeadPoker
+            // 
+            this.panelPlayer3LeadPoker.Location = new System.Drawing.Point(604, 56);
+            this.panelPlayer3LeadPoker.Name = "panelPlayer3LeadPoker";
+            this.panelPlayer3LeadPoker.Size = new System.Drawing.Size(100, 348);
+            this.panelPlayer3LeadPoker.TabIndex = 11;
+            this.panelPlayer3LeadPoker.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer3LeadPoker_Paint);
+            // 
+            // lblClient1Name
+            // 
+            this.lblClient1Name.AutoSize = true;
+            this.lblClient1Name.Location = new System.Drawing.Point(116, 30);
+            this.lblClient1Name.Name = "lblClient1Name";
+            this.lblClient1Name.Size = new System.Drawing.Size(0, 12);
+            this.lblClient1Name.TabIndex = 12;
+            // 
+            // lblClient2Name
+            // 
+            this.lblClient2Name.AutoSize = true;
+            this.lblClient2Name.Location = new System.Drawing.Point(638, 30);
+            this.lblClient2Name.Name = "lblClient2Name";
+            this.lblClient2Name.Size = new System.Drawing.Size(0, 12);
+            this.lblClient2Name.TabIndex = 13;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 566);
+            this.Controls.Add(this.lblClient2Name);
+            this.Controls.Add(this.lblClient1Name);
+            this.Controls.Add(this.panelPlayer3LeadPoker);
+            this.Controls.Add(this.panelPlayer2LeadPoker);
+            this.Controls.Add(this.panelPlayer1LeadPoker);
             this.Controls.Add(this.panelPlayer3);
             this.Controls.Add(this.panelPlayer2);
             this.Controls.Add(this.tbState);
@@ -244,6 +293,11 @@
         private System.Windows.Forms.TextBox tbState;
         private System.Windows.Forms.Panel panelPlayer2;
         private System.Windows.Forms.Panel panelPlayer3;
+        private System.Windows.Forms.Panel panelPlayer1LeadPoker;
+        private System.Windows.Forms.Panel panelPlayer2LeadPoker;
+        private System.Windows.Forms.Panel panelPlayer3LeadPoker;
+        private System.Windows.Forms.Label lblClient1Name;
+        private System.Windows.Forms.Label lblClient2Name;
     }
 }
 
