@@ -25,6 +25,14 @@ namespace FightTheLandLord
         /// </summary>
         public TcpClient client2;
         /// <summary>
+        /// 客户端1的名字
+        /// </summary>
+        public string client1Name;
+        /// <summary>
+        /// 客户端2的名字
+        /// </summary>
+        public string client2Name;
+        /// <summary>
         /// 所有用户是否已准备
         /// </summary>
         public bool everyOneIsOk = false;
@@ -56,7 +64,7 @@ namespace FightTheLandLord
         }
 
         /// <summary>
-        /// 循环接收客户端的准备请求，一旦所有客户端准备完毕，就向客户端发送Start命令
+        /// 循环接收客户端1的请求数据
         /// </summary>
         public void AccpetClient1Data()
         {
@@ -68,6 +76,13 @@ namespace FightTheLandLord
                 byte[] bytes1 = new byte[108];
                 Ns1.Read(bytes1, 0, 108);
                 str1 = Encoding.Default.GetString(bytes1);
+                if (str1.StartsWith("Name"))
+                {
+                    str1 = str1.Replace("Name", "");
+                    this.client1Name = str1;
+                    this.SendDataForClient("CName" + str1, 2);
+                    continue;
+                }
                 if (str1.StartsWith("OK"))
                 {
                     this.client1IsOk = true;
@@ -99,6 +114,9 @@ namespace FightTheLandLord
                 //}
             }
         }
+        /// <summary>
+        /// 循环接收客户端2的请求数据
+        /// </summary>
         public void AccpetClient2Data()
         {
             NetworkStream Ns2 = client2.GetStream();
@@ -109,6 +127,13 @@ namespace FightTheLandLord
                 byte[] bytes2 = new byte[108];
                 Ns2.Read(bytes2, 0, 108);
                 str2 = Encoding.Default.GetString(bytes2);
+                if (str2.StartsWith("Name"))
+                {
+                    str2 = str2.Replace("Name", "");
+                    this.client2Name = str2;
+                    this.SendDataForClient("CName" + str2, 1);
+                    continue;
+                }
                 if (str2.StartsWith("OK"))
                 {
                     this.client2IsOk = true;
@@ -158,6 +183,28 @@ namespace FightTheLandLord
                 return false;
             }
             byte[] bytePg = pg.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
+            Ns.Write(bytePg, 0, bytePg.Length);  //把2个比特流对象写入server与client的连接管道中
+            return true;
+        }
+        public bool SendDataForClient(string head, PokerGroup pg, int client)
+        {
+
+            NetworkStream Ns = null;
+            if (client == 1)
+            {
+                Ns = this.client1.GetStream();
+            }
+            if (client == 2)
+            {
+                Ns = this.client2.GetStream();//得到客户端的网络流对象
+            }
+            if (client != 1 && client != 2)
+            {
+                return false;
+            }
+            byte[] bytePg = pg.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
+            string strPg = head;
+            strPg += Encoding.Default.GetString(bytePg);
             Ns.Write(bytePg, 0, bytePg.Length);  //把2个比特流对象写入server与client的连接管道中
             return true;
         }

@@ -30,7 +30,7 @@
         {
             this.lblIP = new System.Windows.Forms.Label();
             this.lblName = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBoxName = new System.Windows.Forms.TextBox();
             this.btnJoin = new System.Windows.Forms.Button();
             this.textBoxIP = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
@@ -53,12 +53,13 @@
             this.lblName.TabIndex = 1;
             this.lblName.Text = "名    称:";
             // 
-            // textBox2
+            // textBoxName
             // 
-            this.textBox2.Location = new System.Drawing.Point(70, 74);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.Size = new System.Drawing.Size(100, 21);
-            this.textBox2.TabIndex = 3;
+            this.textBoxName.Location = new System.Drawing.Point(70, 74);
+            this.textBoxName.MaxLength = 8;
+            this.textBoxName.Name = "textBoxName";
+            this.textBoxName.Size = new System.Drawing.Size(100, 21);
+            this.textBoxName.TabIndex = 3;
             // 
             // btnJoin
             // 
@@ -81,10 +82,10 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(192, 173);
+            this.ClientSize = new System.Drawing.Size(192, 166);
             this.Controls.Add(this.textBoxIP);
             this.Controls.Add(this.btnJoin);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.textBoxName);
             this.Controls.Add(this.lblName);
             this.Controls.Add(this.lblIP);
             this.MaximizeBox = false;
@@ -103,7 +104,7 @@
 
         private System.Windows.Forms.Label lblIP;
         private System.Windows.Forms.Label lblName;
-        private System.Windows.Forms.TextBox textBox2;
+        private System.Windows.Forms.TextBox textBoxName;
         private System.Windows.Forms.Button btnJoin;
         private System.Windows.Forms.TextBox textBoxIP;
     }

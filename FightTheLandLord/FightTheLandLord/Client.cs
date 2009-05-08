@@ -11,6 +11,10 @@ namespace FightTheLandLord
 {
     public class Client
     {
+        /// <summary>
+        /// 客户端的名称
+        /// </summary>
+        public string Name;
         public TcpClient client;
         /// <summary>
         /// 所有用户是否已准备
@@ -63,6 +67,11 @@ namespace FightTheLandLord
                 byte[] bytes = new byte[108];
                 Ns.Read(bytes, 0, 108);
                 str = Encoding.Default.GetString(bytes);
+                if (str.StartsWith("CName"))
+                {
+                    str = str.Replace("CName", "");
+                    DConsole.OtherClientName = str;
+                }
                 if (str.StartsWith("SPokerCount"))
                 {
                     str = str.Replace("SPokerCount","");
@@ -85,6 +94,29 @@ namespace FightTheLandLord
                 if (str.StartsWith("lead"))
                 {
                     this.haveOrder = true;
+                    continue;
+                }
+                if (str.StartsWith("StartPokers"))
+                {
+                    this.Pokers.GetPokerGroup(bytes);
+                    continue;
+                }
+                if (str.StartsWith("server"))
+                {
+                    PokerGroup pokers = new PokerGroup();
+                    pokers.GetPokerGroup(bytes);
+                    DConsole.leadedPokers.Add(pokers);
+                    DConsole.WriteLeadedPokers();
+                    DConsole.PaintPlayer2LeadPoker(pokers);
+                    continue;
+                }
+                if (str.StartsWith(DConsole.OtherClientName))
+                {
+                    PokerGroup pokers = new PokerGroup();
+                    pokers.GetPokerGroup(bytes);
+                    DConsole.leadedPokers.Add(pokers);
+                    DConsole.WriteLeadedPokers();
+                    DConsole.PaintPlayer3LeadPoker(pokers);
                     continue;
                 }
                 if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))

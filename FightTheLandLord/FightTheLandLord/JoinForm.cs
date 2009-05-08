@@ -24,11 +24,23 @@ namespace FightTheLandLord
             if (IPAddress.TryParse(this.textBoxIP.Text, out ip))
             {
                 Properties.Settings.Default.Host = this.textBoxIP.Text;
-                this.Close();
             }
             else
             {
                 MessageBox.Show("请输入一个正确的IP", "错误");
+            }
+            string name = this.textBoxName.Text.Trim();
+            if (name == "")
+            {
+                MessageBox.Show("请输入一个名字", "火拼斗地主");
+            }
+            else
+            {
+                Properties.Settings.Default.Name = name;
+            }
+            if (Properties.Settings.Default.Name != "" && Properties.Settings.Default.Host != "")
+            {
+                this.Close();
             }
         }
     }
