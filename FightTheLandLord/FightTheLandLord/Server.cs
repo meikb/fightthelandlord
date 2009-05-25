@@ -90,11 +90,20 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("PokerCount"))
                 {
-                    str1 = str1.Replace("0", "");
                     SendDataForClient(str1, 2);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
                     DConsole.PaintClient(PokerCount, 1);
+                    continue;
+                }
+                if (str1.StartsWith("client"))
+                {
+                    SendDataForClient(str1, 2);
+                    str1 = str1.Replace("client", "");
+                    pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
+                    DConsole.PaintPlayer2LeadPoker(pg);
+                    DConsole.leadedPokers.Add(pg);
+                    DConsole.WriteLeadedPokers();
                     continue;
                 }
                 if (!str1.StartsWith("OK"))
@@ -103,6 +112,7 @@ namespace FightTheLandLord
                     DConsole.leadedPokers.Add(pg);
                     SendDataForClient(pg, 2);
                     DConsole.WriteLeadedPokers();
+                    continue;
                 }
                 //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
                 //{
@@ -120,40 +130,49 @@ namespace FightTheLandLord
         public void AccpetClient2Data()
         {
             NetworkStream Ns2 = client2.GetStream();
-            string str2 = "";
+            string str1 = "";
             while (true)
             {
                 PokerGroup pg = new PokerGroup();
                 byte[] bytes2 = new byte[108];
                 Ns2.Read(bytes2, 0, 108);
-                str2 = Encoding.Default.GetString(bytes2);
-                if (str2.StartsWith("Name"))
+                str1 = Encoding.Default.GetString(bytes2);
+                if (str1.StartsWith("Name"))
                 {
-                    str2 = str2.Replace("Name", "");
-                    this.client2Name = str2;
-                    this.SendDataForClient("CName" + str2, 1);
+                    str1 = str1.Replace("Name", "");
+                    this.client2Name = str1;
+                    this.SendDataForClient("CName" + str1, 1);
                     continue;
                 }
-                if (str2.StartsWith("OK"))
+                if (str1.StartsWith("OK"))
                 {
                     this.client2IsOk = true;
                     continue;
                 }
-                if (str2.StartsWith("PokerCount"))
+                if (str1.StartsWith("PokerCount"))
                 {
-                    str2 = str2.Replace("0", "");
-                    SendDataForClient(str2, 1);
-                    str2 = str2.Replace("PokerCount", "");
-                    int PokerCount = Convert.ToInt32(str2);
+                    SendDataForClient(str1, 1);
+                    str1 = str1.Replace("PokerCount", "");
+                    int PokerCount = Convert.ToInt32(str1);
                     DConsole.PaintClient(PokerCount, 2);
                     continue;
                 }
-                if (!str2.StartsWith("OK"))
+                if (!str1.StartsWith("OK"))
                 {
                     pg.GetPokerGroup(bytes2);
                     DConsole.leadedPokers.Add(pg);
                     SendDataForClient(pg, 1);
                     DConsole.WriteLeadedPokers();
+                    continue;
+                }
+                if (str1.StartsWith("client"))
+                {
+                    SendDataForClient(str1, 2);
+                    str1 = str1.Replace("client", "");
+                    pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
+                    DConsole.PaintPlayer2LeadPoker(pg);
+                    DConsole.WriteLeadedPokers();
+                    continue;
                 }
                 //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
                 //{
@@ -203,9 +222,10 @@ namespace FightTheLandLord
                 return false;
             }
             byte[] bytePg = pg.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
-            string strPg = head;
-            strPg += Encoding.Default.GetString(bytePg);
-            Ns.Write(bytePg, 0, bytePg.Length);  //把2个比特流对象写入server与client的连接管道中
+            string strPg = Encoding.Default.GetString(bytePg);
+            string strSender = head + strPg;  //组合两个字符串
+            byte[] byteSender = Encoding.Default.GetBytes(strSender);  //把要发送的数据转换为byte[]
+            Ns.Write(byteSender, 0, byteSender.Length);  //把2个比特流对象写入server与client的连接管道中
             return true;
         }
         public bool SendDataForClient(string str, int client)
