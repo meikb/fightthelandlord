@@ -21,6 +21,7 @@ namespace FightTheLandLord
         private Player player3;
         private Server server;
         private Client client;
+        private bool SendedName;
         private Thread acceptConn;
         private Thread AcceptClient1Data;
         private Thread AcceptClient2Data;
@@ -108,7 +109,7 @@ namespace FightTheLandLord
             if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
             {
                 DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(1);
+                this.server.SendOrder(2);
                 //DConsole.PaintClient(player2Pokers.Count, 1);
                 //DConsole.PaintClient(player3Pokers.Count, 2);
                 //server.SendDataForClient("PokerCount" + Convert.ToString(player2Pokers.Count), 2);
@@ -218,7 +219,7 @@ namespace FightTheLandLord
                 }
                 if (this.client != null)
                 {
-                    client.SendDataForServer(DConsole.orderingPokers);
+                    client.SendDataForServer("client",DConsole.orderingPokers);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.newPokers.Count));
                 }
                 player1.g.Clear(this.BackColor);
@@ -360,7 +361,11 @@ namespace FightTheLandLord
         {
             if (this.client.everyIsOk)
             {
-                client.SendDataForServer("Name" + client.Name); //发送名字到服务器,不能这样写...
+                if (!this.SendedName)
+                {
+                    client.SendDataForServer("Name" + client.Name); //发送名字到服务器,不能这样写...
+                    this.SendedName = true;
+                }
                 if (this.player1.newPokers.Count == 0)
                 {
                     if (this.client.Pokers != null)

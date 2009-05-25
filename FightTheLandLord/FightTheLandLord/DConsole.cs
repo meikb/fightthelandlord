@@ -250,11 +250,11 @@ namespace FightTheLandLord
             gPlayer3LeadPoker.Clear(backColor);
             for (int i = 0; i < pg.Count; i++)
             {
-                int x = i * 20;
-                Rectangle rt = new Rectangle(x, 0, 50, 95);
-                gPlayer2LeadPoker.FillRectangle(Brushes.White, rt);
-                gPlayer2LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer2LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                int y = i * 20;
+                Rectangle rt = new Rectangle(0, y, 95, 50);
+                gPlayer3LeadPoker.FillRectangle(Brushes.White, rt);
+                gPlayer3LeadPoker.DrawRectangle(Pens.Black, rt);
+                gPlayer3LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, 40, y + 5);
             }
         }
 

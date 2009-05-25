@@ -104,16 +104,20 @@ namespace FightTheLandLord
                 if (str.StartsWith("server"))
                 {
                     PokerGroup pokers = new PokerGroup();
-                    pokers.GetPokerGroup(bytes);
+                    str = str.Replace("server", "");
+                    byte[] bytePg = Encoding.Default.GetBytes(str);
+                    pokers.GetPokerGroup(bytePg);
                     DConsole.leadedPokers.Add(pokers);
                     DConsole.WriteLeadedPokers();
                     DConsole.PaintPlayer2LeadPoker(pokers);
                     continue;
                 }
-                if (str.StartsWith(DConsole.OtherClientName))
+                if (str.StartsWith("client"))
                 {
                     PokerGroup pokers = new PokerGroup();
-                    pokers.GetPokerGroup(bytes);
+                    str = str.Replace("client", "");
+                    byte[] bytePg = Encoding.Default.GetBytes(str);
+                    pokers.GetPokerGroup(bytePg);
                     DConsole.leadedPokers.Add(pokers);
                     DConsole.WriteLeadedPokers();
                     DConsole.PaintPlayer3LeadPoker(pokers);
@@ -162,6 +166,16 @@ namespace FightTheLandLord
             NetworkStream Ns = this.client.GetStream();
             byte[] bytes = pg.GetBuffer();
             Ns.Write(bytes, 0, bytes.Length); 
+            return true;
+        }
+        public bool SendDataForServer(string head,PokerGroup pg)
+        {
+            NetworkStream Ns = client.GetStream();
+            byte[] bytePg = pg.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
+            string strPg = Encoding.Default.GetString(bytePg);
+            string strSender = head + strPg;  //组合两个字符串
+            byte[] byteSender = Encoding.Default.GetBytes(strSender);  //把要发送的数据转换为byte[]
+            Ns.Write(byteSender, 0, byteSender.Length);  //把2个比特流对象写入server与client的连接管道中
             return true;
         }
     }
