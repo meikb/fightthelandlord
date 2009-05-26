@@ -216,11 +216,14 @@ namespace FightTheLandLord
                     server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
                     server.SendDataForClient("server", DConsole.orderingPokers, 1);
                     server.SendDataForClient("server", DConsole.orderingPokers, 2);
+                    server.haveOrder = false;
+                    server.SendDataForClient("Order", 2);
                 }
                 if (this.client != null)
                 {
                     client.SendDataForServer("client",DConsole.orderingPokers);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.newPokers.Count));
+                    client.haveOrder = false;
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();

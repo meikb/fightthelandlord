@@ -104,6 +104,7 @@ namespace FightTheLandLord
                     DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.leadedPokers.Add(pg);
                     DConsole.WriteLeadedPokers();
+                    this.haveOrder = true;  //client1出牌后归server出牌
                     continue;
                 }
                 if (!str1.StartsWith("OK"))
@@ -172,6 +173,7 @@ namespace FightTheLandLord
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
                     DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
+                    SendDataForClient("Order", 1);
                     continue;
                 }
                 //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))

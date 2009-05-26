@@ -123,6 +123,11 @@ namespace FightTheLandLord
                     DConsole.PaintPlayer3LeadPoker(pokers);
                     continue;
                 }
+                //接收服务器分配的牌组
+                if (str.StartsWith("Order"))
+                {
+                    this.haveOrder = true;
+                }
                 if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
                 {
                     PokerGroup pokers = new PokerGroup();
@@ -130,12 +135,6 @@ namespace FightTheLandLord
                     if (pokers.Count == 17 | pokers.Count == 20)
                     {
                         this.Pokers = pokers;
-                        continue;
-                    }
-                    else
-                    {
-                        DConsole.leadedPokers.Add(pokers);
-                        DConsole.WriteLeadedPokers();
                         continue;
                     }
                 }
