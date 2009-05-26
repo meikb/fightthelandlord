@@ -51,13 +51,14 @@
             this.panelPlayer3LeadPoker = new System.Windows.Forms.Panel();
             this.lblClient1Name = new System.Windows.Forms.Label();
             this.lblClient2Name = new System.Windows.Forms.Label();
+            this.btnPass = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(360, 381);
+            this.btnStart.Location = new System.Drawing.Point(399, 381);
             this.btnStart.Name = "btnStart";
             this.btnStart.Size = new System.Drawing.Size(75, 23);
             this.btnStart.TabIndex = 0;
@@ -77,7 +78,7 @@
             // btnLead
             // 
             this.btnLead.Enabled = false;
-            this.btnLead.Location = new System.Drawing.Point(430, 381);
+            this.btnLead.Location = new System.Drawing.Point(239, 381);
             this.btnLead.Name = "btnLead";
             this.btnLead.Size = new System.Drawing.Size(75, 23);
             this.btnLead.TabIndex = 2;
@@ -119,21 +120,21 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -160,7 +161,7 @@
             // btnOK
             // 
             this.btnOK.Enabled = false;
-            this.btnOK.Location = new System.Drawing.Point(293, 381);
+            this.btnOK.Location = new System.Drawing.Point(320, 381);
             this.btnOK.Name = "btnOK";
             this.btnOK.Size = new System.Drawing.Size(75, 23);
             this.btnOK.TabIndex = 5;
@@ -207,6 +208,7 @@
             this.panelPlayer1LeadPoker.Name = "panelPlayer1LeadPoker";
             this.panelPlayer1LeadPoker.Size = new System.Drawing.Size(379, 100);
             this.panelPlayer1LeadPoker.TabIndex = 9;
+            this.panelPlayer1LeadPoker.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer1LeadPoker_Paint);
             // 
             // panelPlayer2LeadPoker
             // 
@@ -240,11 +242,23 @@
             this.lblClient2Name.Size = new System.Drawing.Size(0, 12);
             this.lblClient2Name.TabIndex = 13;
             // 
+            // btnPass
+            // 
+            this.btnPass.Location = new System.Drawing.Point(480, 381);
+            this.btnPass.Name = "btnPass";
+            this.btnPass.Size = new System.Drawing.Size(75, 23);
+            this.btnPass.TabIndex = 14;
+            this.btnPass.Text = "要不起";
+            this.btnPass.UseVisualStyleBackColor = true;
+            this.btnPass.Visible = false;
+            this.btnPass.Click += new System.EventHandler(this.btnPass_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 566);
+            this.Controls.Add(this.btnPass);
             this.Controls.Add(this.lblClient2Name);
             this.Controls.Add(this.lblClient1Name);
             this.Controls.Add(this.panelPlayer3LeadPoker);
@@ -298,6 +312,7 @@
         private System.Windows.Forms.Panel panelPlayer3LeadPoker;
         private System.Windows.Forms.Label lblClient1Name;
         private System.Windows.Forms.Label lblClient2Name;
+        private System.Windows.Forms.Button btnPass;
     }
 }
 

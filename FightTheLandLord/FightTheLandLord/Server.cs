@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Threading;
 
@@ -99,10 +97,11 @@ namespace FightTheLandLord
                 if (str1.StartsWith("client"))
                 {
                     SendDataForClient(str1, 2);
+                    Thread.Sleep(100);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
-                    DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.leadedPokers.Add(pg);
+                    DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
                     this.haveOrder = true;  //client1出牌后归server出牌
                     continue;
@@ -114,6 +113,11 @@ namespace FightTheLandLord
                     SendDataForClient(pg, 2);
                     DConsole.WriteLeadedPokers();
                     continue;
+                }
+                //Client放弃出牌,权限交给服务器
+                if (str1.StartsWith("Pass"))
+                {
+                    this.haveOrder = true;
                 }
                 //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
                 //{
@@ -158,21 +162,20 @@ namespace FightTheLandLord
                     DConsole.PaintClient(PokerCount, 2);
                     continue;
                 }
-                if (!str1.StartsWith("OK"))
-                {
-                    pg.GetPokerGroup(bytes2);
-                    DConsole.leadedPokers.Add(pg);
-                    SendDataForClient(pg, 1);
-                    DConsole.WriteLeadedPokers();
-                    continue;
-                }
                 if (str1.StartsWith("client"))
                 {
-                    SendDataForClient(str1, 2);
+                    SendDataForClient(str1, 1);
+                    Thread.Sleep(100);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
-                    DConsole.PaintPlayer2LeadPoker(pg);
+                    DConsole.PaintPlayer3LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
+                    SendDataForClient("Order", 1);
+                    continue;
+                }
+                //Client2放弃出牌,权限交给Client1
+                if (str1.StartsWith("Pass"))
+                {
                     SendDataForClient("Order", 1);
                     continue;
                 }

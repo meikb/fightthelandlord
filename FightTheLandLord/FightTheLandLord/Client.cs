@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 
 namespace FightTheLandLord
@@ -71,6 +69,7 @@ namespace FightTheLandLord
                 {
                     str = str.Replace("CName", "");
                     DConsole.OtherClientName = str;
+                    continue;
                 }
                 if (str.StartsWith("SPokerCount"))
                 {
@@ -123,11 +122,12 @@ namespace FightTheLandLord
                     DConsole.PaintPlayer3LeadPoker(pokers);
                     continue;
                 }
-                //接收服务器分配的牌组
                 if (str.StartsWith("Order"))
                 {
                     this.haveOrder = true;
+                    continue;
                 }
+                //接收服务器分配的牌组
                 if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
                 {
                     PokerGroup pokers = new PokerGroup();
@@ -135,8 +135,8 @@ namespace FightTheLandLord
                     if (pokers.Count == 17 | pokers.Count == 20)
                     {
                         this.Pokers = pokers;
-                        continue;
                     }
+                    continue;
                 }
             }
         }
