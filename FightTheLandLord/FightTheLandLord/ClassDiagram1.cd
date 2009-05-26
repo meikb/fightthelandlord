@@ -3,7 +3,7 @@
   <Class Name="FightTheLandLord.MainForm">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>oUAZAQgKBKABEAAAJSCEEIRKAEAEREgYAQIABQAAAAI=</HashCode>
+      <HashCode>4UQZAYgCBCABFAAAISKEEISKAEAEFEgYAQIABQAgAAI=</HashCode>
       <FileName>MainForm.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -23,7 +23,7 @@
   <Class Name="FightTheLandLord.Properties.Settings" Collapsed="true">
     <Position X="2.25" Y="10" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAIAAACAABCAAAAAAAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAIAQACAABCAAAAAAAAAAAAAA=</HashCode>
     </TypeIdentifier>
   </Class>
   <Class Name="FightTheLandLord.Poker">
@@ -40,24 +40,17 @@
       <FileName>Player.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="FightTheLandLord.Rules">
-    <Position X="2.25" Y="5.75" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAQAAA=</HashCode>
-      <FileName>Rules.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="FightTheLandLord.Client">
     <Position X="7.5" Y="0.5" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAICAAQAEAgAAAAAAACBQAAACBAIgABAAABAA=</HashCode>
+      <HashCode>AAAAEAAAICAAAAEAAAAAAAQAAAQAEAABQAAABAAABAA=</HashCode>
       <FileName>Client.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="FightTheLandLord.Server">
     <Position X="7.5" Y="4.25" Width="1.75" />
     <TypeIdentifier>
-      <HashCode>AEACAAAAIAAAGAEAAAECAAAAAIQAAAAAAAgAAAAABAA=</HashCode>
+      <HashCode>AAACAAAAAAgAGAEBAAEAAAAMAIAAAgAACAgAAAABBAA=</HashCode>
       <FileName>Server.cs</FileName>
     </TypeIdentifier>
   </Class>

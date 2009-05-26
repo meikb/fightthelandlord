@@ -210,19 +210,27 @@ namespace FightTheLandLord
         {
             if (player1.lead())
             {
+                this.btnLead.Visible = false;
+                this.btnPass.Visible = false;
                 if (this.server != null)
                 {
                     server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
+                    Thread.Sleep(100);
                     server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
+                    Thread.Sleep(100);
                     server.SendDataForClient("server", DConsole.orderingPokers, 1);
+                    Thread.Sleep(100);
                     server.SendDataForClient("server", DConsole.orderingPokers, 2);
-                    server.haveOrder = false;
+                    Thread.Sleep(100);
                     server.SendDataForClient("Order", 2);
+                    server.haveOrder = false;
                 }
                 if (this.client != null)
                 {
-                    client.SendDataForServer("client",DConsole.orderingPokers);
+                    client.SendDataForServer("client", DConsole.orderingPokers);
+                    Thread.Sleep(100);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.newPokers.Count));
+                    Thread.Sleep(100);
                     client.haveOrder = false;
                 }
                 player1.g.Clear(this.BackColor);
@@ -330,7 +338,7 @@ namespace FightTheLandLord
                 {
                     this.btnLead.Enabled = true;
                     this.btnLead.Visible = true;
-                    this.server.haveOrder = false;
+                    this.btnPass.Visible = true;
                 }
             }
         }
@@ -387,7 +395,7 @@ namespace FightTheLandLord
             {
                 this.btnLead.Enabled = true;
                 this.btnLead.Visible = true;
-                this.client.haveOrder = false;
+                this.btnPass.Visible = true;
             }
         }
 
@@ -435,6 +443,27 @@ namespace FightTheLandLord
         private void panelPlayer3LeadPoker_Paint(object sender, PaintEventArgs e)
         {
             DConsole.PaintPlayer3LeadPoker();
+        }
+
+        private void panelPlayer1LeadPoker_Paint(object sender, PaintEventArgs e)
+        {
+            DConsole.PaintPlayer1LeadPoker();
+        }
+
+        private void btnPass_Click(object sender, EventArgs e)
+        {
+            this.btnLead.Visible = false;
+            this.btnPass.Visible = false;
+            if (this.server != null)
+            {
+                this.server.SendDataForClient("Order", 2);
+                this.server.haveOrder = false;
+            }
+            if (this.client != null)  //有问题
+            {
+                this.client.SendDataForServer("Pass");
+                this.client.haveOrder = false;
+            }
         }
 
     }
