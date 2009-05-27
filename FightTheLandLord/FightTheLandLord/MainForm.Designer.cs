@@ -58,11 +58,11 @@
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(399, 381);
+            this.btnStart.Location = new System.Drawing.Point(402, 382);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(75, 23);
+            this.btnStart.Size = new System.Drawing.Size(43, 23);
             this.btnStart.TabIndex = 0;
-            this.btnStart.Text = "开始游戏";
+            this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
             this.btnStart.Visible = false;
             this.btnStart.Click += new System.EventHandler(this.btnStart_Click);
@@ -78,9 +78,9 @@
             // btnLead
             // 
             this.btnLead.Enabled = false;
-            this.btnLead.Location = new System.Drawing.Point(239, 381);
+            this.btnLead.Location = new System.Drawing.Point(315, 382);
             this.btnLead.Name = "btnLead";
-            this.btnLead.Size = new System.Drawing.Size(75, 23);
+            this.btnLead.Size = new System.Drawing.Size(37, 23);
             this.btnLead.TabIndex = 2;
             this.btnLead.Text = "出牌";
             this.btnLead.UseVisualStyleBackColor = true;
@@ -161,9 +161,9 @@
             // btnOK
             // 
             this.btnOK.Enabled = false;
-            this.btnOK.Location = new System.Drawing.Point(320, 381);
+            this.btnOK.Location = new System.Drawing.Point(358, 382);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(75, 23);
+            this.btnOK.Size = new System.Drawing.Size(38, 23);
             this.btnOK.TabIndex = 5;
             this.btnOK.Text = "准备";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -244,11 +244,11 @@
             // 
             // btnPass
             // 
-            this.btnPass.Location = new System.Drawing.Point(480, 381);
+            this.btnPass.Location = new System.Drawing.Point(451, 382);
             this.btnPass.Name = "btnPass";
-            this.btnPass.Size = new System.Drawing.Size(75, 23);
+            this.btnPass.Size = new System.Drawing.Size(39, 23);
             this.btnPass.TabIndex = 14;
-            this.btnPass.Text = "要不起";
+            this.btnPass.Text = "不要";
             this.btnPass.UseVisualStyleBackColor = true;
             this.btnPass.Visible = false;
             this.btnPass.Click += new System.EventHandler(this.btnPass_Click);

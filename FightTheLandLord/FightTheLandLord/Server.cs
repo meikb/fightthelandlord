@@ -34,7 +34,14 @@ namespace FightTheLandLord
         /// 所有用户是否已准备
         /// </summary>
         public bool everyOneIsOk = false;
+        /// <summary>
+        /// 是否有出牌权限
+        /// </summary>
         public bool haveOrder = false;
+        /// <summary>
+        /// 出出去的牌是否最大
+        /// </summary>
+        public bool IsBiggest = false;
         public bool client1IsOk = false;
         public bool client2IsOk = false;
 
@@ -106,27 +113,11 @@ namespace FightTheLandLord
                     this.haveOrder = true;  //client1出牌后归server出牌
                     continue;
                 }
-                if (!str1.StartsWith("OK"))
-                {
-                    pg.GetPokerGroup(bytes1);
-                    DConsole.leadedPokers.Add(pg);
-                    SendDataForClient(pg, 2);
-                    DConsole.WriteLeadedPokers();
-                    continue;
-                }
                 //Client放弃出牌,权限交给服务器
                 if (str1.StartsWith("Pass"))
                 {
                     this.haveOrder = true;
                 }
-                //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
-                //{
-                //    this.AcceptedPokers = true;
-                //}
-                //if (str1.StartsWith("AcceptedLeadPokers") && str2.StartsWith("AcceptedLeadPokers"))
-                //{
-                //    this.AcceptedLeadPokers = true;
-                //}
             }
         }
         /// <summary>
@@ -168,6 +159,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
+                    DConsole.leadedPokers.Add(pg);
                     DConsole.PaintPlayer3LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
                     SendDataForClient("Order", 1);
@@ -179,14 +171,6 @@ namespace FightTheLandLord
                     SendDataForClient("Order", 1);
                     continue;
                 }
-                //if (str1.StartsWith("AcceptedPokers") && str2.StartsWith("AcceptedPokers"))
-                //{
-                //    this.AcceptedPokers = true;
-                //}
-                //if (str1.StartsWith("AcceptedLeadPokers") && str2.StartsWith("AcceptedLeadPokers"))
-                //{
-                //    this.AcceptedLeadPokers = true;
-                //}
             }
         }
 
@@ -273,12 +257,15 @@ namespace FightTheLandLord
             {
                 case 1:
                     this.haveOrder = true;
+                    this.IsBiggest = true;
                     break;
                 case 2:
-                    this.SendDataForClient("lead", 1);
+                    this.SendDataForClient("Order", 1);
+                    this.SendDataForClient("IsBiggest", 1);
                     break;
                 case 3:
-                    this.SendDataForClient("lead", 2);
+                    this.SendDataForClient("Order", 2);
+                    this.SendDataForClient("IsBiggest", 2);
                     break;
             }
         }
