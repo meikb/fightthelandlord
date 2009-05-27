@@ -26,6 +26,10 @@ namespace FightTheLandLord
         /// 是否有出牌权限
         /// </summary>
         public bool haveOrder;
+        /// <summary>
+        /// 出出去的牌是否最大
+        /// </summary>
+        public bool IsBiggest;
         public bool AcceptedPokers;
         public bool AcceptedLeadPokers;
 
@@ -90,11 +94,6 @@ namespace FightTheLandLord
                     this.everyIsOk = true;
                     continue;
                 }
-                if (str.StartsWith("lead"))
-                {
-                    this.haveOrder = true;
-                    continue;
-                }
                 if (str.StartsWith("StartPokers"))
                 {
                     this.Pokers.GetPokerGroup(bytes);
@@ -125,6 +124,11 @@ namespace FightTheLandLord
                 if (str.StartsWith("Order"))
                 {
                     this.haveOrder = true;
+                    continue;
+                }
+                if (str.StartsWith("IsBiggest"))
+                {
+                    this.IsBiggest = true;
                     continue;
                 }
                 //接收服务器分配的牌组

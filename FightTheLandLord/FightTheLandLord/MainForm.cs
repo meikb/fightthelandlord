@@ -109,13 +109,7 @@ namespace FightTheLandLord
             if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
             {
                 DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(2);
-                //DConsole.PaintClient(player2Pokers.Count, 1);
-                //DConsole.PaintClient(player3Pokers.Count, 2);
-                //server.SendDataForClient("PokerCount" + Convert.ToString(player2Pokers.Count), 2);
-                //server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
-                //server.SendDataForClient("PokerCount" + Convert.ToString(player3Pokers.Count), 1);
-                //server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
+                this.server.SendOrder(LandLordNum);
             }
             else
             {
@@ -338,7 +332,14 @@ namespace FightTheLandLord
                 {
                     this.btnLead.Enabled = true;
                     this.btnLead.Visible = true;
-                    this.btnPass.Visible = true;
+                    if (!this.server.IsBiggest)
+                    {
+                        this.btnPass.Visible = true;
+                    }
+                }
+                if (this.server.IsBiggest)
+                {
+                    this.btnPass.Visible = false;
                 }
             }
         }
@@ -395,7 +396,14 @@ namespace FightTheLandLord
             {
                 this.btnLead.Enabled = true;
                 this.btnLead.Visible = true;
-                this.btnPass.Visible = true;
+                if (!this.client.IsBiggest)
+                {
+                    this.btnPass.Visible = true;
+                }
+            }
+            if (this.client.IsBiggest)
+            {
+                this.btnPass.Visible = false;
             }
         }
 
