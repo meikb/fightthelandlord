@@ -4,7 +4,6 @@ using System.Text;
 
 namespace FightTheLandLord
 {
-    [Serializable]
     public class Poker
     {
         /// <summary>
@@ -54,20 +53,34 @@ namespace FightTheLandLord
 
         public static bool operator ==(Poker LP, Poker RP)
         {
-            if (LP.pokerNum == RP.pokerNum)
+            if ((object)LP != null && (object)RP != null)
             {
-                return true;
+                if (LP.pokerNum == RP.pokerNum)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                return true;
             }
         }
         public static bool operator ==(Poker LP, PokerNum RP)
         {
-            if (LP.pokerNum == RP)
+            if ((object)LP != null)
             {
-                return true;
+                if (LP.pokerNum == RP)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
@@ -84,13 +97,20 @@ namespace FightTheLandLord
         }
         public static bool operator >(Poker LP, Poker RP)
         {
-            if (LP.pokerNum > RP.pokerNum)
+            if ((object)LP != null && (object)RP != null)
             {
-                return true;
+                if (LP.pokerNum > RP.pokerNum)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             else
             {
-                return false;
+                return true;
             }
         }
         public static bool operator <(Poker LP, Poker RP)
