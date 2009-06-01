@@ -161,8 +161,9 @@ namespace FightTheLandLord
             }
             if (DConsole.IsRules(this.leadPokers))
             {
-                if (DConsole.IsBiggest || this.leadPokers > DConsole.orderingPokers)
+                if (DConsole.IsBiggest || DConsole.orderingPokers > DConsole.leadedPokerGroups[DConsole.leadedPokerGroups.Count-1])
                 {
+                    DConsole.IsBiggest = true;
                     this.BakPoker();  //备份现有newPokers,下次出牌时需要用到
                     //this.leadPokers = DConsole.orderingPokers;
                     foreach (int selectPoker in this.selectPokers)  //在newPokers里移除已经出过的牌

@@ -8,6 +8,11 @@ namespace FightTheLandLord
     public class PokerGroup:List<Poker>
     {
         /// <summary>
+        /// 牌组的类型
+        /// </summary>
+        public PokerGroupType type;
+
+        /// <summary>
         /// 序列化一个PokerGroup对象,返回一个byte数组
         /// </summary>
         /// <returns></returns>
@@ -482,7 +487,7 @@ namespace FightTheLandLord
         }
         public static bool operator <(PokerGroup LP, PokerGroup RP)
         {
-            return !(LP > RP);
+            return (RP > LP);
         }
     }
 

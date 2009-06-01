@@ -51,5 +51,58 @@ namespace FightTheLandLord
             this.pokerNum = pokerNum;
             this.pokerColor = pokerColor;
         }
+
+        public static bool operator ==(Poker LP, Poker RP)
+        {
+            if (LP.pokerNum == RP.pokerNum)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool operator ==(Poker LP, PokerNum RP)
+        {
+            if (LP.pokerNum == RP)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool operator !=(Poker LP, PokerNum RP)
+        {
+            return !(LP.pokerNum == RP);
+        }
+        public static bool operator !=(Poker LP, Poker RP)
+        {
+            return !(LP == RP);
+        }
+        public static bool operator >(Poker LP, Poker RP)
+        {
+            if (LP.pokerNum > RP.pokerNum)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        public static bool operator <(Poker LP, Poker RP)
+        {
+            if (RP > LP)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
     }
 }

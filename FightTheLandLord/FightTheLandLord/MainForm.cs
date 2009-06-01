@@ -19,8 +19,8 @@ namespace FightTheLandLord
         private Player player1 = new Player();
         private Player player2;
         private Player player3;
-        private Server server;
-        private Client client;
+        public Server server;
+        public Client client;
         private bool SendedName;
         private Thread acceptConn;
         private Thread AcceptClient1Data;
@@ -93,7 +93,7 @@ namespace FightTheLandLord
             int LandLordNum = new Random().Next(1, 4);
             for (int i = 51; i < 54; i++)
             {
-                switch (LandLordNum)
+                switch (3)
                 {
                     case 1:
                         this.player1.pokers.Add(this.allPoker[i]);
@@ -109,7 +109,7 @@ namespace FightTheLandLord
             if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
             {
                 DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(LandLordNum);
+                this.server.SendOrder(3);
             }
             else
             {
@@ -241,6 +241,7 @@ namespace FightTheLandLord
         private void 创建游戏ToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.server = new Server();  //创建服务器
+            DConsole.server = this.server;
             this.server.listener.Start();  //开始监听
             this.player2 = new Player();
             this.player3 = new Player();
@@ -262,6 +263,7 @@ namespace FightTheLandLord
             if (Properties.Settings.Default.Host != "" && Properties.Settings.Default.Name != "")
             {
                 this.client = new Client();
+                DConsole.client = this.client;
                 if (this.client.Connection())
                 {
                     MessageBox.Show("连接成功", "消息");

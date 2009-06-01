@@ -7,6 +7,9 @@ namespace FightTheLandLord
 {
     public static class DConsole
     {
+        /// <summary>
+        /// 记录自己最后一次出的牌组(已从大到小排序)
+        /// </summary>
         public static PokerGroup orderingPokers = new PokerGroup();
         public static PokerGroup LeftTempLeadedPoker;
         public static PokerGroup RightTempLeadedPoker;
@@ -17,8 +20,16 @@ namespace FightTheLandLord
         public static Graphics g1, g2, gPlayer1LeadPoker, gPlayer2LeadPoker, gPlayer3LeadPoker;
         public static int leftCount;
         public static int rightCount;
+        public static Server server;
+        public static Client client;
+        /// <summary>
+        /// 自己是否有出牌权限
+        /// </summary>
         public static bool haveOrder;
-        public static bool IsBiggest;
+        /// <summary>
+        /// 上轮出牌是否自己最大
+        /// </summary>
+        private static bool _isBiggest;
         public static string OtherClientName
         {
             get
@@ -41,15 +52,44 @@ namespace FightTheLandLord
                 lblClient1Name.Text = value;
             }
         }
+        //当自己的IsBiggest为true时,发送消息使其他玩家的IsBiggest为false,因为逻辑上IsBiggest只能有一个
+        public static bool IsBiggest
+        {
+            get
+            {
+                return _isBiggest;
+            }
+            set
+            {
+                if (value)
+                {
+                    if (client != null)
+                    {
+                        client.SendDataForServer("IamIsBiggest");
+                        _isBiggest = value;
+                    }
+                    if (server != null)
+                    {
+                        server.SendDataForClient("NoBiggest", 1);
+                        server.SendDataForClient("NoBiggest", 2);
+                        _isBiggest = value;
+                    }
+                }
+                else
+                {
+                    _isBiggest = value;
+                }
+            }
+        }
 
         /// <summary>
-        /// 已出的牌组的集合
+        /// 记录其他玩家出的牌组
         /// </summary>
-        public static List<PokerGroup> leadedPokers = new List<PokerGroup>();
+        public static List<PokerGroup> leadedPokerGroups = new List<PokerGroup>();
         /// <summary>
         /// 验证所出牌组是否符合游戏规则
         /// </summary>
-        public static bool IsRules(PokerGroup leadPokers)
+        public static bool IsRules(PokerGroup leadPokers) //判断所出牌组类型以及其是否符合规则
         {
             bool isRule = false;
             orderingPokers.Clear();
@@ -61,20 +101,31 @@ namespace FightTheLandLord
                     break;
                 case 1:
                     isRule = true;
+                    orderingPokers.type = PokerGroupType.单张;
                     break;
                 case 2:
-                    if (orderingPokers[0].pokerNum == orderingPokers[1].pokerNum)
+                    if (orderingPokers[0] == orderingPokers[1])
                     {
                         isRule = true;
+                        orderingPokers.type = PokerGroupType.对子;
                     }
                     else
                     {
-                        isRule = false;
+                        if (orderingPokers[0] == PokerNum.大王 && orderingPokers[1] == PokerNum.小王)
+                        {
+                            orderingPokers.type = PokerGroupType.双王;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
                     }
                     break;
                 case 3:
-                    if (orderingPokers[0].pokerNum == orderingPokers[1].pokerNum && orderingPokers[1].pokerNum == orderingPokers[2].pokerNum)
+                    if (orderingPokers[0] == orderingPokers[1] && orderingPokers[1] == orderingPokers[2])
                     {
+                        orderingPokers.type = PokerGroupType.三张相同;
                         isRule = true;
                     }
                     else
@@ -83,34 +134,6 @@ namespace FightTheLandLord
                     }
                     break;
             }
-            //if (isRule)
-            //{
-            //    if (leadedPokers.Count != 0)
-            //    {
-            //        if (leadedPokers[leadedPokers.Count] != null)
-            //        {
-            //            if (leadedPokers[leadedPokers.Count].Count == orderingPokers.Count)
-            //            {
-            //                if (leadedPokers[leadedPokers.Count][0].pokerNum < orderingPokers[0].pokerNum)
-            //                {
-            //                    isRule = true;
-            //                }
-            //                else
-            //                {
-            //                    isRule = false;
-            //                }
-            //            }
-            //            else
-            //            {
-            //                isRule = false;
-            //            }
-            //        }
-            //    }
-            //    else
-            //    {
-            //        return true;
-            //    }
-            //}
 #if DEBUG
             Console.WriteLine("玩家出的牌:");
             foreach (Poker Poker in orderingPokers)
@@ -262,10 +285,14 @@ namespace FightTheLandLord
 
         public static void WriteLeadedPokers()
         {
-            foreach (Poker poker in leadedPokers[leadedPokers.Count - 1])
+            foreach (Poker poker in leadedPokerGroups[leadedPokerGroups.Count - 1])
             {
                 Write(poker.pokerColor.ToString() + poker.pokerNum.ToString());
             }
+        }
+        public static bool IsSame(PokerGroup PG, int amount, bool StartWithHead) //写到这里
+        {
+            
         }
     }
 }
