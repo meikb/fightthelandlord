@@ -97,7 +97,7 @@ namespace FightTheLandLord
                     str = str.Replace("server", "");
                     byte[] bytePg = Encoding.Default.GetBytes(str);
                     pokers.GetPokerGroup(bytePg);
-                    DConsole.leadedPokers.Add(pokers);
+                    DConsole.leadedPokerGroups.Add(pokers);
                     DConsole.WriteLeadedPokers();
                     DConsole.PaintPlayer2LeadPoker(pokers);
                     continue;
@@ -108,7 +108,7 @@ namespace FightTheLandLord
                     str = str.Replace("client", "");
                     byte[] bytePg = Encoding.Default.GetBytes(str);
                     pokers.GetPokerGroup(bytePg);
-                    DConsole.leadedPokers.Add(pokers);
+                    DConsole.leadedPokerGroups.Add(pokers);
                     DConsole.WriteLeadedPokers();
                     DConsole.PaintPlayer3LeadPoker(pokers);
                     continue;
@@ -121,6 +121,11 @@ namespace FightTheLandLord
                 if (str.StartsWith("IsBiggest"))
                 {
                     DConsole.IsBiggest = true;
+                    continue;
+                }
+                if (str.StartsWith("NoBiggest"))
+                {
+                    DConsole.IsBiggest = false;
                     continue;
                 }
                 //接收服务器分配的牌组

@@ -8,7 +8,7 @@ using System.Threading;
 
 namespace FightTheLandLord
 {
-    class Server
+    public class Server
     {
         /// <summary>
         /// 监听对象
@@ -99,7 +99,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
-                    DConsole.leadedPokers.Add(pg);
+                    DConsole.leadedPokerGroups.Add(pg);
                     DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
                     DConsole.haveOrder = true;  //client1出牌后归server出牌
@@ -109,6 +109,11 @@ namespace FightTheLandLord
                 if (str1.StartsWith("Pass"))
                 {
                     DConsole.haveOrder = true;
+                }
+                if (str1.StartsWith("IamIsBiggest"))
+                {
+                    DConsole.IsBiggest = false;
+                    this.SendDataForClient("NoBiggest", 2);
                 }
             }
         }
@@ -151,7 +156,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
-                    DConsole.leadedPokers.Add(pg);
+                    DConsole.leadedPokerGroups.Add(pg);
                     DConsole.PaintPlayer3LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
                     SendDataForClient("Order", 1);
@@ -162,6 +167,11 @@ namespace FightTheLandLord
                 {
                     SendDataForClient("Order", 1);
                     continue;
+                }
+                if (str1.StartsWith("IamIsBiggest"))
+                {
+                    DConsole.IsBiggest = false;
+                    this.SendDataForClient("NoBiggest", 1);
                 }
             }
         }
