@@ -159,6 +159,7 @@ namespace FightTheLandLord
         /// </summary>
         public bool lead()
         {
+            this.leadPokers.Clear();
             foreach (int selectPoker in this.selectPokers)  //迭代循环把已选中的牌添加到leadPokers
             {
                 this.leadPokers.Add(this.pokers[selectPoker]);
@@ -178,11 +179,13 @@ namespace FightTheLandLord
                 }
                 else
                 {
+                    this.leadPokers.Clear();
                     return false;
                 }
             }
             else
             {
+                this.leadPokers.Clear();
                 return false;
             }
         }

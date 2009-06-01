@@ -231,7 +231,6 @@ namespace FightTheLandLord
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
                 DConsole.PaintPlayer1LeadPoker();
-                DConsole.leadPokers.Clear();
             }
             else
             {
