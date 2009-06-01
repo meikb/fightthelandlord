@@ -217,7 +217,8 @@ namespace FightTheLandLord
                     server.SendDataForClient("server", DConsole.orderingPokers, 2);
                     Thread.Sleep(100);
                     server.SendDataForClient("Order", 2);
-                    server.haveOrder = false;
+                    DConsole.haveOrder = false;
+                    
                 }
                 if (this.client != null)
                 {
@@ -225,7 +226,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.newPokers.Count));
                     Thread.Sleep(100);
-                    client.haveOrder = false;
+                    DConsole.haveOrder = false;
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
@@ -327,17 +328,16 @@ namespace FightTheLandLord
                     this.btnStart.Enabled = true;
                     this.btnStart.Visible = true;
                 }
-                this.player1.haveOrder = this.server.haveOrder;
-                if (this.player1.haveOrder)
+                if (DConsole.haveOrder)
                 {
                     this.btnLead.Enabled = true;
                     this.btnLead.Visible = true;
-                    if (!this.server.IsBiggest)
+                    if (!DConsole.IsBiggest)
                     {
                         this.btnPass.Visible = true;
                     }
                 }
-                if (this.server.IsBiggest)
+                if (DConsole.IsBiggest)
                 {
                     this.btnPass.Visible = false;
                 }
@@ -391,17 +391,16 @@ namespace FightTheLandLord
                     }
                 }
             }
-            this.player1.haveOrder = this.client.haveOrder;
-            if (this.player1.haveOrder)
+            if (DConsole.haveOrder)
             {
                 this.btnLead.Enabled = true;
                 this.btnLead.Visible = true;
-                if (!this.client.IsBiggest)
+                if (!DConsole.IsBiggest)
                 {
                     this.btnPass.Visible = true;
                 }
             }
-            if (this.client.IsBiggest)
+            if (DConsole.IsBiggest)
             {
                 this.btnPass.Visible = false;
             }
@@ -465,12 +464,12 @@ namespace FightTheLandLord
             if (this.server != null)
             {
                 this.server.SendDataForClient("Order", 2);
-                this.server.haveOrder = false;
+                DConsole.haveOrder = false;
             }
-            if (this.client != null)  //有问题
+            if (this.client != null) 
             {
                 this.client.SendDataForServer("Pass");
-                this.client.haveOrder = false;
+                DConsole.haveOrder = false;
             }
         }
 

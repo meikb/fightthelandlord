@@ -7,6 +7,10 @@ namespace FightTheLandLord
 {
     public class PokerGroup:List<Poker>
     {
+        /// <summary>
+        /// 序列化一个PokerGroup对象,返回一个byte数组
+        /// </summary>
+        /// <returns></returns>
         public byte[] GetBuffer()
         {
             byte[] bytePoker = new byte[this.Count * 2];
@@ -232,7 +236,10 @@ namespace FightTheLandLord
         public PokerGroup()
         {
         }
-
+        /// <summary>
+        /// 通过一个byte[]反序列化为PokerGroup对象
+        /// </summary>
+        /// <param name="bytePokers"></param>
         public void GetPokerGroup(byte[] bytePokers)
         {
             for (int i = 0; i < bytePokers.Length; i += 2)
@@ -442,5 +449,41 @@ namespace FightTheLandLord
                 }
             }
         }
+        /// <summary>
+        /// 重写"大于"运算符
+        /// </summary>
+        /// <param name="LP">左边的PokerGroup对象</param>
+        /// <param name="RP">右边的PokerGroup对象</param>
+        /// <returns></returns>
+        public static bool operator >(PokerGroup LP, PokerGroup RP)
+        {
+            if (LP.Count != RP.Count)
+            {
+                return false;
+            }
+            else
+            {
+                switch (LP.Count)
+                {
+                    case 1:
+                        if (LP[0].pokerNum > RP[0].pokerNum)
+                        {
+                            return true;
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    default:
+                        return false;
+                }
+            }
+        }
+        public static bool operator <(PokerGroup LP, PokerGroup RP)
+        {
+            return !(LP > RP);
+        }
     }
+
 }

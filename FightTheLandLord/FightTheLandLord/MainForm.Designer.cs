@@ -155,7 +155,7 @@
             // 
             // timerServer
             // 
-            this.timerServer.Interval = 1000;
+            this.timerServer.Interval = 500;
             this.timerServer.Tick += new System.EventHandler(this.timerServer_Tick);
             // 
             // btnOK
@@ -172,7 +172,7 @@
             // 
             // timerClient
             // 
-            this.timerClient.Interval = 1000;
+            this.timerClient.Interval = 500;
             this.timerClient.Tick += new System.EventHandler(this.timerClient_Tick);
             // 
             // tbState

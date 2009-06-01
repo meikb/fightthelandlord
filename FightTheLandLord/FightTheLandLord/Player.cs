@@ -15,7 +15,6 @@ namespace FightTheLandLord
         private Color _backColor;
         private Graphics _g;
         private bool _isLandLord;
-        private bool _haveOrder;
 
         public PokerGroup pokers
         {
@@ -106,19 +105,6 @@ namespace FightTheLandLord
             }
         }
 
-        public bool haveOrder
-        {
-            get
-            {
-                return this._haveOrder;
-            }
-            set
-            {
-                this._haveOrder = value;
-            }
-        }
-
-
         /// <summary>
         /// 把牌从大到小重新排序
         /// </summary>
@@ -175,14 +161,21 @@ namespace FightTheLandLord
             }
             if (DConsole.IsRules(this.leadPokers))
             {
-                this.BakPoker();  //备份现有newPokers,下次出牌时需要用到
-                //this.leadPokers = DConsole.orderingPokers;
-                foreach (int selectPoker in this.selectPokers)  //在newPokers里移除已经出过的牌
+                if (DConsole.IsBiggest || this.leadPokers > DConsole.orderingPokers)
                 {
-                    this.newPokers.Remove(this.bakPokers[selectPoker]);
+                    this.BakPoker();  //备份现有newPokers,下次出牌时需要用到
+                    //this.leadPokers = DConsole.orderingPokers;
+                    foreach (int selectPoker in this.selectPokers)  //在newPokers里移除已经出过的牌
+                    {
+                        this.newPokers.Remove(this.bakPokers[selectPoker]);
+                    }
+                    this.selectPokers.Clear();  //清空已选牌
+                    return true;
                 }
-                this.selectPokers.Clear();  //清空已选牌
-                return true;
+                else
+                {
+                    return false;
+                }
             }
             else
             {
