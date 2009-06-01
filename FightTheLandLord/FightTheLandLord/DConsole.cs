@@ -17,6 +17,8 @@ namespace FightTheLandLord
         public static Graphics g1, g2, gPlayer1LeadPoker, gPlayer2LeadPoker, gPlayer3LeadPoker;
         public static int leftCount;
         public static int rightCount;
+        public static bool haveOrder;
+        public static bool IsBiggest;
         public static string OtherClientName
         {
             get

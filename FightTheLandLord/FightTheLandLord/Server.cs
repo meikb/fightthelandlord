@@ -34,14 +34,6 @@ namespace FightTheLandLord
         /// 所有用户是否已准备
         /// </summary>
         public bool everyOneIsOk = false;
-        /// <summary>
-        /// 是否有出牌权限
-        /// </summary>
-        public bool haveOrder = false;
-        /// <summary>
-        /// 出出去的牌是否最大
-        /// </summary>
-        public bool IsBiggest = false;
         public bool client1IsOk = false;
         public bool client2IsOk = false;
 
@@ -110,13 +102,13 @@ namespace FightTheLandLord
                     DConsole.leadedPokers.Add(pg);
                     DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
-                    this.haveOrder = true;  //client1出牌后归server出牌
+                    DConsole.haveOrder = true;  //client1出牌后归server出牌
                     continue;
                 }
                 //Client放弃出牌,权限交给服务器
                 if (str1.StartsWith("Pass"))
                 {
-                    this.haveOrder = true;
+                    DConsole.haveOrder = true;
                 }
             }
         }
@@ -256,8 +248,8 @@ namespace FightTheLandLord
             switch (Num)
             {
                 case 1:
-                    this.haveOrder = true;
-                    this.IsBiggest = true;
+                    DConsole.haveOrder = true;
+                    DConsole.IsBiggest = true;
                     break;
                 case 2:
                     this.SendDataForClient("Order", 1);
