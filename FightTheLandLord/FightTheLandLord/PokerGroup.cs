@@ -480,12 +480,12 @@ namespace FightTheLandLord
                             return false;
                         }
                         break;
-                    case 2:
-                        if (LP.type == PokerGroupType.双王)
+                    case 2: 
+                        if (LP.type.ToString() == PokerGroupType.双王.ToString())  //这里需要修改.和枚举类型的值息息相关
                         {
                             return true;
                         }
-                        if (LP.type == PokerGroupType.对子)
+                        if (LP.type.ToString() == PokerGroupType.对子.ToString())
                         {
                             if (LP[0].pokerNum > RP[0].pokerNum)
                             {

@@ -91,9 +91,9 @@ namespace FightTheLandLord
         /// </summary>
         public static bool IsRules(PokerGroup leadPokers) //判断所出牌组类型以及其是否符合规则
         {
+            DConsole.leadPokers = leadPokers;
             bool isRule = false;
             Player.sort(leadPokers);
-            DConsole.leadPokers = leadPokers;
             switch (leadPokers.Count)
             {
                 case 0:
@@ -141,7 +141,6 @@ namespace FightTheLandLord
                 Write(Poker.pokerColor.ToString() + Poker.pokerNum.ToString());
             }
 #endif
-            leadPokers.Clear();
             return isRule;
         }
 
@@ -301,7 +300,7 @@ namespace FightTheLandLord
         {
             bool IsSame1 = false;
             bool IsSame2 = false;
-            for (int i = 0; i < amount; i++)
+            for (int i = 0; i < amount-1; i++)
             {
                 if (PG[i] == PG[i+1])
                 {
@@ -313,7 +312,7 @@ namespace FightTheLandLord
                     break;
                 }
             }
-            for (int i = amount - 1; i >= 0; i--)
+            for (int i = amount - 1; i >= 1; i--)
             {
                 if (PG[i] == PG[i - 1])
                 {
