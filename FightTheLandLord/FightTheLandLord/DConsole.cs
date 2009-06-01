@@ -10,7 +10,7 @@ namespace FightTheLandLord
         /// <summary>
         /// 记录自己最后一次出的牌组(已从大到小排序)
         /// </summary>
-        public static PokerGroup orderingPokers = new PokerGroup();
+        public static PokerGroup leadPokers = new PokerGroup();
         public static PokerGroup LeftTempLeadedPoker;
         public static PokerGroup RightTempLeadedPoker;
         public static System.Windows.Forms.TextBox tb;
@@ -92,28 +92,28 @@ namespace FightTheLandLord
         public static bool IsRules(PokerGroup leadPokers) //判断所出牌组类型以及其是否符合规则
         {
             bool isRule = false;
-            orderingPokers.Clear();
-            Player.sort(leadPokers, orderingPokers);
-            switch (orderingPokers.Count)
+            Player.sort(leadPokers);
+            DConsole.leadPokers = leadPokers;
+            switch (leadPokers.Count)
             {
                 case 0:
                     isRule = false;
                     break;
                 case 1:
                     isRule = true;
-                    orderingPokers.type = PokerGroupType.单张;
+                    leadPokers.type = PokerGroupType.单张;
                     break;
                 case 2:
-                    if (orderingPokers[0] == orderingPokers[1])
+                    if (IsSame(leadPokers,2))
                     {
                         isRule = true;
-                        orderingPokers.type = PokerGroupType.对子;
+                        leadPokers.type = PokerGroupType.对子;
                     }
                     else
                     {
-                        if (orderingPokers[0] == PokerNum.大王 && orderingPokers[1] == PokerNum.小王)
+                        if (leadPokers[0] == PokerNum.大王 && leadPokers[1] == PokerNum.小王)
                         {
-                            orderingPokers.type = PokerGroupType.双王;
+                            leadPokers.type = PokerGroupType.双王;
                             isRule = true;
                         }
                         else
@@ -123,9 +123,9 @@ namespace FightTheLandLord
                     }
                     break;
                 case 3:
-                    if (orderingPokers[0] == orderingPokers[1] && orderingPokers[1] == orderingPokers[2])
+                    if (leadPokers[0] == leadPokers[1] && leadPokers[1] == leadPokers[2])
                     {
-                        orderingPokers.type = PokerGroupType.三张相同;
+                        leadPokers.type = PokerGroupType.三张相同;
                         isRule = true;
                     }
                     else
@@ -136,11 +136,12 @@ namespace FightTheLandLord
             }
 #if DEBUG
             Console.WriteLine("玩家出的牌:");
-            foreach (Poker Poker in orderingPokers)
+            foreach (Poker Poker in leadPokers)
             {
                 Write(Poker.pokerColor.ToString() + Poker.pokerNum.ToString());
             }
 #endif
+            leadPokers.Clear();
             return isRule;
         }
 
@@ -232,13 +233,13 @@ namespace FightTheLandLord
         public static void PaintPlayer1LeadPoker()
         {
             gPlayer1LeadPoker.Clear(backColor);
-            for (int i = 0; i < orderingPokers.Count; i++)
+            for (int i = 0; i < leadPokers.Count; i++)
             {
                 int x = i * 20;
                 Rectangle rt = new Rectangle(x, 0, 50, 95);
                 gPlayer1LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer1LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer1LeadPoker.DrawString(orderingPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                gPlayer1LeadPoker.DrawString(leadPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
             }
         }
         public static void PaintPlayer2LeadPoker()
@@ -290,9 +291,48 @@ namespace FightTheLandLord
                 Write(poker.pokerColor.ToString() + poker.pokerNum.ToString());
             }
         }
-        public static bool IsSame(PokerGroup PG, int amount, bool StartWithHead) //写到这里
+        /// <summary>
+        /// 判断一个牌组相邻指定数量的牌是否相同
+        /// </summary>
+        /// <param name="PG">牌组对象</param>
+        /// <param name="amount">相邻数量</param>
+        /// <returns></returns>
+        public static bool IsSame(PokerGroup PG, int amount)
         {
-            
+            bool IsSame1 = false;
+            bool IsSame2 = false;
+            for (int i = 0; i < amount; i++)
+            {
+                if (PG[i] == PG[i+1])
+                {
+                    IsSame1 = true;
+                }
+                else
+                {
+                    IsSame1 = false;
+                    break;
+                }
+            }
+            for (int i = amount - 1; i >= 0; i--)
+            {
+                if (PG[i] == PG[i - 1])
+                {
+                    IsSame2 = true;
+                }
+                else
+                {
+                    IsSame2 = false;
+                    break;
+                }
+            }
+            if (IsSame1 || IsSame2)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }

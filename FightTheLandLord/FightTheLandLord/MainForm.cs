@@ -158,12 +158,12 @@ namespace FightTheLandLord
                 this.player1.Paint(); //在panelPlayer1中画出player1的牌
                 this.player2.sort();
                 this.player3.sort();
-                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
-                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
-                server.SendDataForClient("PokerCount" + Convert.ToString(this.player2.newPokers.Count), 2);
-                server.SendDataForClient("PokerCount" + Convert.ToString(this.player3.newPokers.Count), 1);
-                DConsole.PaintClient(this.player2.newPokers.Count, 1);
-                DConsole.PaintClient(this.player3.newPokers.Count, 2);
+                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.pokers.Count), 1);
+                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.pokers.Count), 2);
+                server.SendDataForClient("PokerCount" + Convert.ToString(this.player2.pokers.Count), 2);
+                server.SendDataForClient("PokerCount" + Convert.ToString(this.player3.pokers.Count), 1);
+                DConsole.PaintClient(this.player2.pokers.Count, 1);
+                DConsole.PaintClient(this.player3.pokers.Count, 2);
                 this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
                 this.btnStart.Enabled = false;
                 this.btnStart.Visible = false;
@@ -193,7 +193,7 @@ namespace FightTheLandLord
         {
             int index;
             this.player1.backColor = this.panelPlayer1.BackColor;
-            if ((int)(e.X / 40) < player1.newPokers.Count)
+            if ((int)(e.X / 40) < player1.pokers.Count)
             {
                 index = (int)(e.X / 40);
                 this.player1.Paint(index);
@@ -208,13 +208,13 @@ namespace FightTheLandLord
                 this.btnPass.Visible = false;
                 if (this.server != null)
                 {
-                    server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 1);
+                    server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.pokers.Count), 1);
                     Thread.Sleep(100);
-                    server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.newPokers.Count), 2);
+                    server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.pokers.Count), 2);
                     Thread.Sleep(100);
-                    server.SendDataForClient("server", DConsole.orderingPokers, 1);
+                    server.SendDataForClient("server", DConsole.leadPokers, 1);
                     Thread.Sleep(100);
-                    server.SendDataForClient("server", DConsole.orderingPokers, 2);
+                    server.SendDataForClient("server", DConsole.leadPokers, 2);
                     Thread.Sleep(100);
                     server.SendDataForClient("Order", 2);
                     DConsole.haveOrder = false;
@@ -222,15 +222,16 @@ namespace FightTheLandLord
                 }
                 if (this.client != null)
                 {
-                    client.SendDataForServer("client", DConsole.orderingPokers);
+                    client.SendDataForServer("client", DConsole.leadPokers);
                     Thread.Sleep(100);
-                    client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.newPokers.Count));
+                    client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.pokers.Count));
                     Thread.Sleep(100);
                     DConsole.haveOrder = false;
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
                 DConsole.PaintPlayer1LeadPoker();
+                DConsole.leadPokers.Clear();
             }
             else
             {
@@ -380,7 +381,7 @@ namespace FightTheLandLord
                     client.SendDataForServer("Name" + client.Name); //发送名字到服务器,不能这样写...
                     this.SendedName = true;
                 }
-                if (this.player1.newPokers.Count == 0)
+                if (this.player1.pokers.Count == 0)
                 {
                     if (this.client.Pokers != null)
                     {

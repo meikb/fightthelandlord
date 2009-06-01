@@ -480,6 +480,43 @@ namespace FightTheLandLord
                             return false;
                         }
                         break;
+                    case 2:
+                        if (LP.type == PokerGroupType.双王)
+                        {
+                            return true;
+                        }
+                        if (LP.type == PokerGroupType.对子)
+                        {
+                            if (LP[0].pokerNum > RP[0].pokerNum)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                        break;
+                    case 3:
+                        if (LP.type == PokerGroupType.三张相同)
+                        {
+                            if (LP[0].pokerNum > RP[0].pokerNum)
+                            {
+                                return true;
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
                     default:
                         return false;
                 }

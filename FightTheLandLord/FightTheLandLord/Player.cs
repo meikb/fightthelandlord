@@ -8,7 +8,6 @@ namespace FightTheLandLord
     public class Player
     {
         private PokerGroup _pokers = new PokerGroup();
-        private PokerGroup _newPokers = new PokerGroup();
         private PokerGroup _bakPokers = new PokerGroup();
         private List<int> _selectPokers = new List<int>();
         private PokerGroup _leadPokers = new PokerGroup();
@@ -36,17 +35,6 @@ namespace FightTheLandLord
             set
             {
                 this._isLandLord = value;
-            }
-        }
-        public PokerGroup newPokers
-        {
-            get
-            {
-                return this._newPokers;
-            }
-            set
-            {
-                this._newPokers = value;
             }
         }
         public Graphics g
@@ -110,41 +98,57 @@ namespace FightTheLandLord
         /// </summary>
         public void sort()  //排序玩家的牌
         {
-            sort(this.pokers, this.newPokers); //调用sort另一个版本
+            sort(this.pokers); //调用sort另一个版本
 #if DEBUG
             Console.WriteLine("排序后玩家一的牌");
-            foreach (Poker onePoker in this.newPokers)
+            foreach (Poker onePoker in this.pokers)
             {
                 Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
             }
 #endif
         }
 
-        public static void sort(PokerGroup oldPokers,PokerGroup newPokers)  //从大到小排序算法
+        public static void sort(PokerGroup Pokers)  //从大到小排序算法
         {
-            int pokerAmount = oldPokers.Count;
-            for (int j = 0; j < pokerAmount; j++) //循环17次
+            int i;
+            int j;
+            for (i = 0; i < Pokers.Count; i++)
             {
-                Poker bestBigPoker = null; //目前this.pokers里最大的牌
-                for (int i = 0; i < oldPokers.Count; i++)  //找出目前this.pokers里最大的牌存在bestBigPoker里面
+                for (j = i + 1; j < Pokers.Count; j++)
                 {
-                    if (bestBigPoker == null)
+                    if (Pokers[j] > Pokers[i])
                     {
-                        bestBigPoker = oldPokers[i];
-                    }
-                    if (oldPokers[i].pokerNum > bestBigPoker.pokerNum)
-                    {
-                        bestBigPoker = oldPokers[i];
+                        Poker temp = Pokers[i];
+                        Pokers[i] = Pokers[j];
+                        Pokers[j] = temp;
                     }
                 }
-                oldPokers.Remove(bestBigPoker); //
-                newPokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
             }
+
+
+            //int pokerAmount = oldPokers.Count;
+            //for (int j = 0; j < pokerAmount; j++) //循环17次
+            //{
+            //    Poker bestBigPoker = null; //目前this.pokers里最大的牌
+            //    for (int i = 0; i < oldPokers.Count; i++)  //找出目前this.pokers里最大的牌存在bestBigPoker里面
+            //    {
+            //        if (bestBigPoker == null)
+            //        {
+            //            bestBigPoker = oldPokers[i];
+            //        }
+            //        if (oldPokers[i].pokerNum > bestBigPoker.pokerNum)
+            //        {
+            //            bestBigPoker = oldPokers[i];
+            //        }
+            //    }
+            //    oldPokers.Remove(bestBigPoker); //
+            //    pokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
+            //}
         }
         public void BakPoker()
         {
             this.bakPokers.Clear();
-            foreach (Poker poker in this.newPokers)  //备份已经洗好的牌
+            foreach (Poker poker in this.pokers)  //备份已经洗好的牌
             {
                 this.bakPokers.Add(poker);
             }
@@ -157,18 +161,17 @@ namespace FightTheLandLord
         {
             foreach (int selectPoker in this.selectPokers)  //迭代循环把已选中的牌添加到leadPokers
             {
-                this.leadPokers.Add(this.newPokers[selectPoker]);
+                this.leadPokers.Add(this.pokers[selectPoker]);
             }
             if (DConsole.IsRules(this.leadPokers))
             {
-                if (DConsole.IsBiggest || DConsole.orderingPokers > DConsole.leadedPokerGroups[DConsole.leadedPokerGroups.Count-1])
+                if (DConsole.IsBiggest || DConsole.leadPokers > DConsole.leadedPokerGroups[DConsole.leadedPokerGroups.Count-1])
                 {
                     DConsole.IsBiggest = true;
-                    this.BakPoker();  //备份现有newPokers,下次出牌时需要用到
-                    //this.leadPokers = DConsole.orderingPokers;
-                    foreach (int selectPoker in this.selectPokers)  //在newPokers里移除已经出过的牌
+                    this.BakPoker();  //备份现有pokers,下次出牌时需要用到
+                    foreach (int selectPoker in this.selectPokers)  //在pokers里移除已经出过的牌
                     {
-                        this.newPokers.Remove(this.bakPokers[selectPoker]);
+                        this.pokers.Remove(this.bakPokers[selectPoker]);
                     }
                     this.selectPokers.Clear();  //清空已选牌
                     return true;
@@ -189,7 +192,7 @@ namespace FightTheLandLord
         /// </summary>
         public void Paint()
         {
-            for (int i = 0; i < newPokers.Count; i++)  //循环绘制所有的牌
+            for (int i = 0; i < pokers.Count; i++)  //循环绘制所有的牌
             {
                 int x = i * 40;
                 if (this.IndexIsHave(i) == false)  //当当前的牌没有被选中时,绘制如下图案
@@ -197,21 +200,21 @@ namespace FightTheLandLord
                     Rectangle rt = new Rectangle(x, 50, 50, 95); //没有选中的牌的X比选中的牌的X多50
                     g.FillRectangle(Brushes.White, rt);
                     g.DrawRectangle(Pens.Black, rt);
-                    g.DrawString(this.newPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 55);
+                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 55);
                 }
                 else  //当当前的牌已经被选中时,绘制如下图案
                 {
                     Rectangle rt = new Rectangle(x, 0, 50, 95);
                     g.FillRectangle(Brushes.White, rt);
                     g.DrawRectangle(Pens.Black, rt);
-                    g.DrawString(this.newPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
                 }
             }
         }
         /// <summary>
         /// 传入一个整型显示出牌的选中效果
         /// </summary>
-        public void Paint(int index)  //牌的位置从左到右依次用0-16表示,对应this.newPokers[0-16]
+        public void Paint(int index)  //牌的位置从左到右依次用0-16表示,对应this.pokers[0-16]
         {
             this.g.Clear(this.backColor);
             bool IndexIsHave = this.IndexIsHave(index); //返回一个值确定当前点击的牌是否已经被选中
