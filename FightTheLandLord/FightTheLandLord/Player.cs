@@ -125,25 +125,6 @@ namespace FightTheLandLord
                 }
             }
 
-
-            //int pokerAmount = oldPokers.Count;
-            //for (int j = 0; j < pokerAmount; j++) //循环17次
-            //{
-            //    Poker bestBigPoker = null; //目前this.pokers里最大的牌
-            //    for (int i = 0; i < oldPokers.Count; i++)  //找出目前this.pokers里最大的牌存在bestBigPoker里面
-            //    {
-            //        if (bestBigPoker == null)
-            //        {
-            //            bestBigPoker = oldPokers[i];
-            //        }
-            //        if (oldPokers[i].pokerNum > bestBigPoker.pokerNum)
-            //        {
-            //            bestBigPoker = oldPokers[i];
-            //        }
-            //    }
-            //    oldPokers.Remove(bestBigPoker); //
-            //    pokers.Add(bestBigPoker); //把这张最大的牌添加到一个新集合
-            //}
         }
         public void BakPoker()
         {
@@ -159,6 +140,7 @@ namespace FightTheLandLord
         /// </summary>
         public bool lead()
         {
+            DConsole.leadPokers = leadPokers;
             this.leadPokers.Clear();
             foreach (int selectPoker in this.selectPokers)  //迭代循环把已选中的牌添加到leadPokers
             {

@@ -85,13 +85,12 @@ namespace FightTheLandLord
         /// <summary>
         /// 记录其他玩家出的牌组
         /// </summary>
-        public static List<PokerGroup> leadedPokerGroups = new List<PokerGroup>();
+        public static PokerGroups leadedPokerGroups = new PokerGroups();
         /// <summary>
         /// 验证所出牌组是否符合游戏规则
         /// </summary>
         public static bool IsRules(PokerGroup leadPokers) //判断所出牌组类型以及其是否符合规则
         {
-            DConsole.leadPokers = leadPokers;
             bool isRule = false;
             Player.sort(leadPokers);
             switch (leadPokers.Count)
@@ -123,7 +122,7 @@ namespace FightTheLandLord
                     }
                     break;
                 case 3:
-                    if (leadPokers[0] == leadPokers[1] && leadPokers[1] == leadPokers[2])
+                    if (IsSame(leadPokers,3))
                     {
                         leadPokers.type = PokerGroupType.三张相同;
                         isRule = true;
@@ -131,6 +130,85 @@ namespace FightTheLandLord
                     else
                     {
                         isRule = false;
+                    }
+                    break;
+                case 4:
+                    if (IsSame(leadPokers, 4))
+                    {
+                        leadPokers.type = PokerGroupType.炸弹;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsSame(leadPokers, 3))
+                        {
+                            leadPokers.type = PokerGroupType.三带一;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    break;
+                case 5:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.五张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        isRule = false;
+                    }
+                    break;
+                case 6:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.六张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsLinkPair(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.三连对;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    break;
+                case 7:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.七张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        isRule = false;
+                    }
+                    break;
+                case 8:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.八张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsLinkPair(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.四连对;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
                     }
                     break;
             }
@@ -190,6 +268,7 @@ namespace FightTheLandLord
         /// <param name="PokerCount">剩余牌数</param>
         public static void PaintClient(int PokerCount)
         {
+            System.Threading.Thread.Sleep(100);
             g2.Clear(backColor);
             int x = 0;
             rightCount = PokerCount;
@@ -291,16 +370,16 @@ namespace FightTheLandLord
             }
         }
         /// <summary>
-        /// 判断一个牌组相邻指定数量的牌是否相同
+        /// 判断一个牌组指定数量相邻的牌是否两两相同
         /// </summary>
         /// <param name="PG">牌组对象</param>
-        /// <param name="amount">相邻数量</param>
-        /// <returns></returns>
+        /// <param name="amount">指定数量的相邻牌组</param>
+        /// <returns>指定数量的相邻牌是否两两相同</returns>
         public static bool IsSame(PokerGroup PG, int amount)
         {
             bool IsSame1 = false;
             bool IsSame2 = false;
-            for (int i = 0; i < amount-1; i++)
+            for (int i = 0; i < amount - 1; i++) //从大到小比较相邻牌是否相同
             {
                 if (PG[i] == PG[i+1])
                 {
@@ -312,7 +391,7 @@ namespace FightTheLandLord
                     break;
                 }
             }
-            for (int i = amount - 1; i >= 1; i--)
+            for (int i = PG.Count - 1; i > PG.Count - amount; i--)  //从小到大比较相邻牌是否相同
             {
                 if (PG[i] == PG[i - 1])
                 {
@@ -332,6 +411,61 @@ namespace FightTheLandLord
             {
                 return false;
             }
+        }
+        /// <summary>
+        /// 判断牌组是否为顺子
+        /// </summary>
+        /// <param name="PG">牌组</param>
+        /// <returns>是否为顺子</returns>
+        public static bool IsStraight(PokerGroup PG)
+        {
+            bool IsStraight = false;
+            foreach (Poker poker in PG)
+            {
+                if (poker == PokerNum.P2 || poker == PokerNum.小王 || poker == PokerNum.大王)
+                {
+                    IsStraight = false;
+                    return IsStraight;
+                }
+            }
+            for (int i = 0; i < PG.Count - 1; i++)
+            {
+                if (PG[i].pokerNum - 1 == PG[i + 1].pokerNum)
+                {
+                    IsStraight = true;
+                }
+                else
+                {
+                    IsStraight = false;
+                    break;
+                }
+            }
+            return IsStraight;
+        }
+        public static bool IsLinkPair(PokerGroup PG)
+        {
+            bool IsLinkPair = false;
+            foreach (Poker poker in PG)
+            {
+                if (poker == PokerNum.P2 || poker == PokerNum.小王 || poker == PokerNum.大王)
+                {
+                    IsLinkPair = false;
+                    return IsLinkPair;
+                }
+            }
+            for (int i = 0; i < PG.Count - 2; i += 2)
+            {
+                if (PG[i] == PG[i + 1] && PG[i].pokerNum - 1 == PG[i + 2].pokerNum)
+                {
+                    IsLinkPair = true;
+                }
+                else
+                {
+                    IsLinkPair = false;
+                    break;
+                }
+            }
+            return IsLinkPair;
         }
     }
 }
