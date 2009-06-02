@@ -743,7 +743,17 @@ namespace FightTheLandLord
                             }
                             else
                             {
-                                IsGreater = false;
+                                if (LP.type == PokerGroupType.四带二 && LP.type == PokerGroupType.四带二)
+                                {
+                                    if (LP[0] > RP[0])
+                                    {
+                                        IsGreater = true;
+                                    }
+                                    else
+                                    {
+
+                                    }
+                                }
                             }
                         }
                         break;
