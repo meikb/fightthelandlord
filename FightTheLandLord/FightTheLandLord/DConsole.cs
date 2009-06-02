@@ -177,7 +177,23 @@ namespace FightTheLandLord
                         }
                         else
                         {
-                            isRule = false;
+                            if (IsSame(leadPokers, 4))
+                            {
+                                leadPokers.type = PokerGroupType.四带二;
+                                isRule = true;
+                            }
+                            else
+                            {
+                                if (IsThreeLinkPokers(leadPokers))
+                                {
+                                    leadPokers.type = PokerGroupType.三张相同;
+                                    isRule = true;
+                                }
+                                else
+                                {
+                                    isRule = false;
+                                }
+                            }
                         }
                     }
                     break;
@@ -204,6 +220,24 @@ namespace FightTheLandLord
                         {
                             leadPokers.type = PokerGroupType.四连对;
                             isRule = true;
+                        }
+                        else
+                        {
+
+                        }
+                    }
+                    break;
+                case 9:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.九张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsThreeLinkPokers(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.三连飞机;
                         }
                         else
                         {
@@ -420,7 +454,7 @@ namespace FightTheLandLord
         public static bool IsStraight(PokerGroup PG)
         {
             bool IsStraight = false;
-            foreach (Poker poker in PG)
+            foreach (Poker poker in PG)//不能包含2、小王、大王
             {
                 if (poker == PokerNum.P2 || poker == PokerNum.小王 || poker == PokerNum.大王)
                 {
@@ -442,10 +476,15 @@ namespace FightTheLandLord
             }
             return IsStraight;
         }
+        /// <summary>
+        /// 判断牌组是否为连对
+        /// </summary>
+        /// <param name="PG">牌组</param>
+        /// <returns>是否为连对</returns>
         public static bool IsLinkPair(PokerGroup PG)
         {
             bool IsLinkPair = false;
-            foreach (Poker poker in PG)
+            foreach (Poker poker in PG) //不能包含2、小王、大王
             {
                 if (poker == PokerNum.P2 || poker == PokerNum.小王 || poker == PokerNum.大王)
                 {
@@ -453,9 +492,9 @@ namespace FightTheLandLord
                     return IsLinkPair;
                 }
             }
-            for (int i = 0; i < PG.Count - 2; i += 2)
+            for (int i = 0; i < PG.Count - 2; i += 2)  //首先比较是否都为对子，再比较第一个对子的点数-1是否等于第二个对子，最后检察最小的两个是否为对子（这里的for循环无法检测到最小的两个，所以需要拿出来单独检查）
             {
-                if (PG[i] == PG[i + 1] && PG[i].pokerNum - 1 == PG[i + 2].pokerNum)
+                if (PG[i] == PG[i + 1] && PG[i].pokerNum - 1 == PG[i + 2].pokerNum && PG[i + 2] == PG[i + 3])
                 {
                     IsLinkPair = true;
                 }
@@ -466,6 +505,72 @@ namespace FightTheLandLord
                 }
             }
             return IsLinkPair;
+        }
+        /// <summary>
+        /// 判断牌组是否为连续三张牌
+        /// </summary>
+        /// <param name="PG">牌组</param>
+        /// <returns>是否为连续三张牌</returns>
+        public static bool IsThreeLinkPokers(PokerGroup PG) //判断三张牌方法为判断两两相邻的牌,如果两两相邻的牌相同,则count自加1.最后根据count的值判断牌的类型为多少个连续三张
+        {
+            if (IsLinkPair(PG))  //由于这种特性和连对相同,但是如果牌组为连对的话就不可能为连续三张牌,所以这里判断一下
+            {
+                return false;
+            }
+            bool IsThreeLinkPokers = false;
+            int count = 0;
+            foreach (Poker poker in PG)//不能包含2、小王、大王
+            {
+                if (poker == PokerNum.P2 || poker == PokerNum.小王 || poker == PokerNum.大王)
+                {
+                    IsThreeLinkPokers = false;
+                    return IsThreeLinkPokers;
+                }
+            }
+            for (int i = 0; i < PG.Count - 1; i++)
+            {
+                if (PG[i] == PG[i + 1])
+                {
+                    count++;
+                }
+
+                //if (PG[i] == PG[i + 1] && PG[i + 1] == PG[i + 2] && PG[i + 2].pokerNum - 1 == PG[i + 3].pokerNum && PG[i + 3] == PG[i + 4] && PG[i + 4] == PG[i + 5])
+                //{
+                //    IsThreeLinkPokers = true;
+                //}
+                //else
+                //{
+                //    IsThreeLinkPokers = false;
+                //    break;
+                //}
+            }
+            if (count >= 4 && count <= 11)
+            {
+                IsThreeLinkPokers = true;
+            }
+            return IsThreeLinkPokers;
+
+        }
+
+        public PokerGroup SameSort(PokerGroup PG)
+        {
+            Poker tempPoker;
+            int count = 0;
+            for (int i = 0; i < PG.Count; i++)
+            {
+                if (PG[i] == PG[i + 1])
+                {
+                    count++;
+                }
+                if (count != 0)
+                {
+                    if (PG[i].pokerNum - 1 == PG[i + 1].pokerNum)
+                    {
+
+                    }
+                }
+            }
+
         }
     }
 }
