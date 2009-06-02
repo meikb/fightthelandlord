@@ -551,26 +551,52 @@ namespace FightTheLandLord
             return IsThreeLinkPokers;
 
         }
-
-        public PokerGroup SameSort(PokerGroup PG)
+        /// <summary>
+        /// 对飞机和飞机带翅膀进行排序,把飞机放在前面,翅膀放在后面.
+        /// </summary>
+        /// <param name="PG">牌组</param>
+        /// <returns>是否为连续三张牌</returns>
+        public static PokerGroup SameSort(PokerGroup PG)  //还要写排除把炸弹当飞机出的情况.
         {
-            Poker tempPoker;
+            Poker tempPoker1 = PG[0];
+            Poker tempPoker2 = PG[1];
+            bool FindedThree = false;
+            PokerGroup tempPokerGroup = new PokerGroup();
             int count = 0;
-            for (int i = 0; i < PG.Count; i++)
+            for (int i = 2; i < PG.Count; i++)
             {
-                if (PG[i] == PG[i + 1])
+                if (PG[i] == tempPoker1 && PG[i] == tempPoker2)
                 {
-                    count++;
+                    tempPokerGroup.Add(PG[i]);
+                    FindedThree = true;
                 }
-                if (count != 0)
+                else
                 {
-                    if (PG[i].pokerNum - 1 == PG[i + 1].pokerNum)
+                    if (!FindedThree)
                     {
-
+                        count = i - 1;
+                    }
+                }
+                tempPoker1 = PG[i - 1];
+                tempPoker2 = PG[i];
+            }
+            foreach (Poker tempPoker in tempPokerGroup)
+            {
+                Poker changePoker;
+                for (int j = 0; j < count; j++)
+                {
+                    for (int i = 0; i < PG.Count; i++)
+                    {
+                        if (PG[i] == tempPoker)
+                        {
+                            changePoker = PG[i - count];
+                            PG[i - count] = PG[i];
+                            PG[i] = changePoker;
+                        }
                     }
                 }
             }
-
+            return PG;
         }
     }
 }
