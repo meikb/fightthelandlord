@@ -52,6 +52,8 @@
             this.lblClient1Name = new System.Windows.Forms.Label();
             this.lblClient2Name = new System.Windows.Forms.Label();
             this.btnPass = new System.Windows.Forms.Button();
+            this.btnNeedLandLord = new System.Windows.Forms.Button();
+            this.btnNotLandLord = new System.Windows.Forms.Button();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -120,21 +122,21 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -183,7 +185,7 @@
             this.tbState.Name = "tbState";
             this.tbState.ReadOnly = true;
             this.tbState.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.tbState.Size = new System.Drawing.Size(376, 242);
+            this.tbState.Size = new System.Drawing.Size(376, 56);
             this.tbState.TabIndex = 6;
             // 
             // panelPlayer2
@@ -253,12 +255,36 @@
             this.btnPass.Visible = false;
             this.btnPass.Click += new System.EventHandler(this.btnPass_Click);
             // 
+            // btnNeedLandLord
+            // 
+            this.btnNeedLandLord.Location = new System.Drawing.Point(261, 382);
+            this.btnNeedLandLord.Name = "btnNeedLandLord";
+            this.btnNeedLandLord.Size = new System.Drawing.Size(56, 23);
+            this.btnNeedLandLord.TabIndex = 15;
+            this.btnNeedLandLord.Text = "叫地主";
+            this.btnNeedLandLord.UseVisualStyleBackColor = true;
+            this.btnNeedLandLord.Visible = false;
+            this.btnNeedLandLord.Click += new System.EventHandler(this.btnNeedLandLord_Click);
+            // 
+            // btnNotLandLord
+            // 
+            this.btnNotLandLord.Location = new System.Drawing.Point(486, 382);
+            this.btnNotLandLord.Name = "btnNotLandLord";
+            this.btnNotLandLord.Size = new System.Drawing.Size(57, 23);
+            this.btnNotLandLord.TabIndex = 16;
+            this.btnNotLandLord.Text = "不叫";
+            this.btnNotLandLord.UseVisualStyleBackColor = true;
+            this.btnNotLandLord.Visible = false;
+            this.btnNotLandLord.Click += new System.EventHandler(this.btnNotLandLord_Click);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 566);
+            this.Controls.Add(this.btnNotLandLord);
             this.Controls.Add(this.btnPass);
+            this.Controls.Add(this.btnNeedLandLord);
             this.Controls.Add(this.lblClient2Name);
             this.Controls.Add(this.lblClient1Name);
             this.Controls.Add(this.panelPlayer3LeadPoker);
@@ -313,6 +339,8 @@
         private System.Windows.Forms.Label lblClient1Name;
         private System.Windows.Forms.Label lblClient2Name;
         private System.Windows.Forms.Button btnPass;
+        private System.Windows.Forms.Button btnNeedLandLord;
+        private System.Windows.Forms.Button btnNotLandLord;
     }
 }
 

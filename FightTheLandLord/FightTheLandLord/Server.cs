@@ -102,18 +102,38 @@ namespace FightTheLandLord
                     DConsole.leadedPokerGroups.Add(pg);
                     DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
-                    DConsole.haveOrder = true;  //client1出牌后归server出牌
+                    DConsole.player1.haveOrder = true;  //client1出牌后归server出牌
                     continue;
                 }
                 //Client放弃出牌,权限交给服务器
                 if (str1.StartsWith("Pass"))
                 {
-                    DConsole.haveOrder = true;
+                    DConsole.player1.haveOrder = true;
+                    continue;
                 }
                 if (str1.StartsWith("IamIsBiggest"))
                 {
-                    DConsole.IsBiggest = false;
+                    DConsole.player1.isBiggest = false;
                     this.SendDataForClient("NoBiggest", 2);
+                    continue;
+                }
+                if (str1.StartsWith("AreYouLandLord"))
+                {
+                    if (DConsole.LandLordNum == 1)
+                    {
+                        DConsole.Restart();
+                        continue;
+                    }
+                    DConsole.player1.areYouLandLord = true;
+                    continue;
+                }
+                if (str1.StartsWith("IamLandLord"))
+                {
+                    SendDataForClient("Client1IsLandLord", 2);
+                    SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
+                    SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
+                    DConsole.player1.SelectLandLordEnd();
+                    continue;
                 }
             }
         }
@@ -170,12 +190,36 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("IamIsBiggest"))
                 {
-                    DConsole.IsBiggest = false;
+                    DConsole.player1.isBiggest = false;
                     this.SendDataForClient("NoBiggest", 1);
+                    continue;
+                }
+                if (str1.StartsWith("AreYouLandLord"))
+                {
+                    if (DConsole.LandLordNum == 2)
+                    {
+                        DConsole.Restart();
+                        continue;
+                    }
+                    SendDataForClient("AreYouLandLord", 1);
+                    continue;
+                }
+                if (str1.StartsWith("IamLandLord"))
+                {
+                    SendDataForClient("Client2IsLandLord", 1);
+                    SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
+                    SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
+                    DConsole.player1.SelectLandLordEnd();
+                    continue;
                 }
             }
         }
-
+        /// <summary>
+        /// 发送牌组给客户端
+        /// </summary>
+        /// <param name="pg">牌组</param>
+        /// <param name="client">客户端的编号,只能是1,2</param>
+        /// <returns>是否发送成功</returns>
         public bool SendDataForClient(PokerGroup pg, int client)
         {
 
@@ -196,6 +240,13 @@ namespace FightTheLandLord
             Ns.Write(bytePg, 0, bytePg.Length);  //把2个比特流对象写入server与client的连接管道中
             return true;
         }
+        /// <summary>
+        /// 发送指定牌组和头信息给客户端
+        /// </summary>
+        /// <param name="head">头信息</param>
+        /// <param name="pg">牌组</param>
+        /// <param name="client">客户端编号,只能是1,2</param>
+        /// <returns>是否发送成功</returns>
         public bool SendDataForClient(string head, PokerGroup pg, int client)
         {
 
@@ -219,6 +270,12 @@ namespace FightTheLandLord
             Ns.Write(byteSender, 0, byteSender.Length);  //把2个比特流对象写入server与client的连接管道中
             return true;
         }
+        /// <summary>
+        /// 发送字符串给客户端
+        /// </summary>
+        /// <param name="str">要发送的字符串</param>
+        /// <param name="client">客户端编号,只能是1,2</param>
+        /// <returns>是否发送成功</returns>
         public bool SendDataForClient(string str, int client)
         {
 
@@ -240,34 +297,18 @@ namespace FightTheLandLord
 
             return true;
         }
-
-        /// <summary>
-        /// 循环接收客户端出牌
-        /// </summary>
-        public void AcceptPokers()
-        {
-            while (true)
-            {
-                NetworkStream c1Poker = client1.GetStream();
-                NetworkStream c2Poker = client2.GetStream();
-            }
-        }
-
         public void SendOrder(int Num)
         {
             switch (Num)
             {
                 case 1:
-                    DConsole.haveOrder = true;
-                    DConsole.IsBiggest = true;
+                    DConsole.player1.areYouLandLord = true;
                     break;
                 case 2:
-                    this.SendDataForClient("Order", 1);
-                    this.SendDataForClient("IsBiggest", 1);
+                    this.SendDataForClient("AreYouLandLord", 1);
                     break;
                 case 3:
-                    this.SendDataForClient("Order", 2);
-                    this.SendDataForClient("IsBiggest", 2);
+                    this.SendDataForClient("AreYouLandLord", 2);
                     break;
             }
         }
