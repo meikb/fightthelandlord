@@ -66,7 +66,21 @@ namespace FightTheLandLord
             }
             else
             {
-                return true;
+                if ((object)LP == null && (object)RP != null)
+                {
+                    return false;
+                }
+                else
+                {
+                    if ((object)LP != null && (object)RP == null)
+                    {
+                        return false;
+                    }
+                    else
+                    {
+                        return true;
+                    }
+                }
             }
         }
         public static bool operator ==(Poker LP, PokerNum RP)

@@ -245,6 +245,151 @@ namespace FightTheLandLord
                         }
                     }
                     break;
+                case 10:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.十张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsLinkPair(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.五连对;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    break;
+                case 11:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.十一张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        isRule = false;
+                    }
+                    break;
+                case 12:
+                    if (IsStraight(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.十二张顺子;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsLinkPair(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.六连对;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            if (IsThreeLinkPokers(leadPokers))
+                            {
+                                //12有三连飞机带翅膀和四连飞机两种情况,所以在IsThreeLinkPokers中做了特殊处理,此处不用给type赋值.
+                                isRule = true;
+                            }
+                            else
+                            {
+                                isRule = false;
+                            }
+                        }
+                    }
+                    break;
+                case 13:
+                    isRule = false;
+                    break;
+                case 14:
+                    if (IsLinkPair(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.七连对;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        isRule = false;
+                    }
+                    break;
+                case 15:
+                    if (IsThreeLinkPokers(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.五连飞机;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        isRule = false;
+                    }
+                    break;
+                case 16:
+                    if (IsLinkPair(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.八连对;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsThreeLinkPokers(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.四连飞机带翅膀;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    break;
+                case 17:
+                    isRule = false;
+                    break;
+                case 18:
+                    if (IsLinkPair(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.六连对;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsThreeLinkPokers(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.六连飞机;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    break;
+                case 19:
+                    isRule = false;
+                    break;
+                case 20:
+                    if (IsLinkPair(leadPokers))
+                    {
+                        leadPokers.type = PokerGroupType.十连对;
+                        isRule = true;
+                    }
+                    else
+                    {
+                        if (IsThreeLinkPokers(leadPokers))
+                        {
+                            leadPokers.type = PokerGroupType.五连飞机带翅膀;
+                            isRule = true;
+                        }
+                        else
+                        {
+                            isRule = false;
+                        }
+                    }
+                    break;
             }
 #if DEBUG
             Console.WriteLine("玩家出的牌:");
@@ -507,46 +652,46 @@ namespace FightTheLandLord
             return IsLinkPair;
         }
         /// <summary>
-        /// 判断牌组是否为连续三张牌
+        /// 判断牌组是否为连续三张牌,飞机,飞机带翅膀
         /// </summary>
         /// <param name="PG">牌组</param>
         /// <returns>是否为连续三张牌</returns>
         public static bool IsThreeLinkPokers(PokerGroup PG) //判断三张牌方法为判断两两相邻的牌,如果两两相邻的牌相同,则count自加1.最后根据count的值判断牌的类型为多少个连续三张
         {
-            if (IsLinkPair(PG))  //由于这种特性和连对相同,但是如果牌组为连对的话就不可能为连续三张牌,所以这里判断一下
-            {
-                return false;
-            }
             bool IsThreeLinkPokers = false;
-            int count = 0;
-            foreach (Poker poker in PG)//不能包含2、小王、大王
+            int HowMuchLinkThree = 0;
+            PG = SameThreeSort(PG);
+            for (int i = 2; i < PG.Count; i++)
             {
-                if (poker == PokerNum.P2 || poker == PokerNum.小王 || poker == PokerNum.大王)
+                if (PG[i] == PG[i - 1] && PG[i] == PG[i - 2])
+                {
+                    HowMuchLinkThree++;
+                }
+            }
+
+            for (int i = PG.Count - 1; i > HowMuchLinkThree * 3 - 1; i--)
+            {
+                if (PG[i] == PokerNum.P2 || PG[i] == PokerNum.小王 || PG[i] == PokerNum.大王)
                 {
                     IsThreeLinkPokers = false;
                     return IsThreeLinkPokers;
                 }
             }
-            for (int i = 0; i < PG.Count - 1; i++)
-            {
-                if (PG[i] == PG[i + 1])
-                {
-                    count++;
-                }
-
-                //if (PG[i] == PG[i + 1] && PG[i + 1] == PG[i + 2] && PG[i + 2].pokerNum - 1 == PG[i + 3].pokerNum && PG[i + 3] == PG[i + 4] && PG[i + 4] == PG[i + 5])
-                //{
-                //    IsThreeLinkPokers = true;
-                //}
-                //else
-                //{
-                //    IsThreeLinkPokers = false;
-                //    break;
-                //}
-            }
-            if (count >= 4 && count <= 11)
+            if (HowMuchLinkThree > 0)
             {
                 IsThreeLinkPokers = true;
+            }
+            else
+            {
+                IsThreeLinkPokers = false;
+            }
+            if (HowMuchLinkThree == 4)
+            {
+                PG.type = PokerGroupType.四连飞机;
+            }
+            if (HowMuchLinkThree == 3 && PG.Count == 12)
+            {
+                PG.type = PokerGroupType.三连飞机带翅膀;
             }
             return IsThreeLinkPokers;
 
@@ -556,43 +701,63 @@ namespace FightTheLandLord
         /// </summary>
         /// <param name="PG">牌组</param>
         /// <returns>是否为连续三张牌</returns>
-        public static PokerGroup SameSort(PokerGroup PG)  //还要写排除把炸弹当飞机出的情况.
+        public static PokerGroup SameThreeSort(PokerGroup PG)  //还要写排除把炸弹当飞机出的情况.
         {
-            Poker tempPoker1 = PG[0];
-            Poker tempPoker2 = PG[1];
-            bool FindedThree = false;
-            PokerGroup tempPokerGroup = new PokerGroup();
-            int count = 0;
-            for (int i = 2; i < PG.Count; i++)
+            Poker FourPoker = null;  //如果把4张当三张出并且带4张的另外一张,就需要特殊处理,这里记录出现这种情况的牌的点数.
+            bool FindedThree = false;  //已找到三张相同的牌
+            PokerGroup tempPokerGroup = new PokerGroup();  //记录三张相同的牌
+            int count = 0; //记录在连续三张牌前面的翅膀的张数
+            int Four = 0; // 记录是否连续出现三三相同,如果出现这种情况则表明出现把4张牌(炸弹)当中的三张和其他牌配成飞机带翅膀,并且翅膀中有炸弹牌的点数.
+            // 比如有如下牌组: 998887777666 玩家要出的牌实际上应该为 888777666带997,但是经过从大到小的排序后变成了998887777666 一不美观,二不容易比较.
+            for (int i = 2; i < PG.Count; i++)  //直接从2开始循环,因为PG[0],PG[1]的引用已经存储在其他变量中,直接比较即可
             {
-                if (PG[i] == tempPoker1 && PG[i] == tempPoker2)
+                if (PG[i] == PG[i - 2] && PG[i] == PG[i - 1])// 比较PG[i]与PG[i-1],PG[i]与PG[i-2]是否同时相等,如果相等则说明这是三张相同牌
                 {
-                    tempPokerGroup.Add(PG[i]);
-                    FindedThree = true;
+                    if (Four >= 1) //默认的Four为0,所以第一次运行时这里为false,直接执行else
+                                   //一旦连续出现两个三三相等,就会执行这里的if
+                    {
+                        FourPoker = PG[i]; //当找到四张牌时,记录下4张牌的点数
+                        Poker changePoker; 
+                        for (int k = i; k > 0; k--) //把四张牌中的一张移动到最前面.
+                        {
+                            changePoker = PG[k];
+                            PG[k] = PG[k - 1];
+                            PG[k - 1] = changePoker;
+                        }
+                        count++; //由于此时已经找到三张牌,下面为count赋值的程序不会执行,所以这里要手动+1
+                    }
+                    else
+                    {
+                        Four++; //记录本次循环,因为本次循环找到了三三相等的牌,如果连续两次找到三三相等的牌则说明找到四张牌(炸弹)
+                        tempPokerGroup.Add(PG[i]); //把本次循环的PG[i]记录下来,即记录下三张牌的点数
+                    }
+                    FindedThree = true; //标记已找到三张牌
                 }
                 else
                 {
-                    if (!FindedThree)
+                    Four = 0; //没有找到时,连续找到三张牌的标志Four归零
+                    if (!FindedThree) //只有没有找到三张牌时才让count增加.如果已经找到三张牌,则不再为count赋值.
                     {
                         count = i - 1;
                     }
                 }
-                tempPoker1 = PG[i - 1];
-                tempPoker2 = PG[i];
             }
-            foreach (Poker tempPoker in tempPokerGroup)
+            foreach (Poker tempPoker in tempPokerGroup)  //迭代所有的三张牌点数
             {
-                Poker changePoker;
-                for (int j = 0; j < count; j++)
+                Poker changePoker;  //临时交换Poker
+                for (int i = 0; i < PG.Count; i++)  //把所有的三张牌往前移动
                 {
-                    for (int i = 0; i < PG.Count; i++)
+                    if (PG[i] == tempPoker)  //当PG[i]等于三张牌的点数时
                     {
-                        if (PG[i] == tempPoker)
+                        if (PG[i] == FourPoker) //由于上面已经把4张牌中的一张放到的最前面,这张牌也会与tempPoker相匹配所以这里进行处理
+                                                // 当第一次遇到四张牌的点数时,把记录四张牌的FourPoker赋值为null,并中断本次循环.由于FourPoker已经为Null,所以下次再次遇到四张牌的点数时会按照正常情况执行.
                         {
-                            changePoker = PG[i - count];
-                            PG[i - count] = PG[i];
-                            PG[i] = changePoker;
+                            FourPoker = null;
+                            continue;
                         }
+                        changePoker = PG[i - count];
+                        PG[i - count] = PG[i];
+                        PG[i] = changePoker;
                     }
                 }
             }
