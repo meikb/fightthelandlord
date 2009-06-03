@@ -18,7 +18,7 @@ namespace FightTheLandLord
         /// <returns></returns>
         public byte[] GetBuffer()
         {
-            byte[] bytePoker = new byte[this.Count * 2 + 1];
+            byte[] bytePoker = new byte[this.Count * 2];
             int i = 0;
             foreach (Poker onepoker in this)
             {
@@ -231,7 +231,6 @@ namespace FightTheLandLord
                 }
                 i += 2;
             }
-            //bytePoker[this.Count - 1] = (byte)(this.type);
             return bytePoker;
         }
 
@@ -248,7 +247,7 @@ namespace FightTheLandLord
         /// <param name="bytePokers"></param>
         public void GetPokerGroup(byte[] bytePokers)
         {
-            for (int i = 0; i < bytePokers.Length; i += 2)
+            for (int i = 0; i < bytePokers.Length - 1; i += 2)
             {
                 switch(Convert.ToChar((bytePokers[i + 1])))
                 {
@@ -454,105 +453,6 @@ namespace FightTheLandLord
                         break;
                 }
             }
-            //switch ((int)bytePokers[bytePokers.Length - 1])
-            //{
-            //    case 1:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 2:
-            //        this.type = PokerGroupType.对子;
-            //        break;
-            //    case 3:
-            //        this.type = PokerGroupType.双王;
-            //        break;
-            //    case 4:
-            //        this.type = PokerGroupType.三张相同;
-            //        break;
-            //    case 5:
-            //        this.type = PokerGroupType.三带一;
-            //        break;
-            //    case 6:
-            //        this.type = PokerGroupType.炸弹;
-            //        break;
-            //    case 7:
-            //        this.type = PokerGroupType.五张顺子;
-            //        break;
-            //    case 8:
-            //        this.type = PokerGroupType.六张顺子;
-            //        break;
-            //    case 9:
-            //        this.type = PokerGroupType.三连对;
-            //        break;
-            //    case 10:
-            //        this.type = PokerGroupType.四带二;
-            //        break;
-            //    case 11:
-            //        this.type = PokerGroupType.二连飞机;
-            //        break;
-            //    case 12:
-            //        this.type = PokerGroupType.七张顺子;
-            //        break;
-            //    case 13:
-            //        this.type = PokerGroupType.四连对;
-            //        break;
-            //    case 14:
-            //        this.type = PokerGroupType.八张顺子;
-            //        break;
-            //    case 15:
-            //        this.type = PokerGroupType.飞机带翅膀;
-            //        break;
-            //    case 16:
-            //        this.type = PokerGroupType.九张顺子;
-            //        break;
-            //    case 17:
-            //        this.type = PokerGroupType.三连飞机;
-            //        break;
-            //    case 18:
-            //        this.type = PokerGroupType.五连对;
-            //        break;
-            //    case 19:
-            //        this.type = PokerGroupType.十张顺子
-            //        break;
-            //    case 20:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 21:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 22:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 23:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 24:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 25:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 26:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 27:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 28:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 29:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 30:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 31:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //    case 32:
-            //        this.type = PokerGroupType.单张;
-            //        break;
-            //}
         }
         /// <summary>
         /// 重写"大于"运算符

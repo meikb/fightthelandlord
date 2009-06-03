@@ -13,6 +13,8 @@ namespace FightTheLandLord
         public static PokerGroup leadPokers = new PokerGroup();
         public static PokerGroup LeftTempLeadedPoker;
         public static PokerGroup RightTempLeadedPoker;
+        public static PokerGroup LandLordPokers;
+        public static int LandLordNum;
         public static System.Windows.Forms.TextBox tb;
         public static System.Windows.Forms.Label lblClient1Name;
         public static System.Windows.Forms.Label lblClient2Name;
@@ -22,6 +24,7 @@ namespace FightTheLandLord
         public static int rightCount;
         public static Server server;
         public static Client client;
+        public static Player player1;
         /// <summary>
         /// 自己是否有出牌权限
         /// </summary>
@@ -140,7 +143,7 @@ namespace FightTheLandLord
                     }
                     else
                     {
-                        if (IsSame(leadPokers, 3))
+                        if (IsThreeLinkPokers(leadPokers))
                         {
                             leadPokers.type = PokerGroupType.三带一;
                             isRule = true;
@@ -762,6 +765,27 @@ namespace FightTheLandLord
                 }
             }
             return PG;
+        }
+
+        public static void PaintLandLord(bool IsTurnOn)
+        {
+            if (IsTurnOn)
+            {
+
+            }
+            else
+            {
+            }
+        }
+
+        public static void Restart()
+        {
+            server.SendDataForClient("ReStart", 1);
+            server.SendDataForClient("ReStart", 2);
+            leadPokers.Clear();
+            leadedPokerGroups.Clear();
+            player1.pokers.Clear();
+
         }
     }
 }

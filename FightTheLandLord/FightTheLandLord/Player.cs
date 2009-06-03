@@ -13,7 +13,10 @@ namespace FightTheLandLord
         private PokerGroup _leadPokers = new PokerGroup();
         private Color _backColor;
         private Graphics _g;
+        private bool _areYouLandLord;
         private bool _isLandLord;
+        private bool _haveOrder;
+        private bool _isBiggest;
 
         public PokerGroup pokers
         {
@@ -26,6 +29,17 @@ namespace FightTheLandLord
                 this._pokers = value;
             }
         }
+        public bool areYouLandLord
+        {
+            get
+            {
+                return _areYouLandLord;
+            }
+            set
+            {
+                this._areYouLandLord = value;
+            }
+        }
         public bool isLandLord
         {
             get
@@ -34,7 +48,29 @@ namespace FightTheLandLord
             }
             set
             {
-                this._isLandLord = value;
+                _isLandLord = value;
+            }
+        }
+        public bool haveOrder
+        {
+            get
+            {
+                return _haveOrder;
+            }
+            set
+            {
+                _haveOrder = value;
+            }
+        }
+        public bool isBiggest
+        {
+            get
+            {
+                return _isBiggest;
+            }
+            set
+            {
+                _isBiggest = value;
             }
         }
         public Graphics g
@@ -99,13 +135,6 @@ namespace FightTheLandLord
         public void sort()  //排序玩家的牌
         {
             sort(this.pokers); //调用sort另一个版本
-#if DEBUG
-            Console.WriteLine("排序后玩家一的牌");
-            foreach (Poker onePoker in this.pokers)
-            {
-                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
-            }
-#endif
         }
 
         public static void sort(PokerGroup Pokers)  //从大到小排序算法
@@ -148,9 +177,9 @@ namespace FightTheLandLord
             }
             if (DConsole.IsRules(this.leadPokers))
             {
-                if (DConsole.IsBiggest || DConsole.leadPokers > DConsole.leadedPokerGroups[DConsole.leadedPokerGroups.Count-1])
+                if (DConsole.player1.isBiggest || DConsole.leadPokers > DConsole.leadedPokerGroups[DConsole.leadedPokerGroups.Count-1])
                 {
-                    DConsole.IsBiggest = true;
+                    DConsole.player1.isBiggest = true;
                     this.BakPoker();  //备份现有pokers,下次出牌时需要用到
                     foreach (int selectPoker in this.selectPokers)  //在pokers里移除已经出过的牌
                     {
@@ -212,6 +241,18 @@ namespace FightTheLandLord
                 this.selectPokers.Add(index);  //如果没有被选中则添加它
             }
             this.Paint(); //绘制当前的牌
+        }
+        public void SelectLandLordEnd()
+        {
+            DConsole.PaintLandLord(true);
+            if (this.isLandLord)
+            {
+                foreach (Poker poker in DConsole.LandLordPokers)
+                {
+                    this.pokers.Add(poker);
+                }
+                this.sort();
+            }
         }
 
         public bool IndexIsHave(int index)  //判断选中的牌中是否有传入的值

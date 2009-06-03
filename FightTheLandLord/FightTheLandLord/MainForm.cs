@@ -10,7 +10,6 @@ using System.Threading;
 using Microsoft.VisualBasic;
 
 
-// 再写把牌发给客户端以及处理客户端的出牌请求
 namespace FightTheLandLord
 {
     public partial class MainForm : Form
@@ -26,10 +25,6 @@ namespace FightTheLandLord
         private Thread AcceptClient1Data;
         private Thread AcceptClient2Data;
         private Thread AcceptServerData;
-        //private Thread acceptPokers;
-        //private Thread acceptOrder;
-        //private Thread cacceptLeadPokers;
-        //private Thread sacceptLeadPokers;
         public MainForm()
         {
             InitializeComponent();
@@ -90,27 +85,23 @@ namespace FightTheLandLord
             {
                 this.player3.pokers.Add(this.allPoker[i]);
             }
-            int LandLordNum = new Random().Next(1, 4);
+            DConsole.LandLordNum = new Random().Next(1, 4);
+            PokerGroup landLordPokers = new PokerGroup();
             for (int i = 51; i < 54; i++)
             {
-                switch (3)
-                {
-                    case 1:
-                        this.player1.pokers.Add(this.allPoker[i]);
-                        break;
-                    case 2:
-                        this.player2.pokers.Add(this.allPoker[i]);
-                        break;
-                    case 3:
-                        this.player3.pokers.Add(this.allPoker[i]);
-                        break;
-                }
+                landLordPokers.Add(allPoker[i]);
             }
-            if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
+            DConsole.LandLordPokers = landLordPokers;
+            if (server.SendDataForClient("StartPokers", this.player2.pokers, 1) && server.SendDataForClient("StartPokers", this.player3.pokers, 2))
             {
                 DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(3);
+                this.server.SendOrder(DConsole.LandLordNum);
             }
+            //if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
+            //{
+            //    DConsole.Write("[系统消息]发牌成功!");
+            //    this.server.SendOrder(DConsole.LandLordNum);
+            //}
             else
             {
                 DConsole.Write("[系统消息]发牌失败!");
@@ -217,7 +208,7 @@ namespace FightTheLandLord
                     server.SendDataForClient("server", DConsole.leadPokers, 2);
                     Thread.Sleep(100);
                     server.SendDataForClient("Order", 2);
-                    DConsole.haveOrder = false;
+                    DConsole.player1.haveOrder = false;
                     
                 }
                 if (this.client != null)
@@ -226,7 +217,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.pokers.Count));
                     Thread.Sleep(100);
-                    DConsole.haveOrder = false;
+                    DConsole.player1.haveOrder = false;
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
@@ -242,6 +233,7 @@ namespace FightTheLandLord
         {
             this.server = new Server();  //创建服务器
             DConsole.server = this.server;
+            DConsole.player1 = this.player1;
             this.server.listener.Start();  //开始监听
             this.player2 = new Player();
             this.player3 = new Player();
@@ -264,6 +256,7 @@ namespace FightTheLandLord
             {
                 this.client = new Client();
                 DConsole.client = this.client;
+                DConsole.player1 = this.player1;
                 if (this.client.Connection())
                 {
                     MessageBox.Show("连接成功", "消息");
@@ -330,18 +323,23 @@ namespace FightTheLandLord
                     this.btnStart.Enabled = true;
                     this.btnStart.Visible = true;
                 }
-                if (DConsole.haveOrder)
+                if (DConsole.player1.haveOrder)
                 {
                     this.btnLead.Enabled = true;
                     this.btnLead.Visible = true;
-                    if (!DConsole.IsBiggest)
+                    if (!DConsole.player1.isBiggest)
                     {
                         this.btnPass.Visible = true;
                     }
                 }
-                if (DConsole.IsBiggest)
+                if (DConsole.player1.isBiggest)
                 {
                     this.btnPass.Visible = false;
+                }
+                if (DConsole.player1.areYouLandLord)
+                {
+                    btnNeedLandLord.Visible = true;
+                    btnNotLandLord.Visible = true;
                 }
             }
         }
@@ -377,7 +375,7 @@ namespace FightTheLandLord
             {
                 if (!this.SendedName)
                 {
-                    client.SendDataForServer("Name" + client.Name); //发送名字到服务器,不能这样写...
+                    client.SendDataForServer("Name" + client.Name);
                     this.SendedName = true;
                 }
                 if (this.player1.pokers.Count == 0)
@@ -393,18 +391,23 @@ namespace FightTheLandLord
                     }
                 }
             }
-            if (DConsole.haveOrder)
+            if (DConsole.player1.haveOrder)
             {
                 this.btnLead.Enabled = true;
                 this.btnLead.Visible = true;
-                if (!DConsole.IsBiggest)
+                if (!DConsole.player1.isBiggest)
                 {
                     this.btnPass.Visible = true;
                 }
             }
-            if (DConsole.IsBiggest)
+            if (DConsole.player1.isBiggest)
             {
                 this.btnPass.Visible = false;
+            }
+            if (player1.areYouLandLord)
+            {
+                this.btnNeedLandLord.Visible = true;
+                this.btnNotLandLord.Visible = true;
             }
         }
 
@@ -466,14 +469,53 @@ namespace FightTheLandLord
             if (this.server != null)
             {
                 this.server.SendDataForClient("Order", 2);
-                DConsole.haveOrder = false;
+                DConsole.player1.haveOrder = false;
             }
             if (this.client != null) 
             {
                 this.client.SendDataForServer("Pass");
-                DConsole.haveOrder = false;
+                DConsole.player1.haveOrder = false;
             }
         }
 
+        private void btnNeedLandLord_Click(object sender, EventArgs e)
+        {
+            this.player1.isLandLord = true;
+            this.player1.haveOrder = true;
+            this.player1.isBiggest = true;
+            this.player1.areYouLandLord = false;
+            this.btnNeedLandLord.Visible = false;
+            this.btnNotLandLord.Visible = false;
+            DConsole.player1.Paint();
+            if (this.server != null)
+            {
+                this.player1.SelectLandLordEnd();
+            }
+            if (this.client != null)
+            {
+                this.client.SendDataForServer("IamLandLord");
+            }
+        }
+
+        private void btnNotLandLord_Click(object sender, EventArgs e)
+        {
+            this.player1.areYouLandLord = false;
+            this.player1.isLandLord = false;
+            this.btnNeedLandLord.Visible = false;
+            this.btnNotLandLord.Visible = false;
+            if (this.server != null)
+            {
+                if (DConsole.LandLordNum == 3)
+                {
+                    DConsole.Restart();
+                    return;
+                }
+                this.server.SendDataForClient("AreYouLandLord", 2);
+            }
+            if (this.client != null)
+            {
+                this.client.SendDataForServer("AreYouLandLord");
+            }
+        }
     }
 }

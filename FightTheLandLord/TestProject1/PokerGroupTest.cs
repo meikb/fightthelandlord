@@ -1,15 +1,16 @@
 ﻿using FightTheLandLord;
+using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace TestProject1
 {
     
     
     /// <summary>
-    ///这是 DConsoleTest 的测试类，旨在
-    ///包含所有 DConsoleTest 单元测试
+    ///这是 PokerGroupTest 的测试类，旨在
+    ///包含所有 PokerGroupTest 单元测试
     ///</summary>
     [TestClass()]
-    public class DConsoleTest
+    public class PokerGroupTest
     {
 
 
@@ -63,29 +64,24 @@ namespace TestProject1
 
 
         /// <summary>
-        ///SameSort 的测试
+        ///GetBuffer 的测试
         ///</summary>
         [TestMethod()]
-        public void SameSortTest()
+        public void GetBufferTest()
         {
-            PokerGroup PG = new PokerGroup(); // TODO: 初始化为适当的值
-            PG.Add(new Poker(PokerNum.P10, PokerColor.黑桃));
-            PG.Add(new Poker(PokerNum.P9, PokerColor.红心));
-            PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
-            PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
-            //PG.Add(new Poker(PokerNum.P5, PokerColor.方块));
-            //PG.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
-            //PG.Add(new Poker(PokerNum.P5, PokerColor.红心));
-            //PG.Add(new Poker(PokerNum.P4, PokerColor.方块));
-            //PG.Add(new Poker(PokerNum.P4, PokerColor.黑桃));
-            //PG.Add(new Poker(PokerNum.P4, PokerColor.红心));
-            //PG.Add(new Poker(PokerNum.P3, PokerColor.方块));
-            //PG.Add(new Poker(PokerNum.P3, PokerColor.黑桃));
-            //PG.Add(new Poker(PokerNum.P3, PokerColor.红心));
-
-            PokerGroup expected = null; // TODO: 初始化为适当的值
-            PokerGroup actual;
-            actual = DConsole.SameThreeSort(PG);
+            PokerGroup target = new PokerGroup(); // TODO: 初始化为适当的值
+            target.Add(new Poker(PokerNum.大王, PokerColor.红心));
+            target.Add(new Poker(PokerNum.P7, PokerColor.黑桃));
+            target.Add(new Poker(PokerNum.P3, PokerColor.梅花));
+            target.Add(new Poker(PokerNum.K, PokerColor.方块));
+            target.Add(new Poker(PokerNum.A, PokerColor.红心));
+            target.Add(new Poker(PokerNum.P4, PokerColor.黑桃));
+            target.Add(new Poker(PokerNum.P7, PokerColor.红心));
+            target.Add(new Poker(PokerNum.P9, PokerColor.红心));
+            byte[] expected = null; // TODO: 初始化为适当的值
+            byte[] actual;
+            actual = target.GetBuffer();
+            string str = Encoding.Default.GetString(actual);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("验证此测试方法的正确性。");
         }

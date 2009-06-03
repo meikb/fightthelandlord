@@ -61,6 +61,18 @@ namespace FightTheLandLord
                 byte[] bytes = new byte[108];
                 Ns.Read(bytes, 0, 108);
                 str = Encoding.Default.GetString(bytes);
+                if (str.StartsWith("StartPokers"))
+                {
+                    str = str.Replace("StartPokers", "");
+                    str.Trim();
+                    byte[] bytePokers = Encoding.Default.GetBytes(str);
+                    PokerGroup pokers = new PokerGroup(bytePokers);
+                    if (pokers.Count == 17)
+                    {
+                        this.Pokers = pokers;
+                    }
+                    continue;
+                }
                 if (str.StartsWith("CName"))
                 {
                     str = str.Replace("CName", "");
@@ -84,11 +96,6 @@ namespace FightTheLandLord
                 if (str.StartsWith("EveryOneIsOk"))
                 {
                     this.everyIsOk = true;
-                    continue;
-                }
-                if (str.StartsWith("StartPokers"))
-                {
-                    this.Pokers.GetPokerGroup(bytes);
                     continue;
                 }
                 if (str.StartsWith("server"))
@@ -115,28 +122,39 @@ namespace FightTheLandLord
                 }
                 if (str.StartsWith("Order"))
                 {
-                    DConsole.haveOrder = true;
+                    DConsole.player1.haveOrder = true;
                     continue;
                 }
                 if (str.StartsWith("IsBiggest"))
                 {
-                    DConsole.IsBiggest = true;
+                    DConsole.player1.isBiggest = true;
                     continue;
                 }
                 if (str.StartsWith("NoBiggest"))
                 {
-                    DConsole.IsBiggest = false;
+                    DConsole.player1.isBiggest = false;
                     continue;
                 }
-                //接收服务器分配的牌组
-                if (!str.StartsWith("EveryOneIsOk") && !str.StartsWith("lead"))
+                if (str.StartsWith("AreYouLandLord"))
+                {
+                    DConsole.player1.areYouLandLord = true;
+                    continue;
+                }
+                if (str.StartsWith("LandLordPokers"))
                 {
                     PokerGroup pokers = new PokerGroup();
-                    pokers.GetPokerGroup(bytes);
-                    if (pokers.Count == 17 | pokers.Count == 20)
-                    {
-                        this.Pokers = pokers;
-                    }
+                    str = str.Replace("LandLordPokers", "");
+                    byte[] bytePg = Encoding.Default.GetBytes(str);
+                    pokers.GetPokerGroup(bytePg);
+                    DConsole.LandLordPokers = pokers;
+                    DConsole.player1.SelectLandLordEnd();
+                    continue;
+                }
+                if (str.StartsWith("ReStart"))
+                {
+                    DConsole.leadedPokerGroups.Clear();
+                    DConsole.leadPokers.Clear();
+                    DConsole.player1.pokers.Clear();
                     continue;
                 }
             }
