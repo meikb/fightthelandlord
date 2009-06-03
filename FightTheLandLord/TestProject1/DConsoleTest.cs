@@ -69,17 +69,31 @@ namespace TestProject1
         public void SameSortTest()
         {
             PokerGroup PG = new PokerGroup(); // TODO: 初始化为适当的值
-            PG.Add(new Poker(PokerNum.P3, PokerColor.方块));
-            PG.Add(new Poker(PokerNum.P3, PokerColor.黑桃));
-            PG.Add(new Poker(PokerNum.P3, PokerColor.红心));
-            PG.Add(new Poker(PokerNum.P4, PokerColor.方块));
-            PG.Add(new Poker(PokerNum.P4, PokerColor.黑桃));
-            PG.Add(new Poker(PokerNum.P4, PokerColor.红心));
-            PG.Add(new Poker(PokerNum.P5, PokerColor.方块));
-            PG.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P10, PokerColor.方块));
+            PG.Add(new Poker(PokerNum.P10, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P9, PokerColor.红心));
+            PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P8, PokerColor.红心));
+            PG.Add(new Poker(PokerNum.P8, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P8, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P7, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P7, PokerColor.红心));
+            PG.Add(new Poker(PokerNum.P7, PokerColor.红心));
+            //PG.Add(new Poker(PokerNum.P5, PokerColor.方块));
+            //PG.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
+            //PG.Add(new Poker(PokerNum.P5, PokerColor.红心));
+            //PG.Add(new Poker(PokerNum.P4, PokerColor.方块));
+            //PG.Add(new Poker(PokerNum.P4, PokerColor.黑桃));
+            //PG.Add(new Poker(PokerNum.P4, PokerColor.红心));
+            //PG.Add(new Poker(PokerNum.P3, PokerColor.方块));
+            //PG.Add(new Poker(PokerNum.P3, PokerColor.黑桃));
+            //PG.Add(new Poker(PokerNum.P3, PokerColor.红心));
+
             PokerGroup expected = null; // TODO: 初始化为适当的值
             PokerGroup actual;
-            actual = DConsole.SameSort(PG);
+            actual = DConsole.SameThreeSort(PG);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("验证此测试方法的正确性。");
         }

@@ -581,25 +581,28 @@ namespace FightTheLandLord
                             IsGreater = false;
                         }
                         break;
-                    case 2: 
-                        if (LP.type == PokerGroupType.双王) 
+                    case 2:
+                        if (LP.type == PokerGroupType.双王)
                         {
                             IsGreater = true;
                         }
-                        if (LP.type == PokerGroupType.对子 && RP.type == PokerGroupType.对子)
+                        else
                         {
-                            if (LP[0] > RP[0])
+                            if (LP.type == PokerGroupType.对子 && RP.type == PokerGroupType.对子)
                             {
-                                IsGreater = true;
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
+                                    IsGreater = false;
+                                }
                             }
                             else
                             {
                                 IsGreater = false;
                             }
-                        }
-                        else
-                        {
-                            IsGreater = false;
                         }
                         break;
                     case 3:
@@ -639,57 +642,15 @@ namespace FightTheLandLord
                             }
                             else
                             {
-                                if (LP.type == PokerGroupType.三带一 && RP.type == PokerGroupType.三带一) //先判断连续的三张牌靠前还是靠后,然后对四种情况做出不同的处理
+                                if (LP.type == PokerGroupType.三带一 && RP.type == PokerGroupType.三带一)
                                 {
-                                    if (LP[0] != LP[1])
+                                    if (LP[0] > RP[0])
                                     {
-                                        if (RP[0] != RP[1])  //第一种情况,LP和RP连续的三张牌都靠后,比较LP[3]和RP[3]的大小
-                                        {
-                                            if (LP[3] > RP[3])
-                                            {
-                                                IsGreater = true;
-                                            }
-                                            else
-                                            {
-                                                IsGreater = false;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (LP[3] > RP[0])  //第二种情况,LP的三张牌靠后,但是RP的三张牌靠前,比较LP[3]和RP[0]的大小
-                                            {
-                                                IsGreater = true;
-                                            }
-                                            else
-                                            {
-                                                IsGreater = false;
-                                            }
-                                        }
+                                        IsGreater = true;
                                     }
                                     else
                                     {
-                                        if (RP[0] != RP[1])  //第三种情况,LP的三张牌靠前,RP的三张牌靠后,比较LP[0]和RP[3]
-                                        {
-                                            if (LP[0] > RP[3])
-                                            {
-                                                IsGreater = true;
-                                            }
-                                            else
-                                            {
-                                                IsGreater = false;
-                                            }
-                                        }
-                                        else
-                                        {
-                                            if (LP[0] > RP[0])  //第四种情况,RP的三张牌靠前,LP的三张牌靠前,比较RP[0]和LP[0]
-                                            {
-                                                IsGreater = true;
-                                            }
-                                            else
-                                            {
-                                                IsGreater = false;
-                                            }
-                                        }
+                                        IsGreater = false;
                                     }
                                 }
                                 else
@@ -796,8 +757,296 @@ namespace FightTheLandLord
                                 }
                                 else
                                 {
+                                    if (LP.type == PokerGroupType.飞机带翅膀 && RP.type == PokerGroupType.飞机带翅膀)
+                                    {
+                                        if (LP[0] > RP[0])
+                                        {
+                                            IsGreater = true;
+                                        }
+                                        else
+                                        {
+                                            IsGreater = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        IsGreater = false;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 9:
+                        if (LP.type == PokerGroupType.九张顺子 && RP.type == PokerGroupType.九张顺子)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            if (LP.type == PokerGroupType.三连飞机 && RP.type == PokerGroupType.三连飞机)
+                            {
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
                                     IsGreater = false;
                                 }
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        break;
+                    case 10:
+                        if (LP.type == PokerGroupType.十张顺子 && RP.type == PokerGroupType.十张顺子)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            if (LP.type == PokerGroupType.五连对 && RP.type == PokerGroupType.五连对)
+                            {
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
+                                    IsGreater = false;
+                                }
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        break;
+                    case 11:
+                        if (LP.type == PokerGroupType.十一张顺子 && RP.type == PokerGroupType.十一张顺子)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            IsGreater = false;
+                        }
+                        break;
+                    case 12:
+                        if (LP.type == PokerGroupType.十二张顺子 && RP.type == PokerGroupType.十二张顺子)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            if (LP.type == PokerGroupType.四连飞机 && RP.type == PokerGroupType.四连飞机)
+                            {
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
+                                    IsGreater = false;
+                                }
+                            }
+                            else
+                            {
+                                if (LP.type == PokerGroupType.三连飞机带翅膀 && RP.type == PokerGroupType.三连飞机带翅膀)
+                                {
+                                    if (LP[0] > RP[0])
+                                    {
+                                        IsGreater = true;
+                                    }
+                                    else
+                                    {
+                                        IsGreater = false;
+                                    }
+                                }
+                                else
+                                {
+                                    if (LP.type == PokerGroupType.六连对 && RP.type == PokerGroupType.六连对)
+                                    {
+                                        if (LP[0] > RP[0])
+                                        {
+                                            IsGreater = true;
+                                        }
+                                        else
+                                        {
+                                            IsGreater = false;
+                                        }
+                                    }
+                                    else
+                                    {
+                                        IsGreater = false;
+                                    }
+                                }
+                            }
+                        }
+                        break;
+                    case 13:
+                        IsGreater = false;
+                        break;
+                    case 14:
+                        if (LP.type == PokerGroupType.七连对 && RP.type == PokerGroupType.七连对)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            IsGreater = false;
+                        }
+                        break;
+                    case 15:
+                        if (LP.type == PokerGroupType.五连飞机 && LP.type == PokerGroupType.五连飞机)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            IsGreater = false;
+                        }
+                        break;
+                    case 16:
+                        if (LP.type == PokerGroupType.八连对 && RP.type == PokerGroupType.八连对)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            if (LP.type == PokerGroupType.四连飞机带翅膀 && RP.type == PokerGroupType.四连飞机带翅膀)
+                            {
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
+                                    IsGreater = false;
+                                }
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        break;
+                    case 17:
+                        IsGreater = false;
+                        break;
+                    case 18:
+                        if (LP.type == PokerGroupType.九连对 && RP.type == PokerGroupType.九连对)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            if (LP.type == PokerGroupType.六连飞机 && RP.type == PokerGroupType.六连飞机)
+                            {
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
+                                    IsGreater = false;
+                                }
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        break;
+                    case 19:
+                        IsGreater = false;
+                        break;
+                    case 20:
+                        if (LP.type == PokerGroupType.十连对 && RP.type == PokerGroupType.十连对)
+                        {
+                            if (LP[0] > RP[0])
+                            {
+                                IsGreater = true;
+                            }
+                            else
+                            {
+                                IsGreater = false;
+                            }
+                        }
+                        else
+                        {
+                            if (LP.type == PokerGroupType.五连飞机带翅膀 && RP.type == PokerGroupType.五连飞机带翅膀)
+                            {
+                                if (LP[0] > RP[0])
+                                {
+                                    IsGreater = true;
+                                }
+                                else
+                                {
+                                    IsGreater = false;
+                                }
+                            }
+                            else
+                            {
+                                IsGreater = false;
                             }
                         }
                         break;
