@@ -20,6 +20,9 @@ namespace FightTheLandLord
         public static System.Windows.Forms.TextBox tb;
         public static System.Windows.Forms.Label lblClient1Name;
         public static System.Windows.Forms.Label lblClient2Name;
+        public static System.Windows.Forms.Label lblScore1;
+        public static System.Windows.Forms.Label lblScore2;
+        public static System.Windows.Forms.Label lblScore3;
         public static Color backColor;
         public static Graphics g1, g2, gPlayer1LeadPoker, gPlayer2LeadPoker, gPlayer3LeadPoker, gLandLordPoker;
         public static int leftCount;
@@ -27,6 +30,96 @@ namespace FightTheLandLord
         public static Server server;
         public static Client client;
         public static Player player1;
+        public static int serverScore = 2000;
+        public static int client1Score = 2000;
+        public static int client2Score = 2000;
+        public static int roundScore = 50;
+        public static int multiple = 1;
+        public static int _Winer = 0;
+        public static int Winer
+        {
+            get
+            {
+                return _Winer;
+            }
+            set
+            {
+                if (value == 1)
+                {
+                    switch (LandLordNum)
+                    {
+                        case 1:
+                            serverScore += roundScore * multiple * 2;
+                            client1Score -= roundScore * multiple;
+                            client2Score -= roundScore * multiple;
+                            break;
+                        case 2:
+                            serverScore += roundScore * multiple;
+                            client1Score -= roundScore * multiple * 2;
+                            client2Score += roundScore * multiple;
+                            break;
+                        case 3:
+                            serverScore += roundScore * multiple;
+                            client1Score += roundScore * multiple;
+                            client2Score -= roundScore * multiple * 2;
+                            break;
+                    }
+                    _Winer = value;
+                }
+                if (value == 2)
+                {
+                    switch (LandLordNum)
+                    {
+                        case 1:
+                            serverScore -= roundScore * multiple * 2;
+                            client1Score += roundScore * multiple;
+                            client2Score += roundScore * multiple;
+                            break;
+                        case 2:
+                            serverScore -= roundScore * multiple;
+                            client1Score += roundScore * multiple * 2;
+                            client2Score -= roundScore * multiple;
+                            break;
+                        case 3:
+                            serverScore += roundScore * multiple;
+                            client1Score += roundScore * multiple;
+                            client2Score -= roundScore * multiple * 2;
+                            break;
+
+                    }
+                    _Winer = value;
+                }
+
+                if (value == 3)
+                {
+                    switch (LandLordNum)
+                    {
+                        case 1:
+                            serverScore -= roundScore * multiple * 2;
+                            client1Score += roundScore * multiple;
+                            client2Score += roundScore * multiple;
+                            break;
+                        case 2:
+                            serverScore += roundScore * multiple;
+                            client1Score -= roundScore * multiple * 2;
+                            client2Score += roundScore * multiple;
+                            break;
+                        case 3:
+                            serverScore -= roundScore * multiple;
+                            client1Score -= roundScore * multiple;
+                            client2Score += roundScore * multiple * 2;
+                            break;
+                    }
+                    _Winer = value;
+                }
+                server.SendDataForClient("ClientScore" + client2Score.ToString(), 1);
+                server.SendDataForClient("ClientScore" + client1Score.ToString(), 2);
+                server.SendDataForClient("YouScore" + client1Score.ToString(), 1);
+                server.SendDataForClient("YouScore" + client2Score.ToString(), 2);
+                server.SendDataForClient("ServerScore" + serverScore.ToString(), 1);
+                server.SendDataForClient("ServerScore" + serverScore.ToString(), 2);
+            }
+        }
         /// <summary>
         /// 自己是否有出牌权限
         /// </summary>
@@ -99,7 +192,7 @@ namespace FightTheLandLord
             Console.WriteLine("以下是洗过的牌");
             foreach (Poker onePoker in allPoker)
             {
-                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.ToString());
             }
 #endif
         }
@@ -152,7 +245,7 @@ namespace FightTheLandLord
             Console.WriteLine("玩家一的牌");
             foreach (Poker onePoker in player1.pokers)
             {
-                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.ToString());
             }
 #endif
         }
@@ -474,7 +567,7 @@ namespace FightTheLandLord
             Console.WriteLine("玩家出的牌:");
             foreach (Poker Poker in leadPokers)
             {
-                Write(Poker.pokerColor.ToString() + Poker.pokerNum.ToString());
+                Write(Poker.pokerColor.ToString() + Poker.ToString());
             }
 #endif
             return isRule;
@@ -575,7 +668,7 @@ namespace FightTheLandLord
                 Rectangle rt = new Rectangle(x, 0, 50, 95);
                 gPlayer1LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer1LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer1LeadPoker.DrawString(leadPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
+                gPlayer1LeadPoker.DrawString(leadPokers[i].ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
             }
         }
         public static void PaintPlayer2LeadPoker()
@@ -603,7 +696,7 @@ namespace FightTheLandLord
                 Rectangle rt = new Rectangle(0, y, 95, 50);
                 gPlayer2LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer2LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer2LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, 40, y + 5);
+                gPlayer2LeadPoker.DrawString(pg[i].ToString(), new Font("宋体", 12), Brushes.Black, 40, y + 5);
             }
         }
         public static void PaintPlayer3LeadPoker(PokerGroup pg)
@@ -616,7 +709,7 @@ namespace FightTheLandLord
                 Rectangle rt = new Rectangle(0, y, 95, 50);
                 gPlayer3LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer3LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer3LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, 40, y + 5);
+                gPlayer3LeadPoker.DrawString(pg[i].ToString(), new Font("宋体", 12), Brushes.Black, 40, y + 5);
             }
         }
 
@@ -624,7 +717,7 @@ namespace FightTheLandLord
         {
             foreach (Poker poker in leadedPokerGroups[leadedPokerGroups.Count - 1])
             {
-                Write(poker.pokerColor.ToString() + poker.pokerNum.ToString());
+                Write(poker.pokerColor.ToString() + poker.ToString());
             }
         }
         /// <summary>
@@ -866,7 +959,7 @@ namespace FightTheLandLord
                         Rectangle rt = new Rectangle(x, 0, 70, 95);
                         gLandLordPoker.FillRectangle(Brushes.White, rt);
                         gLandLordPoker.DrawRectangle(Pens.Black, rt);
-                        gLandLordPoker.DrawString(LandLordPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
+                        gLandLordPoker.DrawString(LandLordPokers[i].ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
                     }
                 }
                 else
@@ -895,7 +988,7 @@ namespace FightTheLandLord
                         Rectangle rt = new Rectangle(x, 0, 70, 95);
                         gLandLordPoker.FillRectangle(Brushes.White, rt);
                         gLandLordPoker.DrawRectangle(Pens.Black, rt);
-                        gLandLordPoker.DrawString(LandLordPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
+                        gLandLordPoker.DrawString(LandLordPokers[i].ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
                     }
                 }
                 else

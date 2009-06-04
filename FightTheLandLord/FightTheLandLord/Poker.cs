@@ -138,5 +138,10 @@ namespace FightTheLandLord
                 return false;
             }
         }
+
+        public override string ToString()
+        {
+            return this.pokerNum.ToString().Replace("P", "");
+        }
     }
 }

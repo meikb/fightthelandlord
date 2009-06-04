@@ -199,6 +199,14 @@ namespace FightTheLandLord
             {
                 if (DConsole.player1.isBiggest || DConsole.leadPokers > DConsole.leadedPokerGroups[DConsole.leadedPokerGroups.Count-1])
                 {
+                    if (DConsole.leadPokers.type == PokerGroupType.炸弹)
+                    {
+                        DConsole.multiple *= 2;
+                    }
+                    if (DConsole.leadPokers.type == PokerGroupType.双王)
+                    {
+                        DConsole.multiple *= 3;
+                    }
                     DConsole.player1.isBiggest = true;
                     this.BakPoker();  //备份现有pokers,下次出牌时需要用到
                     foreach (int selectPoker in this.selectPokers)  //在pokers里移除已经出过的牌
@@ -234,14 +242,14 @@ namespace FightTheLandLord
                     Rectangle rt = new Rectangle(x, 50, 50, 95); //没有选中的牌的X比选中的牌的X多50
                     g.FillRectangle(Brushes.White, rt);
                     g.DrawRectangle(Pens.Black, rt);
-                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 55);
+                    g.DrawString(this.pokers[i].ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 55);
                 }
                 else  //当当前的牌已经被选中时,绘制如下图案
                 {
                     Rectangle rt = new Rectangle(x, 0, 50, 95);
                     g.FillRectangle(Brushes.White, rt);
                     g.DrawRectangle(Pens.Black, rt);
-                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
+                    g.DrawString(this.pokers[i].ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
                 }
             }
         }

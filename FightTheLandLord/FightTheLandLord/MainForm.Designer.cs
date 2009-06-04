@@ -55,15 +55,19 @@
             this.btnNeedLandLord = new System.Windows.Forms.Button();
             this.btnNotLandLord = new System.Windows.Forms.Button();
             this.panelLandLordPokers = new System.Windows.Forms.Panel();
+            this.自定义分数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.lblScore2 = new System.Windows.Forms.Label();
+            this.lblScore3 = new System.Windows.Forms.Label();
+            this.lblScore1 = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // btnStart
             // 
             this.btnStart.Enabled = false;
-            this.btnStart.Location = new System.Drawing.Point(402, 382);
+            this.btnStart.Location = new System.Drawing.Point(395, 382);
             this.btnStart.Name = "btnStart";
-            this.btnStart.Size = new System.Drawing.Size(43, 23);
+            this.btnStart.Size = new System.Drawing.Size(50, 23);
             this.btnStart.TabIndex = 0;
             this.btnStart.Text = "开始";
             this.btnStart.UseVisualStyleBackColor = true;
@@ -116,6 +120,7 @@
             this.游戏ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.创建游戏ToolStripMenuItem,
             this.加入游戏ToolStripMenuItem,
+            this.自定义分数ToolStripMenuItem,
             this.退出ToolStripMenuItem});
             this.游戏ToolStripMenuItem.Name = "游戏ToolStripMenuItem";
             this.游戏ToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
@@ -124,21 +129,21 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -167,7 +172,7 @@
             this.btnOK.Enabled = false;
             this.btnOK.Location = new System.Drawing.Point(358, 382);
             this.btnOK.Name = "btnOK";
-            this.btnOK.Size = new System.Drawing.Size(38, 23);
+            this.btnOK.Size = new System.Drawing.Size(48, 23);
             this.btnOK.TabIndex = 5;
             this.btnOK.Text = "准备";
             this.btnOK.UseVisualStyleBackColor = true;
@@ -259,7 +264,7 @@
             // 
             // btnNeedLandLord
             // 
-            this.btnNeedLandLord.Location = new System.Drawing.Point(261, 382);
+            this.btnNeedLandLord.Location = new System.Drawing.Point(284, 382);
             this.btnNeedLandLord.Name = "btnNeedLandLord";
             this.btnNeedLandLord.Size = new System.Drawing.Size(56, 23);
             this.btnNeedLandLord.TabIndex = 15;
@@ -270,7 +275,7 @@
             // 
             // btnNotLandLord
             // 
-            this.btnNotLandLord.Location = new System.Drawing.Point(486, 382);
+            this.btnNotLandLord.Location = new System.Drawing.Point(470, 382);
             this.btnNotLandLord.Name = "btnNotLandLord";
             this.btnNotLandLord.Size = new System.Drawing.Size(57, 23);
             this.btnNotLandLord.TabIndex = 16;
@@ -287,11 +292,45 @@
             this.panelLandLordPokers.TabIndex = 18;
             this.panelLandLordPokers.Paint += new System.Windows.Forms.PaintEventHandler(this.panelLandLordPokers_Paint);
             // 
+            // 自定义分数ToolStripMenuItem
+            // 
+            this.自定义分数ToolStripMenuItem.Name = "自定义分数ToolStripMenuItem";
+            this.自定义分数ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.自定义分数ToolStripMenuItem.Text = "自定义分数";
+            this.自定义分数ToolStripMenuItem.Click += new System.EventHandler(this.自定义分数ToolStripMenuItem_Click);
+            // 
+            // lblScore2
+            // 
+            this.lblScore2.AutoSize = true;
+            this.lblScore2.Location = new System.Drawing.Point(116, 42);
+            this.lblScore2.Name = "lblScore2";
+            this.lblScore2.Size = new System.Drawing.Size(0, 12);
+            this.lblScore2.TabIndex = 19;
+            // 
+            // lblScore3
+            // 
+            this.lblScore3.AutoSize = true;
+            this.lblScore3.Location = new System.Drawing.Point(638, 41);
+            this.lblScore3.Name = "lblScore3";
+            this.lblScore3.Size = new System.Drawing.Size(0, 12);
+            this.lblScore3.TabIndex = 20;
+            // 
+            // lblScore1
+            // 
+            this.lblScore1.AutoSize = true;
+            this.lblScore1.Location = new System.Drawing.Point(222, 387);
+            this.lblScore1.Name = "lblScore1";
+            this.lblScore1.Size = new System.Drawing.Size(0, 12);
+            this.lblScore1.TabIndex = 21;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 566);
+            this.Controls.Add(this.lblScore1);
+            this.Controls.Add(this.lblScore3);
+            this.Controls.Add(this.lblScore2);
             this.Controls.Add(this.panelLandLordPokers);
             this.Controls.Add(this.btnNotLandLord);
             this.Controls.Add(this.btnPass);
@@ -353,6 +392,10 @@
         private System.Windows.Forms.Button btnNeedLandLord;
         private System.Windows.Forms.Button btnNotLandLord;
         private System.Windows.Forms.Panel panelLandLordPokers;
+        private System.Windows.Forms.ToolStripMenuItem 自定义分数ToolStripMenuItem;
+        private System.Windows.Forms.Label lblScore2;
+        private System.Windows.Forms.Label lblScore3;
+        private System.Windows.Forms.Label lblScore1;
     }
 }
 
