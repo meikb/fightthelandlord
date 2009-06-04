@@ -126,6 +126,10 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     server.SendDataForClient("server", DConsole.leadPokers, 2);
                     Thread.Sleep(100);
+                    if (this.player1.pokers.Count == 0 && DConsole.IsStart)
+                    {
+                        DConsole.Restart();
+                    }
                     server.SendDataForClient("Order", 2);
                     DConsole.player1.haveOrder = false;
                     
@@ -136,7 +140,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.pokers.Count));
                     Thread.Sleep(100);
-                    DConsole.player1.haveOrder = false;
+                    this.player1.haveOrder = false;
                 }
                 player1.g.Clear(this.BackColor);
                 player1.Paint();
@@ -260,10 +264,6 @@ namespace FightTheLandLord
                     btnNeedLandLord.Visible = true;
                     btnNotLandLord.Visible = true;
                 }
-                if (DConsole.player1.pokers.Count == 0 && DConsole.IsStart)
-                {
-                    DConsole.Restart();
-                }
             }
         }
 
@@ -278,7 +278,7 @@ namespace FightTheLandLord
                 {
                     this.AcceptServerData = new Thread(new ThreadStart(client.AcceptServerData));
                     this.AcceptServerData.IsBackground = true;
-                    this.AcceptServerData.Name = "接受即将开始消息线程";
+                    this.AcceptServerData.Name = "接收服务器数据";
                 }
                 if (this.AcceptServerData.ThreadState == (ThreadState.Background | ThreadState.Unstarted))
                 {
@@ -323,6 +323,11 @@ namespace FightTheLandLord
                     this.btnPass.Visible = true;
                 }
             }
+            else
+            {
+                btnLead.Visible = false;
+                btnPass.Visible = false;
+            }
             if (DConsole.player1.isBiggest)
             {
                 this.btnPass.Visible = false;
@@ -331,6 +336,12 @@ namespace FightTheLandLord
             {
                 this.btnNeedLandLord.Visible = true;
                 this.btnNotLandLord.Visible = true;
+            }
+            if (DConsole.IsRestart)
+            {
+                DConsole.IsRestart = false;
+                btnOK.Enabled = true;
+                btnOK.Visible = true;
             }
         }
 
