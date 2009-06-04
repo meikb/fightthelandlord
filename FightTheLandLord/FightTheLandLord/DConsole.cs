@@ -36,6 +36,10 @@ namespace FightTheLandLord
         /// </summary>
         public static bool IsStart;
         /// <summary>
+        /// 是否已经重新开始,用户判断是否显示准备按钮
+        /// </summary>
+        public static bool IsRestart;
+        /// <summary>
         /// 上轮出牌是否自己最大
         /// </summary>
         public static string OtherClientName
@@ -108,6 +112,7 @@ namespace FightTheLandLord
         {
             PokerGroup player2Pokers = new PokerGroup();
             PokerGroup player3Pokers = new PokerGroup();
+            player1.pokers.Clear();
             for (int i = 0; i < 17; i++)
             {
                 player1.pokers.Add(allPoker[i]);
@@ -896,6 +901,7 @@ namespace FightTheLandLord
             leadedPokerGroups.Clear();
             player1.pokers.Clear();
             LandLordPokers.Clear();
+            DConsole.allPoker.Clear();
             player1.isLandLord = false;
             player1.isBiggest = false;
             player1.haveOrder = false;
@@ -904,10 +910,6 @@ namespace FightTheLandLord
             System.Threading.Thread.Sleep(200);
             server.SendDataForClient("ReStart", 2);
             System.Threading.Thread.Sleep(200);
-            shuffle();
-            deal();
-            player1.Paint();
-            PaintLandLord(false);
         }
     }
 }

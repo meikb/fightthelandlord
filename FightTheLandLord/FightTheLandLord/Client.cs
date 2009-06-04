@@ -70,6 +70,7 @@ namespace FightTheLandLord
                     PokerGroup pokers = new PokerGroup(bytePokers);
                     if (pokers.Count == 17)
                     {
+                        DConsole.player1.pokers.Clear();
                         DConsole.player1.pokers = pokers;
                         DConsole.player1.sort();
                         DConsole.player1.Paint();
@@ -177,7 +178,8 @@ namespace FightTheLandLord
                     DConsole.player1.isBiggest = false;
                     DConsole.player1.isLandLord = false;
                     DConsole.player1.haveOrder = false;
-                    DConsole.PaintLandLord(false);
+                    //DConsole.PaintLandLord(false);
+                    DConsole.IsRestart = true;
                     continue;
                 }
             }
