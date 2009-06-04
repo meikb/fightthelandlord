@@ -70,12 +70,13 @@ namespace TestProject1
         {
             PokerGroup PG = new PokerGroup(); // TODO: 初始化为适当的值
             PG.Add(new Poker(PokerNum.P10, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P10, PokerColor.黑桃));
             PG.Add(new Poker(PokerNum.P9, PokerColor.红心));
             PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
             PG.Add(new Poker(PokerNum.P9, PokerColor.黑桃));
-            //PG.Add(new Poker(PokerNum.P5, PokerColor.方块));
-            //PG.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
-            //PG.Add(new Poker(PokerNum.P5, PokerColor.红心));
+            PG.Add(new Poker(PokerNum.P5, PokerColor.方块));
+            PG.Add(new Poker(PokerNum.P5, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P5, PokerColor.红心));
             //PG.Add(new Poker(PokerNum.P4, PokerColor.方块));
             //PG.Add(new Poker(PokerNum.P4, PokerColor.黑桃));
             //PG.Add(new Poker(PokerNum.P4, PokerColor.红心));
@@ -86,6 +87,24 @@ namespace TestProject1
             PokerGroup expected = null; // TODO: 初始化为适当的值
             PokerGroup actual;
             actual = DConsole.SameThreeSort(PG);
+            Assert.AreEqual(expected, actual);
+            Assert.Inconclusive("验证此测试方法的正确性。");
+        }
+
+        /// <summary>
+        ///IsThreeLinkPokers 的测试
+        ///</summary>
+        [TestMethod()]
+        public void IsThreeLinkPokersTest()
+        {
+            PokerGroup PG = new PokerGroup(); // TODO: 初始化为适当的值
+            PG.Add(new Poker(PokerNum.P2, PokerColor.红心));
+            PG.Add(new Poker(PokerNum.P3, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P3, PokerColor.黑桃));
+            PG.Add(new Poker(PokerNum.P3, PokerColor.方块));
+            bool expected = true; // TODO: 初始化为适当的值
+            bool actual;
+            actual = DConsole.IsThreeLinkPokers(PG);
             Assert.AreEqual(expected, actual);
             Assert.Inconclusive("验证此测试方法的正确性。");
         }
