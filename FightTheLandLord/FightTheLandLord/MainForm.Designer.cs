@@ -54,6 +54,7 @@
             this.btnPass = new System.Windows.Forms.Button();
             this.btnNeedLandLord = new System.Windows.Forms.Button();
             this.btnNotLandLord = new System.Windows.Forms.Button();
+            this.panelLandLordPokers = new System.Windows.Forms.Panel();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -76,6 +77,7 @@
             this.panelPlayer1.Size = new System.Drawing.Size(800, 150);
             this.panelPlayer1.TabIndex = 1;
             this.panelPlayer1.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer1_Paint);
+            this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick);
             // 
             // btnLead
             // 
@@ -122,21 +124,21 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(118, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -277,11 +279,20 @@
             this.btnNotLandLord.Visible = false;
             this.btnNotLandLord.Click += new System.EventHandler(this.btnNotLandLord_Click);
             // 
+            // panelLandLordPokers
+            // 
+            this.panelLandLordPokers.Location = new System.Drawing.Point(304, 102);
+            this.panelLandLordPokers.Name = "panelLandLordPokers";
+            this.panelLandLordPokers.Size = new System.Drawing.Size(211, 100);
+            this.panelLandLordPokers.TabIndex = 18;
+            this.panelLandLordPokers.Paint += new System.Windows.Forms.PaintEventHandler(this.panelLandLordPokers_Paint);
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(822, 566);
+            this.Controls.Add(this.panelLandLordPokers);
             this.Controls.Add(this.btnNotLandLord);
             this.Controls.Add(this.btnPass);
             this.Controls.Add(this.btnNeedLandLord);
@@ -341,6 +352,7 @@
         private System.Windows.Forms.Button btnPass;
         private System.Windows.Forms.Button btnNeedLandLord;
         private System.Windows.Forms.Button btnNotLandLord;
+        private System.Windows.Forms.Panel panelLandLordPokers;
     }
 }
 

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace FightTheLandLord
 {
@@ -14,12 +15,13 @@ namespace FightTheLandLord
         public static PokerGroup LeftTempLeadedPoker;
         public static PokerGroup RightTempLeadedPoker;
         public static PokerGroup LandLordPokers;
+        public static PokerGroup allPoker = new PokerGroup();
         public static int LandLordNum;
         public static System.Windows.Forms.TextBox tb;
         public static System.Windows.Forms.Label lblClient1Name;
         public static System.Windows.Forms.Label lblClient2Name;
         public static Color backColor;
-        public static Graphics g1, g2, gPlayer1LeadPoker, gPlayer2LeadPoker, gPlayer3LeadPoker;
+        public static Graphics g1, g2, gPlayer1LeadPoker, gPlayer2LeadPoker, gPlayer3LeadPoker, gLandLordPoker;
         public static int leftCount;
         public static int rightCount;
         public static Server server;
@@ -30,9 +32,12 @@ namespace FightTheLandLord
         /// </summary>
         public static bool haveOrder;
         /// <summary>
+        /// 是否已开始
+        /// </summary>
+        public static bool IsStart;
+        /// <summary>
         /// 上轮出牌是否自己最大
         /// </summary>
-        private static bool _isBiggest;
         public static string OtherClientName
         {
             get
@@ -55,40 +60,98 @@ namespace FightTheLandLord
                 lblClient1Name.Text = value;
             }
         }
-        //当自己的IsBiggest为true时,发送消息使其他玩家的IsBiggest为false,因为逻辑上IsBiggest只能有一个
-        public static bool IsBiggest
-        {
-            get
-            {
-                return _isBiggest;
-            }
-            set
-            {
-                if (value)
-                {
-                    if (client != null)
-                    {
-                        client.SendDataForServer("IamIsBiggest");
-                        _isBiggest = value;
-                    }
-                    if (server != null)
-                    {
-                        server.SendDataForClient("NoBiggest", 1);
-                        server.SendDataForClient("NoBiggest", 2);
-                        _isBiggest = value;
-                    }
-                }
-                else
-                {
-                    _isBiggest = value;
-                }
-            }
-        }
 
         /// <summary>
         /// 记录其他玩家出的牌组
         /// </summary>
         public static PokerGroups leadedPokerGroups = new PokerGroups();
+        /// <summary>
+        /// 是否已选完地主
+        /// </summary>
+        public static bool SelectedLandLord = false;
+        /// <summary>
+        /// 洗牌
+        /// </summary>
+        public static void shuffle()
+        {
+            Poker lastPoker;
+            for (int i = 0; i < 5000; i++)  //洗牌,六个随机数向下替换.
+            {
+                int num1 = new Random().Next(0, 27);
+                lastPoker = allPoker[num1];
+                int num2 = new Random().Next(28, 54);
+                allPoker[num1] = allPoker[num2];
+                int num3 = new Random().Next(0, 54);
+                allPoker[num2] = allPoker[num3];
+                int num4 = new Random().Next(0, 10);
+                allPoker[num3] = allPoker[num4];
+                int num5 = new Random().Next(34, 54);
+                allPoker[num4] = allPoker[num5];
+                int num6 = new Random().Next(45, 54);
+                allPoker[num5] = allPoker[num6];
+                allPoker[num6] = lastPoker;
+            }
+#if DEBUG
+            Console.WriteLine("以下是洗过的牌");
+            foreach (Poker onePoker in allPoker)
+            {
+                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+            }
+#endif
+        }
+
+
+        /// <summary>
+        /// 发牌
+        /// </summary>
+        public static void deal()
+        {
+            PokerGroup player2Pokers = new PokerGroup();
+            PokerGroup player3Pokers = new PokerGroup();
+            for (int i = 0; i < 17; i++)
+            {
+                player1.pokers.Add(allPoker[i]);
+            }
+            for (int i = 17; i < 34; i++)
+            {
+                player2Pokers.Add(allPoker[i]);
+            }
+            for (int i = 34; i < 51; i++)
+            {
+                player3Pokers.Add(allPoker[i]);
+            }
+            LandLordNum = new Random().Next(1, 4);
+            PokerGroup landLordPokers = new PokerGroup();
+            for (int i = 51; i < 54; i++)
+            {
+                landLordPokers.Add(allPoker[i]);
+            }
+            LandLordPokers = landLordPokers;
+            player1.sort();
+            if (server.SendDataForClient("StartPokers", player2Pokers, 1) && server.SendDataForClient("StartPokers", player3Pokers, 2))
+            {
+                DConsole.Write("[系统消息]发牌成功!");
+                server.SendOrder(LandLordNum);
+            }
+            //if (server.SendDataForClient(player2.pokers, 1) && server.SendDataForClient(player3.pokers, 2))
+            //{
+            //    DConsole.Write("[系统消息]发牌成功!");
+            //    server.SendOrder(DConsole.LandLordNum);
+            //}
+            else
+            {
+                DConsole.Write("[系统消息]发牌失败!");
+            }
+
+#if DEBUG //调试时在Console上显示的信息
+            Console.WriteLine("玩家一的牌");
+            foreach (Poker onePoker in player1.pokers)
+            {
+                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+            }
+#endif
+        }
+
         /// <summary>
         /// 验证所出牌组是否符合游戏规则
         /// </summary>
@@ -499,7 +562,7 @@ namespace FightTheLandLord
                 Rectangle rt = new Rectangle(x, 0, 50, 95);
                 gPlayer1LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer1LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer1LeadPoker.DrawString(leadPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                gPlayer1LeadPoker.DrawString(leadPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
             }
         }
         public static void PaintPlayer2LeadPoker()
@@ -527,7 +590,7 @@ namespace FightTheLandLord
                 Rectangle rt = new Rectangle(0, y, 95, 50);
                 gPlayer2LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer2LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer2LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, 40, y + 5);
+                gPlayer2LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, 40, y + 5);
             }
         }
         public static void PaintPlayer3LeadPoker(PokerGroup pg)
@@ -540,7 +603,7 @@ namespace FightTheLandLord
                 Rectangle rt = new Rectangle(0, y, 95, 50);
                 gPlayer3LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer3LeadPoker.DrawRectangle(Pens.Black, rt);
-                gPlayer3LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, 40, y + 5);
+                gPlayer3LeadPoker.DrawString(pg[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, 40, y + 5);
             }
         }
 
@@ -769,23 +832,82 @@ namespace FightTheLandLord
 
         public static void PaintLandLord(bool IsTurnOn)
         {
-            if (IsTurnOn)
+            SelectedLandLord = IsTurnOn;
+            gLandLordPoker.Clear(backColor);
+            if (IsStart)
             {
-
+                if (IsTurnOn)
+                {
+                    for (int i = 0; i < LandLordPokers.Count; i++)
+                    {
+                        int x = i * 70;
+                        Rectangle rt = new Rectangle(x, 0, 70, 95);
+                        gLandLordPoker.FillRectangle(Brushes.White, rt);
+                        gLandLordPoker.DrawRectangle(Pens.Black, rt);
+                        gLandLordPoker.DrawString(LandLordPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int x = i * 70;
+                        Rectangle rt = new Rectangle(x, 0, 70, 95);
+                        gLandLordPoker.FillRectangle(Brushes.White, rt);
+                        gLandLordPoker.DrawRectangle(Pens.Black, rt);
+                        gLandLordPoker.DrawString("牌", new Font("宋体", 15), Brushes.Black, x + 20, 33);
+                    }
+                }
             }
-            else
+        }
+        public static void PaintLandLord()
+        {
+            gLandLordPoker.Clear(backColor);
+            if (IsStart)
             {
+                if (SelectedLandLord)
+                {
+                    for (int i = 0; i < LandLordPokers.Count; i++)
+                    {
+                        int x = i * 70;
+                        Rectangle rt = new Rectangle(x, 0, 70, 95);
+                        gLandLordPoker.FillRectangle(Brushes.White, rt);
+                        gLandLordPoker.DrawRectangle(Pens.Black, rt);
+                        gLandLordPoker.DrawString(LandLordPokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < 3; i++)
+                    {
+                        int x = i * 70;
+                        Rectangle rt = new Rectangle(x, 0, 70, 95);
+                        gLandLordPoker.FillRectangle(Brushes.White, rt);
+                        gLandLordPoker.DrawRectangle(Pens.Black, rt);
+                        gLandLordPoker.DrawString("牌", new Font("宋体", 15), Brushes.Black, x + 20, 33);
+                    }
+                }
             }
         }
 
         public static void Restart()
         {
-            server.SendDataForClient("ReStart", 1);
-            server.SendDataForClient("ReStart", 2);
             leadPokers.Clear();
             leadedPokerGroups.Clear();
             player1.pokers.Clear();
-
+            LandLordPokers.Clear();
+            player1.isLandLord = false;
+            player1.isBiggest = false;
+            player1.haveOrder = false;
+            player1.areYouLandLord = false;
+            server.SendDataForClient("ReStart", 1);
+            System.Threading.Thread.Sleep(200);
+            server.SendDataForClient("ReStart", 2);
+            System.Threading.Thread.Sleep(200);
+            shuffle();
+            deal();
+            player1.Paint();
+            PaintLandLord(false);
         }
     }
 }
