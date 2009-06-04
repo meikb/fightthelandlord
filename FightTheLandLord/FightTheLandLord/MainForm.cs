@@ -66,13 +66,17 @@ namespace FightTheLandLord
                 this.player2.sort();
                 this.player3.sort();
                 server.SendDataForClient("SPokerCount" + "17", 1);
+                Thread.Sleep(200);
                 server.SendDataForClient("SPokerCount" + "17", 2);
-                server.SendDataForClient("PokerCount" + "17", 2);
+                Thread.Sleep(200);
                 server.SendDataForClient("PokerCount" + "17", 1);
+                Thread.Sleep(200);
+                server.SendDataForClient("PokerCount" + "17", 2);
+                Thread.Sleep(200);
                 DConsole.PaintClient(17, 1);
                 DConsole.PaintClient(17, 2);
                 DConsole.PaintLandLord(false);
-                this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
+                //this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
                 this.btnStart.Enabled = false;
                 this.btnStart.Visible = false;
             }
@@ -130,15 +134,18 @@ namespace FightTheLandLord
                     {
                         DConsole.Restart();
                     }
-                    server.SendDataForClient("Order", 2);
+                    else
+                    {
+                        server.SendDataForClient("Order", 2); //当server端的牌出完了后,就不再传递出牌权限.
+                    }
                     DConsole.player1.haveOrder = false;
                     
                 }
                 if (this.client != null)
                 {
-                    client.SendDataForServer("client", DConsole.leadPokers);
-                    Thread.Sleep(100);
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.pokers.Count));
+                    Thread.Sleep(100);
+                    client.SendDataForServer("client", DConsole.leadPokers);
                     Thread.Sleep(100);
                     this.player1.haveOrder = false;
                 }
@@ -254,6 +261,11 @@ namespace FightTheLandLord
                     {
                         this.btnPass.Visible = true;
                     }
+                }
+                else
+                {
+                    this.btnLead.Visible = false;
+                    this.btnPass.Visible = false;
                 }
                 if (DConsole.player1.isBiggest)
                 {
@@ -400,15 +412,18 @@ namespace FightTheLandLord
         {
             this.btnLead.Visible = false;
             this.btnPass.Visible = false;
-            if (this.server != null)
+            DConsole.player1.haveOrder = false;
+            if (player1.pokers.Count != 0) //当牌出完后,出牌权限消失,不允许再次传递
             {
-                this.server.SendDataForClient("Order", 2);
-                DConsole.player1.haveOrder = false;
-            }
-            if (this.client != null) 
-            {
-                this.client.SendDataForServer("Pass");
-                DConsole.player1.haveOrder = false;
+                if (this.server != null)
+                {
+                    this.server.SendDataForClient("Order", 2);
+                }
+                if (this.client != null)
+                {
+                    this.client.SendDataForServer("Pass");
+                    DConsole.player1.haveOrder = false;
+                }
             }
         }
 

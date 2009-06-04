@@ -178,6 +178,10 @@ namespace FightTheLandLord
                     DConsole.player1.isBiggest = false;
                     DConsole.player1.isLandLord = false;
                     DConsole.player1.haveOrder = false;
+                    DConsole.lblClient1Name.Text = DConsole.lblClient1Name.Text.Replace("(地主)", "");
+                    DConsole.lblClient2Name.Text = DConsole.lblClient2Name.Text.Replace("(地主)", "");
+                    DConsole.lblClient1Name.ForeColor = System.Drawing.Color.Black;
+                    DConsole.lblClient2Name.ForeColor = System.Drawing.Color.Black;
                     //DConsole.PaintLandLord(false);
                     DConsole.IsRestart = true;
                     continue;

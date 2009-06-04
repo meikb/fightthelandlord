@@ -923,6 +923,11 @@ namespace FightTheLandLord
             player1.isBiggest = false;
             player1.haveOrder = false;
             player1.areYouLandLord = false;
+            DConsole.lblClient1Name.Text = DConsole.lblClient1Name.Text.Replace("(地主)", "");
+            DConsole.lblClient2Name.Text = DConsole.lblClient2Name.Text.Replace("(地主)", "");
+            DConsole.lblClient1Name.ForeColor = Color.Black;
+            DConsole.lblClient2Name.ForeColor = Color.Black;
+            IsRestart = true;
             server.SendDataForClient("ReStart", 1);
             System.Threading.Thread.Sleep(200);
             server.SendDataForClient("ReStart", 2);
