@@ -294,7 +294,15 @@ namespace FightTheLandLord
                         }
                         else
                         {
-
+                            if (IsThreeLinkPokers(leadPokers))
+                            {
+                                leadPokers.type = PokerGroupType.飞机带翅膀;
+                                isRule = true;
+                            }
+                            else
+                            {
+                                isRule = false;
+                            }
                         }
                     }
                     break;
@@ -730,27 +738,36 @@ namespace FightTheLandLord
         public static bool IsThreeLinkPokers(PokerGroup PG) //判断三张牌方法为判断两两相邻的牌,如果两两相邻的牌相同,则count自加1.最后根据count的值判断牌的类型为多少个连续三张
         {
             bool IsThreeLinkPokers = false;
-            int HowMuchLinkThree = 0;
-            PG = SameThreeSort(PG);
-            for (int i = 2; i < PG.Count; i++)
+            int HowMuchLinkThree = 0;  //飞机的数量
+            PG = SameThreeSort(PG); //排序,把飞机放在前面
+            for (int i = 2; i < PG.Count; i++)  //得到牌组中有几个飞机
             {
                 if (PG[i] == PG[i - 1] && PG[i] == PG[i - 2])
                 {
                     HowMuchLinkThree++;
                 }
             }
-
-            for (int i = PG.Count - 1; i > HowMuchLinkThree * 3 - 1; i--)
+            if (HowMuchLinkThree > 0)  //当牌组里面有三个时
             {
-                if (PG[i] == PokerNum.P2 || PG[i] == PokerNum.小王 || PG[i] == PokerNum.大王)
+                if (HowMuchLinkThree > 1)  //当牌组为飞机时
                 {
-                    IsThreeLinkPokers = false;
-                    return IsThreeLinkPokers;
+                    for (int i = 0; i < HowMuchLinkThree * 3 - 3; i += 3) //判断飞机之间的点数是否相差1
+                    {
+                        if (PG[i] != PokerNum.P2 && PG[i].pokerNum - 1 == PG[i + 3].pokerNum) //2点不能当飞机出
+                        {
+                            IsThreeLinkPokers = true;
+                        }
+                        else
+                        {
+                            IsThreeLinkPokers = false; 
+                            break;
+                        }
+                    }
                 }
-            }
-            if (HowMuchLinkThree > 0)
-            {
-                IsThreeLinkPokers = true;
+                else
+                {
+                    IsThreeLinkPokers = true; //牌组为普通三个,直接返回true
+                }
             }
             else
             {
@@ -772,7 +789,7 @@ namespace FightTheLandLord
         /// </summary>
         /// <param name="PG">牌组</param>
         /// <returns>是否为连续三张牌</returns>
-        public static PokerGroup SameThreeSort(PokerGroup PG)  //还要写排除把炸弹当飞机出的情况.
+        public static PokerGroup SameThreeSort(PokerGroup PG)
         {
             Poker FourPoker = null;  //如果把4张当三张出并且带4张的另外一张,就需要特殊处理,这里记录出现这种情况的牌的点数.
             bool FindedThree = false;  //已找到三张相同的牌
