@@ -37,6 +37,8 @@ namespace FightTheLandLord
         public bool client1IsOk = false;
         public bool client2IsOk = false;
 
+        public int sleep = 100;
+
         /// <summary>
         /// 寻远接收客户端的连接请求，当连接2个客户端后关闭端口监听。
         /// </summary>
@@ -87,12 +89,13 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("PokerCount"))
                 {
-                    Thread.Sleep(200);
+                    Thread.Sleep(sleep);
                     SendDataForClient(str1, 2);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
                     if (PokerCount == 0 && DConsole.IsStart)
                     {
+                        DConsole.Winer = 2;
                         DConsole.Restart();
                     }
                     DConsole.PaintClient(PokerCount, 1);
@@ -101,7 +104,7 @@ namespace FightTheLandLord
                 if (str1.StartsWith("client"))
                 {
                     SendDataForClient(str1, 2);
-                    Thread.Sleep(200);
+                    Thread.Sleep(sleep);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
                     DConsole.leadedPokerGroups.Add(pg);
@@ -144,10 +147,10 @@ namespace FightTheLandLord
                     DConsole.lblClient1Name.Text += "(地主)";
                     DConsole.lblClient1Name.ForeColor = System.Drawing.Color.Red;
                     SendDataForClient("ClientIsLandLord", 2);
-                    Thread.Sleep(200);
+                    Thread.Sleep(sleep);
                     DConsole.PaintClient(20, 1);
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
-                    Thread.Sleep(200);
+                    Thread.Sleep(sleep);
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
                     DConsole.player1.SelectLandLordEnd();
                     continue;
@@ -181,12 +184,13 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("PokerCount"))
                 {
-                    Thread.Sleep(200);
+                    Thread.Sleep(sleep);
                     SendDataForClient(str1, 1);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
                     if (PokerCount == 0 && DConsole.IsStart)
                     {
+                        DConsole.Winer = 3;
                         DConsole.Restart();
                     }
                     DConsole.PaintClient(PokerCount, 2);
@@ -195,7 +199,7 @@ namespace FightTheLandLord
                 if (str1.StartsWith("client"))
                 {
                     SendDataForClient(str1, 1);
-                    Thread.Sleep(100);
+                    Thread.Sleep(sleep);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
                     DConsole.leadedPokerGroups.Add(pg);
@@ -209,7 +213,7 @@ namespace FightTheLandLord
                     {
                         DConsole.IsRestart = false; //当检测到已经Restart时,复位Restart使它还原为false供下次使用
                     }
-                    System.Threading.Thread.Sleep(200);
+                    System.Threading.Thread.Sleep(sleep);
                     continue;
                 }
                 //Client2放弃出牌,权限交给Client1
@@ -239,11 +243,8 @@ namespace FightTheLandLord
                     DConsole.lblClient2Name.Text += "(地主)";
                     DConsole.lblClient2Name.ForeColor = System.Drawing.Color.Red;
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
-                    Thread.Sleep(200);
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
-                    Thread.Sleep(200);
                     SendDataForClient("ClientIsLandLord", 1);
-                    Thread.Sleep(200);
                     DConsole.PaintClient(20, 2);
                     DConsole.player1.SelectLandLordEnd();
                     continue;
@@ -274,6 +275,7 @@ namespace FightTheLandLord
             }
             byte[] bytePg = pg.GetBuffer();  //通过2个 MemoryStream对象获取代表2组牌的 比特流对象
             Ns.Write(bytePg, 0, bytePg.Length);  //把2个比特流对象写入server与client的连接管道中
+            Thread.Sleep(sleep);
             return true;
         }
         /// <summary>
@@ -304,6 +306,7 @@ namespace FightTheLandLord
             string strSender = head + strPg;  //组合两个字符串
             byte[] byteSender = Encoding.Default.GetBytes(strSender);  //把要发送的数据转换为byte[]
             Ns.Write(byteSender, 0, byteSender.Length);  //把2个比特流对象写入server与client的连接管道中
+            Thread.Sleep(sleep);
             return true;
         }
         /// <summary>
@@ -330,7 +333,7 @@ namespace FightTheLandLord
             }
             byte[] byteStr = Encoding.Default.GetBytes(str); 
             Ns.Write(byteStr, 0, byteStr.Length);  //把2个比特流对象写入server与client的连接管道中
-
+            Thread.Sleep(sleep);
             return true;
         }
         public void SendOrder(int Num)

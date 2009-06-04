@@ -11,6 +11,14 @@ namespace FightTheLandLord
         {
             if (DConsole.IsRules(PG))
             {
+                if (PG.type == PokerGroupType.双王)
+                {
+                    DConsole.multiple *= 3;
+                }
+                if (PG.type == PokerGroupType.炸弹)
+                {
+                    DConsole.multiple *= 2;
+                }
                 base.Add(PG);
             }
             else

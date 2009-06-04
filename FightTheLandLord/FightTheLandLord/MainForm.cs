@@ -55,7 +55,7 @@ namespace FightTheLandLord
                 Console.WriteLine(DConsole.allPoker.Count);
                 foreach (Poker onePoker in DConsole.allPoker)
                 {
-                    Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
+                    Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.ToString());
                 }
 #endif
                 DConsole.shuffle(); //洗牌
@@ -94,6 +94,9 @@ namespace FightTheLandLord
             DConsole.backColor = this.BackColor;
             DConsole.lblClient1Name = this.lblClient1Name;
             DConsole.lblClient2Name = this.lblClient2Name;
+            DConsole.lblScore1 = this.lblScore1;
+            DConsole.lblScore2 = this.lblScore2;
+            DConsole.lblScore3 = this.lblScore3;
             player1.g = panelPlayer1.CreateGraphics();
 
         }
@@ -132,6 +135,7 @@ namespace FightTheLandLord
                     Thread.Sleep(100);
                     if (this.player1.pokers.Count == 0 && DConsole.IsStart)
                     {
+                        DConsole.Winer = 1;
                         DConsole.Restart();
                     }
                     else
@@ -175,6 +179,7 @@ namespace FightTheLandLord
             this.timerServer.Enabled = true;
             ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
             tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
+            tsmi.DropDownItems["自定义分数ToolStripMenuItem"].Enabled = false;
             tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
         }
 
@@ -196,6 +201,7 @@ namespace FightTheLandLord
                     btnOK.Visible = true;   //启用"准备"按钮
                     ToolStripMenuItem tsmi = (ToolStripMenuItem)(this.menuStrip1.Items["游戏ToolStripMenuItem"]);
                     tsmi.DropDownItems["创建游戏ToolStripMenuItem"].Enabled = false;
+                    tsmi.DropDownItems["自定义分数ToolStripMenuItem"].Enabled = false;
                     tsmi.DropDownItems["加入游戏ToolStripMenuItem"].Enabled = false;  //禁用相关菜单
                 }
                 else
@@ -276,6 +282,9 @@ namespace FightTheLandLord
                     btnNeedLandLord.Visible = true;
                     btnNotLandLord.Visible = true;
                 }
+                lblScore1.Text = "分数:" + DConsole.serverScore.ToString();
+                lblScore2.Text = "分数:" + DConsole.client1Score.ToString();
+                lblScore3.Text = "分数:" + DConsole.client2Score.ToString();
             }
         }
 
@@ -355,6 +364,9 @@ namespace FightTheLandLord
                 btnOK.Enabled = true;
                 btnOK.Visible = true;
             }
+            lblScore2.Text = "分数:" + DConsole.serverScore.ToString();
+            lblScore1.Text = "分数:" + DConsole.client1Score.ToString();
+            lblScore3.Text = "分数:" + DConsole.client2Score.ToString();
         }
 
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
@@ -479,6 +491,13 @@ namespace FightTheLandLord
         private void panelLandLordPokers_Paint(object sender, PaintEventArgs e)
         {
             DConsole.PaintLandLord();
+        }
+
+        private void 自定义分数ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            CustomScore fromCustomScore = new CustomScore();
+            fromCustomScore.ShowDialog();
+
         }
     }
 }

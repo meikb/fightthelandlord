@@ -4,6 +4,7 @@ using System.Text;
 using System.Net;
 using System.Net.Sockets;
 using System.IO;
+using System.Threading;
 
 namespace FightTheLandLord
 {
@@ -24,6 +25,7 @@ namespace FightTheLandLord
         public PokerGroup Pokers;
         public bool AcceptedPokers;
         public bool AcceptedLeadPokers;
+        public int sleep = 100;
 
         /// <summary>
         /// 构造函数
@@ -186,6 +188,24 @@ namespace FightTheLandLord
                     DConsole.IsRestart = true;
                     continue;
                 }
+                if (str.StartsWith("YouScore"))
+                {
+                    str = str.Replace("YouScore","");
+                    DConsole.serverScore = Convert.ToInt32(str);
+                    continue;
+                }
+                if (str.StartsWith("ClientScore"))
+                {
+                    str = str.Replace("ClientScore", "");
+                    DConsole.client2Score = Convert.ToInt32(str);
+                    continue;
+                }
+                if (str.StartsWith("ServerScore"))
+                {
+                    str = str.Replace("ServerScore", "");
+                    DConsole.client1Score = Convert.ToInt32(str);
+                    continue;
+                }
             }
         }
 
@@ -205,14 +225,16 @@ namespace FightTheLandLord
         {
             NetworkStream Ns = this.client.GetStream();
             byte[] bytes = Encoding.Default.GetBytes(str);
-            Ns.Write(bytes, 0, bytes.Length);  
+            Ns.Write(bytes, 0, bytes.Length);
+            Thread.Sleep(sleep);
             return true;
         }
         public bool SendDataForServer(PokerGroup pg)
         {
             NetworkStream Ns = this.client.GetStream();
             byte[] bytes = pg.GetBuffer();
-            Ns.Write(bytes, 0, bytes.Length); 
+            Ns.Write(bytes, 0, bytes.Length);
+            Thread.Sleep(sleep);
             return true;
         }
         public bool SendDataForServer(string head,PokerGroup pg)
@@ -223,6 +245,7 @@ namespace FightTheLandLord
             string strSender = head + strPg;  //组合两个字符串
             byte[] byteSender = Encoding.Default.GetBytes(strSender);  //把要发送的数据转换为byte[]
             Ns.Write(byteSender, 0, byteSender.Length);  //把2个比特流对象写入server与client的连接管道中
+            Thread.Sleep(sleep);
             return true;
         }
     }
