@@ -87,6 +87,7 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("PokerCount"))
                 {
+                    Thread.Sleep(200);
                     SendDataForClient(str1, 2);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
@@ -106,7 +107,14 @@ namespace FightTheLandLord
                     DConsole.leadedPokerGroups.Add(pg);
                     DConsole.PaintPlayer2LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
-                    DConsole.player1.haveOrder = true;  //client1出牌后归server出牌
+                    if (!DConsole.IsRestart)
+                    {
+                        DConsole.player1.haveOrder = true;  //client1出牌后归server出牌,前提是没有Restart,Restart后出牌权限消失
+                    }
+                    else
+                    {
+                        DConsole.IsRestart = false;
+                    }
                     continue;
                 }
                 //Client放弃出牌,权限交给服务器
@@ -173,6 +181,7 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("PokerCount"))
                 {
+                    Thread.Sleep(200);
                     SendDataForClient(str1, 1);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
@@ -192,7 +201,14 @@ namespace FightTheLandLord
                     DConsole.leadedPokerGroups.Add(pg);
                     DConsole.PaintPlayer3LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
-                    SendDataForClient("Order", 1);
+                    if (!DConsole.IsRestart)
+                    {
+                        SendDataForClient("Order", 1);  //权限交给client1 前提是没有Restart
+                    }
+                    else
+                    {
+                        DConsole.IsRestart = false; //当检测到已经Restart时,复位Restart使它还原为false供下次使用
+                    }
                     System.Threading.Thread.Sleep(200);
                     continue;
                 }
