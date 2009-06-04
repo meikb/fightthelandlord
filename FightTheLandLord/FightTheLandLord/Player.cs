@@ -62,17 +62,6 @@ namespace FightTheLandLord
                 _haveOrder = value;
             }
         }
-        public bool isBiggest
-        {
-            get
-            {
-                return _isBiggest;
-            }
-            set
-            {
-                _isBiggest = value;
-            }
-        }
         public Graphics g
         {
             get
@@ -126,6 +115,37 @@ namespace FightTheLandLord
             set
             {
                 this._bakPokers = value;
+            }
+        }
+
+
+        //当自己的IsBiggest为true时,发送消息使其他玩家的IsBiggest为false,因为逻辑上IsBiggest只能有一个
+        public bool isBiggest
+        {
+            get
+            {
+                return _isBiggest;
+            }
+            set
+            {
+                if (value)
+                {
+                    if (DConsole.client != null)
+                    {
+                        DConsole.client.SendDataForServer("IamIsBiggest");
+                        _isBiggest = value;
+                    }
+                    if (DConsole.server != null)
+                    {
+                        DConsole.server.SendDataForClient("NoBiggest", 1);
+                        DConsole.server.SendDataForClient("NoBiggest", 2);
+                        _isBiggest = value;
+                    }
+                }
+                else
+                {
+                    _isBiggest = value;
+                }
             }
         }
 
@@ -214,14 +234,14 @@ namespace FightTheLandLord
                     Rectangle rt = new Rectangle(x, 50, 50, 95); //没有选中的牌的X比选中的牌的X多50
                     g.FillRectangle(Brushes.White, rt);
                     g.DrawRectangle(Pens.Black, rt);
-                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 55);
+                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 55);
                 }
                 else  //当当前的牌已经被选中时,绘制如下图案
                 {
                     Rectangle rt = new Rectangle(x, 0, 50, 95);
                     g.FillRectangle(Brushes.White, rt);
                     g.DrawRectangle(Pens.Black, rt);
-                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Red, x + 5, 5);
+                    g.DrawString(this.pokers[i].pokerNum.ToString(), new Font("宋体", 12), Brushes.Black, x + 5, 5);
                 }
             }
         }
@@ -252,6 +272,7 @@ namespace FightTheLandLord
                     this.pokers.Add(poker);
                 }
                 this.sort();
+                this.Paint();
             }
         }
 

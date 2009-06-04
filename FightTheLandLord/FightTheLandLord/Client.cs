@@ -63,14 +63,18 @@ namespace FightTheLandLord
                 str = Encoding.Default.GetString(bytes);
                 if (str.StartsWith("StartPokers"))
                 {
+                    DConsole.IsStart = true;
                     str = str.Replace("StartPokers", "");
                     str.Trim();
                     byte[] bytePokers = Encoding.Default.GetBytes(str);
                     PokerGroup pokers = new PokerGroup(bytePokers);
                     if (pokers.Count == 17)
                     {
-                        this.Pokers = pokers;
+                        DConsole.player1.pokers = pokers;
+                        DConsole.player1.sort();
+                        DConsole.player1.Paint();
                     }
+                    DConsole.PaintLandLord();
                     continue;
                 }
                 if (str.StartsWith("CName"))
@@ -150,11 +154,30 @@ namespace FightTheLandLord
                     DConsole.player1.SelectLandLordEnd();
                     continue;
                 }
+                if (str.StartsWith("ClientIsLandLord"))
+                {
+                    DConsole.lblClient2Name.Text += "(地主)";
+                    DConsole.lblClient2Name.ForeColor = System.Drawing.Color.Red;
+                    DConsole.PaintClient(20);
+                    continue;
+                }
+                if (str.StartsWith("ServerIsLandLord"))
+                {
+                    DConsole.lblClient1Name.Text += "(地主)";
+                    DConsole.lblClient1Name.ForeColor = System.Drawing.Color.Red;
+                    DConsole.PaintServer(20);
+                    continue;
+                }
                 if (str.StartsWith("ReStart"))
                 {
                     DConsole.leadedPokerGroups.Clear();
                     DConsole.leadPokers.Clear();
                     DConsole.player1.pokers.Clear();
+                    DConsole.player1.areYouLandLord = false;
+                    DConsole.player1.isBiggest = false;
+                    DConsole.player1.isLandLord = false;
+                    DConsole.player1.haveOrder = false;
+                    DConsole.PaintLandLord(false);
                     continue;
                 }
             }

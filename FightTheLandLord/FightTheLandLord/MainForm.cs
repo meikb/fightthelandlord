@@ -14,7 +14,6 @@ namespace FightTheLandLord
 {
     public partial class MainForm : Form
     {
-        private PokerGroup allPoker = new PokerGroup();
         private Player player1 = new Player();
         private Player player2;
         private Player player3;
@@ -31,93 +30,10 @@ namespace FightTheLandLord
             CheckForIllegalCrossThreadCalls = false;
         }
 
-        /// <summary>
-        /// 洗牌
-        /// </summary>
-        public void shuffle()
-        {
-            Poker lastPoker;
-            try
-            {
-                for(int i =0;i < 5000;i++)  //洗牌,六个随机数向下替换.
-                {
-                    int num1 = new Random().Next(0, 27);
-                    int num2 = new Random().Next(28, 54);
-                    int num3 = new Random().Next(0, 54);
-                    int num4 = new Random().Next(0, 10);
-                    int num5 = new Random().Next(34, 54);
-                    int num6 = new Random().Next(45, 54);
-                    lastPoker = this.allPoker[num1];
-                    this.allPoker[num1] = this.allPoker[num2];
-                    this.allPoker[num2] = this.allPoker[num3];
-                    this.allPoker[num3] = this.allPoker[num4];
-                    this.allPoker[num4] = this.allPoker[num5];
-                    this.allPoker[num5] = this.allPoker[num6];
-                    this.allPoker[num6] = lastPoker;
-                }
-#if DEBUG
-                Console.WriteLine("以下是洗过的牌");
-                foreach (Poker onePoker in this.allPoker)
-                {
-                    Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
-                }
-#endif
-            }
-            catch
-            {
-            }
-        }
-
-        /// <summary>
-        /// 发牌
-        /// </summary>
-        public void deal()
-        {
-            for (int i = 0; i < 17; i++)
-            {
-                this.player1.pokers.Add(this.allPoker[i]);
-            }
-            for (int i = 17; i < 34; i++)
-            {
-                this.player2.pokers.Add(this.allPoker[i]);
-            }
-            for (int i = 34; i < 51; i++)
-            {
-                this.player3.pokers.Add(this.allPoker[i]);
-            }
-            DConsole.LandLordNum = new Random().Next(1, 4);
-            PokerGroup landLordPokers = new PokerGroup();
-            for (int i = 51; i < 54; i++)
-            {
-                landLordPokers.Add(allPoker[i]);
-            }
-            DConsole.LandLordPokers = landLordPokers;
-            if (server.SendDataForClient("StartPokers", this.player2.pokers, 1) && server.SendDataForClient("StartPokers", this.player3.pokers, 2))
-            {
-                DConsole.Write("[系统消息]发牌成功!");
-                this.server.SendOrder(DConsole.LandLordNum);
-            }
-            //if (server.SendDataForClient(this.player2.pokers, 1) && server.SendDataForClient(this.player3.pokers, 2))
-            //{
-            //    DConsole.Write("[系统消息]发牌成功!");
-            //    this.server.SendOrder(DConsole.LandLordNum);
-            //}
-            else
-            {
-                DConsole.Write("[系统消息]发牌失败!");
-            }
-
-#if DEBUG //调试时在Console上显示的信息
-            Console.WriteLine("玩家一的牌");
-            foreach (Poker onePoker in player1.pokers)
-            {
-                Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
-            }
-#endif
-        }
 
         private void btnStart_Click(object sender, EventArgs e)
         {
+            DConsole.IsStart = true;
             if (this.server != null)
             {
                 for (int i = 3; i < 18; i++)  //嵌套for循环初始化54张牌
@@ -126,35 +42,36 @@ namespace FightTheLandLord
                     {
                         if (i <= 15)
                         {
-                            this.allPoker.Add(new Poker((PokerNum)i, (PokerColor)j));
+                            DConsole.allPoker.Add(new Poker((PokerNum)i, (PokerColor)j));
                         }
                     }
                     if (i >= 16)
                     {
-                        this.allPoker.Add(new Poker((PokerNum)i, PokerColor.黑桃));
+                        DConsole.allPoker.Add(new Poker((PokerNum)i, PokerColor.黑桃));
                     }
                 }                           //嵌套for循环初始化54张牌
 
 #if DEBUG
-                Console.WriteLine(allPoker.Count);
-                foreach (Poker onePoker in this.allPoker)
+                Console.WriteLine(DConsole.allPoker.Count);
+                foreach (Poker onePoker in DConsole.allPoker)
                 {
                     Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.pokerNum.ToString());
                 }
 #endif
-                shuffle(); //洗牌
-                deal(); //发牌
+                DConsole.shuffle(); //洗牌
+                DConsole.deal(); //发牌
                 this.player1.sort(); //把牌从大到小排序
                 this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
                 this.player1.Paint(); //在panelPlayer1中画出player1的牌
                 this.player2.sort();
                 this.player3.sort();
-                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.pokers.Count), 1);
-                server.SendDataForClient("SPokerCount" + Convert.ToString(this.player1.pokers.Count), 2);
-                server.SendDataForClient("PokerCount" + Convert.ToString(this.player2.pokers.Count), 2);
-                server.SendDataForClient("PokerCount" + Convert.ToString(this.player3.pokers.Count), 1);
-                DConsole.PaintClient(this.player2.pokers.Count, 1);
-                DConsole.PaintClient(this.player3.pokers.Count, 2);
+                server.SendDataForClient("SPokerCount" + "17", 1);
+                server.SendDataForClient("SPokerCount" + "17", 2);
+                server.SendDataForClient("PokerCount" + "17", 2);
+                server.SendDataForClient("PokerCount" + "17", 1);
+                DConsole.PaintClient(17, 1);
+                DConsole.PaintClient(17, 2);
+                DConsole.PaintLandLord(false);
                 this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
                 this.btnStart.Enabled = false;
                 this.btnStart.Visible = false;
@@ -169,9 +86,11 @@ namespace FightTheLandLord
             DConsole.gPlayer1LeadPoker = this.panelPlayer1LeadPoker.CreateGraphics();
             DConsole.gPlayer2LeadPoker = this.panelPlayer2LeadPoker.CreateGraphics();
             DConsole.gPlayer3LeadPoker = this.panelPlayer3LeadPoker.CreateGraphics();
+            DConsole.gLandLordPoker = this.panelLandLordPokers.CreateGraphics();
             DConsole.backColor = this.BackColor;
             DConsole.lblClient1Name = this.lblClient1Name;
             DConsole.lblClient2Name = this.lblClient2Name;
+            player1.g = panelPlayer1.CreateGraphics();
 
         }
 
@@ -341,6 +260,10 @@ namespace FightTheLandLord
                     btnNeedLandLord.Visible = true;
                     btnNotLandLord.Visible = true;
                 }
+                if (DConsole.player1.pokers.Count == 0 && DConsole.IsStart)
+                {
+                    DConsole.Restart();
+                }
             }
         }
 
@@ -378,18 +301,18 @@ namespace FightTheLandLord
                     client.SendDataForServer("Name" + client.Name);
                     this.SendedName = true;
                 }
-                if (this.player1.pokers.Count == 0)
-                {
-                    if (this.client.Pokers != null)
-                    {
-                        DConsole.Write("[系统消息]:接收到服务器分配的牌组.");
-                        this.player1.pokers = this.client.Pokers;
-                        this.player1.sort(); //把牌从大到小排序
-                        this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
-                        this.player1.Paint(); //在panelPlayer1中画出player1的牌
-                        this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
-                    }
-                }
+                //if (this.player1.pokers.Count == 0)
+                //{
+                //    if (this.client.Pokers != null)
+                //    {
+                //        DConsole.Write("[系统消息]:接收到服务器分配的牌组.");
+                //        this.player1.pokers = this.client.Pokers;
+                //        this.player1.sort(); //把牌从大到小排序
+                //        this.player1.g = this.panelPlayer1.CreateGraphics(); //把panelPlayer1的Graphics传递给player1
+                //        this.player1.Paint(); //在panelPlayer1中画出player1的牌
+                //        this.panelPlayer1.MouseClick += new System.Windows.Forms.MouseEventHandler(this.panelPlayer1_MouseClick); //给panelPlayer1添加一个点击事件
+                //    }
+                //}
             }
             if (DConsole.player1.haveOrder)
             {
@@ -490,10 +413,19 @@ namespace FightTheLandLord
             if (this.server != null)
             {
                 this.player1.SelectLandLordEnd();
+                this.server.SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
+                Thread.Sleep(100);
+                this.server.SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
+                Thread.Sleep(100);
+                this.server.SendDataForClient("ServerIsLandLord", 1);
+                Thread.Sleep(100);
+                this.server.SendDataForClient("ServerIsLandLord", 2);
+                Thread.Sleep(100);
             }
             if (this.client != null)
             {
                 this.client.SendDataForServer("IamLandLord");
+                Thread.Sleep(300);
             }
         }
 
@@ -516,6 +448,11 @@ namespace FightTheLandLord
             {
                 this.client.SendDataForServer("AreYouLandLord");
             }
+        }
+
+        private void panelLandLordPokers_Paint(object sender, PaintEventArgs e)
+        {
+            DConsole.PaintLandLord();
         }
     }
 }

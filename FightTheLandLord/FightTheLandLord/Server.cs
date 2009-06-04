@@ -90,13 +90,17 @@ namespace FightTheLandLord
                     SendDataForClient(str1, 2);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
+                    if (PokerCount == 0 && DConsole.IsStart)
+                    {
+                        DConsole.Restart();
+                    }
                     DConsole.PaintClient(PokerCount, 1);
                     continue;
                 }
                 if (str1.StartsWith("client"))
                 {
                     SendDataForClient(str1, 2);
-                    Thread.Sleep(100);
+                    Thread.Sleep(200);
                     str1 = str1.Replace("client", "");
                     pg.GetPokerGroup(Encoding.Default.GetBytes(str1));
                     DConsole.leadedPokerGroups.Add(pg);
@@ -129,8 +133,13 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("IamLandLord"))
                 {
-                    SendDataForClient("Client1IsLandLord", 2);
+                    DConsole.lblClient1Name.Text += "(地主)";
+                    DConsole.lblClient1Name.ForeColor = System.Drawing.Color.Red;
+                    SendDataForClient("ClientIsLandLord", 2);
+                    Thread.Sleep(200);
+                    DConsole.PaintClient(20, 1);
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
+                    Thread.Sleep(200);
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
                     DConsole.player1.SelectLandLordEnd();
                     continue;
@@ -167,6 +176,10 @@ namespace FightTheLandLord
                     SendDataForClient(str1, 1);
                     str1 = str1.Replace("PokerCount", "");
                     int PokerCount = Convert.ToInt32(str1);
+                    if (PokerCount == 0 && DConsole.IsStart)
+                    {
+                        DConsole.Restart();
+                    }
                     DConsole.PaintClient(PokerCount, 2);
                     continue;
                 }
@@ -180,6 +193,7 @@ namespace FightTheLandLord
                     DConsole.PaintPlayer3LeadPoker(pg);
                     DConsole.WriteLeadedPokers();
                     SendDataForClient("Order", 1);
+                    System.Threading.Thread.Sleep(200);
                     continue;
                 }
                 //Client2放弃出牌,权限交给Client1
@@ -206,9 +220,15 @@ namespace FightTheLandLord
                 }
                 if (str1.StartsWith("IamLandLord"))
                 {
-                    SendDataForClient("Client2IsLandLord", 1);
+                    DConsole.lblClient2Name.Text += "(地主)";
+                    DConsole.lblClient2Name.ForeColor = System.Drawing.Color.Red;
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 1);
+                    Thread.Sleep(200);
                     SendDataForClient("LandLordPokers", DConsole.LandLordPokers, 2);
+                    Thread.Sleep(200);
+                    SendDataForClient("ClientIsLandLord", 1);
+                    Thread.Sleep(200);
+                    DConsole.PaintClient(20, 2);
                     DConsole.player1.SelectLandLordEnd();
                     continue;
                 }
