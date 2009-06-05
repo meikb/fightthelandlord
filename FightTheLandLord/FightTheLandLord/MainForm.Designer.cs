@@ -37,6 +37,7 @@
             this.游戏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.创建游戏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.加入游戏ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.自定义分数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.关于作者ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -55,7 +56,6 @@
             this.btnNeedLandLord = new System.Windows.Forms.Button();
             this.btnNotLandLord = new System.Windows.Forms.Button();
             this.panelLandLordPokers = new System.Windows.Forms.Panel();
-            this.自定义分数ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.lblScore2 = new System.Windows.Forms.Label();
             this.lblScore3 = new System.Windows.Forms.Label();
             this.lblScore1 = new System.Windows.Forms.Label();
@@ -129,21 +129,28 @@
             // 创建游戏ToolStripMenuItem
             // 
             this.创建游戏ToolStripMenuItem.Name = "创建游戏ToolStripMenuItem";
-            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.创建游戏ToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.创建游戏ToolStripMenuItem.Text = "创建游戏";
             this.创建游戏ToolStripMenuItem.Click += new System.EventHandler(this.创建游戏ToolStripMenuItem_Click);
             // 
             // 加入游戏ToolStripMenuItem
             // 
             this.加入游戏ToolStripMenuItem.Name = "加入游戏ToolStripMenuItem";
-            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.加入游戏ToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.加入游戏ToolStripMenuItem.Text = "加入游戏";
             this.加入游戏ToolStripMenuItem.Click += new System.EventHandler(this.加入游戏ToolStripMenuItem_Click);
+            // 
+            // 自定义分数ToolStripMenuItem
+            // 
+            this.自定义分数ToolStripMenuItem.Name = "自定义分数ToolStripMenuItem";
+            this.自定义分数ToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
+            this.自定义分数ToolStripMenuItem.Text = "自定义分数";
+            this.自定义分数ToolStripMenuItem.Click += new System.EventHandler(this.自定义分数ToolStripMenuItem_Click);
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(130, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
@@ -213,9 +220,9 @@
             // 
             // panelPlayer1LeadPoker
             // 
-            this.panelPlayer1LeadPoker.Location = new System.Drawing.Point(219, 275);
+            this.panelPlayer1LeadPoker.Location = new System.Drawing.Point(222, 275);
             this.panelPlayer1LeadPoker.Name = "panelPlayer1LeadPoker";
-            this.panelPlayer1LeadPoker.Size = new System.Drawing.Size(379, 100);
+            this.panelPlayer1LeadPoker.Size = new System.Drawing.Size(376, 100);
             this.panelPlayer1LeadPoker.TabIndex = 9;
             this.panelPlayer1LeadPoker.Paint += new System.Windows.Forms.PaintEventHandler(this.panelPlayer1LeadPoker_Paint);
             // 
@@ -291,13 +298,6 @@
             this.panelLandLordPokers.Size = new System.Drawing.Size(211, 100);
             this.panelLandLordPokers.TabIndex = 18;
             this.panelLandLordPokers.Paint += new System.Windows.Forms.PaintEventHandler(this.panelLandLordPokers_Paint);
-            // 
-            // 自定义分数ToolStripMenuItem
-            // 
-            this.自定义分数ToolStripMenuItem.Name = "自定义分数ToolStripMenuItem";
-            this.自定义分数ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.自定义分数ToolStripMenuItem.Text = "自定义分数";
-            this.自定义分数ToolStripMenuItem.Click += new System.EventHandler(this.自定义分数ToolStripMenuItem_Click);
             // 
             // lblScore2
             // 

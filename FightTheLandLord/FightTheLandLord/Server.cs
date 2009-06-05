@@ -123,7 +123,10 @@ namespace FightTheLandLord
                 //Client放弃出牌,权限交给服务器
                 if (str1.StartsWith("Pass"))
                 {
+                    DConsole.gPlayer2LeadPoker.Clear(DConsole.backColor);
+                    DConsole.gPlayer2LeadPoker.DrawString("不要", new System.Drawing.Font("宋体", 20), System.Drawing.Brushes.Red,5,5);
                     DConsole.player1.haveOrder = true;
+                    SendDataForClient("ClientPass", 2);
                     continue;
                 }
                 if (str1.StartsWith("IamIsBiggest"))
@@ -219,6 +222,10 @@ namespace FightTheLandLord
                 //Client2放弃出牌,权限交给Client1
                 if (str1.StartsWith("Pass"))
                 {
+                    DConsole.gPlayer3LeadPoker.Clear(DConsole.backColor);
+                    DConsole.gPlayer3LeadPoker.DrawString("不要", new System.Drawing.Font("宋体", 20), System.Drawing.Brushes.Red, 5, 5);
+                    SendDataForClient("ClientPass", 1);
+                    Thread.Sleep(500);
                     SendDataForClient("Order", 1);
                     continue;
                 }

@@ -23,7 +23,7 @@ namespace FightTheLandLord
             }
             else
             {
-                DConsole.Write("[系统消息]:有玩家作弊!");
+                DConsole.Write("[系统消息]:有玩家作弊,重新启动游戏.");
             }
         }
     }

@@ -664,7 +664,7 @@ namespace FightTheLandLord
             gPlayer1LeadPoker.Clear(backColor);
             for (int i = 0; i < leadPokers.Count; i++)
             {
-                int x = i * 20;
+                int x = i * 30;
                 Rectangle rt = new Rectangle(x, 0, 50, 95);
                 gPlayer1LeadPoker.FillRectangle(Brushes.White, rt);
                 gPlayer1LeadPoker.DrawRectangle(Pens.Black, rt);
