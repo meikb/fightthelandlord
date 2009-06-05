@@ -148,7 +148,7 @@ namespace FightTheLandLord
                 if (this.client != null)
                 {
                     client.SendDataForServer("PokerCount" + Convert.ToString(this.player1.pokers.Count));
-                    Thread.Sleep(100);
+                    Thread.Sleep(500);
                     client.SendDataForServer("client", DConsole.leadPokers);
                     Thread.Sleep(100);
                     this.player1.haveOrder = false;
@@ -429,12 +429,14 @@ namespace FightTheLandLord
             {
                 if (this.server != null)
                 {
+                    this.server.SendDataForClient("ServerPass", 1);
+                    this.server.SendDataForClient("ServerPass", 2);
+                    Thread.Sleep(500);
                     this.server.SendDataForClient("Order", 2);
                 }
                 if (this.client != null)
                 {
                     this.client.SendDataForServer("Pass");
-                    DConsole.player1.haveOrder = false;
                 }
             }
         }

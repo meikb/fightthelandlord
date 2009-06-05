@@ -141,7 +141,34 @@ namespace FightTheLandLord
 
         public override string ToString()
         {
-            return this.pokerNum.ToString().Replace("P", "");
+            string Num = this.pokerNum.ToString().Replace("P", "");
+            string Color; 
+            switch (this.pokerColor.ToString())
+            {
+                case "黑桃":
+                    Color = "♠";
+                    break;
+                case "方块":
+                    Color = "♦";
+                    break;
+                case "红心":
+                    Color = "♥";
+                    break;
+                case "梅花":
+                    Color = "♣";
+                    break;
+                default:
+                    Color = "";
+                    break;
+            }
+            if ((int)(this.pokerNum) >= 16)
+            {
+                return Num;
+            }
+            else
+            {
+                return Color + Num;
+            }
         }
     }
 }

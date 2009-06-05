@@ -20,11 +20,8 @@ namespace FightTheLandLord
         /// </summary>
         public bool everyIsOk = false;
         /// <summary>
-        /// 引用服务器发送的牌组对象
+        /// 每次发送数据延迟时间(毫秒)
         /// </summary>
-        public PokerGroup Pokers;
-        public bool AcceptedPokers;
-        public bool AcceptedLeadPokers;
         public int sleep = 100;
 
         /// <summary>
@@ -130,6 +127,18 @@ namespace FightTheLandLord
                 if (str.StartsWith("Order"))
                 {
                     DConsole.player1.haveOrder = true;
+                    continue;
+                }
+                if (str.StartsWith("ClientPass"))
+                {
+                    DConsole.gPlayer3LeadPoker.Clear(DConsole.backColor);
+                    DConsole.gPlayer3LeadPoker.DrawString("不要", new System.Drawing.Font("宋体", 20), System.Drawing.Brushes.Red, 5, 5);
+                    continue;
+                }
+                if (str.StartsWith("ServerPass"))
+                {
+                    DConsole.gPlayer2LeadPoker.Clear(DConsole.backColor);
+                    DConsole.gPlayer2LeadPoker.DrawString("不要", new System.Drawing.Font("宋体", 20), System.Drawing.Brushes.Red, 5, 5);
                     continue;
                 }
                 if (str.StartsWith("IsBiggest"))
