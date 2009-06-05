@@ -58,6 +58,10 @@ namespace FightTheLandLord
                     Console.WriteLine(onePoker.pokerColor.ToString() + onePoker.ToString());
                 }
 #endif
+                if (!DConsole.IsRestart)
+                {
+                    server.SendDataForClient("YouAreClient1", 1);
+                }
                 DConsole.shuffle(); //洗牌
                 DConsole.deal(); //发牌
                 this.player1.sort(); //把牌从大到小排序

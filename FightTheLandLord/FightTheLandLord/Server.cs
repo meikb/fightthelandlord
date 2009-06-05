@@ -343,6 +343,9 @@ namespace FightTheLandLord
             Thread.Sleep(sleep);
             return true;
         }
+        /// <summary>
+        /// 通知客户端选出的地主
+        /// </summary>
         public void SendOrder(int Num)
         {
             switch (Num)
