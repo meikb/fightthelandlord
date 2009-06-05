@@ -98,7 +98,10 @@
             this.Controls.Add(this.tbStartScore);
             this.Controls.Add(this.tbRoundScore);
             this.Controls.Add(this.btnSave);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "CustomScore";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "自定义";
             this.ResumeLayout(false);
             this.PerformLayout();
