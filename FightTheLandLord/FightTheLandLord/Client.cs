@@ -97,6 +97,11 @@ namespace FightTheLandLord
                     DConsole.PaintClient(pokerCount);
                     continue;
                 }
+                if (str.StartsWith("YouAreClient1"))
+                {
+                    DConsole.ChangePlace();
+                    continue;
+                }
                 if (str.StartsWith("EveryOneIsOk"))
                 {
                     this.everyIsOk = true;
@@ -193,7 +198,7 @@ namespace FightTheLandLord
                     DConsole.lblClient2Name.Text = DConsole.lblClient2Name.Text.Replace("(地主)", "");
                     DConsole.lblClient1Name.ForeColor = System.Drawing.Color.Black;
                     DConsole.lblClient2Name.ForeColor = System.Drawing.Color.Black;
-                    //DConsole.PaintLandLord(false);
+                    DConsole.PaintLandLord(false);
                     DConsole.IsRestart = true;
                     continue;
                 }

@@ -36,7 +36,7 @@ namespace FightTheLandLord
         public static int roundScore = 50;
         public static int multiple = 1;
         public static int _Winer = 0;
-        public static int Winer
+        public static int Winer  //计算分数
         {
             get
             {
@@ -132,9 +132,6 @@ namespace FightTheLandLord
         /// 是否已经重新开始,用户判断是否显示准备按钮
         /// </summary>
         public static bool IsRestart;
-        /// <summary>
-        /// 上轮出牌是否自己最大
-        /// </summary>
         public static string OtherClientName
         {
             get
@@ -350,7 +347,7 @@ namespace FightTheLandLord
                             {
                                 if (IsThreeLinkPokers(leadPokers))
                                 {
-                                    leadPokers.type = PokerGroupType.三张相同;
+                                    leadPokers.type = PokerGroupType.二连飞机;
                                     isRule = true;
                                 }
                                 else
@@ -1025,6 +1022,19 @@ namespace FightTheLandLord
             System.Threading.Thread.Sleep(200);
             server.SendDataForClient("ReStart", 2);
             System.Threading.Thread.Sleep(200);
+        }
+
+        public static void ChangePlace()
+        {
+            Graphics tempG = g1;
+            g1 = g2;
+            g2 = tempG;
+            tempG = gPlayer2LeadPoker;
+            gPlayer2LeadPoker = gPlayer3LeadPoker;
+            gPlayer3LeadPoker = tempG;
+            //System.Windows.Forms.Label lblTemp = lblClient1Name;
+            //lblClient1Name = lblClient2Name;
+            //lblClient2Name = lblTemp;
         }
     }
 }
