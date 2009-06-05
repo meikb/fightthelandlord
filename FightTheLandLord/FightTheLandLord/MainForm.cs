@@ -376,7 +376,8 @@ namespace FightTheLandLord
 
         private void 关于作者ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show("作者:李达", "火拼斗地主");
+            About about = new About();
+            about.ShowDialog();
         }
 
         private void panelPlayer2_Paint(object sender, PaintEventArgs e)
