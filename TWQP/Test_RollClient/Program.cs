@@ -14,8 +14,15 @@ namespace Test_RollClient
         public static Writer w = Writer.Instance;
         static void Main(string[] args)
         {
-            var id = int.Parse(w.RL("请输入小于 100 的 Player ID"));
-            new DataCenterCallback(new Handler(id));
+            var id = int.Parse(w.RL("请输入大于 100 的 Player ID"));
+            Handler hl = new Handler(id);
+            new DataCenterCallback(hl);
+            w.WE();
+            w.RL("请输入你要加入的服务器ID");
+            //int selectId = Convert.ToInt32(Console.ReadLine());
+            byte[][] data = new byte[1][];
+            data[0] = ActionType.加入.ToBinary();
+            hl.DataCenterProxy.Whisper(1, data);
             w.WE();
         }
     }
@@ -75,7 +82,7 @@ namespace Test_RollClient
         public void JoinSuccessed(int[] serviceIdList)
         {
             foreach (var id in serviceIdList)
-                if (id > 100) _rollServiceIdList.Add(id);
+                if (id < 100) _rollServiceIdList.Add(id);
 
             w.WL("已于" + DateTime.Now.ToString() + " 连入数据中心");
             if (_rollServiceIdList.Count > 0)
@@ -103,15 +110,22 @@ namespace Test_RollClient
 
         public bool Ping(byte[][] data)
         {
-            w.WL("Got ping at " + DateTime.Now.ToString());
+            //w.WL("Got ping at " + DateTime.Now.ToString());
 
-            var dt = data[0].ToObject<DataTable>();
-            w.W(dt);
+            //var dt = data[0].ToObject<DataTable>();
+            //w.W(dt);
 
             return true;
         }
 
         #endregion
 
+    }
+
+    public enum ActionType
+    {
+        加入 = 1,
+        准备 = 2,
+        开始 = 3,
     }
 }

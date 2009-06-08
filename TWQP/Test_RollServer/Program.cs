@@ -14,7 +14,7 @@ namespace Test_RollServer
         public static Writer w = Writer.Instance;
         static void Main(string[] args)
         {
-            var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
+            var id = int.Parse(w.RL("请输入小于 100 的 Service ID"));
             new DataCenterCallback(new Handler(id));
             w.WE();
         }
@@ -41,7 +41,8 @@ namespace Test_RollServer
 
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            w.WL(id + " whisper: " + data + Environment.NewLine);
+            var dt = data[0].ToObject();
+            w.WL(id + " whisper: " + dt.ToString() + Environment.NewLine);
         }
 
         public void ServiceEnter(int id)
@@ -75,15 +76,22 @@ namespace Test_RollServer
 
         public bool Ping(byte[][] data)
         {
-            w.WL("Got ping at " + DateTime.Now.ToString());
+            //w.WL("Got ping at " + DateTime.Now.ToString());
 
-            var dt = data[0].ToObject<DataTable>();
-            w.W(dt);
+            //var dt = data[0].ToObject<DataTable>();
+            //w.W(dt);
 
             return true;
         }
 
         #endregion
 
+    }
+
+    public enum ActionType
+    {
+        加入 = 1,
+        准备 = 2,
+        开始 = 3,
     }
 }
