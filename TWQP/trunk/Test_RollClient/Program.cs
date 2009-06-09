@@ -24,7 +24,10 @@ namespace Test_RollClient
             Console.ReadLine();
             byte[][] dataRelay = { DataType.Action.ToBinary(), ActionType.Ready.ToBinary() };
             h.DataCenterProxy.Whisper(selectId, dataRelay);
-            w.WE();
+            while (true)
+            {
+                w.WE();
+            }
         }
     }
 

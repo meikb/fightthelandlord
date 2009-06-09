@@ -27,11 +27,11 @@ namespace Test_RollServer
     {
         private Writer w = Writer.Instance;
         /// <summary>
-        /// 玩家ID集合
+        /// 玩家集合
         /// </summary>
         private List<Player> Players = new List<Player>();
         /// <summary>
-        /// 观战者ID集合
+        /// 观战者集合
         /// </summary>
         private List<Watcher> Watchers = new List<Watcher>();
         /// <summary>
