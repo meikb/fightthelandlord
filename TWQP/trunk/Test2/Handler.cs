@@ -15,6 +15,7 @@ namespace Test2
         public Handler(int serviceId)
         {
             this.ServiceID = serviceId;
+            // 测试修改一下（看SVN的效果）
         }
 
         #region IDataCenterCallbackHandler Members
