@@ -16,9 +16,9 @@ public partial class DataCenterCallback : IDataCenterCallback
     public DataCenterCallback(IDataCenterCallbackHandler handler)
     {
         this._handler = handler;
-        handler.DataCenterProxy = this._proxy;
         InstanceContext site = new InstanceContext(this);
         this._proxy = new DataCenterProxy(site);
+        handler.DataCenterProxy = this._proxy;
         this._proxy.BeginJoin(handler.ServiceID, new AsyncCallback(OnEndJoin), null);
     }
 

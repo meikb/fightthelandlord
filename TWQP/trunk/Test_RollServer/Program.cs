@@ -7,6 +7,7 @@ using System.Timers;
 using System.Threading;
 using ConsoleHelper;
 using Extensions;
+using Constructs;
 
 namespace Test_RollServer
 {
@@ -18,6 +19,12 @@ namespace Test_RollServer
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new Handler(id);
             new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            var dt = new DataTable("Join");
+            dt.Columns.Add("Action");
+            dt.Rows.Add(ActionType.加入);
+            var Data = new byte[][] { dt.ToBinary<DataTable>() };
+            h.DataCenterProxy.Whisper(1, Data);
+            w.WE();
             new GameLooper(h).Loop();   // 创建游戏循环并运行
         }
     }
@@ -79,10 +86,10 @@ namespace Test_RollServer
 
         public bool Ping(byte[][] data)
         {
-            w.WL("Got ping at " + DateTime.Now.ToString());
+            //w.WL("Got ping at " + DateTime.Now.ToString());
 
-            var dt = data[0].ToObject<DataTable>();
-            w.W(dt);
+            //var dt = data[0].ToObject<DataTable>();
+            //w.W(dt);
 
             return true;
         }
@@ -115,4 +122,5 @@ namespace Test_RollServer
 
         #endregion
     }
+
 }
