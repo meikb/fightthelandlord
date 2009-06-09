@@ -19,12 +19,6 @@ namespace Test_RollServer
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new Handler(id);
             new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
-            var dt = new DataTable("Join");
-            dt.Columns.Add("Action");
-            dt.Rows.Add(ActionType.加入);
-            var Data = new byte[][] { dt.ToBinary<DataTable>() };
-            h.DataCenterProxy.Whisper(1, Data);
-            w.WE();
             new GameLooper(h).Loop();   // 创建游戏循环并运行
         }
     }
@@ -32,6 +26,18 @@ namespace Test_RollServer
     public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
+        /// <summary>
+        /// 玩家ID集合
+        /// </summary>
+        private List<Player> Players = new List<Player>();
+        /// <summary>
+        /// 观战者ID集合
+        /// </summary>
+        private List<Watcher> Watchers = new List<Watcher>();
+        /// <summary>
+        /// 最大玩加数量
+        /// </summary>
+        private int PlayersAmount = 3;
 
         #region Constructor
         public Handler(int serviceId)
@@ -52,7 +58,95 @@ namespace Test_RollServer
 
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            w.WL(id + " whisper: " + data + Environment.NewLine);
+            var dt = data[0].ToObject<DataType>();
+            object Edata = data[1].ToObject<object>();
+            switch (dt)
+            {
+                case DataType.Action:
+                    if ((ActionType)Edata == ActionType.Join)
+                    {
+                        if (Players.Count < PlayersAmount)
+                        {
+                            Players.Add(new Player(id));
+                            w.WL(id + " 已加入游戏 " + Environment.NewLine);
+                        }
+                        else
+                        {
+                            Watchers.Add(new Watcher(id));
+                            w.WL(id + " 进入游戏观战区 " + Environment.NewLine);
+                        }
+                    }
+                    if ((ActionType)Edata == ActionType.Ready)
+                    {
+                        int ReadyPlayers = 0;
+                        foreach (Player onePlayer in Players)
+                        {
+                            if (onePlayer.Id == id)
+                            {
+                                onePlayer.IsReady = true;
+                            }
+                        }
+                        foreach (Player onePlayer in Players)
+                        {
+                            if (onePlayer.IsReady)
+                            {
+                                ReadyPlayers++;
+                            }
+                        }
+                        if (ReadyPlayers == Players.Count)
+                        {
+                            byte[][] dataStart = {DataType.Action.ToBinary(),ActionType.Start.ToBinary()};
+                            foreach (Player onePlayer in Players)
+                            {
+                                DataCenterProxy.Whisper(onePlayer.Id, dataStart);
+                            }
+                        }
+                        w.WL(id + " 已准备 " + Environment.NewLine);
+                    }
+                    if ((ActionType)Edata == ActionType.Throw)
+                    {
+                        bool everyOneWasThrew = false;
+                        foreach (Player onePlayer in Players)
+                        {
+                            if (onePlayer.Id == id)
+                            {
+                                onePlayer.Num = new Random().Next(1, 7);
+                                byte[][] dataNum = {DataType.Num.ToBinary(),onePlayer.Num.ToBinary()};
+                                DataCenterProxy.Whisper(id, dataNum);
+                                foreach (Player otherPlayer in Players)
+                                {
+                                    if (otherPlayer.Id != id)
+                                    {
+                                        byte[][] dataOtherNum = { DataType.OtherNum.ToBinary(), id.ToBinary(), onePlayer.Num.ToBinary() };
+                                        DataCenterProxy.Whisper(otherPlayer.Id, dataOtherNum);
+                                    }
+                                }
+                            }
+                        }
+                        foreach (Player onePlayer in Players)
+                        {
+                            if (onePlayer.Num != 0)
+                            {
+                                everyOneWasThrew = true;
+                            }
+                            else
+                            {
+                                everyOneWasThrew = false;
+                            }
+                        }
+                        if (everyOneWasThrew)
+                        {
+                            Players.Sort(Player.ComparePlayerByNum);
+                        }
+                    }
+                    break;
+                case DataType.UserMessage:
+                    Edata = (string)Edata;
+                    w.WL(id + " whisper: " + Edata + Environment.NewLine);
+                    break;
+            }
+
+            //w.WL(id + " whisper: " + dt.ToString() + Environment.NewLine);
         }
 
         public void ServiceEnter(int id)
