@@ -5,6 +5,7 @@ using System.Text;
 using System.Data;
 using ConsoleHelper;
 using Extensions;
+using Constructs;
 
 namespace Test_RollClient
 {
@@ -14,7 +15,14 @@ namespace Test_RollClient
         static void Main(string[] args)
         {
             var id = int.Parse(w.RL("请输入小于 100 的 Player ID"));
-            new DataCenterCallback(new Handler(id));
+            var h = new Handler(id);
+            new DataCenterCallback(h);
+            var selectId = Convert.ToInt32(Console.ReadLine());
+            var dt = new DataTable("Join");
+            dt.Columns.Add("Action");
+            dt.Rows.Add(ActionType.加入);
+            var Data = new byte[][] { dt.ToBinary<DataTable>() };
+            h.DataCenterProxy.Whisper(selectId, Data);
             w.WE();
         }
     }
@@ -102,10 +110,10 @@ namespace Test_RollClient
 
         public bool Ping(byte[][] data)
         {
-            w.WL("Got ping at " + DateTime.Now.ToString());
+            //w.WL("Got ping at " + DateTime.Now.ToString());
 
-            var dt = data[0].ToObject<DataTable>();
-            w.W(dt);
+            //var dt = data[0].ToObject<DataTable>();
+            //w.W(dt);
 
             return true;
         }
