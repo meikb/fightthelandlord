@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Data;
+using System.Timers;
 using ConsoleHelper;
 using Extensions;
-using Constructs;
+using ZBWZ;
 
 namespace ZBWZ_RollClient
 {
@@ -14,29 +15,38 @@ namespace ZBWZ_RollClient
         public static Writer w = Writer.Instance;
         static void Main(string[] args)
         {
-            var id = int.Parse(w.RL("请输入小于 100 的 Player ID"));
+            Console.CursorVisible = false;
+            var id = int.Parse(w.RL("请输入小于 100 的 Service ID"));
             var h = new Handler(id);
-            new DataCenterCallback(h);
-            var selectId = int.Parse(w.RL("请选择服务器"));
-            var Data = new byte[][] { DataType.Action.ToBinary(), ActionType.Join.ToBinary() };
-            h.DataCenterProxy.Whisper(selectId, Data);
-            w.WL("准备请按回车" + Environment.NewLine);
-            Console.ReadLine();
-            byte[][] dataRelay = { DataType.Action.ToBinary(), ActionType.Ready.ToBinary() };
-            h.DataCenterProxy.Whisper(selectId, dataRelay);
-            while (true)
+            Timer t = new Timer();
+            t.Elapsed += (sender1, ea1) =>
             {
-                w.WE();
-            }
+                t.Stop();
+                while (true)
+                {
+                   h.kb = Console.ReadKey(true);
+                }
+                
+            };
+            t.Start();
+            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            h.ServerId = int.Parse(w.RL("请选择一个服务器"));
+            var Data = new byte[][] { DataType.Action.ToBinary(), ActionType.Join.ToBinary() };
+            h.DataCenterProxy.Whisper(h.ServerId, Data);
+            new GameLooper(h).Loop();   // 创建游戏循环并运行
+            
         }
     }
 
-    public class Handler : IDataCenterCallbackHandler
+    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
         private object _syncObj = new object();
         private List<int> _rollServiceIdList = new List<int>();
         private Player I = new Player();
+        public ConsoleKeyInfo kb { get; set; }
+        public int ServerId { get; set; }
+        public bool IsStart = false;
 
         public Handler(int serviceId)
         {
@@ -62,11 +72,8 @@ namespace ZBWZ_RollClient
                     ActionType actionType = data[1].ToObject<ActionType>();
                     if (actionType == ActionType.Start)
                     {
-                        w.WL("所有玩家准备就绪,开始游戏..." + Environment.NewLine + "请按回车投掷色子" + Environment.NewLine);
-                        Console.ReadLine();
-                        byte[][] dataThrow = { DataType.Action.ToBinary(), ActionType.Throw.ToBinary() };
-                        this.DataCenterProxy.Whisper(this.ServiceID, dataThrow);
-                        w.WE();
+                        this.IsStart = true;
+                        w.WL("所有玩家准备就绪,开始游戏..." + Environment.NewLine );
                     }
                     break;
                 case DataType.Num:
@@ -79,7 +86,6 @@ namespace ZBWZ_RollClient
                     int otherNum = data[1].ToObject<int>();
                     int otherId = data[2].ToObject<int>();
                     w.WL("玩家 " + id.ToString() + " 丢出点数 " + otherNum.ToString());
-                    w.WE();
                     break;
             }
             w.WL(id + " whisper: " + data + Environment.NewLine);
@@ -120,7 +126,7 @@ namespace ZBWZ_RollClient
             if (_rollServiceIdList.Count > 0)
             {
                 w.W("发现 Roll 游戏服务器：");
-                w.W("请输入服务器ID加入相应服务器");
+                w.W("请输入服务器ID加入相应服务器" + Environment.NewLine);
                 w.W<int>(_rollServiceIdList);
                 w.WL();
             }
@@ -149,6 +155,62 @@ namespace ZBWZ_RollClient
             //w.W(dt);
 
             return true;
+        }
+
+        #endregion
+
+        #region IGameLoopHandler Members
+
+        public GameLooper GameLooper { get; set; }
+
+        public void Init()
+        {
+            w.WL(@"
+游戏开始运行.
+类型：RollGame Client
+编号：{0}
+时间：{1}
+准备请按R
+投掷色子请按T
+", this.ServiceID, DateTime.Now);
+        }
+
+        public void Process()
+        {
+            w.W(60, 0, true, ConsoleColor.White, ConsoleColor.Black, DateTime.Now.ToString());
+            switch (kb.Key)
+            {
+                case ConsoleKey.R:
+                    if (!this.I.IsReady)
+                    {
+                        this.I.IsReady = true;
+                        byte[][] dataRelay = { DataType.Action.ToBinary(), ActionType.Ready.ToBinary() };
+                        this.DataCenterProxy.Whisper(this.ServerId, dataRelay);
+                        
+                    }
+                    else
+                    {
+                        //w.WL("您已经准备过了" + Environment.NewLine);
+                    } 
+                    break;
+                case ConsoleKey.T:
+                    if (this.IsStart)
+                    {
+                        this.IsStart = false;
+                        byte[][] dataThrow = { DataType.Action.ToBinary(), ActionType.Throw.ToBinary() };
+                        this.DataCenterProxy.Whisper(this.ServerId, dataThrow);
+                    }
+                    else
+                    {
+                        //w.WL("您已经投掷过色子了" + Environment.NewLine);
+                    }
+                    break;
+            }
+        }
+
+        public void Exit()
+        {
+            w.WE();
         }
 
         #endregion

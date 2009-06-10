@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZBWZ_RoolServer", "ZBWZ_Roo
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZBWZ_RoolClient", "ZBWZ_RoolClient\ZBWZ_RoolClient.csproj", "{5B1244A3-6E9C-449F-AFC2-DB31ABB6F218}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ZBWZ", "ZBWZ\ZBWZ.csproj", "{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -77,6 +79,10 @@ Global
 		{5B1244A3-6E9C-449F-AFC2-DB31ABB6F218}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B1244A3-6E9C-449F-AFC2-DB31ABB6F218}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B1244A3-6E9C-449F-AFC2-DB31ABB6F218}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
