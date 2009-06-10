@@ -87,37 +87,4 @@ Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
-	GlobalSection(TeamFoundationVersionControl) = preSolution
-		SccNumberOfProjects = 10
-		SccEnterpriseProvider = {4CA58AB2-18FA-4F8D-95D4-32DDF27D184C}
-		SccTeamFoundationServer = http://tfs:8080/
-		SccLocalPath0 = .
-		SccProjectUniqueName1 = DAL\\DAL.csproj
-		SccProjectName1 = DAL
-		SccLocalPath1 = DAL
-		SccProjectUniqueName2 = DataCenter\\DataCenter.csproj
-		SccProjectName2 = DataCenter
-		SccLocalPath2 = DataCenter
-		SccProjectUniqueName3 = Test1\\Test1.csproj
-		SccProjectName3 = Test1
-		SccLocalPath3 = Test1
-		SccProjectUniqueName4 = ConosleHelper\\ConosleHelper.csproj
-		SccProjectName4 = ConosleHelper
-		SccLocalPath4 = ConosleHelper
-		SccProjectUniqueName5 = Test2\\Test2.csproj
-		SccProjectName5 = Test2
-		SccLocalPath5 = Test2
-		SccProjectUniqueName6 = Extensions\\Extensions.csproj
-		SccProjectName6 = Extensions
-		SccLocalPath6 = Extensions
-		SccProjectUniqueName7 = Constructs\\Constructs.csproj
-		SccProjectName7 = Constructs
-		SccLocalPath7 = Constructs
-		SccProjectUniqueName8 = Test_RollServer\\Test_RollServer.csproj
-		SccProjectName8 = Test_RollServer
-		SccLocalPath8 = Test_RollServer
-		SccProjectUniqueName9 = Test_RollClient\\Test_RollClient.csproj
-		SccProjectName9 = Test_RollClient
-		SccLocalPath9 = Test_RollClient
-	EndGlobalSection
 EndGlobal
