@@ -1,0 +1,132 @@
+﻿using System;
+
+public partial interface IGameLoopHandler
+{
+    /// <summary>
+    /// 指向当前游戏循环实例。用来访问游戏循环中相关的属性值
+    /// </summary>
+    GameLooper GameLooper { get; set; }
+    /// <summary>
+    /// 进入循环前的初始化
+    /// </summary>
+    void Init();
+    /// <summary>
+    /// 每个循环时调用
+    /// </summary>
+    void Process();
+    /// <summary>
+    /// 循环退出后
+    /// </summary>
+    void Exit();
+}
+
+/// <summary>
+/// 游戏主循环
+/// </summary>
+public partial class GameLooper
+{
+    #region Properties
+
+    /// <summary>
+    /// 游戏循环中用到的方法实例
+    /// </summary>
+    protected IGameLoopHandler _handler;
+
+    /// <summary>
+    /// 是否正在循环
+    /// </summary>
+    public bool IsLooping { get; set; }
+
+    /// <summary>
+    /// 每次循环所消耗的时间上限（限速模式）
+    /// </summary>
+    public double LoopDurationLimit { get; set; }
+
+    /// <summary>
+    /// 是否为限速模式
+    /// </summary>
+    public bool IsSpeedLimitMode { get; set; }
+
+    /// <summary>
+    /// 每次循环所消耗的时间 0.0001 秒为单位
+    /// </summary>
+    public double LoopDuration { get; set; }
+
+    /// <summary>
+    /// 游戏循环中用到的计时器
+    /// </summary>
+    public System.Diagnostics.Stopwatch Stopwatch { get; set; }
+
+    /// <summary>
+    /// 游戏循环计数器
+    /// </summary>
+    public long Counter { get; set; }
+
+    /// <summary>
+    /// 随机数发生器
+    /// </summary>
+    public Random Random { get; set; }
+
+    #endregion
+
+    #region Constructor
+
+    /// <summary>
+    /// GameLoop 的构造函数（初始化各个 handler　及 form）
+    /// </summary>
+    public GameLooper(IGameLoopHandler handler)
+    {
+        handler.GameLooper = this;
+        this._handler = handler;
+        this.Init();
+    }
+
+    #endregion
+
+    #region Methods
+
+    public void Init()
+    {
+        this.IsLooping = true;
+        this.LoopDuration = 0;
+        this.Counter = 0;
+        this.Stopwatch = new System.Diagnostics.Stopwatch();
+        this.IsSpeedLimitMode = true;
+        this.LoopDurationLimit = 10.0;
+    }
+
+    /// <summary>
+    /// 开始循环
+    /// </summary>
+    public void Loop()
+    {
+        this._handler.Init();
+        this.Stopwatch.Start();
+        while (this.IsLooping)
+        {
+            if (this.IsSpeedLimitMode)
+            {
+                this.LoopDuration += this.Stopwatch.ElapsedMilliseconds;
+                if (this.LoopDuration > this.LoopDurationLimit)
+                {
+                    this.Counter++;
+                    this._handler.Process();
+                    this.LoopDuration = 0.0;
+                }
+                else
+                {
+                    System.Threading.Thread.Sleep(1);
+                }
+            }
+            else
+            {
+                this.Counter++;
+                this.LoopDuration = this.Stopwatch.ElapsedMilliseconds;
+                this._handler.Process();
+            }
+        }
+        _handler.Exit();
+    }
+    #endregion
+
+}

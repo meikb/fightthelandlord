@@ -7,7 +7,7 @@ using System.Timers;
 using System.Threading;
 using ConsoleHelper;
 using Extensions;
-using Constructs;
+using ZBWZ;
 
 namespace ZBWZ_RollServer
 {
@@ -138,6 +138,7 @@ namespace ZBWZ_RollServer
                         {
                             Players.Sort(Player.ComparePlayerByNum);
                         }
+                        w.WL(id + " 已投掷色子 " + Environment.NewLine);
                     }
                     break;
                 case DataType.UserMessage:

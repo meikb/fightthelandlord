@@ -57,6 +57,7 @@
     <Compile Include="GameLooper.cs" />
     <Compile Include="IDataCenterCallbackHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="没有添加接受用户按键的GameLooper" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
