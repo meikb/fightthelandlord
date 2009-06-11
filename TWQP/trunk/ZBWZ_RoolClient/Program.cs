@@ -70,6 +70,25 @@ namespace ZBWZ_RollClient
             {
                 case DataType.Action:
                     ActionType actionType = data[1].ToObject<ActionType>();
+                    if (actionType == ActionType.YouCanJoinIt)
+                    {
+                        byte[][] dataJoin = { DataType.Action.ToBinary(), ActionType.Join.ToBinary() };
+                        this.DataCenterProxy.Whisper(ServerId, dataJoin);
+                        w.WL("正在加入服务器: " + ServerId + "...");
+                    }
+                    if (actionType == ActionType.YouCanNotJoinIt)
+                    {
+                        w.WL("服务器 " + ServerId + "玩家已满,请稍后再试");
+                    }
+                    if (actionType == ActionType.JoinedSuccess)
+                    {
+                        I.IsJoin = true;
+                        w.WL("加入游戏成功,请在15秒内准备");
+                    }
+                    if (actionType == ActionType.Out)
+                    {
+                        w.WL("被服务器T出...");
+                    }
                     if (actionType == ActionType.Start)
                     {
                         this.IsStart = true;
@@ -77,13 +96,39 @@ namespace ZBWZ_RollClient
                     }
                     break;
                 case DataType.Num:
-                    int num = data[1].ToObject<int>();
-                    I.Num = num;
-                    w.WL("您丢出的色子点数为 " + I.Num.ToString() + Environment.NewLine);
-                    w.WE();
+                    int NumId = data[1].ToObject<int>();
+                    int num = data[2].ToObject<int>();
+                    if (I.Id == NumId)
+                    {
+                        I.IsThrew = true;
+                        I.Num = num;
+                        w.WL("您丢出的色子点数为 " + I.Num.ToString() + Environment.NewLine);
+                    }
+                    else
+                    {
+                        w.WL("玩家 " + NumId.ToString() + " 丢出的色子点数为 " + num.ToString() + Environment.NewLine);
+                    }
+                    break;
+                case DataType.TimeOutTime:
+                    double timeOutTime = data[1].ToObject<double>();
+                    int RTime = (int)timeOutTime/1000;
+                    I.TimeOut.Interval = 1000;
+                    I.TimeOut.Elapsed += (sender, ea1) =>
+                        {
+                            w.W(60, 5, true, ConsoleColor.White, ConsoleColor.Black, RTime--.ToString());
+                            if (RTime == 0)
+                            {
+                                I.TimeOut.Stop();
+                                w.WL("超时,自动投掷色子" + Environment.NewLine);
+                            }
+                        };
+                    I.TimeOut.Start();
+                    break;
+                case DataType.Score:
+                    I.Score = data[1].ToObject<int>();
                     break;
             }
-            w.WL(id + " whisper: " + data + Environment.NewLine);
+            //w.WL(id + " whisper: " + data + Environment.NewLine);
         }
 
         public void ServiceEnter(int id)
@@ -171,20 +216,25 @@ namespace ZBWZ_RollClient
         public void Process()
         {
             w.W(60, 0, true, ConsoleColor.White, ConsoleColor.Black, DateTime.Now.ToString());
+            w.W(40, 18, true, ConsoleColor.Red, ConsoleColor.Black, "分数: {0}", I.Score.ToString());
+            if (I.IsJoin && !I.IsReady)
+            {
+                w.W(40, 20, true, ConsoleColor.Red, ConsoleColor.Black, "请按\"R\"键准备");
+            }
+            if (!I.IsThrew)
+            {
+                w.W(40, 22, true, ConsoleColor.Red, ConsoleColor.Black, "请按\"T\"键投掷色子");
+            }
             switch (kb.Key)
             {
                 case ConsoleKey.R:
-                    if (!this.I.IsReady)
+                    if (!this.I.IsReady && I.IsJoin)
                     {
                         this.I.IsReady = true;
-                        byte[][] dataRelay = { DataType.Action.ToBinary(), ActionType.Ready.ToBinary() };
-                        this.DataCenterProxy.Whisper(this.ServerId, dataRelay);
-                        
+                        byte[][] dataReady = { DataType.Action.ToBinary(), ActionType.Ready.ToBinary() };
+                        this.DataCenterProxy.Whisper(this.ServerId, dataReady);
+                        w.W(40, 20, true, ConsoleColor.Red, ConsoleColor.Black, "已准备");
                     }
-                    else
-                    {
-                        //w.WL("您已经准备过了" + Environment.NewLine);
-                    } 
                     break;
                 case ConsoleKey.T:
                     if (this.IsStart)
@@ -192,10 +242,7 @@ namespace ZBWZ_RollClient
                         this.IsStart = false;
                         byte[][] dataThrow = { DataType.Action.ToBinary(), ActionType.Throw.ToBinary() };
                         this.DataCenterProxy.Whisper(this.ServerId, dataThrow);
-                    }
-                    else
-                    {
-                        //w.WL("您已经投掷过色子了" + Environment.NewLine);
+                        w.W(40, 22, true, ConsoleColor.Red, ConsoleColor.Black, "已投掷");
                     }
                     break;
             }

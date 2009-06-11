@@ -32,18 +32,17 @@ namespace ZBWZ_RollServer
         /// </summary>
         private List<Player> Players = new List<Player>();
         /// <summary>
-        /// 最大玩加数量
+        /// 最大玩家数量
         /// </summary>
         private readonly int PlayersAmount = 3;
+        /// <summary>
+        /// 每局分数
+        /// </summary>
         private readonly int RoundScore = 10;
         /// <summary>
-        /// 已准备玩家数量
+        /// 游戏是否已经开始
         /// </summary>
-        private int ReadiedPlayers = 0;
-        /// <summary>
-        /// 已投掷色子玩家数量
-        /// </summary>
-        private int ThrewPlayers = 0;
+        private bool IsStart { get; set; }
 
         #region Constructor
         public Handler(int serviceId)
@@ -77,9 +76,12 @@ namespace ZBWZ_RollServer
                             tempPlayer.TimeOut.Interval = 5000;
                             tempPlayer.TimeOut.Elapsed += (sender1, ea1) =>
                             {
-                                tempPlayer.IsDead = true;
-                                tempPlayer.TimeOut.Stop();
-                            };  //如果该用户10秒钟未加入游戏,则干掉该用户.
+                                if (!tempPlayer.IsJoin)
+                                {
+                                    tempPlayer.IsDead = true;
+                                    tempPlayer.TimeOut.Stop();
+                                }
+                            };  //如果该用户5秒钟未加入游戏,则干掉该用户.
                             tempPlayer.TimeOut.Start();
                             Players.Add(tempPlayer); //给该用户占位.
                             byte[][] dataJoinedSuccess = { DataType.Action.ToBinary(), ActionType.YouCanJoinIt.ToBinary() };
@@ -202,29 +204,41 @@ namespace ZBWZ_RollServer
 
         public void Process()
         {
+            var ThrewPlayers = 0;
+            var ReadiedPlayers = 0;
             w.W(60, 0, true, ConsoleColor.White, ConsoleColor.Black, DateTime.Now.ToString());
             for (int i = 0; i < Players.Count; i++)
             {
                 if (Players[i].IsDead)
                 {
-                    Players.Remove(Players[i]);  //移除挂掉的玩家
                     byte[][] dataOut = { DataType.Action.ToBinary(), ActionType.Out.ToBinary() };
                     this.DataCenterProxy.Whisper(Players[i].Id, dataOut);  //通知玩家被踢
                     w.WL("玩家" + Players[i].Id + "在规定时间内(15秒)没有准备或者由于网络原因被踢" + Environment.NewLine);
+                    Players.Remove(Players[i]);  //移除挂掉的玩家
+                    break;
                 }
+            }
+            for (int i = 0; i < Players.Count; i++)
+            {
                 if (Players[i].IsJoin)
                 {
                     Players[i].IsJoin = false;
                     Players[i].ThrowTimeOuted = false;
-                    Players[i].TimeOut.Interval = 15000;  //如果玩家15秒为准备就干掉玩家
+                    Players[i].TimeOut.Interval = 15000;  //如果玩家15秒未准备就干掉玩家
                     Players[i].TimeOut.Elapsed += (sender1, ea1) =>
+                    {
+                        try
                         {
                             if (!Players[i].IsReady)
                             {
                                 Players[i].IsDead = true;
                                 Players[i].TimeOut.Stop();
                             }
-                        };
+                        }
+                        catch
+                        {
+                        }
+                    };
                     Players[i].TimeOut.Start();
                     byte[][] dataJoinedSuccess = { DataType.Action.ToBinary(), ActionType.JoinedSuccess.ToBinary() };
                     this.DataCenterProxy.Whisper(Players[i].Id, dataJoinedSuccess);  //通知玩家加入游戏成功
@@ -232,7 +246,6 @@ namespace ZBWZ_RollServer
                 }
                 if (Players[i].IsReady)
                 {
-                    Players[i].IsReady = false;
                     ReadiedPlayers++;
                 }
                 if (Players[i].IsThrew)
@@ -248,19 +261,19 @@ namespace ZBWZ_RollServer
                 if (Players[i].ThrowTimeOuted) //如果超时,服务器自动帮超时的客户端投掷色子
                 {
                     Players[i].ThrowTimeOuted = false;
-                    byte[][] dataThrow = {DataType.Action.ToBinary(),ActionType.Throw.ToBinary()};
+                    byte[][] dataThrow = { DataType.Action.ToBinary(), ActionType.Throw.ToBinary() };
                     this.ReceiveWhisper(Players[i].Id, dataThrow);
                 }
             }
-            if (ReadiedPlayers == PlayersAmount)  //当所有玩家均已准备并且玩家数量达到要求后,通知玩家加入开始游戏
+            if (ReadiedPlayers == PlayersAmount && !IsStart)  //当所有玩家均已准备并且玩家数量达到要求后,通知玩家加入开始游戏
             {
-                ReadiedPlayers = 0;
+                IsStart = true;
                 foreach (var onePlayer in Players)
                 {
+                    onePlayer.TimeOut.Stop();
                     onePlayer.TimeOut.Interval = 10000;
                     onePlayer.TimeOut.Elapsed += (sender1, ea1) =>
                         {
-                            onePlayer.TimeOut.Stop();
                             onePlayer.ThrowTimeOuted = true;
                         };
                     onePlayer.TimeOut.Start();
