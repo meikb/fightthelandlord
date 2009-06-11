@@ -75,12 +75,6 @@ namespace Test_RollClient
                     w.WL("您丢出的色子点数为 " + I.Num.ToString() + Environment.NewLine);
                     w.WE();
                     break;
-                case DataType.OtherNum:
-                    int otherNum = data[1].ToObject<int>();
-                    int otherId = data[2].ToObject<int>();
-                    w.WL("玩家 " + id.ToString() + " 丢出点数 " + otherNum.ToString());
-                    w.WE();
-                    break;
             }
             w.WL(id + " whisper: " + data + Environment.NewLine);
         }

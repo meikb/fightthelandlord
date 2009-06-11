@@ -18,21 +18,21 @@ namespace ZBWZ_RollClient
             Console.CursorVisible = false;
             var id = int.Parse(w.RL("请输入小于 100 的 Service ID"));
             var h = new Handler(id);
+            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            h.ServerId = int.Parse(w.RL("请选择一个服务器"));
+            var Data = new byte[][] { DataType.Action.ToBinary(), ActionType.CanIJoinIt.ToBinary() };
+            h.DataCenterProxy.Whisper(h.ServerId, Data);
             Timer t = new Timer();
             t.Elapsed += (sender1, ea1) =>
             {
                 t.Stop();
                 while (true)
                 {
-                   h.kb = Console.ReadKey(true);
+                    h.kb = Console.ReadKey(true);
                 }
-                
+
             };
             t.Start();
-            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
-            h.ServerId = int.Parse(w.RL("请选择一个服务器"));
-            var Data = new byte[][] { DataType.Action.ToBinary(), ActionType.Join.ToBinary() };
-            h.DataCenterProxy.Whisper(h.ServerId, Data);
             new GameLooper(h).Loop();   // 创建游戏循环并运行
             
         }
@@ -81,11 +81,6 @@ namespace ZBWZ_RollClient
                     I.Num = num;
                     w.WL("您丢出的色子点数为 " + I.Num.ToString() + Environment.NewLine);
                     w.WE();
-                    break;
-                case DataType.OtherNum:
-                    int otherNum = data[1].ToObject<int>();
-                    int otherId = data[2].ToObject<int>();
-                    w.WL("玩家 " + id.ToString() + " 丢出点数 " + otherNum.ToString());
                     break;
             }
             w.WL(id + " whisper: " + data + Environment.NewLine);
@@ -170,8 +165,6 @@ namespace ZBWZ_RollClient
 类型：RollGame Client
 编号：{0}
 时间：{1}
-准备请按R
-投掷色子请按T
 ", this.ServiceID, DateTime.Now);
         }
 

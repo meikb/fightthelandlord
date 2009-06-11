@@ -7,25 +7,31 @@ namespace ZBWZ
 {
     public enum ActionType
     {
-        Join = 1,
-        Ready = 2,
-        Start = 3,
-        Out = 4,
-        Throw = 5,
+        CanIJoinIt,
+        YouCanJoinIt,
+        YouCanNotJoinIt,
+        Join,
+        JoinedSuccess,
+        YouCanReady,
+        Ready,
+        Start,
+        Out,
+        Throw,
     }
     public enum DataType
     {
-        Action = 1,
-        UserMessage = 2,
-        SystemMessage = 3,
-        TimeOut = 4,
-        Num = 5,
-        OtherNum,
+        Action,
+        UserMessage,
+        SystemMessage,
+        TimeOutTime,
+        Num,
+        Result,
+        Score,
     }
     public enum Result
     {
-        Win = 1,
-        Lose = 2,
-        Same = 3,
+        Win,
+        Lose,
+        Same,
     }
 }
