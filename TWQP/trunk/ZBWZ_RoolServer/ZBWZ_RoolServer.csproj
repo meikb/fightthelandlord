@@ -50,6 +50,9 @@
   <ItemGroup>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <None Include="Program.cs.bak">
+      <SubType>Code</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

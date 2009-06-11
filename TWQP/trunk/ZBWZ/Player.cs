@@ -10,15 +10,20 @@ namespace ZBWZ
     {
         public int Id { get; set; }
         public bool IsReady { get; set; }
+        public bool IsJoin { get; set; }
+        public bool IsDead { get; set; }
+        public bool IsThrew { get; set; }
         public int Score { get; set; }
         public int Num { get; set; }
-        public Timer TimeOut = new Timer(30000);
+        public Timer TimeOut = new Timer(15000);
+        public bool ThrowTimeOuted { get; set; }
         public Player(int Id)
         {
             this.Id = Id;
             TimeOut.Elapsed += (sender1, ea1) =>
                 {
-                    
+                    ThrowTimeOuted = true;
+                    TimeOut.Stop();
                 };
         }
         public Player()
