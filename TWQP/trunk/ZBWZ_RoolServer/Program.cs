@@ -43,7 +43,19 @@ namespace ZBWZ_RollServer
         /// 游戏是否已经开始
         /// </summary>
         private bool IsStart { get; set; }
-
+        /// <summary>
+        /// 已投掷色子玩家数量
+        /// </summary>
+        private int  ThrewPlayers = 0;
+        /// <summary>
+        /// 已准备玩家数量
+        /// </summary>
+        private int ReadiedPlayers = 0;
+        /// <summary>
+        /// 是否重启游戏
+        /// </summary>
+        private bool IsRestart { get; set; }
+        private ElapsedEventHandler _elapsedEventHandler = null;
         #region Constructor
         public Handler(int serviceId)
         {
@@ -74,14 +86,16 @@ namespace ZBWZ_RollServer
                         {
                             var tempPlayer = new Player(id);
                             tempPlayer.TimeOut.Interval = 5000;
-                            tempPlayer.TimeOut.Elapsed += (sender1, ea1) =>
+                            tempPlayer.TimeOut.Elapsed -= _elapsedEventHandler;
+                            _elapsedEventHandler = (sender1, ea1) =>
                             {
-                                if (!tempPlayer.IsJoin)
+                                if (!tempPlayer.Joined)
                                 {
                                     tempPlayer.IsDead = true;
                                     tempPlayer.TimeOut.Stop();
                                 }
-                            };  //如果该用户5秒钟未加入游戏,则干掉该用户.
+                            };
+                            tempPlayer.TimeOut.Elapsed += _elapsedEventHandler; //如果该用户5秒钟未加入游戏,则干掉该用户.
                             tempPlayer.TimeOut.Start();
                             Players.Add(tempPlayer); //给该用户占位.
                             byte[][] dataJoinedSuccess = { DataType.Action.ToBinary(), ActionType.YouCanJoinIt.ToBinary() };
@@ -102,10 +116,10 @@ namespace ZBWZ_RollServer
                         {
                             if (onePlayer.Id == id)
                             {
-                                onePlayer.IsJoin = true;  //该用户已加入
+                                onePlayer.Join = true;  //该用户已加入
                                 PlayerIsExist = true;
+                                w.WL(id + " 加入游戏 " + Environment.NewLine);
                             }
-                            w.WL(id + " 加入游戏 " + Environment.NewLine);
                         }
                         if (!PlayerIsExist)
                         {
@@ -121,9 +135,9 @@ namespace ZBWZ_RollServer
                             if (onePlayer.Id == id)
                             {
                                 onePlayer.IsReady = true;
+                                w.WL(id + " 已准备 " + Environment.NewLine);
                             }
                         }
-                        w.WL(id + " 已准备 " + Environment.NewLine);
                     }
                     if ((ActionType)Edata == ActionType.Throw)
                     {
@@ -132,10 +146,10 @@ namespace ZBWZ_RollServer
                             if (onePlayer.Id == id)
                             {
                                 onePlayer.Num = new Random().Next(1, 7);
-                                onePlayer.IsThrew = true;
+                                onePlayer.Throw = true;
+                                w.WL(id + " 已投掷色子 " + Environment.NewLine);
                             }
                         }
-                        w.WL(id + " 已投掷色子 " + Environment.NewLine);
                     }
                     break;
                 case DataType.UserMessage:
@@ -204,8 +218,7 @@ namespace ZBWZ_RollServer
 
         public void Process()
         {
-            var ThrewPlayers = 0;
-            var ReadiedPlayers = 0;
+            ReadiedPlayers = 0;
             w.W(60, 0, true, ConsoleColor.White, ConsoleColor.Black, DateTime.Now.ToString());
             for (int i = 0; i < Players.Count; i++)
             {
@@ -220,12 +233,13 @@ namespace ZBWZ_RollServer
             }
             for (int i = 0; i < Players.Count; i++)
             {
-                if (Players[i].IsJoin)
+                if (Players[i].Join && !Players[i].Joined)
                 {
-                    Players[i].IsJoin = false;
-                    Players[i].ThrowTimeOuted = false;
+                    Players[i].Join = false; 
+                    Players[i].Joined = true ;
                     Players[i].TimeOut.Interval = 15000;  //如果玩家15秒未准备就干掉玩家
-                    Players[i].TimeOut.Elapsed += (sender1, ea1) =>
+                    Players[i].TimeOut.Elapsed -= _elapsedEventHandler;
+                    _elapsedEventHandler = (sender1, ea1) =>
                     {
                         try
                         {
@@ -239,18 +253,22 @@ namespace ZBWZ_RollServer
                         {
                         }
                     };
+                    Players[i].TimeOut.Elapsed += _elapsedEventHandler;
                     Players[i].TimeOut.Start();
                     byte[][] dataJoinedSuccess = { DataType.Action.ToBinary(), ActionType.JoinedSuccess.ToBinary() };
                     this.DataCenterProxy.Whisper(Players[i].Id, dataJoinedSuccess);  //通知玩家加入游戏成功
-                    w.WL("玩家" + Players[i].Id + "成功加入游戏,服务器已发送消息让其准备,如果该玩家15秒内未准备,服务器将踢掉该玩家" + Environment.NewLine);
+                    w.WL("玩家" + Players[i].Id + "成功加入游戏" + Environment.NewLine);
+                    byte[][] dataScore = { DataType.Score.ToBinary(), Players[i].Score.ToBinary() };
+                    this.DataCenterProxy.Whisper(Players[i].Id, dataScore); //发送分数
                 }
                 if (Players[i].IsReady)
                 {
                     ReadiedPlayers++;
                 }
-                if (Players[i].IsThrew)
+                if (Players[i].Throw)
                 {
-                    Players[i].IsThrew = false;
+                    Players[i].Throw = false;
+                    Players[i].IsThrew = true;
                     ThrewPlayers++;
                     byte[][] dataThrewNum = { DataType.Num.ToBinary(), Players[i].Id.ToBinary(), Players[i].Num.ToBinary() };
                     foreach (var onePlayer in Players)
@@ -265,20 +283,26 @@ namespace ZBWZ_RollServer
                     this.ReceiveWhisper(Players[i].Id, dataThrow);
                 }
             }
-            if (ReadiedPlayers == PlayersAmount && !IsStart)  //当所有玩家均已准备并且玩家数量达到要求后,通知玩家加入开始游戏
+            if (ReadiedPlayers == PlayersAmount && !IsStart)  //当所有玩家均已准备并且玩家数量达到要求后,通知玩家开始游戏
             {
                 IsStart = true;
                 foreach (var onePlayer in Players)
                 {
                     onePlayer.TimeOut.Stop();
                     onePlayer.TimeOut.Interval = 10000;
-                    onePlayer.TimeOut.Elapsed += (sender1, ea1) =>
+                    onePlayer.TimeOut.Elapsed -= _elapsedEventHandler;
+                    _elapsedEventHandler = (sender1, ea1) =>
+                    {
+                        if (!onePlayer.IsThrew)
                         {
                             onePlayer.ThrowTimeOuted = true;
-                        };
+                            onePlayer.TimeOut.Stop();
+                        }
+                    };
+                    onePlayer.TimeOut.Elapsed += _elapsedEventHandler;
                     onePlayer.TimeOut.Start();
                     byte[][] dataStart = { DataType.Action.ToBinary(), ActionType.Start.ToBinary() };
-                    this.DataCenterProxy.Whisper(onePlayer.Id, dataStart);  //通知玩家加入开始游戏
+                    this.DataCenterProxy.Whisper(onePlayer.Id, dataStart);  //通知玩家开始游戏
                     byte[][] dataTimeOut = { DataType.TimeOutTime.ToBinary(), onePlayer.TimeOut.Interval.ToBinary() };
                     this.DataCenterProxy.Whisper(onePlayer.Id, dataTimeOut); //通知玩家投掷色子的超时时间
                 }
@@ -304,16 +328,24 @@ namespace ZBWZ_RollServer
                 if (TheSamePlayers == PlayersAmount - 1)
                 {
                     dataResult = new byte[][] { DataType.Result.ToBinary(), Result.Same.ToBinary() };
+                    foreach (var onePlayer in Players)
+                    {
+                        this.DataCenterProxy.Whisper(onePlayer.Id, dataResult);
+                    }
                 }
                 else
                 {
                     for (int i = TheSamePlayers; i < Players.Count; i++)
                     {
                         Players[i].Score += RoundScore;
+                        dataResult = new byte[][] { DataType.Result.ToBinary(), Result.Win.ToBinary() };
+                        this.DataCenterProxy.Whisper(Players[i].Id, dataResult);
                     }
                     for (int i = 0; i < Players.Count - TheSamePlayers; i++)
                     {
                         Players[i].Score -= TheSamePlayers * RoundScore / (Players.Count - TheSamePlayers);
+                        dataResult = new byte[][] { DataType.Result.ToBinary(), Result.Lose.ToBinary() };
+                        this.DataCenterProxy.Whisper(Players[i].Id, dataResult);
                     }
                 }
                 byte[][] dataScore;
@@ -322,6 +354,19 @@ namespace ZBWZ_RollServer
                     dataScore = new byte[][] { DataType.Score.ToBinary(), onePlayer.Score.ToBinary() };
                     this.DataCenterProxy.Whisper(onePlayer.Id, dataScore);
                 }
+                List<int> playerIds = new List<int>(); //临时存储玩家ID
+                foreach (var onePlayer in Players)  
+                {
+                    playerIds.Add(onePlayer.Id);
+                }
+                Players.Clear();  //初始化玩家集合
+                foreach (var id in playerIds)
+                {
+                    var tempPlayer = new Player(id);
+                    tempPlayer.Joined = true;
+                    Players.Add(tempPlayer);
+                }
+                IsStart = false;
             }
         }
 
