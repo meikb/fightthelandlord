@@ -75,6 +75,36 @@ namespace ZBWZ
             return new byte[][] { DataType.Score.ToBinary(), player.Score.ToBinary() };
         }
 
+        public bool EveryOneIsThrew(List<Player> players)
+        {
+            var everyOneIsThrew = false;
+            foreach (var onePlayer in players)
+            {
+                if (onePlayer.IsThrew)
+                {
+                    everyOneIsThrew = true;
+                }
+                else
+                {
+                    everyOneIsThrew = false;
+                    break;
+                }
+            }
+            return everyOneIsThrew;
+        }
+
+        public Player WhoThrowTimeOuted(long Counter, List<Player> players)
+        {
+            foreach (var onePlayer in players)
+            {
+                if (Counter >= onePlayer.TimeOut)
+                {
+                    return onePlayer;
+                }
+            }
+            return null;
+        }
+
         #endregion
 
         #region IWatingReady 成员
@@ -103,6 +133,38 @@ namespace ZBWZ
             player.IsReady = true;
             ReadyPlayerAmount++;
         }
+
+
+        public bool EveryOneIsReady(List<Player> players)
+        {
+            var everyOneIsReady = false;
+            foreach (var onePlayer in players)
+            {
+                if (onePlayer.IsReady)
+                {
+                    everyOneIsReady = true;
+                }
+                else
+                {
+                    everyOneIsReady = false;
+                    break;
+                }
+            }
+            return everyOneIsReady;
+        }
+
+        public Player WhoReadyTimeOuted(long Counter, List<Player> players)
+        {
+            foreach(var onePlayer in players)
+            {
+                if (Counter >= onePlayer.TimeOut)
+                {
+                    return onePlayer;
+                }
+            }
+            return null;
+        }
+
 
         #endregion
 
@@ -137,7 +199,7 @@ namespace ZBWZ
             return has;
         }
 
-        public Player WhoTimeOuted(long Counter, List<Player> players)
+        public Player WhoJoinTimeOuted(long Counter, List<Player> players)
         {
             foreach (var onePlayer in players)
             {
@@ -147,6 +209,24 @@ namespace ZBWZ
                 }
             }
             return null;
+        }
+
+        public bool JoinSuccess(List<Player> players)
+        {
+            var joinSuccess = false;
+            foreach (var onePlayer in players)
+            {
+                if (onePlayer.Joined)
+                {
+                    joinSuccess = true;
+                }
+                else
+                {
+                    joinSuccess = false;
+                    break;
+                }
+            }
+            return joinSuccess;
         }
 
         #endregion

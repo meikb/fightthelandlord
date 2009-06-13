@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZBWZ
 {
-    interface IWatingThrow
+    public interface IWatingThrow
     {
         /// <summary>
         /// 已投掷骰子玩家数量
@@ -39,5 +39,12 @@ namespace ZBWZ
         /// <param name="player">玩家</param>
         /// <returns>分数比特流</returns>
         byte[][] GetScore(Player player);
+        /// <summary>
+        /// 谁投掷骰子超时了
+        /// </summary>
+        /// <param name="Counter">计时器</param>
+        /// <param name="players">玩家列表</param>
+        /// <returns>超时的玩家</returns>
+        Player WhoThrowTimeOuted(long Counter, List<Player> players);
     }
 }
