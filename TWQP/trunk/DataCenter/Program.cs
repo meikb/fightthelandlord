@@ -5,7 +5,6 @@ using System.ServiceModel;
 using System.Configuration;
 using System.Timers;
 using System.Data;
-using Extensions;
 
 namespace DataCenter
 {

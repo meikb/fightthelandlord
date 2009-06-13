@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Data;
 using ConsoleHelper;
-using Extensions;
 
 namespace Test2
 {
