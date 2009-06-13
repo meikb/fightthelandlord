@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZBWZ
 {
-    interface IWatingJoin
+    public interface IWatingJoin
     {
         /// <summary>
         /// 玩家数量
@@ -30,7 +30,7 @@ namespace ZBWZ
         /// <param name="Counter">计时器</param>
         /// <param name="players">玩家列表</param>
         /// <returns>超时玩家</returns>
-        Player WhoTimeOuted(long Counter, List<Player> players);
+        Player WhoJoinTimeOuted(long Counter, List<Player> players);
         /// <summary>
         /// 所有用户是否已加入
         /// </summary>

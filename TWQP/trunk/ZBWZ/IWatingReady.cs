@@ -5,7 +5,7 @@ using System.Text;
 
 namespace ZBWZ
 {
-    interface IWatingReady
+    public interface IWatingReady
     {
         /// <summary>
         /// 已准备玩家数量
@@ -29,9 +29,10 @@ namespace ZBWZ
         /// <summary>
         /// 返回已超时的玩家,没有超时返回null
         /// </summary>
+        /// <param name="Counter">计时器</param>
         /// <param name="players">玩家列表</param>
         /// <returns>已超时玩家或null</returns>
-        Player HasTimeOuted(List<Player> players);
+        Player WhoReadyTimeOuted(long Counter, List<Player> players);
 
     }
 }
