@@ -32,6 +32,14 @@ namespace ZBWZ_RollServer
         /// </summary>
         private List<Player> Players = new List<Player>();
         /// <summary>
+        /// 游戏状态
+        /// </summary>
+        GameStates _currentGameState = GameStates.WatingJoin;
+        /// <summary>
+        /// 状态处理程序
+        /// </summary>
+        StateHandler _currentStateHander = new StateHandler();
+        /// <summary>
         /// 最大玩家数量
         /// </summary>
         private readonly int PlayersAmount = 3;
@@ -68,6 +76,23 @@ namespace ZBWZ_RollServer
         public int ServiceID { get; set; }
         public DataCenterProxy DataCenterProxy { get; set; }
 
+        /// <summary>
+        /// 通过ID获取玩家
+        /// </summary>
+        /// <param name="id">ID</param>
+        /// <returns>玩家</returns>
+        public Player GetPlayerById(int id)
+        {
+            foreach (var onePlayer in Players)
+            {
+                if (onePlayer.Id == id)
+                {
+                    return onePlayer;
+                }
+            }
+            return null;
+        }
+
         public void Receive(int id, byte[][] data)
         {
             w.WL(id + ": " + data + Environment.NewLine);
@@ -82,32 +107,16 @@ namespace ZBWZ_RollServer
                 case DataType.Action:
                     if ((ActionType)Edata == ActionType.CanIJoinIt)
                     {
-                        if (Players.Count < PlayersAmount)
+                        var data = _currentStateHander.CanIJoinIt(Players.Count);
+                        ActionType temp = data[1].ToObject<ActionType>();
+                        if (temp == ActionType.YouCanJoinIt)
                         {
                             var tempPlayer = new Player(id);
-                            //tempPlayer.TimeOut.Interval = 5000;
-                            //tempPlayer.TimeOut.Elapsed -= _elapsedEventHandler;
-                            //_elapsedEventHandler = (sender1, ea1) =>
-                            //{
-                            //    if (!tempPlayer.Joined)
-                            //    {
-                            //        tempPlayer.IsDead = true;
-                            //        tempPlayer.TimeOut.Stop();
-                            //    }
-                            //};
-                            //tempPlayer.TimeOut.Elapsed += _elapsedEventHandler; //如果该用户5秒钟未加入游戏,则干掉该用户.
-                            //tempPlayer.TimeOut.Start();
-                            Players.Add(tempPlayer); //给该用户占位.
-                            byte[][] dataJoinedSuccess = { DataType.Action.ToBinary(), ActionType.YouCanJoinIt.ToBinary() };
-                            this.DataCenterProxy.Whisper(id, dataJoinedSuccess); //通知该用户可以加入游戏.
-                            w.WL(id + " 准备加入游戏 " + Environment.NewLine);
+                            tempPlayer.TimeOut = GameLooper.Counter + 5;
+                            Players.Add(tempPlayer);
                         }
-                        else
-                        {
-                            byte[][] dataReject = { DataType.Action.ToBinary(), ActionType.YouCanNotJoinIt.ToBinary() };
-                            this.DataCenterProxy.Whisper(id, dataReject);  //拒绝掉该用户加入游戏的请求
-                            w.WL(id + " 尝试进入,但服务器人数已满无法进入 " + Environment.NewLine);
-                        }
+                        DataCenterProxy.Whisper(id, data);
+                        w.WL(id + " 准备加入游戏 " + Environment.NewLine);
                     }
                     if ((ActionType)Edata == ActionType.Join)
                     {
@@ -218,6 +227,20 @@ namespace ZBWZ_RollServer
 
         public void Process()
         {
+            if (_currentGameState == GameStates.WatingJoin)
+            {
+                var h = _currentStateHander as IWatingJoin;
+            }
+            if (_currentGameState == GameStates.WatingReady)
+            {
+                var h = _currentStateHander as IWatingReady;
+            }
+            if (_currentGameState == GameStates.WatingThrow)
+            {
+                var h = _currentStateHander as IWatingThrow;
+            }
+
+
             ReadiedPlayers = 0;
             w.W(60, 0, true, ConsoleColor.White, ConsoleColor.Black, DateTime.Now.ToString());
             for (int i = 0; i < Players.Count; i++)

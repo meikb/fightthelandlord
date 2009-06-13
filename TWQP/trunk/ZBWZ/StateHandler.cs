@@ -124,6 +124,31 @@ namespace ZBWZ
             return data;
         }
 
+        public bool HasThisPlayer(int PlayerId, List<Player> players)
+        {
+            var has = false;
+            foreach (var onePlayer in players)
+            {
+                if (onePlayer.Id == PlayerId)
+                {
+                    has = true;
+                }
+            }
+            return has;
+        }
+
+        public Player WhoTimeOuted(long Counter, List<Player> players)
+        {
+            foreach (var onePlayer in players)
+            {
+                if (Counter >= onePlayer.TimeOut)
+                {
+                    return onePlayer;
+                }
+            }
+            return null;
+        }
+
         #endregion
     }
 }
