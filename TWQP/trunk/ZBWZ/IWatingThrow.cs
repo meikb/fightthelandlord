@@ -18,9 +18,9 @@ namespace ZBWZ
         /// <summary>
         /// 所有玩家是否已投掷骰子
         /// </summary>
-        /// <param name="PlayerAmount">玩家数量</param>
+        /// <param name="PlayerAmount">玩家列表</param>
         /// <returns>所有玩家是否已投掷骰子</returns>
-        bool EveryOneIsThrew(int PlayerAmount);
+        bool EveryOneIsThrew(List<Player> players);
         /// <summary>
         /// 投掷骰子
         /// </summary>
@@ -33,6 +33,11 @@ namespace ZBWZ
         /// <param name="players">所有玩家集合</param>
         /// <returns>结果</returns>
         byte[][] GetResult(List<Player> players);
+        /// <summary>
+        /// 获取玩家分数比特流
+        /// </summary>
+        /// <param name="player">玩家</param>
+        /// <returns>分数比特流</returns>
         byte[][] GetScore(Player player);
     }
 }
