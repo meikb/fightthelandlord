@@ -85,18 +85,18 @@ namespace ZBWZ_RollServer
                         if (Players.Count < PlayersAmount)
                         {
                             var tempPlayer = new Player(id);
-                            tempPlayer.TimeOut.Interval = 5000;
-                            tempPlayer.TimeOut.Elapsed -= _elapsedEventHandler;
-                            _elapsedEventHandler = (sender1, ea1) =>
-                            {
-                                if (!tempPlayer.Joined)
-                                {
-                                    tempPlayer.IsDead = true;
-                                    tempPlayer.TimeOut.Stop();
-                                }
-                            };
-                            tempPlayer.TimeOut.Elapsed += _elapsedEventHandler; //如果该用户5秒钟未加入游戏,则干掉该用户.
-                            tempPlayer.TimeOut.Start();
+                            //tempPlayer.TimeOut.Interval = 5000;
+                            //tempPlayer.TimeOut.Elapsed -= _elapsedEventHandler;
+                            //_elapsedEventHandler = (sender1, ea1) =>
+                            //{
+                            //    if (!tempPlayer.Joined)
+                            //    {
+                            //        tempPlayer.IsDead = true;
+                            //        tempPlayer.TimeOut.Stop();
+                            //    }
+                            //};
+                            //tempPlayer.TimeOut.Elapsed += _elapsedEventHandler; //如果该用户5秒钟未加入游戏,则干掉该用户.
+                            //tempPlayer.TimeOut.Start();
                             Players.Add(tempPlayer); //给该用户占位.
                             byte[][] dataJoinedSuccess = { DataType.Action.ToBinary(), ActionType.YouCanJoinIt.ToBinary() };
                             this.DataCenterProxy.Whisper(id, dataJoinedSuccess); //通知该用户可以加入游戏.
@@ -354,19 +354,21 @@ namespace ZBWZ_RollServer
                     dataScore = new byte[][] { DataType.Score.ToBinary(), onePlayer.Score.ToBinary() };
                     this.DataCenterProxy.Whisper(onePlayer.Id, dataScore);
                 }
-                List<int> playerIds = new List<int>(); //临时存储玩家ID
                 foreach (var onePlayer in Players)  
                 {
-                    playerIds.Add(onePlayer.Id);
+                    onePlayer.IsDead = false;
+                    onePlayer.IsReady = false;
+                    onePlayer.IsThrew = false;
+                    onePlayer.Join = false;
+                    onePlayer.Joined = true;
+                    onePlayer.Throw = false;
+                    onePlayer.IsThrew = false;
+                    onePlayer.ThrowTimeOuted = false;
+                    onePlayer.TimeOut.Stop();
+                    onePlayer.TimeOut.Dispose();
+                    onePlayer.TimeOut = new System.Timers.Timer();
                 }
-                Players.Clear();  //初始化玩家集合
-                foreach (var id in playerIds)
-                {
-                    var tempPlayer = new Player(id);
-                    tempPlayer.Joined = true;
-                    Players.Add(tempPlayer);
-                }
-                IsStart = false;
+                w.WL("本轮结束,游戏重新开始" + Environment.NewLine);
             }
         }
 
