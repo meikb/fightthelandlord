@@ -28,10 +28,10 @@ namespace ZBWZ
         Result,
         Score,
     }
-    public enum Result
+    public enum GameStates
     {
-        Win,
-        Lose,
-        Same,
+        WatingJoin,
+        WatingReady,
+        WatingThrow,
     }
 }

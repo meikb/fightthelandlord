@@ -17,16 +17,11 @@ namespace ZBWZ
         public bool IsThrew { get; set; }
         public int Score { get; set; }
         public int Num { get; set; }
-        public Timer TimeOut = new Timer(15000);
+        public long TimeOut { get; set; }
         public bool ThrowTimeOuted { get; set; }
         public Player(int Id)
         {
             this.Id = Id;
-            //TimeOut.Elapsed += (sender1, ea1) =>
-            //    {
-            //        ThrowTimeOuted = true;
-            //        TimeOut.Stop();
-            //    };
         }
         public Player()
         {
