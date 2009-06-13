@@ -41,42 +41,28 @@ namespace RollGame
         }
         #endregion
 
-        #region IDataCenterCallbackHandler Members
-
+        #region 暂时用不到这些
         public int ServiceID { get; set; }
         public DataCenterProxy DataCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {
-            w.WL(id + ": " + data + Environment.NewLine);
-        }
-
-        public void ReceiveWhisper(int id, byte[][] data)
-        {
-
         }
 
         public void ServiceEnter(int id)
         {
-            w.WL("Service " + id + " enter at " + DateTime.Now.ToString() + Environment.NewLine);
         }
 
         public void ServiceLeave(int id)
         {
-            w.WL("Service " + id + " leave at " + DateTime.Now.ToString() + Environment.NewLine);
         }
 
         public void JoinSuccessed(int[] serviceIdList)
         {
-            w.WL("Connected at " + DateTime.Now.ToString() + " with service id " + this.ServiceID + Environment.NewLine);
-            Console.Write("Current Service ID List = {");
-            foreach (var i in serviceIdList) Console.Write(i + ",");
-            Console.Write("}" + Environment.NewLine);
         }
 
         public void JoinFailed()
         {
-            w.WL("Error: service id " + this.ServiceID + " already exist!");
         }
 
         public void ConnectField(Exception ex)
@@ -92,10 +78,112 @@ namespace RollGame
 
         #endregion
 
-        #region IGameLoopHandler Members
-
         public GameLooper GameLooper { get; set; }
+        private static object _sync_players = new object();
+        private static object _sync_whispers = new object();
+        private static Dictionary<int, Character> _players = new Dictionary<int, Character>();
+        private static Queue<KeyValuePair<int, byte[][]>> _receivedWhispers = new Queue<KeyValuePair<int, byte[][]>>();
 
+        #region Methods
+
+        public void ReceiveWhisper(int id, byte[][] data)
+        {
+            var clientAction = (ClientActions)BitConverter.ToInt32(data[0], 0);
+            switch (clientAction)
+            {
+                case ClientActions.发_能进否:
+                    收到消息_发_能进否(id);
+                    break;
+                case ClientActions.发_要求进入:
+                    收到消息_发_要求进入(id);
+                    break;
+                case ClientActions.回_已准备好:
+                    收到消息_回_已准备好(id);
+                    break;
+                case ClientActions.回_已掷骰子:
+                    收到消息_回_已掷骰子(id);
+                    break;
+                case ClientActions.回_已看成绩单:
+                    收到消息_回_已看成绩单(id);
+                    break;
+            }
+        }
+
+        #region 收到消息
+        private void 收到消息_发_能进否(int id)
+        {
+            // todo: check...
+            // 把玩家加入列表
+            lock (_sync_players)
+            {
+                if (!_players.ContainsKey(id)) _players.Add(id, new Character());
+                else
+                {
+                    // todo: 重复的 id 进入
+                }
+            }
+        }
+        private void 收到消息_发_要求进入(int id)
+        {
+            // 先看看列表里有没有玩家
+            lock (_sync_players)
+            {
+                if (_players.ContainsKey(id))
+                {
+                    var player = _players[id];
+                    // ...
+                }
+                else
+                {
+                    发出消息_回_不能进(id);
+                }
+            }
+        }
+        private void 收到消息_回_已准备好(int id)
+        {
+        }
+        private void 收到消息_回_已掷骰子(int id)
+        {
+        }
+        private void 收到消息_回_已看成绩单(int id)
+        {
+        }
+        #endregion
+
+        #region 发出消息
+        private void 发出消息_回_能进(int id)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_能进) });
+        }
+        private void 发出消息_回_不能进(int id)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_不能进) });
+        }
+        private void 发出消息_回_请进入(int id)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_请进入) });
+        }
+        private void 发出消息_回_不能进入(int id)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_不能进入) });
+        }
+        private void 发出消息_发_请准备(int id)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请准备) });
+        }
+        private void 发出消息_发_请掷骰子(int id)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请掷骰子) });
+        }
+        private void 发出消息_发_请看成绩单(int id, byte[] data)
+        {
+            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请看成绩单), data });
+        }
+        #endregion
+
+        #endregion
+
+        #region GameLooper Init
         public void Init()
         {
             w.WL(@"
@@ -105,31 +193,85 @@ namespace RollGame
 时间：{1}
 ", this.ServiceID, DateTime.Now);
         }
+        #endregion
 
         public void Process()
         {
-            w.W(60, 0, true, ConsoleColor.White, ConsoleColor.Black, DateTime.Now.ToString());
         }
 
         public void Exit()
         {
-            w.WE();
         }
 
-        #endregion
+    }
+
+    public class Message
+    {
+        public int ID;
+        public byte[] Data;
+    }
+
+    public class ReceiveMessage : Message
+    {
+        public ClientActions ClientAction;
+    }
+
+    public class SendMessage : Message
+    {
+        public ServiceActions ServiceAction;
     }
 
 
-    // todo
     [Serializable]
     public class Character : OO.User_Character
     {
-        
+        public PlayerStates PlayerState;
+        public long AskExpireCount;
+        public long JoinExpireCount;
+        public long ReadyExpireCount;
+        public long RollExpireCount;
+        public int Score;
+        public int Point;
     }
-    //public class State
-    //{
-    //}
-    //public class Score
-    //{
-    //}
+    public enum GameStates
+    {
+        Ready, Play
+    }
+    public enum PlayerStates
+    {
+        Ask, Join, Ready, Roll
+    }
+
+    public enum ServiceActions
+    {
+        // Client Action : 发_能进否
+        回_能进,
+        回_不能进,
+
+        // Client Action : 发_要求进入
+        回_请进入,
+        回_不能进入,
+
+        发_请准备,
+
+        发_请掷骰子,
+
+        发_请看成绩单     // 带数据报表
+    }
+
+    public enum ClientActions
+    {
+        发_能进否,
+
+        发_要求进入,
+
+        // Service Action : 发_请准备
+        回_已准备好,
+
+        // Service Action : 发_请掷骰子
+        回_已掷骰子,
+
+        // Service Action : 发_请看成绩单
+        回_已看成绩单
+    }
 }
