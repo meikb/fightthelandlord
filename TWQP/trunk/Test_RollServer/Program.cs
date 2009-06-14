@@ -55,6 +55,8 @@ namespace RollGame
 
         public void Process()
         {
+            #region 处理消息
+
             KeyValuePair<int, byte[][]>[] whispers;
             lock (_sync_whispers)
             {
@@ -84,6 +86,12 @@ namespace RollGame
                         break;
                 }
             }
+
+            #endregion
+
+            #region 处理超时
+
+            #endregion
         }
 
         #region 收到消息
