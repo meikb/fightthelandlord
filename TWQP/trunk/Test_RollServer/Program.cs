@@ -10,8 +10,8 @@
         {
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new RollGame.Handler(id);
-            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
-            new GameLooper(h).Loop();   // 创建游戏循环并运行
+            new DataCenterCallback(h);                                      // 连接至 DataCenter 并准备好回调实例
+            new GameLooper(h) { LoopDurationLimit = 1000.0 }.Loop();        // 创建游戏循环并运行
         }
     }
 }
@@ -60,7 +60,7 @@ namespace RollGame
             KeyValuePair<int, byte[][]>[] whispers;
             lock (_sync_whispers)
             {
-                whispers = new KeyValuePair<int,byte[][]>[_receivedWhispers.Count];
+                whispers = new KeyValuePair<int, byte[][]>[_receivedWhispers.Count];
                 _receivedWhispers.CopyTo(whispers, 0);
             }
             foreach (var whisper in whispers)
@@ -91,6 +91,39 @@ namespace RollGame
 
             #region 处理超时
 
+            // 根据当前游戏的进展，分别判断玩家的超时并处理（踢除或强制状态改变）
+            lock (_sync_players)
+            {
+                var counter = GameLooper.Counter;
+                var removeIds = new List<int>();
+                foreach (var kvp in _players)
+                {
+                    var player = kvp.Value;
+                    var id = kvp.Key;
+                    if (player.客户端状态 == 客户端状态枚举.已发_能进否)
+                    {
+                        if (player.超时周期_发_能进否 <= counter) removeIds.Add(id);
+                    }
+                    else if (player.客户端状态 == 客户端状态枚举.已发_要求进入)
+                    {
+                        if (player.超时周期_发_要求进入 <= counter) removeIds.Add(id);
+                    }
+                    else if (player.客户端状态 == 客户端状态枚举.已回_已准备好)
+                    {
+                        //if (player.超时周期_回_已准备好 <= counter) removeIds.Add(id);
+                    }
+                    else if (player.客户端状态 == 客户端状态枚举.已回_已掷骰子)
+                    {
+                        //if (player.超时周期_回_已掷骰子 <= counter) removeIds.Add(id);
+                    }
+                    else if (player.客户端状态 == 客户端状态枚举.已回_已看成绩单)
+                    {
+                        if (player.超时周期_回_已看成绩单 <= counter) removeIds.Add(id);
+                    }
+                }
+                foreach (var id in removeIds) _players.Remove(id);
+            }
+
             #endregion
         }
 
@@ -98,6 +131,9 @@ namespace RollGame
         private void 收到消息_发_能进否(int id)
         {
             // todo: check...
+            // 对于　能进否 来说，有如下条件：
+            // 不超出游戏最大上限人数
+
             // 把玩家加入列表
             lock (_sync_players)
             {
@@ -110,13 +146,22 @@ namespace RollGame
         }
         private void 收到消息_发_要求进入(int id)
         {
+            // 对于　要求进入 来说，有如下条件：
+            // 玩家处于发起　能进否　的询问状态且未超时的
+
             // 先看看列表里有没有玩家
             lock (_sync_players)
             {
                 if (_players.ContainsKey(id))
                 {
                     var player = _players[id];
-                    // ...
+                    if (player.客户端状态 == 客户端状态枚举.已发_能进否)
+                    {
+                        // 令 player 进
+                        player.客户端状态 = 客户端状态枚举.已发_要求进入;
+                        // set 超时
+                        发出消息_回_请进入(id);
+                    }
                 }
                 else
                 {
@@ -255,21 +300,25 @@ namespace RollGame
     [Serializable]
     public class Character : OO.User_Character
     {
-        public PlayerStates PlayerState;
-        public long AskExpireCount;
-        public long JoinExpireCount;
-        public long ReadyExpireCount;
-        public long RollExpireCount;
-        public int Score;
-        public int Point;
+        public 客户端状态枚举 客户端状态;
+        public long 超时周期_发_能进否;
+        public long 超时周期_发_要求进入;
+        public long 超时周期_回_已准备好;
+        public long 超时周期_回_已掷骰子;
+        public long 超时周期_回_已看成绩单;
+        public int 获胜次数;
     }
-    public enum GameStates
+    public enum 服务状态枚举
     {
-        Ready, Play
+        正在游戏, 等待客户端准备好
     }
-    public enum PlayerStates
+    public enum 客户端状态枚举
     {
-        Ask, Join, Ready, Roll
+        已发_能进否,
+        已发_要求进入,
+        已回_已准备好,
+        已回_已掷骰子,
+        已回_已看成绩单
     }
 
     public enum ServiceActions
