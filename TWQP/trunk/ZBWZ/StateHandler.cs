@@ -29,6 +29,7 @@ namespace ZBWZ
         public byte[][] Throw(Player player)
         {
             player.Num = new Random().Next(1, 7);
+            player.IsThrew = true;
             return new byte[][] { DataType.Num.ToBinary(), player.Num.ToBinary() };
         }
 
@@ -97,7 +98,7 @@ namespace ZBWZ
         {
             foreach (var onePlayer in players)
             {
-                if (Counter >= onePlayer.TimeOut)
+                if (Counter >= onePlayer.TimeOut && !onePlayer.IsThrew)
                 {
                     return onePlayer;
                 }
@@ -157,7 +158,7 @@ namespace ZBWZ
         {
             foreach(var onePlayer in players)
             {
-                if (Counter >= onePlayer.TimeOut)
+                if (Counter >= onePlayer.TimeOut && !onePlayer.IsReady)
                 {
                     return onePlayer;
                 }
@@ -203,7 +204,7 @@ namespace ZBWZ
         {
             foreach (var onePlayer in players)
             {
-                if (Counter >= onePlayer.TimeOut)
+                if (Counter >= onePlayer.TimeOut && !onePlayer.Joined)
                 {
                     return onePlayer;
                 }
