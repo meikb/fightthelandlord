@@ -33,79 +33,68 @@ namespace RollGame
     public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
-
-        #region Constructor
-        public Handler(int serviceId)
-        {
-            this.ServiceID = serviceId;
-        }
-        #endregion
-
-        #region 暂时用不到这些
-        public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
-
-        public void Receive(int id, byte[][] data)
-        {
-        }
-
-        public void ServiceEnter(int id)
-        {
-        }
-
-        public void ServiceLeave(int id)
-        {
-        }
-
-        public void JoinSuccessed(int[] serviceIdList)
-        {
-        }
-
-        public void JoinFailed()
-        {
-        }
-
-        public void ConnectField(Exception ex)
-        {
-            w.WL("Error: Cannot connect to service!");
-            w.WL(ex.Message);
-        }
-
-        public bool Ping(byte[][] data)
-        {
-            return true;
-        }
-
-        #endregion
-
         public GameLooper GameLooper { get; set; }
         private static object _sync_players = new object();
         private static object _sync_whispers = new object();
         private static Dictionary<int, Character> _players = new Dictionary<int, Character>();
         private static Queue<KeyValuePair<int, byte[][]>> _receivedWhispers = new Queue<KeyValuePair<int, byte[][]>>();
 
-        #region Methods
+        #region ReceiveWhisper
 
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            var clientAction = (ClientActions)BitConverter.ToInt32(data[0], 0);
-            switch (clientAction)
+            lock (_sync_whispers)
             {
-                case ClientActions.发_能进否:
-                    收到消息_发_能进否(id);
-                    break;
-                case ClientActions.发_要求进入:
-                    收到消息_发_要求进入(id);
-                    break;
-                case ClientActions.回_已准备好:
-                    收到消息_回_已准备好(id);
-                    break;
-                case ClientActions.回_已掷骰子:
-                    收到消息_回_已掷骰子(id);
-                    break;
-                case ClientActions.回_已看成绩单:
-                    收到消息_回_已看成绩单(id);
-                    break;
+                _receivedWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, data));
+            }
+        }
+
+        #endregion
+
+        #region GameLooper Init
+        public void Init()
+        {
+            w.WL(@"
+服务开始运行.
+类型：RollGame Server
+编号：{0}
+时间：{1}
+", this.ServiceID, DateTime.Now);
+        }
+        #endregion
+
+        #region GameLooper Process
+
+        public void Process()
+        {
+            KeyValuePair<int, byte[][]>[] whispers;
+            lock (_sync_whispers)
+            {
+                whispers = new KeyValuePair<int,byte[][]>[_receivedWhispers.Count];
+                _receivedWhispers.CopyTo(whispers, 0);
+            }
+            foreach (var whisper in whispers)
+            {
+                var id = whisper.Key;
+                var clientAction = (ClientActions)BitConverter.ToInt32(whisper.Value[0], 0);
+                switch (clientAction)
+                {
+                    case ClientActions.发_能进否:
+                        收到消息_发_能进否(id);
+                        break;
+                    case ClientActions.发_要求进入:
+                        收到消息_发_要求进入(id);
+                        break;
+                    case ClientActions.回_已准备好:
+                        收到消息_回_已准备好(id);
+                        break;
+                    case ClientActions.回_已掷骰子:
+                        收到消息_回_已掷骰子(id);
+                        break;
+                    case ClientActions.回_已看成绩单:
+                        收到消息_回_已看成绩单(id);
+                        break;
+                }
             }
         }
 
@@ -183,27 +172,60 @@ namespace RollGame
 
         #endregion
 
-        #region GameLooper Init
-        public void Init()
-        {
-            w.WL(@"
-服务开始运行.
-类型：RollGame Server
-编号：{0}
-时间：{1}
-", this.ServiceID, DateTime.Now);
-        }
-        #endregion
-
-        public void Process()
-        {
-        }
-
+        #region GameLooper Exit
         public void Exit()
         {
         }
+        #endregion
 
+        #region 暂时不用管这些
+
+        #region Constructor
+        public Handler(int serviceId)
+        {
+            this.ServiceID = serviceId;
+        }
+        #endregion
+
+
+        public int ServiceID { get; set; }
+        public DataCenterProxy DataCenterProxy { get; set; }
+
+        public void Receive(int id, byte[][] data)
+        {
+        }
+
+        public void ServiceEnter(int id)
+        {
+        }
+
+        public void ServiceLeave(int id)
+        {
+        }
+
+        public void JoinSuccessed(int[] serviceIdList)
+        {
+        }
+
+        public void JoinFailed()
+        {
+        }
+
+        public void ConnectField(Exception ex)
+        {
+            w.WL("Error: Cannot connect to service!");
+            w.WL(ex.Message);
+        }
+
+        public bool Ping(byte[][] data)
+        {
+            return true;
+        }
+
+        #endregion
     }
+
+    #region 服务中用到的相关类定义
 
     public class Message
     {
@@ -274,4 +296,6 @@ namespace RollGame
         // Service Action : 发_请看成绩单
         回_已看成绩单
     }
+
+    #endregion
 }
