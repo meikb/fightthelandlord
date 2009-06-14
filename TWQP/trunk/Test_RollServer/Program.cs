@@ -51,18 +51,6 @@ namespace RollGame
 
         #endregion
 
-        #region GameLooper Init
-        public void Init()
-        {
-            w.WL(@"
-服务开始运行.
-类型：RollGame Server
-编号：{0}
-时间：{1}
-", this.ServiceID, DateTime.Now);
-        }
-        #endregion
-
         #region GameLooper Process
 
         public void Process()
@@ -172,13 +160,25 @@ namespace RollGame
 
         #endregion
 
+        #region 暂时不用管这些
+
+        #region GameLooper Init
+        public void Init()
+        {
+            w.WL(@"
+服务开始运行.
+类型：RollGame Server
+编号：{0}
+时间：{1}
+", this.ServiceID, DateTime.Now);
+        }
+        #endregion
+
         #region GameLooper Exit
         public void Exit()
         {
         }
         #endregion
-
-        #region 暂时不用管这些
 
         #region Constructor
         public Handler(int serviceId)
