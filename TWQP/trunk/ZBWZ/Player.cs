@@ -11,9 +11,6 @@ namespace ZBWZ
         public int Id { get; set; }
         public bool IsReady { get; set; }
         public bool Joined { get; set; }
-        public bool Join { get; set; }
-        public bool IsDead { get; set; }
-        public bool Throw { get; set; }
         public bool IsThrew { get; set; }
         public int Score { get; set; }
         public int Num { get; set; }
