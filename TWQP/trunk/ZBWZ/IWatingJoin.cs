@@ -23,19 +23,19 @@ namespace ZBWZ
         /// <param name="PlayerId">玩家ID</param>
         /// <param name="players">玩家列表</param>
         /// <returns>是否有该玩家</returns>
-        bool HasThisPlayer(int PlayerId, List<Player> players);
+        bool HasThisPlayer(int PlayerId, Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 找出超时玩家
         /// </summary>
         /// <param name="Counter">计时器</param>
         /// <param name="players">玩家列表</param>
         /// <returns>超时玩家</returns>
-        Player WhoJoinTimeOuted(long Counter, List<Player> players);
+        Player WhoJoinTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 所有用户是否已加入
         /// </summary>
         /// <param name="players">用户列表</param>
         /// <returns>是否全部加入</returns>
-        bool JoinSuccess(List<Player> players);
+        bool JoinSuccess(Dictionary<int, KeyValuePair<int, Character>> players);
     }
 }

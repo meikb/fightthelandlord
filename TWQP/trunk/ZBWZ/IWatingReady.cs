@@ -16,7 +16,7 @@ namespace ZBWZ
         /// </summary>
         /// <param name="playerAmount">玩家数量</param>
         /// <returns>是否全部准备</returns>
-        bool EveryOneIsReady(List<Player> players);
+        bool EveryOneIsReady(Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 得到发送给客户端的游戏开始数据
         /// </summary>
@@ -32,7 +32,7 @@ namespace ZBWZ
         /// <param name="Counter">计时器</param>
         /// <param name="players">玩家列表</param>
         /// <returns>已超时玩家或null</returns>
-        Player WhoReadyTimeOuted(long Counter, List<Player> players);
+        Player WhoReadyTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
 
     }
 }
