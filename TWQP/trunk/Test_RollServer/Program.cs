@@ -2,6 +2,7 @@
 {
     using System;
     using ConsoleHelper;
+    using System.ComponentModel;
 
     public static class Program
     {
@@ -19,6 +20,7 @@
 
 namespace RollGame
 {
+    #region usings
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -28,61 +30,119 @@ namespace RollGame
     using System.Threading;
     using ConsoleHelper;
     using DAL;
-
+    using System.ComponentModel;
+    #endregion
 
     public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
     {
+        #region 环境变量
+
         private Writer w = Writer.Instance;
         public GameLooper GameLooper { get; set; }
+        private static bool _isSending = true;
         private static object _sync_players = new object();
-        private static object _sync_whispers = new object();
+        private static object _sync_receivedWhispers = new object();
+        private static object _sync_sendWhispers = new object();
         private static Dictionary<int, Character> _players = new Dictionary<int, Character>();
-        private static Queue<KeyValuePair<int, byte[][]>> _receivedWhispers = new Queue<KeyValuePair<int, byte[][]>>();
+        private static Queue<RollMessage> _receivedWhispers = new Queue<RollMessage>();
+        private static Queue<RollMessage> _sendWhispers = new Queue<RollMessage>();
 
-        #region ReceiveWhisper
+        #endregion
 
+        #region ReceiveWhisper （收到消息后写队列）
+
+        /// <summary>
+        /// 过滤并接收消息，存入消息接收队列
+        /// </summary>
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            lock (_sync_whispers)
+            lock (_sync_receivedWhispers)
             {
-                _receivedWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, data));
+                var msg = new RollMessage
+                {
+                    ID = id,
+                    RollAction = (RollActions)BitConverter.ToInt32(data[0], 0),
+                    Data = data.Length > 1 ? data[1] : null
+                };
+
+                // todo: 检查当前 msg 是否有效（根据当前游戏进展，以及玩家的状态检查）
+                // 根据 id 定位玩家，如果未找到，则当前允许的是 请求进入指令
+                // 否则允许的是 “当前允许收到的客户端消息列表”
+
+                _receivedWhispers.Enqueue(msg);
             }
         }
 
         #endregion
 
-        #region GameLooper Process
+        #region GameLooper Init (初始化消息发送线程）
+        public void Init()
+        {
+            var bw = new BackgroundWorker();
+            bw.DoWork += (sender, ea) =>
+            {
+                while (_isSending)
+                {
+                    RollMessage[] msgs;
+                    lock (_sync_sendWhispers)
+                    {
+                        msgs = new RollMessage[_sendWhispers.Count];
+                        _sendWhispers.CopyTo(msgs, 0);
+                        _sendWhispers.Clear();
+                    }
+                    foreach (var msg in msgs)
+                    {
+                        // todo: async call Whisper
+
+                        DataCenterProxy.Whisper(msg.ID,
+                            new byte[][] { BitConverter.GetBytes((int)msg.RollAction), msg.Data });
+                    }
+                    msgs = null;
+                    Thread.Sleep(1);
+                }
+            };
+            bw.RunWorkerAsync();
+        }
+
+        #endregion
+
+        #region GameLooper Exit （停止后台线程）
+        public void Exit()
+        {
+            _isSending = false;
+        }
+        #endregion
+
+        #region GameLooper Process （每秒处理一次业务逻辑）
 
         public void Process()
         {
-            #region 处理消息
+            #region 处理收到的消息
 
-            KeyValuePair<int, byte[][]>[] whispers;
-            lock (_sync_whispers)
+            // 从队列读取消息
+            RollMessage[] whispers;
+            lock (_sync_receivedWhispers)
             {
-                whispers = new KeyValuePair<int, byte[][]>[_receivedWhispers.Count];
+                whispers = new RollMessage[_receivedWhispers.Count];
                 _receivedWhispers.CopyTo(whispers, 0);
+                _receivedWhispers.Clear();
             }
+
+            // 处理
             foreach (var whisper in whispers)
             {
-                var id = whisper.Key;
-                var clientAction = (ClientActions)BitConverter.ToInt32(whisper.Value[0], 0);
+                var id = whisper.ID;
+                var clientAction = whisper.RollAction;
                 switch (clientAction)
                 {
-                    case ClientActions.发_能进否:
-                        收到消息_发_能进否(id);
+                    case RollActions.C要求进入:
+                        处理_C要求进入(id);
                         break;
-                    case ClientActions.发_要求进入:
-                        收到消息_发_要求进入(id);
+                    case RollActions.C已准备好:
+                        处理_C已准备好(id);
                         break;
-                    case ClientActions.回_已准备好:
-                        收到消息_回_已准备好(id);
-                        break;
-                    case ClientActions.回_已掷骰子:
-                        收到消息_回_已掷骰子(id);
-                        break;
-                    case ClientActions.回_已看成绩单:
-                        收到消息_回_已看成绩单(id);
+                    case RollActions.C已投掷:
+                        处理_C已投掷(id);
                         break;
                 }
             }
@@ -100,7 +160,8 @@ namespace RollGame
                 {
                     var player = kvp.Value;
                     var id = kvp.Key;
-                    if (player.客户端状态 == 客户端状态枚举.已发_能进否)
+                    /*
+                    if (player.当前客户端状态 == 客户端状态枚举.正在进)
                     {
                         if (player.超时周期_发_能进否 <= counter) removeIds.Add(id);
                     }
@@ -120,41 +181,33 @@ namespace RollGame
                     {
                         if (player.超时周期_回_已看成绩单 <= counter) removeIds.Add(id);
                     }
+                    */
                 }
                 foreach (var id in removeIds) _players.Remove(id);
             }
 
             #endregion
+
+            #region 生成玩家应收消息列表
+
+            // todo
+
+            #endregion
         }
 
-        #region 收到消息
-        private void 收到消息_发_能进否(int id)
-        {
-            // todo: check...
-            // 对于　能进否 来说，有如下条件：
-            // 不超出游戏最大上限人数
+        #region 处理收到的消息
 
-            // 把玩家加入列表
-            lock (_sync_players)
-            {
-                if (!_players.ContainsKey(id)) _players.Add(id, new Character());
-                else
-                {
-                    // todo: 重复的 id 进入
-                }
-            }
-        }
-        private void 收到消息_发_要求进入(int id)
+        private void 处理_C要求进入(int id)
         {
             // 对于　要求进入 来说，有如下条件：
-            // 玩家处于发起　能进否　的询问状态且未超时的
-
-            // 先看看列表里有没有玩家
+            // 不超出游戏最大上限人数
+            // 玩家于列表中不存在，玩家未存在于别的游戏服务（将来会用到）
             lock (_sync_players)
             {
                 if (_players.ContainsKey(id))
                 {
                     var player = _players[id];
+                    /*
                     if (player.客户端状态 == 客户端状态枚举.已发_能进否)
                     {
                         // 令 player 进
@@ -162,76 +215,48 @@ namespace RollGame
                         // set 超时
                         发出消息_回_请进入(id);
                     }
+                     */
                 }
                 else
                 {
-                    发出消息_回_不能进(id);
+                    发出_S不能进入(id);
                 }
             }
         }
-        private void 收到消息_回_已准备好(int id)
+        private void 处理_C已准备好(int id)
         {
         }
-        private void 收到消息_回_已掷骰子(int id)
-        {
-        }
-        private void 收到消息_回_已看成绩单(int id)
+        private void 处理_C已投掷(int id)
         {
         }
         #endregion
 
         #region 发出消息
-        private void 发出消息_回_能进(int id)
+        private void 发出_S请进入(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_能进) });
+            _sendWhispers.Enqueue(new RollMessage { ID = id, RollAction = RollActions.S请进入 });
         }
-        private void 发出消息_回_不能进(int id)
+        private void 发出_S不能进入(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_不能进) });
+            _sendWhispers.Enqueue(new RollMessage { ID = id, RollAction = RollActions.S不能进入 });
         }
-        private void 发出消息_回_请进入(int id)
+        private void 发出_S请准备(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_请进入) });
+            _sendWhispers.Enqueue(new RollMessage { ID = id, RollAction = RollActions.S请准备 });
         }
-        private void 发出消息_回_不能进入(int id)
+        private void 发出_S请投掷(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_不能进入) });
+            _sendWhispers.Enqueue(new RollMessage { ID = id, RollAction = RollActions.S请投掷 });
         }
-        private void 发出消息_发_请准备(int id)
+        private void 发出_S请看成绩(int id, byte[] data)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请准备) });
-        }
-        private void 发出消息_发_请掷骰子(int id)
-        {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请掷骰子) });
-        }
-        private void 发出消息_发_请看成绩单(int id, byte[] data)
-        {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请看成绩单), data });
+            _sendWhispers.Enqueue(new RollMessage { ID = id, RollAction = RollActions.S请看成绩 });   // todo: , data = ...
         }
         #endregion
 
         #endregion
 
         #region 暂时不用管这些
-
-        #region GameLooper Init
-        public void Init()
-        {
-            w.WL(@"
-服务开始运行.
-类型：RollGame Server
-编号：{0}
-时间：{1}
-", this.ServiceID, DateTime.Now);
-        }
-        #endregion
-
-        #region GameLooper Exit
-        public void Exit()
-        {
-        }
-        #endregion
 
         #region Constructor
         public Handler(int serviceId)
@@ -278,81 +303,4 @@ namespace RollGame
         #endregion
     }
 
-    #region 服务中用到的相关类定义
-
-    public class Message
-    {
-        public int ID;
-        public byte[] Data;
-    }
-
-    public class ReceiveMessage : Message
-    {
-        public ClientActions ClientAction;
-    }
-
-    public class SendMessage : Message
-    {
-        public ServiceActions ServiceAction;
-    }
-
-
-    [Serializable]
-    public class Character : OO.User_Character
-    {
-        public 客户端状态枚举 客户端状态;
-        public long 超时周期_发_能进否;
-        public long 超时周期_发_要求进入;
-        public long 超时周期_回_已准备好;
-        public long 超时周期_回_已掷骰子;
-        public long 超时周期_回_已看成绩单;
-        public int 获胜次数;
-    }
-    public enum 服务状态枚举
-    {
-        正在游戏, 等待客户端准备好
-    }
-    public enum 客户端状态枚举
-    {
-        已发_能进否,
-        已发_要求进入,
-        已回_已准备好,
-        已回_已掷骰子,
-        已回_已看成绩单
-    }
-
-    public enum ServiceActions
-    {
-        // Client Action : 发_能进否
-        回_能进,
-        回_不能进,
-
-        // Client Action : 发_要求进入
-        回_请进入,
-        回_不能进入,
-
-        发_请准备,
-
-        发_请掷骰子,
-
-        发_请看成绩单     // 带数据报表
-    }
-
-    public enum ClientActions
-    {
-        发_能进否,
-
-        发_要求进入,
-
-        // Service Action : 发_请准备
-        回_已准备好,
-
-        // Service Action : 发_请掷骰子
-        回_已掷骰子,
-
-        // Service Action : 发_请看成绩单
-        回_已看成绩单
-    }
-
-    #endregion
 }
