@@ -32,7 +32,7 @@ namespace ZBWZ
             return new byte[][] { DataType.Num.ToBinary(), player.Num.ToBinary() };
         }
 
-        public byte[][] GetResult(List<Player> players)
+        public byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players)
         {
             int[] zero = { 0 };
             var TheSamePlayerAmount = 0;
@@ -75,7 +75,7 @@ namespace ZBWZ
             return new byte[][] { DataType.Score.ToBinary(), player.Score.ToBinary() };
         }
 
-        public bool EveryOneIsThrew(List<Player> players)
+        public bool EveryOneIsThrew(Dictionary<int, KeyValuePair<int, Character>> players)
         {
             var everyOneIsThrew = false;
             foreach (var onePlayer in players)
@@ -93,7 +93,7 @@ namespace ZBWZ
             return everyOneIsThrew;
         }
 
-        public Player WhoThrowTimeOuted(long Counter, List<Player> players)
+        public Player WhoThrowTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players)
         {
             foreach (var onePlayer in players)
             {
@@ -135,7 +135,7 @@ namespace ZBWZ
         }
 
 
-        public bool EveryOneIsReady(List<Player> players)
+        public bool EveryOneIsReady(Dictionary<int, KeyValuePair<int, Character>> players)
         {
             var everyOneIsReady = false;
             foreach (var onePlayer in players)
@@ -153,7 +153,7 @@ namespace ZBWZ
             return everyOneIsReady;
         }
 
-        public Player WhoReadyTimeOuted(long Counter, List<Player> players)
+        public Player WhoReadyTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players)
         {
             foreach(var onePlayer in players)
             {
@@ -186,7 +186,7 @@ namespace ZBWZ
             return data;
         }
 
-        public bool HasThisPlayer(int PlayerId, List<Player> players)
+        public bool HasThisPlayer(int PlayerId, Dictionary<int, KeyValuePair<int, Character>> players)
         {
             var has = false;
             foreach (var onePlayer in players)
@@ -199,7 +199,7 @@ namespace ZBWZ
             return has;
         }
 
-        public Player WhoJoinTimeOuted(long Counter, List<Player> players)
+        public Player WhoJoinTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players)
         {
             foreach (var onePlayer in players)
             {
@@ -211,7 +211,7 @@ namespace ZBWZ
             return null;
         }
 
-        public bool JoinSuccess(List<Player> players)
+        public bool JoinSuccess(Dictionary<int, KeyValuePair<int, Character>> players)
         {
             var joinSuccess = false;
             foreach (var onePlayer in players)
@@ -230,5 +230,22 @@ namespace ZBWZ
         }
 
         #endregion
+    }
+
+    [Serializable]
+    public class Character : OO.User_Character
+    {
+        public ClientStates clientState;
+        public long 超时_进入超时;
+        public long 超时_准备超时;
+        public long 超时_投掷超时;
+        public int 获胜次数;
+    }
+
+    public class Message
+    {
+        int Id;
+        byte[][] data;
+        public RollActions rollAction;
     }
 }

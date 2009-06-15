@@ -20,7 +20,7 @@ namespace ZBWZ
         /// </summary>
         /// <param name="PlayerAmount">玩家列表</param>
         /// <returns>所有玩家是否已投掷骰子</returns>
-        bool EveryOneIsThrew(List<Player> players);
+        bool EveryOneIsThrew(Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 投掷骰子
         /// </summary>
@@ -32,7 +32,7 @@ namespace ZBWZ
         /// </summary>
         /// <param name="players">所有玩家集合</param>
         /// <returns>结果</returns>
-        byte[][] GetResult(List<Player> players);
+        byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 获取玩家分数比特流
         /// </summary>
@@ -45,6 +45,6 @@ namespace ZBWZ
         /// <param name="Counter">计时器</param>
         /// <param name="players">玩家列表</param>
         /// <returns>超时的玩家</returns>
-        Player WhoThrowTimeOuted(long Counter, List<Player> players);
+        Player WhoThrowTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
     }
 }

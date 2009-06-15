@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{22CFD82D-2429-4947-B59D-7534D44E5E38}</ProjectGuid>
     <OutputType>Exe</OutputType>
@@ -68,6 +68,10 @@
     <ProjectReference Include="..\Constructs\Constructs.csproj">
       <Project>{301592A6-B6EA-44A3-A24D-7C4CCAC4726C}</Project>
       <Name>Constructs</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{B5FB0399-580B-4F40-8AF1-3999FC6312CB}</Project>
+      <Name>DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\Extensions\Extensions.csproj">
       <Project>{BCF3DAA8-8ED5-4F40-A14D-4787198143D5}</Project>

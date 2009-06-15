@@ -32,14 +32,6 @@ namespace ZBWZ_RollServer
     {
         private Writer w = Writer.Instance;
         /// <summary>
-        /// 玩家集合
-        /// </summary>
-        private List<Player> Players = new List<Player>();
-        /// <summary>
-        /// 游戏状态
-        /// </summary>
-        GameStates _currentGameState = GameStates.WatingJoin;
-        /// <summary>
         /// 状态处理程序
         /// </summary>
         StateHandler _currentStateHander = new StateHandler();
@@ -68,23 +60,7 @@ namespace ZBWZ_RollServer
         /// 发送消息列队
         /// </summary>
         private static Queue<KeyValuePair<int, byte[][]>> _sendWhispers = new Queue<KeyValuePair<int, byte[][]>>();
-
-        /// <summary>
-        /// 通过ID获取玩家
-        /// </summary>
-        /// <param name="id">ID</param>
-        /// <returns>玩家</returns>
-        public Player GetPlayerById(int id)
-        {
-            foreach (var onePlayer in Players)
-            {
-                if (onePlayer.Id == id)
-                {
-                    return onePlayer;
-                }
-            }
-            return null;
-        }
+        private static ServiceStates serviceState = ServiceStates.等待客户端进入;
 
         public void Receive(int id, byte[][] data)
         {
@@ -167,23 +143,20 @@ namespace ZBWZ_RollServer
             foreach (var whisper in whispers)
             {
                 var id = whisper.Key;
-                var clientAction = (ClientActions)BitConverter.ToInt32(whisper.Value[0], 0);
-                switch (clientAction)
+                var rollAction = (RollActions)BitConverter.ToInt32(whisper.Value[0], 0);
+                switch (rollAction)
                 {
-                    case ClientActions.发_能进否:
-                        收到消息_发_能进否(id);
+                    case RollActions.C_能否进入:
+                        处理_能进否(id);
                         break;
-                    case ClientActions.发_要求进入:
-                        收到消息_发_要求进入(id);
+                    case RollActions.C_进入:
+                        处理_进入(id);
                         break;
-                    case ClientActions.回_已准备好:
-                        收到消息_回_已准备好(id);
+                    case RollActions.C_准备:
+                        处理_准备(id);
                         break;
-                    case ClientActions.回_已掷骰子:
-                        收到消息_回_已掷骰子(id);
-                        break;
-                    case ClientActions.回_已看成绩单:
-                        收到消息_回_已看成绩单(id);
+                    case RollActions.C_投掷:
+                        处理_投掷(id);
                         break;
                 }
 
@@ -196,27 +169,19 @@ namespace ZBWZ_RollServer
                     var removeIds = new List<int>();
                     foreach (var kvp in _players)
                     {
-                        var player = kvp.Value;
+                        var player = kvp.Value.Value;
                         var id = kvp.Key;
-                        if (player.客户端状态 == 客户端状态枚举.已发_能进否)
+                        if (player.clientState == ClientStates.已发_能进否)
                         {
-                            if (player.超时周期_发_能进否 <= counter) removeIds.Add(id);
+                            if (player.超时_进入超时 <= counter) removeIds.Add(id);
                         }
-                        else if (player.客户端状态 == 客户端状态枚举.已发_要求进入)
+                        else if (player.clientState == ClientStates.已发_要求进入)
                         {
-                            if (player.超时周期_发_要求进入 <= counter) removeIds.Add(id);
+                            if (player.超时_准备超时 <= counter) removeIds.Add(id);
                         }
-                        else if (player.客户端状态 == 客户端状态枚举.已回_已准备好)
+                        else if (player.clientState == ClientStates.已发_已准备好)
                         {
-                            //if (player.超时周期_回_已准备好 <= counter) removeIds.Add(id);
-                        }
-                        else if (player.客户端状态 == 客户端状态枚举.已回_已掷骰子)
-                        {
-                            //if (player.超时周期_回_已掷骰子 <= counter) removeIds.Add(id);
-                        }
-                        else if (player.客户端状态 == 客户端状态枚举.已回_已看成绩单)
-                        {
-                            if (player.超时周期_回_已看成绩单 <= counter) removeIds.Add(id);
+                            if (player.超时_投掷超时 <= counter) removeIds.Add(id);
                         }
                     }
                     foreach (var id in removeIds) _players.Remove(id);
@@ -225,12 +190,44 @@ namespace ZBWZ_RollServer
                 #endregion
             }
             #endregion
-
-
+            #region 游戏进度指示
+            if (serviceState == ServiceStates.等待客户端进入)
+            {
+                var h = _currentStateHander as IWatingJoin;
+                if (h.JoinSuccess(_players))
+                {
+                    serviceState = ServiceStates.等待客户端准备好;
+                }
+            }
+            else if (serviceState == ServiceStates.等待客户端准备好)
+            {
+                var h = _currentStateHander as IWatingReady;
+                if (h.EveryOneIsReady(_players))
+                {
+                    foreach (var player in _players)
+                    {
+                        发出_请投掷(player.Value.Key);
+                    }
+                    serviceState = ServiceStates.正在游戏;
+                }
+            }
+            else if (serviceState == ServiceStates.正在游戏)
+            {
+                var h = _currentStateHander as IWatingThrow;
+                if (h.EveryOneIsThrew(_players))
+                {
+                    foreach (var player in _players)
+                    {
+                        发出_请准备(player.Value.Key);
+                    }
+                    serviceState = ServiceStates.等待客户端准备好;
+                }
+            }
+            #endregion
         }
 
         #region 收到消息
-        private void 收到消息_发_能进否(int id)
+        private void 处理_能进否(int id)
         {
             // todo: check...
             // 对于　能进否 来说，有如下条件：
@@ -239,22 +236,26 @@ namespace ZBWZ_RollServer
             // 把玩家加入列表
             lock (_sync_players)
             {
-                if (!_players.ContainsKey(id))
+                if (_currentStateHander.CanIJoinIt(_players.Count))  //人数是否已满
                 {
-                    var player = new Character();
-                    //占位
-                    _players.Add(id, player);
-                    //十秒未发送 要求进入,就删之
-                    player.超时周期_发_能进否 = GameLooper.Counter + 10;
-
-                }
-                else
-                {
-                    // todo: 重复的 id 进入
+                    if (!_players.ContainsKey(id))
+                    {
+                        var player = new Character();
+                        //占位
+                        _players.Add(id, player);
+                        //十秒未发送 要求进入,就删之
+                        player.超时_进入超时 = GameLooper.Counter + 10;
+                        //回复可以进入
+                        发出_能够进入(id);
+                    }
+                    else
+                    {
+                        // todo: 重复的 id 进入
+                    }
                 }
             }
         }
-        private void 收到消息_发_要求进入(int id)
+        private void 处理_进入(int id)
         {
             // 对于　要求进入 来说，有如下条件：
             // 玩家处于发起　能进否　的询问状态且未超时的
@@ -265,86 +266,73 @@ namespace ZBWZ_RollServer
                 if (_players.ContainsKey(id))
                 {
                     var player = _players[id].Value;
-                    if (player.客户端状态 == 客户端状态枚举.已发_能进否)
+                    if (player.clientState == ClientStates.已发_能进否)
                     {
                         // 令 player 进
-                        player.客户端状态 = 客户端状态枚举.已发_要求进入;
+                        player.clientState = ClientStates.已发_要求进入;
                         // set 超时
-                        player.超时周期_发_要求进入 = GameLooper.Counter + 30;
-                        发出消息_回_请进入(id);
+                        player.超时_准备超时 = GameLooper.Counter + 30;
+                        发出_能够进入(id);
                     }
                 }
                 else
                 {
-                    发出消息_回_不能进(id);
+                    发出_不能进入(id);
                 }
             }
         }
-        private void 收到消息_回_已准备好(int id)
+        private void 处理_准备(int id)
         {
             lock (_sync_players)
             {
                 if (_players.ContainsKey(id))
                 {
                     var player = _players[id].Value;
-                    if (player.客户端状态 == 客户端状态枚举.已发_要求进入)
+                    if (player.clientState == ClientStates.已发_要求进入)
                     {
                         //让 player 准备
-                        player.客户端状态 = 客户端状态枚举.已回_已准备好;
-                        // set 超时
+                        player.clientState = ClientStates.已发_已准备好;
+                        // 当所有玩家都已准备时才使用投掷超时
                     }
                 }
             }
         }
-        private void 收到消息_回_已掷骰子(int id)
+        private void 处理_投掷(int id)
         {
             lock (_sync_players)
             {
                 if (_players.ContainsKey(id))
                 {
                     var player = _players[id].Value;
-                    if (player.客户端状态 == 客户端状态枚举.已回_已准备好)
+                    if (player.clientState == ClientStates.已发_已准备好)
                     {
                         //让 player 投掷骰子
-                        player.客户端状态 = 客户端状态枚举.已回_已掷骰子;
-                        
-                        
+                        player.clientState = ClientStates.已发_已掷骰子;
                     }
                 }
             }
-        }
-        private void 收到消息_回_已看成绩单(int id)
-        {
         }
         #endregion
         #region 发出消息
-        private void 发出消息_回_能进(int id)
+        private void 发出_能够进入(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_能进) });
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_能进入) }));
         }
-        private void 发出消息_回_不能进(int id)
+        private void 发出_不能进入(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_不能进) });
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_不能进入) }));
         }
-        private void 发出消息_回_请进入(int id)
+        private void 发出_请准备(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_请进入) });
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请准备) }));
         }
-        private void 发出消息_回_不能进入(int id)
+        private void 发出_请投掷(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.回_不能进入) });
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请投掷) }));
         }
-        private void 发出消息_发_请准备(int id)
+        private void 发出_结果(int id)
         {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请准备) });
-        }
-        private void 发出消息_发_请掷骰子(int id)
-        {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请掷骰子) });
-        }
-        private void 发出消息_发_请看成绩单(int id, byte[] data)
-        {
-            this.DataCenterProxy.Whisper(id, new byte[][] { BitConverter.GetBytes((int)ServiceActions.发_请看成绩单), data });
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果) }));
         }
         #endregion
 
@@ -357,32 +345,4 @@ namespace ZBWZ_RollServer
 
         #endregion
     }
-
-    [Serializable]
-    public class Character : OO.User_Character
-    {
-        public 客户端状态枚举 客户端状态;
-        public long 超时周期_发_要求进入;
-        public long 超时周期_回_已准备好;
-        public long 超时周期_回_已掷骰子;
-        public long 超时周期_回_已看成绩单;
-        public int 获胜次数;
-    }
-
-    public class Message
-    {
-        int Id;
-        byte[][] data;
-    }
-
-    public class ReceiveMessage : Message
-    {
-        public ClientActions ClientAction;
-    }
-    public class SendMessage : Message
-    {
-        public ServiceActions ServiceAction;
-    }
-
-
 }
