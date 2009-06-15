@@ -5,8 +5,8 @@ using System.Text;
 using System.Data;
 using System.Timers;
 using System.Threading;
+using System.ComponentModel;
 using ConsoleHelper;
-using Extensions;
 using ZBWZ;
 using DAL;
 
@@ -21,6 +21,9 @@ namespace ZBWZ_RollServer
             var h = new Handler(id);
             Console.CursorVisible = false;
             new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            BackgroundWorker bw = new BackgroundWorker();
+            bw.DoWork += new DoWorkEventHandler(h.SendMessage);
+            bw.RunWorkerAsync();
             var gameLooper = new GameLooper(h);   // 创建游戏循环并运行
             gameLooper.IsSpeedLimitMode = true; //限速循环
             gameLooper.LoopDurationLimit = 1000; //每次循环耗时1秒
@@ -167,24 +170,26 @@ namespace ZBWZ_RollServer
                 {
                     var counter = GameLooper.Counter;
                     var removeIds = new List<int>();
+                    var autoThrowPlayers = new List<Character>();
                     foreach (var kvp in _players)
                     {
                         var player = kvp.Value.Value;
-                        var id = kvp.Key;
+                        var playerId = kvp.Key;
                         if (player.clientState == ClientStates.已发_能进否)
                         {
-                            if (player.超时_进入超时 <= counter) removeIds.Add(id);
+                            if (player.超时_进入超时 <= counter && player.clientState == ClientStates.已发_能进否) removeIds.Add(playerId);
                         }
                         else if (player.clientState == ClientStates.已发_要求进入)
                         {
-                            if (player.超时_准备超时 <= counter) removeIds.Add(id);
+                            if (player.超时_准备超时 <= counter && player.clientState == ClientStates.已发_要求进入) removeIds.Add(playerId);
                         }
                         else if (player.clientState == ClientStates.已发_已准备好)
                         {
-                            if (player.超时_投掷超时 <= counter) removeIds.Add(id);
+                            if (player.超时_投掷超时 <= counter && player.clientState == ClientStates.已发_已准备好) autoThrowPlayers.Add(player);
                         }
                     }
-                    foreach (var id in removeIds) _players.Remove(id);
+                    foreach (var playerId in removeIds) _players.Remove(playerId); //删除进入超时,准备超时玩家
+                    foreach (var player in autoThrowPlayers) _currentStateHander.Throw(player); //为投掷超时玩家自动投掷
                 }
 
                 #endregion
@@ -241,8 +246,9 @@ namespace ZBWZ_RollServer
                     if (!_players.ContainsKey(id))
                     {
                         var player = new Character();
+                        player.clientState = ClientStates.已发_能进否;
                         //占位
-                        _players.Add(id, player);
+                        _players.Add(id, new KeyValuePair<int, Character>(id, player));
                         //十秒未发送 要求进入,就删之
                         player.超时_进入超时 = GameLooper.Counter + 10;
                         //回复可以进入
@@ -250,7 +256,8 @@ namespace ZBWZ_RollServer
                     }
                     else
                     {
-                        // todo: 重复的 id 进入
+                        //重复进入
+                        发出_不能进入(id);
                     }
                 }
             }
@@ -277,6 +284,7 @@ namespace ZBWZ_RollServer
                 }
                 else
                 {
+                    //未询问进入
                     发出_不能进入(id);
                 }
             }
@@ -308,6 +316,8 @@ namespace ZBWZ_RollServer
                     {
                         //让 player 投掷骰子
                         player.clientState = ClientStates.已发_已掷骰子;
+                        _currentStateHander.Throw(player);
+                        发出_点数(id);
                     }
                 }
             }
@@ -330,11 +340,26 @@ namespace ZBWZ_RollServer
         {
             _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请投掷) }));
         }
+        private void 发出_点数(int id)
+        {
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_点数), BitConverter.GetBytes(_players[id].Value.Num) }));
+        }
         private void 发出_结果(int id)
         {
             _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果) }));
         }
         #endregion
+
+        public void SendMessage(object sender, DoWorkEventArgs e)
+        {
+            KeyValuePair<int, byte[][]>[] whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
+            _sendWhispers.CopyTo(whispers, 0);
+            _sendWhispers.Clear();
+            foreach (var whisper in whispers)
+            {
+                this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+            }
+        }
 
 
 

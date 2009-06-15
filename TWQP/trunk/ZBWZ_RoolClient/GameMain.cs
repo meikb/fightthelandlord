@@ -22,7 +22,7 @@ namespace ZBWZ_RoolClient
         {
             var inputId = new InputId();
             inputId.ShowDialog();
-            player = new Player(inputId.PlayerId);
+            player = new Dictionary<int, KeyValuePair<int, Character>>(inputId.PlayerId);
         }
 
         private void 输入IDToolStripMenuItem_Click(object sender, EventArgs e)
