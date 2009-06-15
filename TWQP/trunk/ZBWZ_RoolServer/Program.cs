@@ -352,12 +352,16 @@ namespace ZBWZ_RollServer
 
         public void SendMessage(object sender, DoWorkEventArgs e)
         {
-            KeyValuePair<int, byte[][]>[] whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
-            _sendWhispers.CopyTo(whispers, 0);
-            _sendWhispers.Clear();
-            foreach (var whisper in whispers)
+            while (true)
             {
-                this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                KeyValuePair<int, byte[][]>[] whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
+                _sendWhispers.CopyTo(whispers, 0);
+                _sendWhispers.Clear();
+                foreach (var whisper in whispers)
+                {
+                    this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                }
+                Thread.Sleep(1);
             }
         }
 
