@@ -8,6 +8,7 @@ using System.Threading;
 using ConsoleHelper;
 using Extensions;
 using ZBWZ;
+using DAL;
 
 namespace ZBWZ_RollServer
 {
@@ -53,6 +54,16 @@ namespace ZBWZ_RollServer
 
         public int ServiceID { get; set; }
         public DataCenterProxy DataCenterProxy { get; set; }
+        private static object _sync_players = new object();
+        private static object _sync_whispers = new object();
+        /// <summary>
+        /// 玩家列表
+        /// </summary>
+        private static Dictionary<int, KeyValuePair<int,Character>> _players = new Dictionary<int,KeyValuePair<int,Character>>();
+        /// <summary>
+        /// 收到消息列队
+        /// </summary>
+        private static Queue<KeyValuePair<int, byte[][]>> _receivedWhispers = new Queue<KeyValuePair<int,byte[][]>>();
 
         /// <summary>
         /// 通过ID获取玩家
@@ -78,65 +89,10 @@ namespace ZBWZ_RollServer
 
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            var dt = data[0].ToObject<DataType>();
-            object Edata = data[1].ToObject<object>();
-            switch (dt)
+            lock (_sync_whispers)
             {
-                case DataType.Action:
-                    if ((ActionType)Edata == ActionType.CanIJoinIt)
-                    {
-                        var dataReturn = _currentStateHander.CanIJoinIt(Players.Count);
-                        ActionType temp = dataReturn[1].ToObject<ActionType>();
-                        if (temp == ActionType.YouCanJoinIt)
-                        {
-                            var tempPlayer = new Player(id);
-                            tempPlayer.TimeOut = GameLooper.Counter + 5;
-                            Players.Add(tempPlayer);
-                            w.WL(id + " 准备加入游戏 " + Environment.NewLine);
-                        }
-                        DataCenterProxy.Whisper(id, data);
-                    }
-                    if ((ActionType)Edata == ActionType.Join)
-                    {
-                        if (_currentStateHander.HasThisPlayer(id, Players)) //判断该玩家有没有预约
-                        {
-                            var tempPlayer = GetPlayerById(id);
-                            tempPlayer.Joined = true;
-                            tempPlayer.TimeOut = GameLooper.Counter + 30;
-                            w.WL(id + " 加入游戏 " + Environment.NewLine);
-                        }
-                        else
-                        {
-                            w.WL(id + " 发现非法请求,已拒绝 " + Environment.NewLine);
-                        }
-                    }
-                    if ((ActionType)Edata == ActionType.Ready)
-                    {
-                        var tempPlayer = GetPlayerById(id);
-                        if (tempPlayer != null)
-                        {
-                            _currentStateHander.PlayerReady(tempPlayer);
-                            w.WL(id + " 已准备 " + Environment.NewLine);
-                        }
-                    }
-                    if ((ActionType)Edata == ActionType.Throw)
-                    {
-                        var tempPlayer = GetPlayerById(id);
-                        if (tempPlayer != null)
-                        {
-                            var numData = _currentStateHander.Throw(tempPlayer);
-                            this.DataCenterProxy.Whisper(id, numData);
-                            w.WL(id + " 已投掷色子 " + Environment.NewLine);
-                        }
-                    }
-                    break;
-                case DataType.UserMessage:
-                    Edata = (string)Edata;
-                    w.WL(id + " whisper: " + Edata + Environment.NewLine);
-                    break;
+                _receivedWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, data));
             }
-
-            //w.WL(id + " whisper: " + dt.ToString() + Environment.NewLine);
         }
 
         public void ServiceEnter(int id)
@@ -196,54 +152,19 @@ namespace ZBWZ_RollServer
 
         public void Process()
         {
-            if (_currentGameState == GameStates.WatingJoin)
+            #region 处理消息
+            KeyValuePair<int, byte[][]>[] whispers;
+            lock (_sync_whispers)
             {
-                var h = _currentStateHander as IWatingJoin;
-                if (h.JoinSuccess(Players))
-                {
-                    _currentGameState = GameStates.WatingReady;
-                }
-                var timeOutPlayer = h.WhoJoinTimeOuted(GameLooper.Counter, Players);
-                if (timeOutPlayer != null)
-                {
-                    Players.Remove(timeOutPlayer);
-                }
+                whispers = new KeyValuePair<int, byte[][]>[_receivedWhispers.Count];
+                _receivedWhispers.CopyTo(whispers, 0);
+                _receivedWhispers.Clear();
             }
-            if (_currentGameState == GameStates.WatingReady)
+            foreach (var whisper in whispers)
             {
-                var h = _currentStateHander as IWatingReady;
-                if (h.EveryOneIsReady(Players))
-                {
-                    _currentGameState = GameStates.WatingThrow;
-                }
-                var timeOutPlayer = h.WhoReadyTimeOuted(GameLooper.Counter, Players);
-                if (timeOutPlayer != null)
-                {
-                    Players.Remove(timeOutPlayer);
-                    w.WL("玩家 " + timeOutPlayer.Id.ToString() + " 在规定时间内未准备");
-                }
+                var id = whisper.Key;
             }
-            if (_currentGameState == GameStates.WatingThrow)
-            {
-                var h = _currentStateHander as IWatingThrow;
-                if (h.EveryOneIsThrew(Players))
-                {
-                    var resultData = h.GetResult(Players);
-                    foreach (var onePlayer in Players)
-                    {
-                        var ScoreData = h.GetScore(onePlayer);
-                        DataCenterProxy.Whisper(onePlayer.Id, ScoreData);
-                        DataCenterProxy.Whisper(onePlayer.Id, resultData);
-                    }
-                    _currentGameState = GameStates.WatingReady;
-                }
-                var timeOutPlayer = h.WhoThrowTimeOuted(GameLooper.Counter, Players);
-                if (timeOutPlayer != null)
-                {
-                    h.Throw(timeOutPlayer);
-                    w.WL("玩家 " + timeOutPlayer.Id.ToString() + " 在规定时间内未投掷骰子,服务器自动为其投掷");
-                }
-            }
+            #endregion
         }
 
         public void Exit()
@@ -253,5 +174,33 @@ namespace ZBWZ_RollServer
 
         #endregion
     }
+
+    [Serializable]
+    public class Character : OO.User_Character
+    {
+        public 客户端状态枚举 客户端状态;
+        public long 超时周期_发_能进否;
+        public long 超时周期_发_要求进入;
+        public long 超时周期_回_已准备好;
+        public long 超时周期_回_已掷骰子;
+        public long 超时周期_回_已看成绩单;
+        public int 获胜次数;
+    }
+
+    public class Message
+    {
+        int Id;
+        byte[][] data;
+    }
+
+    public class ReceiveMessage : Message
+    {
+        public ClientActions ClientAction;
+    }
+    public class SendMessage : Message
+    {
+        public ServiceActions ServiceAction;
+    }
+    
 
 }
