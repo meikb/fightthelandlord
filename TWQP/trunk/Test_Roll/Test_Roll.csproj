@@ -5,21 +5,13 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E25166B3-E855-4358-B7EA-D6146A9B3E45}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{C6DF216B-1772-422B-99D4-676E20BB940E}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Test_RollServer</RootNamespace>
-    <AssemblyName>Test_RollServer</AssemblyName>
+    <RootNamespace>Test_Roll</RootNamespace>
+    <AssemblyName>Test_Roll</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <SccProjectName>
-    </SccProjectName>
-    <SccLocalPath>
-    </SccLocalPath>
-    <SccAuxPath>
-    </SccAuxPath>
-    <SccProvider>
-    </SccProvider>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -43,9 +35,6 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <Reference Include="System.ServiceModel">
-      <RequiredTargetFramework>3.0</RequiredTargetFramework>
-    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -56,40 +45,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="Enums.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="todo.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ConosleHelper\ConosleHelper.csproj">
-      <Project>{94780E41-9078-4D3B-B2FD-464A0B54D79D}</Project>
-      <Name>ConosleHelper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Constructs\Constructs.csproj">
-      <Project>{301592A6-B6EA-44A3-A24D-7C4CCAC4726C}</Project>
-      <Name>Constructs</Name>
-    </ProjectReference>
     <ProjectReference Include="..\DAL\DAL.csproj">
       <Project>{B5FB0399-580B-4F40-8AF1-3999FC6312CB}</Project>
       <Name>DAL</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Extensions\Extensions.csproj">
-      <Project>{BCF3DAA8-8ED5-4F40-A14D-4787198143D5}</Project>
-      <Name>Extensions</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Test_Roll\Test_Roll.csproj">
-      <Project>{C6DF216B-1772-422B-99D4-676E20BB940E}</Project>
-      <Name>Test_Roll</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\ZBWZ\ZBWZ.csproj">
-      <Project>{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}</Project>
-      <Name>ZBWZ</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
