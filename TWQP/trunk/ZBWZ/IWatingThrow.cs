@@ -26,25 +26,25 @@ namespace ZBWZ
         /// </summary>
         /// <param name="player">玩家</param>
         /// <returns>返回发送给玩家的Num数据</returns>
-        byte[][] Throw(Player player);
-        /// <summary>
-        /// 得到本局结果
-        /// </summary>
-        /// <param name="players">所有玩家集合</param>
-        /// <returns>结果</returns>
-        byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players);
+        byte[][] Throw(Character player);
+        ///// <summary>
+        ///// 得到本局结果
+        ///// </summary>
+        ///// <param name="players">所有玩家集合</param>
+        ///// <returns>结果</returns>
+        //byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 获取玩家分数比特流
         /// </summary>
         /// <param name="player">玩家</param>
         /// <returns>分数比特流</returns>
-        byte[][] GetScore(Player player);
-        /// <summary>
-        /// 谁投掷骰子超时了
-        /// </summary>
-        /// <param name="Counter">计时器</param>
-        /// <param name="players">玩家列表</param>
-        /// <returns>超时的玩家</returns>
-        Player WhoThrowTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
+        byte[][] GetScore(Character player);
+        ///// <summary>
+        ///// 谁投掷骰子超时了
+        ///// </summary>
+        ///// <param name="Counter">计时器</param>
+        ///// <param name="players">玩家列表</param>
+        ///// <returns>超时的玩家</returns>
+        //Dictionary<int, KeyValuePair<int, Character>> WhoThrowTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
     }
 }

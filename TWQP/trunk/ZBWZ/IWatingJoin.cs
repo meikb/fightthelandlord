@@ -16,21 +16,14 @@ namespace ZBWZ
         /// </summary>
         /// <param name="Amount">现有玩家数量</param>
         /// <returns>发送给客户端的数据</returns>
-        byte[][] CanIJoinIt(int Amount);
-        /// <summary>
-        /// 指定玩家列表里是否有该玩家
-        /// </summary>
-        /// <param name="PlayerId">玩家ID</param>
-        /// <param name="players">玩家列表</param>
-        /// <returns>是否有该玩家</returns>
-        bool HasThisPlayer(int PlayerId, Dictionary<int, KeyValuePair<int, Character>> players);
+        bool CanIJoinIt(int Amount);
         /// <summary>
         /// 找出超时玩家
         /// </summary>
         /// <param name="Counter">计时器</param>
         /// <param name="players">玩家列表</param>
         /// <returns>超时玩家</returns>
-        Player WhoJoinTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
+        //Dictionary<int, KeyValuePair<int, Character>> WhoJoinTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players);
         /// <summary>
         /// 所有用户是否已加入
         /// </summary>

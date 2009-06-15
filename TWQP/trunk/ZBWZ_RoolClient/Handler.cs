@@ -14,7 +14,7 @@ namespace ZBWZ_RoolClient
         private Writer w = Writer.Instance;
         private object _syncObj = new object();
         private List<int> _rollServiceIdList = new List<int>();
-        private Player I = new Player();
+        private Dictionary<int, KeyValuePair<int, Character>> I = new Dictionary<int, KeyValuePair<int, Character>>();
         public ConsoleKeyInfo kb { get; set; }
         public int ServerId { get; set; }
 
