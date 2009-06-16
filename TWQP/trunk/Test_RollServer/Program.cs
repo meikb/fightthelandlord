@@ -12,7 +12,7 @@
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new RollGame.Handler(id);
             new DataCenterCallback(h);                                      // 连接至 DataCenter 并准备好回调实例
-            new GameLooper(h) { LoopDurationLimit = 1000.0 }.Loop();        // 创建游戏循环并运行
+            new GameLooper(h) { LoopDurationLimit = 1000 }.Loop();        // 创建游戏循环并运行
         }
     }
 }
