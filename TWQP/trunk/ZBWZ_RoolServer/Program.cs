@@ -51,6 +51,7 @@ namespace ZBWZ_RollServer
         public DataCenterProxy DataCenterProxy { get; set; }
         private static object _sync_players = new object();
         private static object _sync_whispers = new object();
+        private static object _sync_sendWhispers = new object();
         /// <summary>
         /// 玩家列表
         /// </summary>
@@ -63,6 +64,9 @@ namespace ZBWZ_RollServer
         /// 发送消息列队
         /// </summary>
         private static Queue<KeyValuePair<int, byte[][]>> _sendWhispers = new Queue<KeyValuePair<int, byte[][]>>();
+        /// <summary>
+        /// 服务器流程状态
+        /// </summary>
         private static ServiceStates serviceState = ServiceStates.等待客户端进入;
 
         public void Receive(int id, byte[][] data)
@@ -131,6 +135,7 @@ namespace ZBWZ_RollServer
 编号：{0}
 时间：{1}
 ", this.ServiceID, DateTime.Now);
+            _currentStateHander.AmountPlayer = 3;
         }
 
         public void Process()
@@ -188,7 +193,11 @@ namespace ZBWZ_RollServer
                             if (player.超时_投掷超时 <= counter && player.clientState == ClientStates.已发_已准备好) autoThrowPlayers.Add(player);
                         }
                     }
-                    foreach (var playerId in removeIds) _players.Remove(playerId); //删除进入超时,准备超时玩家
+                    foreach (var playerId in removeIds)
+                    {
+                        _players.Remove(playerId); //删除进入超时,准备超时玩家
+                        发出_踢出(id);
+                    }
                     foreach (var player in autoThrowPlayers) _currentStateHander.Throw(player); //为投掷超时玩家自动投掷
                 }
 
@@ -225,6 +234,7 @@ namespace ZBWZ_RollServer
                     {
                         发出_请准备(player.Value.Key);
                     }
+                    发出_结果();
                     serviceState = ServiceStates.等待客户端准备好;
                 }
             }
@@ -253,6 +263,7 @@ namespace ZBWZ_RollServer
                         player.超时_进入超时 = GameLooper.Counter + 10;
                         //回复可以进入
                         发出_能够进入(id);
+                        w.WL("玩家 " + id + "准备进入游戏" + Environment.NewLine);
                     }
                     else
                     {
@@ -279,7 +290,8 @@ namespace ZBWZ_RollServer
                         player.clientState = ClientStates.已发_要求进入;
                         // set 超时
                         player.超时_准备超时 = GameLooper.Counter + 30;
-                        发出_能够进入(id);
+                        发出_请准备(id);
+                        w.WL("玩家 " + id + "已进入游戏" + Environment.NewLine);
                     }
                 }
                 else
@@ -301,6 +313,8 @@ namespace ZBWZ_RollServer
                         //让 player 准备
                         player.clientState = ClientStates.已发_已准备好;
                         // 当所有玩家都已准备时才使用投掷超时
+
+                        w.WL("玩家 " + id + "已准备" + Environment.NewLine);
                     }
                 }
             }
@@ -318,6 +332,7 @@ namespace ZBWZ_RollServer
                         player.clientState = ClientStates.已发_已掷骰子;
                         _currentStateHander.Throw(player);
                         发出_点数(id);
+                        w.WL("玩家 " + id + "已投掷骰子,点数为 " + player.Num.ToString() + Environment.NewLine);
                     }
                 }
             }
@@ -326,27 +341,56 @@ namespace ZBWZ_RollServer
         #region 发出消息
         private void 发出_能够进入(int id)
         {
-            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_能进入) }));
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_能进入) }));
+            }
         }
         private void 发出_不能进入(int id)
         {
-            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_不能进入) }));
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_不能进入) }));
+            }
         }
         private void 发出_请准备(int id)
         {
-            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请准备) }));
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请准备) }));
+            }
         }
         private void 发出_请投掷(int id)
         {
-            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请投掷) }));
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_请投掷) }));
+            }
         }
         private void 发出_点数(int id)
         {
-            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_点数), BitConverter.GetBytes(_players[id].Value.Num) }));
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_点数), BitConverter.GetBytes(_players[id].Value.Num) }));
+            }
         }
-        private void 发出_结果(int id)
+        private void 发出_结果()
         {
-            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果) }));
+            lock (_sync_sendWhispers)
+            {
+                byte[][] dataResult = _currentStateHander.GetResult(_players);
+                foreach (var player in _players)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(player.Value.Key, dataResult));
+                }
+            }
+        }
+        private void 发出_踢出(int id)
+        {
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, new byte[][] { BitConverter.GetBytes((int)RollActions.S_踢出) }));
+            }
         }
         #endregion
 
@@ -354,14 +398,17 @@ namespace ZBWZ_RollServer
         {
             while (true)
             {
-                KeyValuePair<int, byte[][]>[] whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
-                _sendWhispers.CopyTo(whispers, 0);
-                _sendWhispers.Clear();
-                foreach (var whisper in whispers)
+                lock (_sync_sendWhispers)
                 {
-                    this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                    KeyValuePair<int, byte[][]>[] whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
+                    _sendWhispers.CopyTo(whispers, 0);
+                    _sendWhispers.Clear();
+                    foreach (var whisper in whispers)
+                    {
+                        this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                    }
+                    Thread.Sleep(1);
                 }
-                Thread.Sleep(1);
             }
         }
 

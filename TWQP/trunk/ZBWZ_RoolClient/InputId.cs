@@ -20,6 +20,7 @@ namespace ZBWZ_RoolClient
         private void button1_Click(object sender, EventArgs e)
         {
             PlayerId = int.Parse(textBox1.Text);
+            Close();
         }
     }
 }

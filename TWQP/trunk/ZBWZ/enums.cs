@@ -34,11 +34,14 @@ namespace ZBWZ
     }
     public enum ClientStates
     {
+        断开,
         已发_能进否,
         已发_要求进入,
         已发_已准备好,
         已发_已掷骰子,
-        已发_已看成绩单
+        已发_已看成绩单,
+        请准备,
+        请投掷
     }
 
     public enum RollActions
@@ -53,5 +56,6 @@ namespace ZBWZ
         S_请投掷,
         S_点数,
         S_结果,
+        S_踢出
     }
 }

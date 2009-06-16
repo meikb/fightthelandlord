@@ -9,22 +9,48 @@ using ZBWZ;
 
 namespace ZBWZ_RoolClient
 {
-    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
+    public class Handler : IDataCenterCallbackHandler
     {
         private Writer w = Writer.Instance;
-        private object _syncObj = new object();
-        private List<int> _rollServiceIdList = new List<int>();
-        private Dictionary<int, KeyValuePair<int, Character>> I = new Dictionary<int, KeyValuePair<int, Character>>();
-        public ConsoleKeyInfo kb { get; set; }
-        public int ServerId { get; set; }
+        public object _syncWhispers = new object();
+        /// <summary>
+        /// 服务器列表
+        /// </summary>
+        public List<int> _rollServiceIdList = new List<int>();
+        /// <summary>
+        /// 发出消息列队
+        /// </summary>
+        Queue<KeyValuePair<int, byte[][]>> _sendWhispers = new Queue<KeyValuePair<int, byte[][]>>();
+        /// <summary>
+        /// 收到消息列队
+        /// </summary>
+        public Queue<KeyValuePair<int, byte[][]>> _receiveWhispers = new Queue<KeyValuePair<int, byte[][]>>();
+        /// <summary>
+        /// 游戏状态
+        /// </summary>
+        public ClientStates clientState { get; set; }
+        /// <summary>
+        /// 计时器
+        /// </summary>
+        public long Counter { get; set; }
+        /// <summary>
+        /// 玩家
+        /// </summary>
+        public Character player;
+        /// <summary>
+        /// 远程服务ID
+        /// </summary>
+        public int ServerID;
 
-        public Handler(int serviceId)
+        public Handler(int PlayerId)
         {
-            this.ServiceID = serviceId;
+            this.ServiceID = PlayerId;
         }
 
         #region IDataCenterCallbackHandler Members
-
+        /// <summary>
+        /// 玩家ID
+        /// </summary>
         public int ServiceID { get; set; }
         public DataCenterProxy DataCenterProxy { get; set; }
 
@@ -35,51 +61,18 @@ namespace ZBWZ_RoolClient
 
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            DataType dataType = data[0].ToObject<DataType>();
-            switch (dataType)
+            lock (_syncWhispers)
             {
-                case DataType.Action:
-                    ActionType actionType = data[1].ToObject<ActionType>();
-                    if (actionType == ActionType.YouCanJoinIt)
-                    {
-
-                    }
-                    if (actionType == ActionType.YouCanNotJoinIt)
-                    {
-
-                    }
-                    if (actionType == ActionType.JoinedSuccess)
-                    {
-
-                    }
-                    if (actionType == ActionType.Out)
-                    {
-
-                    }
-                    if (actionType == ActionType.Start)
-                    {
-
-                    }
-                    break;
-                case DataType.Num:
-                    break;
-                case DataType.TimeOutTime:
-
-                    break;
-                case DataType.Score:
-
-                    break;
-                case DataType.Result:
-                    break;
+                //将接收到的数据加入到列队
+                _receiveWhispers.Enqueue(new KeyValuePair<int, byte[][]>(id, data));
             }
-            //w.WL(id + " whisper: " + data + Environment.NewLine);
         }
 
         public void ServiceEnter(int id)
         {
             if (id > 100)
             {
-                lock (_syncObj)
+                lock (_syncWhispers)
                 {
                     if (!_rollServiceIdList.Contains(id)) _rollServiceIdList.Add(id);
                     // todo
@@ -92,7 +85,7 @@ namespace ZBWZ_RoolClient
         {
             if (id > 100)
             {
-                lock (_syncObj)
+                lock (_syncWhispers)
                 {
                     if (_rollServiceIdList.Contains(id)) _rollServiceIdList.Remove(id);
                     // todo
@@ -106,17 +99,17 @@ namespace ZBWZ_RoolClient
             foreach (var id in serviceIdList)
                 if (id > 100) _rollServiceIdList.Add(id);
 
-            w.WL("已于" + DateTime.Now.ToString() + " 连入数据中心");
+            //w.WL("已于" + DateTime.Now.ToString() + " 连入数据中心");
             if (_rollServiceIdList.Count > 0)
             {
-                w.W("发现 Roll 游戏服务器：");
-                w.W("请输入服务器ID加入相应服务器" + Environment.NewLine);
-                w.W<int>(_rollServiceIdList);
-                w.WL();
+                //w.W("发现 Roll 游戏服务器：");
+                //w.W("请输入服务器ID加入相应服务器" + Environment.NewLine);
+                //w.W<int>(_rollServiceIdList);
+                //w.WL();
             }
             else
             {
-                w.W("未发现任何 Roll 游戏服务器！");
+               // w.W("未发现任何 Roll 游戏服务器！");
             }
         }
 
@@ -143,29 +136,114 @@ namespace ZBWZ_RoolClient
 
         #endregion
 
-        #region IGameLoopHandler Members
+//        #region IGameLoopHandler Members
 
-        public GameLooper GameLooper { get; set; }
+//        public GameLooper GameLooper { get; set; }
 
-        public void Init()
+//        public void Init()
+//        {
+//            w.WL(@"
+//游戏开始运行.
+//类型：RollGame Client
+//编号：{0}
+//时间：{1}
+//", this.ServiceID, DateTime.Now);
+//        }
+
+//        public void Process()
+//        {
+
+//        }
+
+//        public void Exit()
+//        {
+//            w.WE();
+//        }
+
+//        #endregion
+
+        #region 发出消息
+        public void 发出_能进否()
         {
-            w.WL(@"
-游戏开始运行.
-类型：RollGame Client
-编号：{0}
-时间：{1}
-", this.ServiceID, DateTime.Now);
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(ServerID, new byte[][] { BitConverter.GetBytes((int)RollActions.C_能否进入) }));
         }
 
-        public void Process()
+        public void 发出_进入()
         {
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(ServerID, new byte[][] { BitConverter.GetBytes((int)RollActions.C_进入) }));
         }
 
-        public void Exit()
+        public void 发出_准备()
         {
-            w.WE();
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(ServerID, new byte[][] { BitConverter.GetBytes((int)RollActions.C_准备) }));
         }
 
+        public void 发出_投掷()
+        {
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(ServerID, new byte[][] { BitConverter.GetBytes((int)RollActions.C_投掷) }));
+        }
+
+        public void 发出_所有消息()
+        {
+            KeyValuePair<int, byte[][]>[]  whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
+            _sendWhispers.CopyTo(whispers, 0);
+            _sendWhispers.Clear();
+            foreach (var whisper in whispers) DataCenterProxy.Whisper(ServerID, whisper.Value);
+        }
+        #endregion
+        #region 处理超时
+        public void 处理超时()
+        {
+            if (Counter >= player.超时_进入超时 && player.clientState == ClientStates.已发_能进否)
+            {
+                clientState = ClientStates.断开;
+            }
+            if (Counter >= player.超时_准备超时 && player.clientState == ClientStates.已发_要求进入)
+            {
+                clientState = ClientStates.断开;
+            }
+            if (Counter >= player.超时_投掷超时 && player.clientState == ClientStates.已发_已准备好)
+            {
+                clientState = ClientStates.断开;
+            }
+        }
+        #endregion
+
+        #region 处理消息
+        public void 处理_能够进入()
+        {
+            发出_进入();
+            clientState = ClientStates.已发_要求进入;
+        }
+        public void 处理_不能进入()
+        {
+            clientState = ClientStates.断开;
+        }
+        public void 处理_请准备()
+        {
+            clientState = ClientStates.请准备;
+        }
+        public void 处理_请投掷()
+        {
+            clientState = ClientStates.请投掷;
+        }
+        public void 处理_点数(int Score)
+        {
+            player.Num = Score;
+        }
+        /// <summary>
+        /// 处理消息:结果
+        /// </summary>
+        /// <param name="dataResult">赢家ID列表</param>
+        /// <returns>true表示自己是赢家,false表示自己是输家</returns>
+        public bool 处理_结果(List<int> dataResult)
+        {
+            return dataResult.Contains(ServiceID);
+        }
+        public void 处理_踢出()
+        {
+            clientState = ClientStates.断开;
+        }
         #endregion
 
     }
