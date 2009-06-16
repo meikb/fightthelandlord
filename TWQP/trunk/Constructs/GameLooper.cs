@@ -40,7 +40,7 @@ public partial class GameLooper
     /// <summary>
     /// 每次循环所消耗的时间上限（限速模式）
     /// </summary>
-    public double LoopDurationLimit { get; set; }
+    public long LoopDurationLimit { get; set; }
 
     /// <summary>
     /// 是否为限速模式
@@ -50,7 +50,20 @@ public partial class GameLooper
     /// <summary>
     /// 每次循环所消耗的时间 0.0001 秒为单位
     /// </summary>
-    public double LoopDuration { get; set; }
+    public long LoopDuration
+    {
+        get { return this.Stopwatch.ElapsedMilliseconds - this.LastDuration; }
+    }
+
+    /// <summary>
+    /// 上个循结束时所经历的总时长
+    /// </summary>
+    public long LastDuration { get; set; }
+
+    /// <summary>
+    /// 当前所经历的总时长
+    /// </summary>
+    public long Duration { get { return this.Stopwatch.ElapsedMilliseconds; } }
 
     /// <summary>
     /// 游戏循环中用到的计时器
@@ -66,6 +79,11 @@ public partial class GameLooper
     /// 随机数发生器
     /// </summary>
     public Random Random { get; set; }
+
+    /// <summary>
+    /// 当前循环的
+    /// </summary>
+    public bool IsCurrentProcessCalled { get; set; }
 
     #endregion
 
@@ -88,11 +106,12 @@ public partial class GameLooper
     public void Init()
     {
         this.IsLooping = true;
-        this.LoopDuration = 0;
+        this.LastDuration = 0;
         this.Counter = 0;
         this.Stopwatch = new System.Diagnostics.Stopwatch();
         this.IsSpeedLimitMode = true;
-        this.LoopDurationLimit = 10.0;
+        this.LoopDurationLimit = 100;
+        this.IsCurrentProcessCalled = false;
     }
 
     /// <summary>
@@ -106,27 +125,28 @@ public partial class GameLooper
         {
             if (this.IsSpeedLimitMode)
             {
-                this.LoopDuration += this.Stopwatch.ElapsedMilliseconds;
-                if (this.LoopDuration > this.LoopDurationLimit)
+                if (this.IsCurrentProcessCalled)
                 {
-                    this.Counter++;
-                    this._handler.Process();
-                    this.LoopDuration = 0.0;
+                    if (this.LoopDuration < this.LoopDurationLimit)
+                        System.Threading.Thread.Sleep(1);
+                    else this.IsCurrentProcessCalled = false;
                 }
                 else
                 {
-                    System.Threading.Thread.Sleep(1);
+                    this.Counter++;
+                    this.LastDuration = this.Duration;
+                    this._handler.Process();
+                    this.IsCurrentProcessCalled = true;
                 }
             }
             else
             {
                 this.Counter++;
-                this.LoopDuration = this.Stopwatch.ElapsedMilliseconds;
                 this._handler.Process();
             }
         }
+        this.Stopwatch.Stop();
         _handler.Exit();
     }
     #endregion
-
 }

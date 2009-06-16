@@ -14,63 +14,61 @@ namespace ZBWZ
 
         public int RoundScore { get; set; }
 
-        public bool EveryOneIsThrew(int PlayerAmount)
-        {
-            if (PlayerAmount == ThrewPlayerAmount)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
         public byte[][] Throw(Character player)
         {
             player.Num = new Random().Next(1, 7);
             return new byte[][] { DataType.Num.ToBinary(), player.Num.ToBinary() };
         }
 
-        //public byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players)
-        //{
-        //    int[] zero = { 0 };
-        //    var TheSamePlayerAmount = 0;
-        //    byte[][] dataResult;
-        //    players.Sort(Player.ComparePlayerByNum); //从小到大排序
-        //    players.Values.Select
-        //    for (int i = players.Values.Count - 1; i >= 1; i++) //判断相同点数玩家的数量
-        //    {
-        //        if (players[i] == players[i - 1])
-        //        {
-        //            TheSamePlayerAmount++;
-        //        }
-        //        else
-        //        {
-        //            break;
-        //        }
-        //    }
-        //    if (TheSamePlayerAmount == players.Count - 1) //全部相同
-        //    {
-        //        dataResult = new byte[][] { DataType.Result.ToBinary(), zero.ToBinary() };
-        //    }
-        //    else
-        //    {
-        //        List<int> WinersId = new List<int>();
-        //        for (int i = players.Count - TheSamePlayerAmount; i < players.Count; i++) //给胜者加分
-        //        {
-        //            players.Values[i] += RoundScore;
-        //            WinersId.Add(players[i].Id);
-        //        }
-        //        for (int i = 0; i < players.Count - TheSamePlayerAmount; i++)  //给败者减分
-        //        {
-        //            players[i].Score -= TheSamePlayerAmount * RoundScore / (players.Count - TheSamePlayerAmount);
-        //        }
-        //        dataResult = new byte[][] { DataType.Result.ToBinary(), WinersId.ToArray().ToBinary() }; //返回的结果数据
-        //    }
-        //    return dataResult;
+        public byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players)
+        {
+            int[] zero = { 0 };
+            var TheSamePlayerAmount = 0;
+            byte[][] dataResult;
+            for (int i = 0; i < players.Count - 1; i++)  //根据骰子的点数从小到大排序
+            {
+                for (int j = i + 1; j < players.Count; j++)
+                {
+                    var temp = players[i];
+                    if (players[i].Value.Num > players[j].Value.Num)
+                    {
+                        players[i] = players[j];
+                        players[j] = temp;
+                    }
+                }
+            }
+            for (int i = players.Values.Count - 1; i >= 1; i++) //判断相同点数玩家的数量
+            {
+                if (players[i].Value.Num == players[i - 1].Value.Num)
+                {
+                    TheSamePlayerAmount++;
+                }
+                else
+                {
+                    break;
+                }
+            }
+            if (TheSamePlayerAmount == players.Count - 1) //全部相同
+            {
+                dataResult = new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果), zero.ToBinary() };
+            }
+            else
+            {
+                List<int> WinersId = new List<int>();
+                for (int i = players.Count - TheSamePlayerAmount; i < players.Count; i++) //给胜者加分
+                {
+                    players[i].Value.Gold += RoundScore;
+                    WinersId.Add(players[i].Key);
+                }
+                for (int i = 0; i < players.Count - TheSamePlayerAmount; i++)  //给败者减分
+                {
+                    players[i].Value.Gold -= TheSamePlayerAmount * RoundScore / (players.Count - TheSamePlayerAmount);
+                }
+                dataResult = new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果), WinersId.ToArray().ToBinary() }; //返回的结果数据
+            }
+            return dataResult;
 
-        //}
+        }
         public byte[][] GetScore(Character player)
         {
             return new byte[][] { DataType.Score.ToBinary(), player.Gold.ToBinary() };
@@ -78,20 +76,26 @@ namespace ZBWZ
 
         public bool EveryOneIsThrew(Dictionary<int, KeyValuePair<int, Character>> players)
         {
-            var everyOneIsThrew = false;
+            var ThrewPlayer = 0;
             foreach (var onePlayer in players)
             {
                 if (onePlayer.Value.Value.clientState == ClientStates.已发_已掷骰子)
                 {
-                    everyOneIsThrew = true;
+                    ThrewPlayer++;
                 }
                 else
                 {
-                    everyOneIsThrew = false;
-                    break;
+                    return false;
                 }
             }
-            return everyOneIsThrew;
+            if (ThrewPlayer == AmountPlayer)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //public Dictionary<int, KeyValuePair<int, Character>> WhoThrowTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players)
@@ -125,20 +129,26 @@ namespace ZBWZ
 
         public bool EveryOneIsReady(Dictionary<int, KeyValuePair<int, Character>> players)
         {
-            var everyOneIsReady = false;
+            var ReadyPlayer = 0;
             foreach (var onePlayer in players)
             {
                 if (onePlayer.Value.Value.clientState == ClientStates.已发_已准备好)
                 {
-                    everyOneIsReady = true;
+                    ReadyPlayer++;
                 }
                 else
                 {
-                    everyOneIsReady = false;
-                    break;
+                    return false;
                 }
             }
-            return everyOneIsReady;
+            if (ReadyPlayer == AmountPlayer)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         //public Dictionary<int, KeyValuePair<int, Character>> WhoReadyTimeOuted(long Counter, Dictionary<int, KeyValuePair<int, Character>> players)
@@ -186,20 +196,26 @@ namespace ZBWZ
 
         public bool JoinSuccess(Dictionary<int, KeyValuePair<int, Character>> players)
         {
-            var joinSuccess = false;
+            var joinSuccessPlayer = 0;
             foreach (var onePlayer in players)
             {
                 if (onePlayer.Value.Value.clientState == ClientStates.已发_要求进入)
                 {
-                    joinSuccess = true;
+                    joinSuccessPlayer++;
                 }
                 else
                 {
-                    joinSuccess = false;
-                    break;
+                    return false;
                 }
             }
-            return joinSuccess;
+            if (joinSuccessPlayer == AmountPlayer)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         #endregion
