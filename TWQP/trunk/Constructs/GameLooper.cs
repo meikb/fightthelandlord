@@ -81,7 +81,7 @@ public partial class GameLooper
     public Random Random { get; set; }
 
     /// <summary>
-    /// 当前循环的
+    /// 当前循环的 Process 是否已经被调用过
     /// </summary>
     public bool IsCurrentProcessCalled { get; set; }
 
@@ -90,7 +90,7 @@ public partial class GameLooper
     #region Constructor
 
     /// <summary>
-    /// GameLoop 的构造函数（初始化各个 handler　及 form）
+    /// GameLoop 的构造函数（初始化，设置 handler）
     /// </summary>
     public GameLooper(IGameLoopHandler handler)
     {
