@@ -48,15 +48,15 @@ namespace ZBWZ_RoolClient
         private void btnReady_Click(object sender, EventArgs e)
         {
             h.发出_准备();
-            btnReady.Visible = false;
             h.clientState = ClientStates.已发_已准备好;
+            btnReady.Visible = false;
         }
 
         private void btnThrow_Click(object sender, EventArgs e)
         {
             h.发出_投掷();
-            btnThrow.Visible = false;
             h.clientState = ClientStates.已发_已掷骰子;
+            btnThrow.Visible = false;
             pictureBox1.Visible = true;
         }
 
@@ -126,7 +126,7 @@ namespace ZBWZ_RoolClient
                         pictureBox1.Visible = false;
                         break;
                     case RollActions.S_结果:
-                        var WinerIds = receiveWhisper.Value[1].ToObject<List<int>>();
+                        var WinerIds = receiveWhisper.Value[1].ToObject<int[]>();
                         var isWiner = h.处理_结果(WinerIds);
                         if (isWiner)
                         {

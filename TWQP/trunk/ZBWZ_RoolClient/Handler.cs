@@ -236,9 +236,10 @@ namespace ZBWZ_RoolClient
         /// </summary>
         /// <param name="dataResult">赢家ID列表</param>
         /// <returns>true表示自己是赢家,false表示自己是输家</returns>
-        public bool 处理_结果(List<int> dataResult)
+        public bool 处理_结果(int[] dataResult)
         {
-            return dataResult.Contains(ServiceID);
+            clientState = ClientStates.请准备;
+            return dataResult.Contains<int>(ServiceID);
         }
         public void 处理_踢出()
         {

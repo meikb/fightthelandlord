@@ -197,6 +197,7 @@ namespace ZBWZ_RollServer
                     {
                         _players.Remove(playerId); //删除进入超时,准备超时玩家
                         发出_踢出(id);
+                        w.WL("踢出 " + id.ToString() + Environment.NewLine);
                     }
                     foreach (var player in autoThrowPlayers) _currentStateHander.Throw(player); //为投掷超时玩家自动投掷
                 }
@@ -308,7 +309,7 @@ namespace ZBWZ_RollServer
                 if (_players.ContainsKey(id))
                 {
                     var player = _players[id].Value;
-                    if (player.clientState == ClientStates.已发_要求进入)
+                    if (player.clientState == ClientStates.已发_要求进入 || player.clientState == ClientStates.已发_已掷骰子)
                     {
                         //让 player 准备
                         player.clientState = ClientStates.已发_已准备好;
