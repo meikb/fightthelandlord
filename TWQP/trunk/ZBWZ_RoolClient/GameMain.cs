@@ -27,6 +27,7 @@ namespace ZBWZ_RoolClient
             var inputId = new InputId();
             inputId.ShowDialog();
             h = new Handler(inputId.PlayerId);
+            lblID.Text = inputId.PlayerId.ToString();
             h.player = new Character();
             new DataCenterCallback(h);
             timer1.Enabled = true;
@@ -122,29 +123,39 @@ namespace ZBWZ_RoolClient
                         break;
                     case RollActions.S_点数:
                         h.处理_点数(BitConverter.ToInt32(receiveWhisper.Value[1], 0));
+                        h.clientState = ClientStates.已发_已掷骰子;
                         lblNum.Text = h.player.Num.ToString();
                         pictureBox1.Visible = false;
+                        btnThrow.Visible = false;
                         break;
                     case RollActions.S_结果:
                         var WinerIds = receiveWhisper.Value[1].ToObject<int[]>();
-                        var isWiner = h.处理_结果(WinerIds);
-                        if (isWiner)
+                        if (WinerIds[0] == 0)
                         {
-                            MessageBox.Show("你赢了");
+                            MessageBox.Show("打平了");
                         }
                         else
                         {
-                            StringBuilder sb = new StringBuilder("你输了,赢家是: ");
-                            foreach (var WinerId in WinerIds)
+                            var isWiner = h.处理_结果(WinerIds);
+                            if (isWiner)
                             {
-                                sb.Append(WinerId.ToString() + " ");
+                                MessageBox.Show("你赢了");
                             }
-                            MessageBox.Show(sb.ToString());
+                            else
+                            {
+                                StringBuilder sb = new StringBuilder("你输了,赢家是: ");
+                                foreach (var WinerId in WinerIds)
+                                {
+                                    sb.Append(WinerId.ToString() + " ");
+                                }
+                                MessageBox.Show(sb.ToString());
+                            }
                         }
                         break;
                     case RollActions.S_踢出:
                         h.处理_踢出();
                         break;
+
                 }
             }
         }
