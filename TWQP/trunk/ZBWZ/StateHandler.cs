@@ -20,16 +20,16 @@ namespace ZBWZ
             return new byte[][] { DataType.Num.ToBinary(), player.Num.ToBinary() };
         }
 
-        public static int ComparePlayerByNum(Character p1, Character p2)
+        public static int ComparePlayerByNum(KeyValuePair<int, Character> p1,KeyValuePair<int, Character> p2)
         {
 
-            if (p1.Num > p2.Num)
+            if (p1.Value.Num > p2.Value.Num)
             {
                 return 1;
             }
             else
             {
-                if (p1.Num < p2.Num)
+                if (p1.Value.Num < p2.Value.Num)
                 {
                     return -1;
                 }
@@ -43,26 +43,14 @@ namespace ZBWZ
         public byte[][] GetResult(Dictionary<int, KeyValuePair<int, Character>> players)
         {
             int[] zero = { 0 };
-            var TheSamePlayerAmount = 0;
+            var TheSamePlayerAmount = 1;
             byte[][] dataResult;
-            var listPlayers = new List<Character>();
-            foreach(var player in players) listPlayers.Add(player.Value.Value);
-            listPlayers.Sort(ComparePlayerByNum);
-            //for (int i = 0; i < players.Count - 1; i++)  //根据骰子的点数从小到大排序
-            //{
-            //    for (int j = i + 1; j < players.Count; j++)
-            //    {
-            //        var temp = players.[i];
-            //        if (players[i].Value.Num > players[j].Value.Num)
-            //        {
-            //            players[i] = players[j];
-            //            players[j] = temp;
-            //        }
-            //    }
-            //}
+            var listPlayers = new List<KeyValuePair<int, Character>>();
+            foreach (var player in players) listPlayers.Add(new KeyValuePair<int, Character>(player.Value.Key, player.Value.Value));
+            listPlayers.Sort(ComparePlayerByNum);//根据骰子的点数从小到大排
             for (int i = listPlayers.Count - 1; i >= 1; i--) //判断相同点数玩家的数量
             {
-                if (listPlayers[i].Num == listPlayers[i - 1].Num)
+                if (listPlayers[i].Value.Num == listPlayers[i - 1].Value.Num)
                 {
                     TheSamePlayerAmount++;
                 }
@@ -71,7 +59,7 @@ namespace ZBWZ
                     break;
                 }
             }
-            if (TheSamePlayerAmount == listPlayers.Count - 1) //全部相同
+            if (TheSamePlayerAmount == listPlayers.Count) //全部相同
             {
                 dataResult = new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果), zero.ToBinary() };
             }
@@ -80,12 +68,12 @@ namespace ZBWZ
                 List<int> WinersId = new List<int>();
                 for (int i = listPlayers.Count - TheSamePlayerAmount; i < listPlayers.Count; i++) //给胜者加分
                 {
-                    listPlayers[i].Gold += RoundScore;
-                    WinersId.Add(players[i].Key);
+                    listPlayers[i].Value.Gold += RoundScore;
+                    WinersId.Add(listPlayers[i].Key);
                 }
                 for (int i = 0; i < listPlayers.Count - TheSamePlayerAmount; i++)  //给败者减分
                 {
-                    listPlayers[i].Gold -= TheSamePlayerAmount * RoundScore / (listPlayers.Count - TheSamePlayerAmount);
+                    listPlayers[i].Value.Gold -= TheSamePlayerAmount * RoundScore / (listPlayers.Count - TheSamePlayerAmount);
                 }
                 dataResult = new byte[][] { BitConverter.GetBytes((int)RollActions.S_结果), WinersId.ToArray().ToBinary() }; //返回的结果数据
             }
@@ -222,7 +210,7 @@ namespace ZBWZ
             var joinSuccessPlayer = 0;
             foreach (var onePlayer in players)
             {
-                if (onePlayer.Value.Value.clientState == ClientStates.已发_要求进入)
+                if (onePlayer.Value.Value.clientState == ClientStates.已发_要求进入 || onePlayer.Value.Value.clientState == ClientStates.已发_已准备好)
                 {
                     joinSuccessPlayer++;
                 }

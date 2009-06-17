@@ -167,43 +167,50 @@ namespace ZBWZ_RollServer
                         处理_投掷(id);
                         break;
                 }
-
-                #region 处理超时
-
-                // 根据当前游戏的进展，分别判断玩家的超时并处理（踢除或强制状态改变）
-                lock (_sync_players)
-                {
-                    var counter = GameLooper.Counter;
-                    var removeIds = new List<int>();
-                    var autoThrowPlayers = new List<Character>();
-                    foreach (var kvp in _players)
-                    {
-                        var player = kvp.Value.Value;
-                        var playerId = kvp.Key;
-                        if (player.clientState == ClientStates.已发_能进否)
-                        {
-                            if (player.超时_进入超时 <= counter && player.clientState == ClientStates.已发_能进否) removeIds.Add(playerId);
-                        }
-                        else if (player.clientState == ClientStates.已发_要求进入)
-                        {
-                            if (player.超时_准备超时 <= counter && player.clientState == ClientStates.已发_要求进入) removeIds.Add(playerId);
-                        }
-                        else if (player.clientState == ClientStates.已发_已准备好)
-                        {
-                            if (player.超时_投掷超时 <= counter && player.clientState == ClientStates.已发_已准备好) autoThrowPlayers.Add(player);
-                        }
-                    }
-                    foreach (var playerId in removeIds)
-                    {
-                        _players.Remove(playerId); //删除进入超时,准备超时玩家
-                        发出_踢出(id);
-                        w.WL("踢出 " + id.ToString() + Environment.NewLine);
-                    }
-                    foreach (var player in autoThrowPlayers) _currentStateHander.Throw(player); //为投掷超时玩家自动投掷
-                }
-
-                #endregion
             }
+
+            #region 处理超时
+
+            // 根据当前游戏的进展，分别判断玩家的超时并处理（踢除或强制状态改变）
+            lock (_sync_players)
+            {
+                var counter = GameLooper.Counter;
+                var removeIds = new List<int>();
+                var autoThrowPlayers = new List<KeyValuePair<int,Character>>();
+                foreach (var kvp in _players)
+                {
+                    var player = kvp.Value.Value;
+                    var playerId = kvp.Key;
+                    if (player.clientState == ClientStates.已发_能进否)
+                    {
+                        if (player.超时_进入超时 <= counter) removeIds.Add(playerId);
+                    }
+                    else if ((player.clientState == ClientStates.已发_要求进入 || player.clientState == ClientStates.已发_已掷骰子) && serviceState == ServiceStates.等待客户端准备好)
+                    {
+                        if (player.超时_准备超时 <= counter) removeIds.Add(playerId);
+                    }
+                    else if (player.clientState == ClientStates.已发_已准备好 && serviceState == ServiceStates.正在游戏)
+                    {
+                        if (player.超时_投掷超时 <= counter) autoThrowPlayers.Add(new KeyValuePair<int,Character>(playerId, player));
+                    }
+                }
+                foreach (var playerId in removeIds)
+                {
+                    _players.Remove(playerId); //删除进入超时,准备超时玩家
+                    发出_踢出(playerId);
+                    w.WL("踢出 " + playerId.ToString() + Environment.NewLine);
+                }
+                foreach (var player in autoThrowPlayers)
+                {
+
+                    _currentStateHander.Throw(player.Value);//为投掷超时玩家自动投掷
+                    发出_点数(player.Key);
+                    player.Value.clientState = ClientStates.已发_已掷骰子;
+                    w.WL("玩家 " + player.Key + "投掷超时,服务器已自动投掷骰子,点数为 " + player.Value.Num.ToString() + Environment.NewLine);
+                }
+            }
+
+            #endregion
             #endregion
             #region 游戏进度指示
             if (serviceState == ServiceStates.等待客户端进入)
@@ -222,6 +229,7 @@ namespace ZBWZ_RollServer
                     foreach (var player in _players)
                     {
                         发出_请投掷(player.Value.Key);
+                        player.Value.Value.超时_投掷超时 = GameLooper.Counter + 30;
                     }
                     serviceState = ServiceStates.正在游戏;
                 }
@@ -234,6 +242,7 @@ namespace ZBWZ_RollServer
                     foreach (var player in _players)
                     {
                         发出_请准备(player.Value.Key);
+                        player.Value.Value.超时_准备超时 = GameLooper.Counter + 30;
                     }
                     发出_结果();
                     serviceState = ServiceStates.等待客户端准备好;
@@ -330,9 +339,9 @@ namespace ZBWZ_RollServer
                     if (player.clientState == ClientStates.已发_已准备好)
                     {
                         //让 player 投掷骰子
-                        player.clientState = ClientStates.已发_已掷骰子;
                         _currentStateHander.Throw(player);
                         发出_点数(id);
+                        player.clientState = ClientStates.已发_已掷骰子;
                         w.WL("玩家 " + id + "已投掷骰子,点数为 " + player.Num.ToString() + Environment.NewLine);
                     }
                 }

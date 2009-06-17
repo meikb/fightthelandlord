@@ -43,6 +43,7 @@
             this.btnThrow = new System.Windows.Forms.Button();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.lblNum = new System.Windows.Forms.Label();
+            this.lblID = new System.Windows.Forms.Label();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -72,26 +73,26 @@
             // 加入服务器ToolStripMenuItem
             // 
             this.加入服务器ToolStripMenuItem.Name = "加入服务器ToolStripMenuItem";
-            this.加入服务器ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.加入服务器ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.加入服务器ToolStripMenuItem.Text = "选择服务器";
             this.加入服务器ToolStripMenuItem.Click += new System.EventHandler(this.加入服务器ToolStripMenuItem_Click);
             // 
             // 准备ToolStripMenuItem
             // 
             this.准备ToolStripMenuItem.Name = "准备ToolStripMenuItem";
-            this.准备ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.准备ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.准备ToolStripMenuItem.Text = "准备";
             // 
             // 投掷ToolStripMenuItem
             // 
             this.投掷ToolStripMenuItem.Name = "投掷ToolStripMenuItem";
-            this.投掷ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.投掷ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.投掷ToolStripMenuItem.Text = "投掷";
             // 
             // 退出ToolStripMenuItem
             // 
             this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
-            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(136, 22);
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.退出ToolStripMenuItem.Text = "退出";
             // 
             // 关于ToolStripMenuItem
@@ -156,11 +157,21 @@
             this.lblNum.Size = new System.Drawing.Size(0, 27);
             this.lblNum.TabIndex = 4;
             // 
+            // lblID
+            // 
+            this.lblID.AutoSize = true;
+            this.lblID.Location = new System.Drawing.Point(279, 36);
+            this.lblID.Name = "lblID";
+            this.lblID.Size = new System.Drawing.Size(23, 12);
+            this.lblID.TabIndex = 5;
+            this.lblID.Text = "ID:";
+            // 
             // GameMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(367, 350);
+            this.Controls.Add(this.lblID);
             this.Controls.Add(this.lblNum);
             this.Controls.Add(this.btnThrow);
             this.Controls.Add(this.btnReady);
@@ -196,5 +207,6 @@
         private System.Windows.Forms.Button btnThrow;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.Label lblNum;
+        private System.Windows.Forms.Label lblID;
     }
 }
