@@ -94,9 +94,6 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="todo.txt" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
