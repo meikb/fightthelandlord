@@ -11,7 +11,7 @@
         {
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new RollGame.Handler(id);
-            new DataCenterCallback(h);                                      // 连接至 DataCenter 并准备好回调实例
+            new DataCenterCallback(h);                                    // 连接至 DataCenter 并准备好回调实例
             new GameLooper(h) { LoopDurationLimit = 1000 }.Loop();        // 创建游戏循环并运行
         }
     }
@@ -21,6 +21,7 @@
 namespace RollGame
 {
     #region usings
+
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -28,24 +29,65 @@ namespace RollGame
     using System.Data;
     using System.Timers;
     using System.Threading;
+    using System.ComponentModel;
+
     using ConsoleHelper;
     using DAL;
-    using System.ComponentModel;
+
     #endregion
 
     public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
     {
         #region 环境变量
 
+        /// <summary>
+        /// 用于向控制台输出
+        /// </summary>
         private Writer w = Writer.Instance;
+
+        /// <summary>
+        /// 指向游戏循环
+        /// </summary>
         public GameLooper GameLooper { get; set; }
+
+        /// <summary>
+        /// 后台消息发送进程的运行判断标识
+        /// </summary>
         private static bool _isSending = true;
+
+        /// <summary>
+        /// 用于锁定 收到消息队列
+        /// </summary>
+        private object _sync_receivedWhispers = new object();
+        /// <summary>
+        /// 用于锁定 待发消息队列
+        /// </summary>
+        private object _sync_sendWhispers = new object();
+
+        /// <summary>
+        /// 用于锁定 当前玩家列表
+        /// </summary>
         private static object _sync_players = new object();
-        private static object _sync_receivedWhispers = new object();
-        private static object _sync_sendWhispers = new object();
-        private static Dictionary<int, Character> _players = new Dictionary<int, Character>();
-        private static Queue<RollMessage> _receivedWhispers = new Queue<RollMessage>();
-        private static Queue<RollMessage> _sendWhispers = new Queue<RollMessage>();
+
+        /// <summary>
+        /// 当前玩家列表
+        /// </summary>
+        private Dictionary<int, Character> _players = new Dictionary<int, Character>();
+
+        /// <summary>
+        /// 收到消息队列
+        /// </summary>
+        private Queue<RollMessage> _receivedWhispers = new Queue<RollMessage>();
+
+        /// <summary>
+        /// 待发消息队列
+        /// </summary>
+        private Queue<RollMessage> _sendWhispers = new Queue<RollMessage>();
+
+        /// <summary>
+        /// 当前游戏的状态实例
+        /// </summary>
+        private RollGameState _state = new RollGameState();
 
         #endregion
 
@@ -56,30 +98,50 @@ namespace RollGame
         /// </summary>
         public void ReceiveWhisper(int id, byte[][] data)
         {
-            lock (_sync_receivedWhispers)
+            // 将收到的数据转为 RollMessage 对象实例
+            var msg = new RollMessage
             {
-                var msg = new RollMessage
+                ID = id,
+                RollAction = (RollActions)BitConverter.ToInt32(data[0], 0),
+                Data = data.Length > 1 ? data[1] : null
+            };
+
+            // 如果消息“合法”
+            if (CheckReceiveMessageIsValid(msg))
+            {
+                // 将 RollMessage 对象实例 插入到接收队列中
+                lock (_sync_receivedWhispers)
                 {
-                    ID = id,
-                    RollAction = (RollActions)BitConverter.ToInt32(data[0], 0),
-                    Data = data.Length > 1 ? data[1] : null
-                };
-
-                // todo: 检查当前 msg 是否有效（根据当前游戏进展，以及玩家的状态检查）
-                // 根据 id 定位玩家，如果未找到，则当前允许的是 请求进入指令
-                // 否则允许的是 “当前允许收到的客户端消息列表”
-
-                _receivedWhispers.Enqueue(msg);
+                    _receivedWhispers.Enqueue(msg);
+                }
             }
+            else
+            {
+                // todo: 攻击判定
+            }
+        }
+
+        /// <summary>
+        /// 根据当前游戏的进展，玩家状态来判断当前消息是否“合法”
+        /// </summary>
+        public bool CheckReceiveMessageIsValid(RollMessage m)
+        {
+            // 服务刚开始运行
+            if (_state.当前阶段 == 0) return false;
+
+            // todo
+
+            return true;
         }
 
         #endregion
 
-        #region GameLooper Init (初始化消息发送线程）
+        #region GameLooper Init (初始化，启动消息发送线程）
+
         public void Init()
         {
-            var bw = new BackgroundWorker();
-            bw.DoWork += (sender, ea) =>
+            // 声明消息发送循环方法（有消息就发）
+            var action = new Action(() =>
             {
                 while (_isSending)
                 {
@@ -92,7 +154,7 @@ namespace RollGame
                     }
                     foreach (var msg in msgs)
                     {
-                        // todo: async call Whisper
+                        // todo: 改为异步调用？？
 
                         DataCenterProxy.Whisper(msg.ID,
                             new byte[][] { BitConverter.GetBytes((int)msg.RollAction), msg.Data });
@@ -100,8 +162,10 @@ namespace RollGame
                     msgs = null;
                     Thread.Sleep(1);
                 }
-            };
-            bw.RunWorkerAsync();
+            });
+
+            // 开始执行
+            action.BeginInvoke(null, null);
         }
 
         #endregion
@@ -113,13 +177,47 @@ namespace RollGame
         }
         #endregion
 
-        #region GameLooper Process （每秒处理一次业务逻辑）
+        #region GameLooper Process （循环处理已收数据，根据业务逻辑产生待发数据）
 
         public void Process()
         {
+            #region 处理当前游戏阶段状态
+
+            if (_state.当前阶段 == 服务阶段枚举.等所有玩家进入)
+            {
+                int playerCount;
+                lock (_sync_players)
+                {
+                    // 统计 玩家数量（除开正在连接服务的玩家）
+                    playerCount = _players.Count(kvp =>
+                    {
+                        var player = kvp.Value;
+                        return player.当前阶段 != 客户端阶段枚举.正在进;
+                    });
+                }
+                // 如果当前不足两个玩家， 则无限等待（ 即等待玩家进入的计数器复位）
+                if (playerCount < 2)
+                {
+                    _state.超时_等所有玩家进入.Current = 0;
+                }
+                // 如果
+                else if (_state.超时_等所有玩家进入.IsOvertimed)
+                {
+
+                }
+            }
+            else if (_state.当前阶段 == 服务阶段枚举.等所有玩家准备)
+            {
+            }
+            else if (_state.当前阶段 == 服务阶段枚举.等掷骰子)
+            {
+            }
+
+            #endregion
+
             #region 处理收到的消息
 
-            // 从队列读取消息
+            // 将消息从队列移至数组
             RollMessage[] whispers;
             lock (_sync_receivedWhispers)
             {
@@ -128,7 +226,7 @@ namespace RollGame
                 _receivedWhispers.Clear();
             }
 
-            // 处理
+            // 循环处理消息
             foreach (var whisper in whispers)
             {
                 var id = whisper.ID;
@@ -137,6 +235,9 @@ namespace RollGame
                 {
                     case RollActions.C要求进入:
                         处理_C要求进入(id);
+                        break;
+                    case RollActions.C已进入:
+                        处理_C已进入(id);
                         break;
                     case RollActions.C已准备好:
                         处理_C已准备好(id);
@@ -149,50 +250,45 @@ namespace RollGame
 
             #endregion
 
-            #region 处理超时
+            //// todo: 根据当前游戏的进展，分别判断玩家的超时并处理（踢除或强制状态改变）
+            //#region ...
+            //lock (_sync_players)
+            //{
+            //    var counter = GameLooper.Counter;
+            //    var removeIds = new List<int>();
+            //    foreach (var kvp in _players)
+            //    {
+            //        var player = kvp.Value;
+            //        var id = kvp.Key;
+            //        /*
+            //        if (player.当前客户端状态 == 客户端状态枚举.正在进)
+            //        {
+            //            if (player.超时周期_发_能进否 <= counter) removeIds.Add(id);
+            //        }
+            //        else if (player.客户端状态 == 客户端状态枚举.已发_要求进入)
+            //        {
+            //            if (player.超时周期_发_要求进入 <= counter) removeIds.Add(id);
+            //        }
+            //        else if (player.客户端状态 == 客户端状态枚举.已回_已准备好)
+            //        {
+            //            //if (player.超时周期_回_已准备好 <= counter) removeIds.Add(id);
+            //        }
+            //        else if (player.客户端状态 == 客户端状态枚举.已回_已掷骰子)
+            //        {
+            //            //if (player.超时周期_回_已掷骰子 <= counter) removeIds.Add(id);
+            //        }
+            //        else if (player.客户端状态 == 客户端状态枚举.已回_已看成绩单)
+            //        {
+            //            if (player.超时周期_回_已看成绩单 <= counter) removeIds.Add(id);
+            //        }
+            //        */
+            //    }
+            //    foreach (var id in removeIds) _players.Remove(id);
+            //}
 
-            // 根据当前游戏的进展，分别判断玩家的超时并处理（踢除或强制状态改变）
-            lock (_sync_players)
-            {
-                var counter = GameLooper.Counter;
-                var removeIds = new List<int>();
-                foreach (var kvp in _players)
-                {
-                    var player = kvp.Value;
-                    var id = kvp.Key;
-                    /*
-                    if (player.当前客户端状态 == 客户端状态枚举.正在进)
-                    {
-                        if (player.超时周期_发_能进否 <= counter) removeIds.Add(id);
-                    }
-                    else if (player.客户端状态 == 客户端状态枚举.已发_要求进入)
-                    {
-                        if (player.超时周期_发_要求进入 <= counter) removeIds.Add(id);
-                    }
-                    else if (player.客户端状态 == 客户端状态枚举.已回_已准备好)
-                    {
-                        //if (player.超时周期_回_已准备好 <= counter) removeIds.Add(id);
-                    }
-                    else if (player.客户端状态 == 客户端状态枚举.已回_已掷骰子)
-                    {
-                        //if (player.超时周期_回_已掷骰子 <= counter) removeIds.Add(id);
-                    }
-                    else if (player.客户端状态 == 客户端状态枚举.已回_已看成绩单)
-                    {
-                        if (player.超时周期_回_已看成绩单 <= counter) removeIds.Add(id);
-                    }
-                    */
-                }
-                foreach (var id in removeIds) _players.Remove(id);
-            }
-
-            #endregion
-
-            #region 生成玩家应收消息列表
-
-            // todo
-
-            #endregion
+            //#endregion
+            //// todo: 结合游戏当前阶段，玩家的情况，所经历的时间，对游戏状态进行切换。。。。
+            //// todo: 生成玩家应收消息列表
         }
 
         #region 处理收到的消息
@@ -223,6 +319,9 @@ namespace RollGame
                 }
             }
         }
+        private void 处理_C已进入(int id)
+        {
+        }
         private void 处理_C已准备好(int id)
         {
         }
@@ -231,7 +330,8 @@ namespace RollGame
         }
         #endregion
 
-        #region 发出消息
+        #region 往待发消息队列追加数据
+
         private void 发出_S请进入(int id)
         {
             _sendWhispers.Enqueue(new RollMessage { ID = id, RollAction = RollActions.S请进入 });

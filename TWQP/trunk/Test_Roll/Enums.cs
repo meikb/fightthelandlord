@@ -62,66 +62,23 @@ public enum RollActions
     S请接受核实
 }
 
-/// <summary>
-/// 收发 Roll 相关消息所用到的结构
-/// </summary>
-public class RollMessage
-{
-    public int ID;
-    public RollActions RollAction;
-    public byte[] Data;
-}
-
-/// <summary>
-/// 用来表达一对 Long 值
-/// </summary>
-public class LongPair
-{
-    public LongPair(long first, long second)
-    {
-        this.First = first;
-        this.Second = second;
-    }
-    public long First { get; set; }
-    public long Second { get; set; }
-}
-
-/// <summary>
-/// 用于 RollService 中记录玩家当前状态
-/// </summary>
-[Serializable]
-public class Character : OO.User_Character
-{
-    public DateTime 进入服务时间 = DateTime.Now;
-    public int 总局数 = 0;
-    public int 获胜局数 = 0;
-    public int 当前投掷点数 = 0;
-
-    public List<RollActions> 当前允许收到的客户端消息列表 = new List<RollActions>();
-    public LongPair 超时_C已进入 = new LongPair(10, 0);
-    public LongPair 超时_C已准备好 = new LongPair(30, 0);
-    public LongPair 超时_C已投掷 = new LongPair(30, 0);
-}
-
-public enum 服务状态枚举
+public enum 服务阶段枚举
 {
     /// <summary>
     /// 该过程耗时 10 秒
     /// </summary>
-    等进入,
+    等所有玩家进入,
     /// <summary>
     /// 该过程耗时 30 秒
     /// </summary>
-    等准备,
+    等所有玩家准备,
     /// <summary>
     /// 该过程耗时 30 秒
     /// </summary>
-    游戏中
+    等掷骰子
 }
 
-
-/*
-public enum 客户端状态枚举
+public enum 客户端阶段枚举
 {
     /// <summary>
     /// 如果玩家进入时服务人数上限未到，且未处于 “等进入” 阶段，则将处于 观战状态
@@ -144,4 +101,3 @@ public enum 客户端状态枚举
     /// </summary>
     已投掷未准备,
 }
-*/
