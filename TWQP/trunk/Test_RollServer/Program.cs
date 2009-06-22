@@ -200,14 +200,16 @@ namespace RollGame
                 {
                     _state.超时_等所有玩家进入.Current = 0;
                 }
-                // 如果
+                // 如果超时，则进入下一阶段
                 else if (_state.超时_等所有玩家进入.IsOvertimed)
                 {
-
+                    _state.当前阶段 = 服务阶段枚举.等所有玩家准备;
+                    _state.超时_等所有玩家准备.Clear();
                 }
             }
             else if (_state.当前阶段 == 服务阶段枚举.等所有玩家准备)
             {
+
             }
             else if (_state.当前阶段 == 服务阶段枚举.等掷骰子)
             {
