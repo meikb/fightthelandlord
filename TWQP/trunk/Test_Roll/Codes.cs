@@ -34,6 +34,20 @@ public class Counter
     {
         get { return this.Current >= this.Max; }
     }
+    /// <summary>
+    /// 令 Current ++
+    /// </summary>
+    public void Increase()
+    {
+        this.Current++;
+    }
+    /// <summary>
+    /// 复位计数
+    /// </summary>
+    public void Clear()
+    {
+        this.Current = 0;
+    }
 }
 
 /// <summary>
