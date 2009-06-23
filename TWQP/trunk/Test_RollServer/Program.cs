@@ -179,60 +179,65 @@ namespace RollGame
 
         #region GameLooper Process （循环处理已收数据，根据业务逻辑产生待发数据）
 
-        public void Process()
+        /// <summary>
+        /// 获取玩家状态与传入枚举“&”操作后不为零的玩家数量
+        /// </summary>
+        public int GetPlayersCount(客户端阶段枚举 enums)
         {
-            #region 处理当前游戏阶段状态
-
-            if (_state.当前阶段 == 服务阶段枚举.等所有玩家进入)
+            int playerCount;
+            lock (_sync_players)
             {
-                int playerCount;
-                lock (_sync_players)
+                playerCount = _players.Count(kvp =>
                 {
-                    // 统计 玩家数量（除开正在连接服务的玩家）
-                    playerCount = _players.Count(kvp =>
-                    {
-                        var player = kvp.Value;
-                        return player.当前阶段 != 客户端阶段枚举.正在进;
-                    });
-                }
-                // 如果当前不足两个玩家， 则无限等待（ 即等待玩家进入的计数器复位）
-                if (playerCount < 2)
-                {
-                    _state.超时_等所有玩家进入.Current = 0;
-                }
-                // 如果超时，则进入下一阶段
-                else if (_state.超时_等所有玩家进入.IsOvertimed)
-                {
-                    _state.当前阶段 = 服务阶段枚举.等所有玩家准备;
-                    _state.超时_等所有玩家准备.Clear();
-                }
+                    var player = kvp.Value;
+                    return (int)(player.当前阶段 & enums) > 0;
+                });
             }
-            else if (_state.当前阶段 == 服务阶段枚举.等所有玩家准备)
+            return playerCount;
+        }
+
+        /// <summary>
+        /// 获取玩家状态与传入枚举“&”操作后不为零的玩家数组
+        /// </summary>
+        public Character[] GetPlayers(客户端阶段枚举 enums)
+        {
+            lock (_sync_players)
             {
-
+                var result = from player in _players
+                             where (int)(player.Value.当前阶段 & enums) > 0
+                             select player.Value;
+                return result.ToArray();
             }
-            else if (_state.当前阶段 == 服务阶段枚举.等掷骰子)
-            {
-            }
+        }
 
-            #endregion
-
-            #region 处理收到的消息
-
-            // 将消息从队列移至数组
-            RollMessage[] whispers;
+        /// <summary>
+        /// 获取当前已接收的消息数组，并清空接收容器
+        /// </summary>
+        public RollMessage[] GetMessages()
+        {
+            RollMessage[] msgs;
             lock (_sync_receivedWhispers)
             {
-                whispers = new RollMessage[_receivedWhispers.Count];
-                _receivedWhispers.CopyTo(whispers, 0);
+                msgs = new RollMessage[_receivedWhispers.Count];
+                _receivedWhispers.CopyTo(msgs, 0);
                 _receivedWhispers.Clear();
             }
+            return msgs;
+        }
 
+        // todo: 群发方法 
+
+        public void Process()
+        {
+            #region 处理收到的消息
+
+            // 获取当前的消息
+            var msgs = GetMessages();
             // 循环处理消息
-            foreach (var whisper in whispers)
+            foreach (var msg in msgs)
             {
-                var id = whisper.ID;
-                var clientAction = whisper.RollAction;
+                var id = msg.ID;
+                var clientAction = msg.RollAction;
                 switch (clientAction)
                 {
                     case RollActions.C要求进入:
@@ -251,6 +256,56 @@ namespace RollGame
             }
 
             #endregion
+
+            #region 处理当前游戏阶段状态
+
+            // 如果过了游戏接入期进入的玩家，将进入 观战状态
+
+            if (_state.当前阶段 == 服务阶段枚举.等所有玩家进入)
+            {
+                // 获取 已进入未准备，正在观战 的玩家数量（除开正在连接服务的玩家）
+                var players = GetPlayers(客户端阶段枚举.已进入未准备 | 客户端阶段枚举.正在观战);
+                // 如果当前不足两个玩家， 则无限等待（ 即等待玩家进入的计数器复位）
+                if (players.Length < 2)
+                {
+                    _state.超时_等所有玩家进入.Current = 0;
+                }
+                // 如果超时，则设置进入下一阶段
+                else if (_state.超时_等所有玩家进入.IsOvertimed)
+                {
+                    _state.当前阶段 = 服务阶段枚举.等所有玩家准备;
+                    _state.超时_等所有玩家准备.Clear();
+                    // todo: 群发 请准备（针对非 正在进入 玩家）
+                }
+            }
+            else if (_state.当前阶段 == 服务阶段枚举.等所有玩家准备)
+            {
+                // 统计 上一步 正确进入玩家 但未准备的 玩家数量
+                // 如果所有玩家都已准备
+                if (GetPlayersCount(客户端阶段枚举.已进入未准备) == 0)
+                {
+                    _state.当前阶段 = 服务阶段枚举.等掷骰子;
+                    _state.超时_等掷骰子.Clear();
+                    var players = GetPlayers(客户端阶段枚举.已准备未投掷);
+                    // todo: 群发 请投掷（针对非观战玩家）
+                }
+            }
+            else if (_state.当前阶段 == 服务阶段枚举.等掷骰子)
+            {
+                // 统计 已投掷 玩家数量
+                // 如果所有玩家都已投掷
+                if (GetPlayersCount(客户端阶段枚举.已准备未投掷) == 0)
+                {
+                    _state.当前阶段 = 服务阶段枚举.等所有玩家进入;
+                    _state.超时_等掷骰子.Clear();
+                    var players = GetPlayers(客户端阶段枚举.已投掷未准备);
+                    // todo: 群发 请准备
+                }
+            }
+
+            #endregion
+
+
 
             //// todo: 根据当前游戏的进展，分别判断玩家的超时并处理（踢除或强制状态改变）
             //#region ...
