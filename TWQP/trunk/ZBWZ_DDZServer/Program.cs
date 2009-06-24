@@ -46,8 +46,14 @@ namespace ZBWZ_DDZServer
         #endregion
 
         #region IDataCenterCallbackHandler Members
-
+        /// <summary>
+        /// 自己的ID
+        /// </summary>
         public int ServiceID { get; set; }
+        /// <summary>
+        /// 占用服务的大厅ID
+        /// </summary>
+        public int GameMainID { get; set; }
         public DataCenterProxy DataCenterProxy { get; set; }
         private static object _sync_players = new object();
         private static object _sync_whispers = new object();
@@ -55,7 +61,7 @@ namespace ZBWZ_DDZServer
         /// <summary>
         /// 玩家列表
         /// </summary>
-        private static Dictionary<int, KeyValuePair<int, DDZCharacter>> _players = new Dictionary<int, KeyValuePair<int, DDZCharacter>>();
+        private static PlayerCollections _players = new PlayerCollections();
         /// <summary>
         /// 收到消息列队
         /// </summary>
@@ -148,45 +154,47 @@ namespace ZBWZ_DDZServer
             }
             foreach (var whisper in whispers)
             {
-                var playerid = BitConverter.ToInt32(whisper.Value[0],0);
+                //var playerid = BitConverter.ToInt32(whisper.Value[0],0);
                 switch ((DDZActions)BitConverter.ToInt32(whisper.Value[1],0))
                 {
                     case DDZActions.C_能否进入:
-                        处理_能否进入(playerid, whisper.Key);
+                        处理_能否进入(whisper);
                         break;
                     case DDZActions.C_进入:
-                        处理_进入(playerid, whisper.Key);
+                        处理_进入(whisper);
                         break;
                     case DDZActions.C_准备:
-                        处理_准备(playerid, whisper.Key);
+                        处理_准备(whisper);
                         break;
                     case DDZActions.C_出牌:
-                        处理_出牌(playerid, whisper.Key);
+                        处理_出牌(whisper);
                         break;
                 }
             }
         }
+
+        private void 处理_出牌(KeyValuePair<int, byte[][]> whisper)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void 处理_准备(KeyValuePair<int, byte[][]> whisper)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void 处理_进入(KeyValuePair<int, byte[][]> whisper)
+        {
+            throw new NotImplementedException();
+        }
+
+        private void 处理_能否进入(KeyValuePair<int, byte[][]> whisper)
+        {
+            if (_currentStateHander.CanIJoinIt(_players.Count))
+            {
+            }
+        }
         //todo 实现Server端数据处理
-        private void 处理_出牌(int playerid, int p)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void 处理_准备(int playerid, int p)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void 处理_进入(int playerid, int p)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void 处理_能否进入(int playerid, int p)
-        {
-            throw new NotImplementedException();
-        }
-
         public void SendMessage(object sender, DoWorkEventArgs e)
         {
             while (true)

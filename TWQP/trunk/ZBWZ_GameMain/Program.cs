@@ -62,10 +62,6 @@ namespace ZBWZ_GameMain
         /// 游戏服务ID集合
         /// </summary>
         private List<int> GameServiceIDs = new List<int>();
-        /// <summary>
-        /// 桌子集合,第一个int为桌子ID,第二个int为这个桌子对应的游戏服务ID
-        /// </summary>
-        private List<KeyValuePair<int, int>> DeskTops = new List<KeyValuePair<int, int>>();
 
         public void Receive(int id, byte[][] data)
         {
@@ -101,7 +97,6 @@ namespace ZBWZ_GameMain
                 if (i > 199 && i < 300)
                 {
                     GameServiceIDs.Add(i);
-                    DeskTops.Add(new KeyValuePair<int, int>(i, i)); // todo 桌子暂时随便乱写
                 }
             }
         }
