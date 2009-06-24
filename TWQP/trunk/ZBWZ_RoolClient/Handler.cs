@@ -196,15 +196,15 @@ namespace ZBWZ_RoolClient
         {
             if (Counter >= player.超时_进入超时 && player.clientState == ClientStates.已发_能进否)
             {
-                clientState = ClientStates.断开;
+                clientState = ClientStates.收到_断开;
             }
             if (Counter >= player.超时_准备超时 && player.clientState == ClientStates.已发_要求进入)
             {
-                clientState = ClientStates.断开;
+                clientState = ClientStates.收到_断开;
             }
             if (Counter >= player.超时_投掷超时 && player.clientState == ClientStates.已发_已准备好)
             {
-                clientState = ClientStates.断开;
+                clientState = ClientStates.收到_断开;
             }
         }
         #endregion
@@ -217,15 +217,15 @@ namespace ZBWZ_RoolClient
         }
         public void 处理_不能进入()
         {
-            clientState = ClientStates.断开;
+            clientState = ClientStates.收到_断开;
         }
         public void 处理_请准备()
         {
-            clientState = ClientStates.请准备;
+            clientState = ClientStates.收到_请准备;
         }
         public void 处理_请投掷()
         {
-            clientState = ClientStates.请投掷;
+            clientState = ClientStates.收到_请投掷;
         }
         public void 处理_点数(int Score)
         {
@@ -238,12 +238,12 @@ namespace ZBWZ_RoolClient
         /// <returns>true表示自己是赢家,false表示自己是输家</returns>
         public bool 处理_结果(int[] dataResult)
         {
-            clientState = ClientStates.请准备;
+            clientState = ClientStates.收到_请准备;
             return dataResult.Contains<int>(ServiceID);
         }
         public void 处理_踢出()
         {
-            clientState = ClientStates.断开;
+            clientState = ClientStates.收到_断开;
         }
         #endregion
 
