@@ -102,7 +102,7 @@ namespace ZBWZ_DDZServer
         {
             w.WL("Connected at " + DateTime.Now.ToString() + " with service id " + this.ServiceID + Environment.NewLine);
             Console.Write("Current Service ID List = {");
-            foreach (var i in serviceIdList) Console.Write(i + ",");
+            foreach (var serviceID in serviceIdList) Console.Write(serviceID + ",");
             Console.Write("}" + Environment.NewLine);
         }
 
@@ -169,8 +169,16 @@ namespace ZBWZ_DDZServer
                     case DDZActions.C_出牌:
                         处理_出牌(whisper);
                         break;
+                    case DDZActions.GM_请求服务数据:
+                        处理_GM_请求服务数据(whisper);
+                        break;
                 }
             }
+        }
+
+        private void 处理_GM_请求服务数据(KeyValuePair<int, byte[][]> whisper)
+        {
+            throw new NotImplementedException();
         }
 
         private void 处理_出牌(KeyValuePair<int, byte[][]> whisper)
