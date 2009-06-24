@@ -65,7 +65,7 @@ namespace ZBWZ_DDZServer
         /// </summary>
         private static Queue<KeyValuePair<int, byte[][]>> _sendWhispers = new Queue<KeyValuePair<int, byte[][]>>();
         /// <summary>
-        /// 服务器流程状态
+        /// 服务流程状态
         /// </summary>
         private static ServiceStates serviceState = ServiceStates.等待客户端进入;
 
@@ -148,39 +148,43 @@ namespace ZBWZ_DDZServer
             }
             foreach (var whisper in whispers)
             {
-                var Playerid = BitConverter.ToInt32(whisper.Value[0],0);
+                var playerid = BitConverter.ToInt32(whisper.Value[0],0);
                 switch ((DDZActions)BitConverter.ToInt32(whisper.Value[1],0))
                 {
                     case DDZActions.C_能否进入:
-                        收到_能否进入(Playerid, whisper.Key);
+                        处理_能否进入(playerid, whisper.Key);
                         break;
                     case DDZActions.C_进入:
-                        收到_进入(Playerid, whisper.Key);
+                        处理_进入(playerid, whisper.Key);
                         break;
                     case DDZActions.C_准备:
-                        收到_准备(Playerid, whisper.Key);
+                        处理_准备(playerid, whisper.Key);
                         break;
                     case DDZActions.C_出牌:
-                        收到_出牌(Playerid, whisper.Key);
+                        处理_出牌(playerid, whisper.Key);
                         break;
                 }
             }
         }
-        //todo 实现消息处理方法
-        public void 收到_能否进入(int playerID, int proxyID)
+        //todo 实现Server端数据处理
+        private void 处理_出牌(int playerid, int p)
         {
+            throw new NotImplementedException();
         }
 
-        public void 收到_进入(int playerID, int proxyID)
+        private void 处理_准备(int playerid, int p)
         {
+            throw new NotImplementedException();
         }
 
-        public void 收到_准备(int playerID, int proxyID)
+        private void 处理_进入(int playerid, int p)
         {
+            throw new NotImplementedException();
         }
 
-        public void 收到_出牌(int playerID, int proxyID)
+        private void 处理_能否进入(int playerid, int p)
         {
+            throw new NotImplementedException();
         }
 
         public void SendMessage(object sender, DoWorkEventArgs e)
