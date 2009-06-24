@@ -89,7 +89,9 @@ namespace ZBWZ
         S_点数,
         S_结果,
         S_踢出,
-        S_桌子数据
+        S_桌子数据,
+        GM_向游戏服务请求其数据,
+        GM_返回所有游戏服务数据
     }
     #endregion
 }
