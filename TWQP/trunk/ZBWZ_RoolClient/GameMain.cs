@@ -74,15 +74,15 @@ namespace ZBWZ_RoolClient
                 h.发出_所有消息();
                 switch (h.clientState)
                 {
-                    case ClientStates.断开:
+                    case ClientStates.收到_断开:
                         //MessageBox.Show("与服务器断开连接");
                         btnReady.Visible = false;
                         btnThrow.Visible = false;
                         break;
-                    case ClientStates.请投掷:
+                    case ClientStates.收到_请投掷:
                         btnThrow.Visible = true;
                         break;
-                    case ClientStates.请准备:
+                    case ClientStates.收到_请准备:
                         btnReady.Visible = true;
                         break;
                 }

@@ -243,6 +243,17 @@ namespace ZBWZ
         public int Num;
     }
 
+    [Serializable]
+    public class DDZCharacter : OO.User_Character
+    {
+        public ClientStates clientState;
+        public bool IsBiggest { get; set; }
+        public long 超时_进入超时;
+        public long 超时_准备超时;
+        public long 超时_出牌超时;
+        public int 获胜次数;
+    }
+
     public class Message
     {
         int Id;

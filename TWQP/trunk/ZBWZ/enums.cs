@@ -34,14 +34,14 @@ namespace ZBWZ
     }
     public enum ClientStates
     {
-        断开,
+        收到_断开,
         已发_能进否,
         已发_要求进入,
         已发_已准备好,
         已发_已掷骰子,
         已发_已看成绩单,
-        请准备,
-        请投掷
+        收到_请准备,
+        收到_请投掷
     }
 
     public enum RollActions
@@ -58,4 +58,33 @@ namespace ZBWZ
         S_结果,
         S_踢出
     }
+    #region 斗地主
+
+    public enum DDZClientStates
+    {
+        已发_能进否,
+        已发_要求进入,
+        已发_已准备好,
+        已发_接收到牌,
+        已发_已看成绩单,
+        收到_断开,
+        收到_请准备,
+        收到_请出牌
+    }
+
+    public enum DDZActions
+    {
+        C_能否进入,
+        C_进入,
+        C_准备,
+        C_出牌,
+        S_能进入,
+        S_不能进入,
+        S_请准备,
+        S_请出牌,
+        S_点数,
+        S_结果,
+        S_踢出
+    }
+    #endregion
 }
