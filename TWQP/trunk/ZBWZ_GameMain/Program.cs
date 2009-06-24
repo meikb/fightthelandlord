@@ -96,6 +96,7 @@ namespace ZBWZ_GameMain
             {
                 if (i > 199 && i < 300)
                 {
+                    发送_GM_请求服务数据(i);
                     GameServiceIDs.Add(i);
                 }
             }
@@ -197,11 +198,16 @@ namespace ZBWZ_GameMain
                     case DDZActions.S_踢出:
                         处理_S_踢出(playerID, whisper.Value);
                         break;
-                    case DDZActions.S_桌子数据:
-                        处理_S_桌子数据(playerID, whisper.Value);
+                    case DDZActions.S_返回服务数据:
+                        处理_S_返回服务数据(playerID, whisper.Value);
                         break;
                 }
             }
+        }
+
+        private void 处理_S_返回服务数据(int playerID, byte[][] p)
+        {
+            throw new NotImplementedException();
         }
 
         private void 处理_C_断开(int playerID, byte[][] p)
@@ -282,6 +288,12 @@ namespace ZBWZ_GameMain
         private void 处理_C_能否进入(int playerID, byte[][] p)
         {
             throw new NotImplementedException();
+        }
+
+
+        private void 发送_GM_请求服务数据(int serviceID)
+        {
+
         }
 
         public void 发送信息(int ID, byte[][] data)
