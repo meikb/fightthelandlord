@@ -34,10 +34,6 @@ namespace ZBWZ_DDZProxy
     public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
-        /// <summary>
-        /// 状态处理程序
-        /// </summary>
-        StateHandler _currentStateHander = new StateHandler();
         #region Constructor
         public Handler(int serviceId)
         {
@@ -125,7 +121,6 @@ namespace ZBWZ_DDZProxy
 编号：{0}
 时间：{1}
 ", this.ServiceID, DateTime.Now);
-            _currentStateHander.AmountPlayer = 3;
         }
 
         public void Process()
@@ -133,15 +128,51 @@ namespace ZBWZ_DDZProxy
             KeyValuePair<int, byte[][]>[] whispers = new KeyValuePair<int, byte[][]>[_receivedWhispers.Count];
             lock (_sync_whispers)
             {
-                _sendWhispers.CopyTo(whispers, 0);
-                _sendWhispers.Clear();
+                _receivedWhispers.CopyTo(whispers, 0);
+                _receivedWhispers.Clear();
             }
             foreach (var whisper in whispers)
             {
                 if (whisper.Key > 100 && whisper.Key < 200)
                 {
-                    //todo 转发数据
+                    转发大厅消息(whisper.Value);
                 }
+                else if (whisper.Key > 999)
+                {
+                    转发玩家消息(whisper.Key, whisper.Value);
+                }
+            }
+        }
+
+        public void 转发大厅消息(byte[][] data)
+        {
+            int playerID = BitConverter.ToInt32(data[0], 0);
+            List<byte[]> sendDataList = new List<byte[]>();
+            for (int i = 1; i < data.Length; i++)
+            {
+                sendDataList.Add(data[i]);
+            }
+            byte[][] sendData = sendDataList.ToArray();
+            发送信息(playerID, sendData);
+        }
+
+        public void 转发玩家消息(int playerID, byte[][] data)
+        {
+            List<byte[]> sendDataList = new List<byte[]>();
+            sendDataList.Add(BitConverter.GetBytes(playerID));
+            for (int i = 0; i < data.Length; i++)
+            {
+                sendDataList.Add(data[i]);
+            }
+            byte[][] sendData = sendDataList.ToArray();
+            发送信息(150, sendData);
+        }
+
+        public void 发送信息(int ID, byte[][] data)
+        {
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(ID, data));
             }
         }
 
