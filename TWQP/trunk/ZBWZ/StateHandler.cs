@@ -241,6 +241,8 @@ namespace ZBWZ
         public long 超时_投掷超时;
         public int 获胜次数;
         public int Num;
+        public int DestTopID;
+        public int ProxyID;
     }
 
     [Serializable]

@@ -183,13 +183,13 @@ GameMain
 byte[0]玩家ID
 byte[1]动作
 byte[2]附带数据
+(发送方(代理)ID)
 
 发送消息
 byte[0]玩家ID
 byte[1]动作
 byte[2]附带数据
-
-
+(发送目标为发送方代理ID)
 
 
 ID规划
