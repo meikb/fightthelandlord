@@ -172,6 +172,9 @@ namespace ZBWZ_GameMain
                     case DDZActions.C_出牌:
                         处理_C_出牌(playerID, whisper.Value);
                         break;
+                    case DDZActions.C_断开:
+                        处理_C_断开(playerID, whisper.Value);
+                        break;
                     case DDZActions.C_请求桌子数据:
                         处理_C_请求桌子数据(playerID, whisper.Value);
                         break;
@@ -204,6 +207,11 @@ namespace ZBWZ_GameMain
                         break;
                 }
             }
+        }
+
+        private void 处理_C_断开(int playerID, byte[][] p)
+        {
+            throw new NotImplementedException();
         }
         //todo 实现处理数据的一系列方法
         private void 处理_S_桌子数据(int playerID, byte[][] p)
