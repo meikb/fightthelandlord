@@ -61,7 +61,7 @@ namespace ZBWZ_GameMain
         /// <summary>
         /// 游戏服务ID集合
         /// </summary>
-        private List<int> GameServiceIDs = new List<int>();
+        private GameService _gameService = new GameService();
 
         public void Receive(int id, byte[][] data)
         {
@@ -79,6 +79,10 @@ namespace ZBWZ_GameMain
         public void ServiceEnter(int id)
         {
             w.WL("Service " + id + " enter at " + DateTime.Now.ToString() + Environment.NewLine);
+            if (id > 199 && id < 300)
+            {
+                发送_GM_请求服务数据(id);
+            }
         }
 
         public void ServiceLeave(int id)
@@ -97,7 +101,6 @@ namespace ZBWZ_GameMain
                 if (i > 199 && i < 300)
                 {
                     发送_GM_请求服务数据(i);
-                    GameServiceIDs.Add(i);
                 }
             }
         }
@@ -157,150 +160,218 @@ namespace ZBWZ_GameMain
                         处理_C_能否进入(playerID, whisper.Value);
                         break;
                     case DDZActions.C_进入:
-                        处理_C_进入(playerID, whisper.Value);
-                        break;
-                    case DDZActions.C_选择桌子:
-                        处理_C_选择桌子(playerID, whisper.Value);
+                        处理_C_进入(playerID);
                         break;
                     case DDZActions.C_准备:
-                        处理_C_准备(playerID, whisper.Value);
+                        处理_C_准备(playerID);
                         break;
                     case DDZActions.C_出牌:
-                        处理_C_出牌(playerID, whisper.Value);
+                        处理_C_出牌(playerID);
                         break;
                     case DDZActions.C_断开:
-                        处理_C_断开(playerID, whisper.Value);
+                        处理_C_断开(playerID);
                         break;
                     case DDZActions.C_请求桌子数据:
-                        处理_C_请求桌子数据(playerID, whisper.Value);
+                        处理_C_请求桌子数据(playerID);
                         break;
                     case DDZActions.S_能进入:
-                        处理_S_能进入(playerID, whisper.Value);
+                        处理_S_能进入(playerID);
                         break;
                     case DDZActions.S_不能进入:
-                        处理_S_不能进入(playerID, whisper.Value);
-                        break;
-                    case DDZActions.S_坐下:
-                        处理_S_坐下(playerID, whisper.Value);
+                        处理_S_不能进入(playerID);
                         break;
                     case DDZActions.S_请准备:
-                        处理_S_请准备(playerID, whisper.Value);
+                        处理_S_请准备(playerID);
                         break;
                     case DDZActions.S_请出牌:
-                        处理_S_请出牌(playerID, whisper.Value);
-                        break;
-                    case DDZActions.S_点数:
-                        处理_S_点数(playerID, whisper.Value);
+                        处理_S_请出牌(playerID);
                         break;
                     case DDZActions.S_结果:
-                        处理_S_结果(playerID, whisper.Value);
+                        处理_S_结果(playerID);
                         break;
                     case DDZActions.S_踢出:
-                        处理_S_踢出(playerID, whisper.Value);
+                        处理_S_踢出(playerID);
                         break;
                     case DDZActions.S_返回服务数据:
-                        处理_S_返回服务数据(playerID, whisper.Value);
+                        处理_S_返回服务数据(whisper.Key, whisper.Value);
                         break;
                 }
             }
         }
 
-        private void 处理_S_返回服务数据(int playerID, byte[][] p)
+        private void 处理_S_返回服务数据(int p, byte[][] whisper)
         {
-            throw new NotImplementedException();
+            _gameService.Add(p, whisper[2].ToObject<int[]>());
         }
 
-        private void 处理_C_断开(int playerID, byte[][] p)
+        private void 处理_S_踢出(int p)
         {
-            throw new NotImplementedException();
-        }
-        //todo 实现处理数据的一系列方法
-        private void 处理_S_桌子数据(int playerID, byte[][] p)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void 处理_S_踢出(int playerID, byte[][] p)
-        {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_踢出) };
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
+                }
+            }
         }
 
-        private void 处理_S_结果(int playerID, byte[][] p)
+        private void 处理_S_结果(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_结果) };
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
+                }
+            }
         }
 
-        private void 处理_S_点数(int playerID, byte[][] p)
+        private void 处理_S_请出牌(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_请出牌) };
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
+                }
+            }
         }
 
-        private void 处理_S_请出牌(int playerID, byte[][] p)
+        private void 处理_S_请准备(int p)
         {
-            throw new NotImplementedException();
+            
+            if (_player.ContainsKey(p))
+            {
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_请准备) };
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
+                }
+            }
         }
 
-        private void 处理_S_请准备(int playerID, byte[][] p)
+        private void 处理_S_不能进入(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_不能进入) };
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
+                }
+            }
         }
 
-        private void 处理_S_坐下(int playerID, byte[][] p)
+        private void 处理_S_能进入(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_能进入) };
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
+                }
+            }
         }
 
-        private void 处理_S_不能进入(int playerID, byte[][] p)
+        private void 处理_C_请求桌子数据(int p)
         {
-            throw new NotImplementedException();
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.GM_桌子数据),
+                _gameService.ToBinary() };
+            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
         }
 
-        private void 处理_S_能进入(int playerID, byte[][] p)
+        private void 处理_C_断开(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_断开) };
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                }
+                _player.Remove(p);
+            }
         }
 
-        private void 处理_C_请求桌子数据(int playerID, byte[][] p)
+        private void 处理_C_出牌(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_出牌), p_2[2] };
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                }
+            }
         }
 
-        private void 处理_C_出牌(int playerID, byte[][] p)
+        private void 处理_C_准备(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_准备) };
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                }
+            }
         }
 
-        private void 处理_C_准备(int playerID, byte[][] p)
+        private void 处理_C_进入(int p)
         {
-            throw new NotImplementedException();
+            if (_player.ContainsKey(p))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_进入) };
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                }
+            }
         }
 
-        private void 处理_C_选择桌子(int playerID, byte[][] p)
+        private void 处理_C_能否进入(int p, byte[][] p_2)
         {
-            throw new NotImplementedException();
+            var selectedServiceID = BitConverter.ToInt32(p_2[2], 0);
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_能否进入) };
+            if (selectedServiceID == 0)
+            {
+                foreach (var service in _gameService)  //随机加入
+                {
+                    if (service.Value.Length < 3)
+                    {
+                        lock (_sync_sendWhispers)
+                        {
+                            _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(service.Key, sendData));
+                            var tempPlayer = new Character();
+                            tempPlayer.DestTopID = service.Key;
+                            tempPlayer.ProxyID = p;
+                            _player.Add(p, tempPlayer);
+                        }
+                    }
+                }
+            }
+            else   //选择加入
+            {
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(selectedServiceID, sendData));
+                    var tempPlayer = new Character();
+                    tempPlayer.DestTopID = selectedServiceID;
+                    tempPlayer.ProxyID = p;
+                    _player.Add(p, tempPlayer);
+                }
+            }
         }
-
-        private void 处理_C_进入(int playerID, byte[][] p)
-        {
-            throw new NotImplementedException();
-        }
-
-        private void 处理_C_能否进入(int playerID, byte[][] p)
-        {
-            throw new NotImplementedException();
-        }
-
-
         private void 发送_GM_请求服务数据(int serviceID)
-        {
-
-        }
-
-        public void 发送信息(int ID, byte[][] data)
         {
             lock (_sync_sendWhispers)
             {
-                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(ID, data));
+                byte[][] sendData = new byte[][] {0, BitConverter.GetBytes((int)DDZActions.GM_请求服务数据)};
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(serviceID, sendData));
             }
         }
 
@@ -327,5 +398,20 @@ namespace ZBWZ_GameMain
         }
 
         #endregion
+    }
+
+    public class GameService : Dictionary<int,int[]>
+    {
+        //public int ID { get; set; }
+        //public int[] PlayerIDs { get; set; }
+        //public GameService(int ID, int[] PlayerIDs)
+        //{
+        //    this.ID = ID; 
+        //    this.PlayerIDs = PlayerIDs;
+        //}
+        //public GameService(int ID)
+        //{
+        //    this.ID = ID;
+        //}
     }
 }
