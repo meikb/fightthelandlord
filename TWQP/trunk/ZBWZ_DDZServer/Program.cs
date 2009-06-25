@@ -174,6 +174,20 @@ namespace ZBWZ_DDZServer
                         break;
                 }
             }
+            #region 游戏状态管理
+            if (serviceState == ServiceStates.等待客户端进入)
+            {
+                var h = _currentStateHander as IWatingJoin;
+            }
+            else if (serviceState == ServiceStates.等待客户端准备好)
+            {
+                var h = _currentStateHander as IWatingReady;
+            }
+            else if (serviceState == ServiceStates.正在游戏)
+            {
+
+            }
+            #region
         }
         #region 处理消息
         private void 处理_GM_请求服务数据()
