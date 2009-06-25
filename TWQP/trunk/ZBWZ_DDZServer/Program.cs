@@ -154,52 +154,129 @@ namespace ZBWZ_DDZServer
             }
             foreach (var whisper in whispers)
             {
-                //var playerid = BitConverter.ToInt32(whisper.Value[0],0);
+                var playerid = BitConverter.ToInt32(whisper.Value[0],0);
                 switch ((DDZActions)BitConverter.ToInt32(whisper.Value[1],0))
                 {
                     case DDZActions.C_能否进入:
-                        处理_能否进入(whisper);
+                        处理_能否进入(playerid);
                         break;
                     case DDZActions.C_进入:
-                        处理_进入(whisper);
+                        处理_进入(playerid);
                         break;
                     case DDZActions.C_准备:
-                        处理_准备(whisper);
+                        处理_准备(playerid);
                         break;
                     case DDZActions.C_出牌:
-                        处理_出牌(whisper);
+                        处理_出牌(playerid, whisper.Value);
                         break;
                     case DDZActions.GM_请求服务数据:
-                        处理_GM_请求服务数据(whisper);
+                        处理_GM_请求服务数据();
                         break;
                 }
             }
         }
-
-        private void 处理_GM_请求服务数据(KeyValuePair<int, byte[][]> whisper)
+        #region 处理消息
+        private void 处理_GM_请求服务数据()
         {
-            throw new NotImplementedException();
+            发出_服务数据();
         }
 
-        private void 处理_出牌(KeyValuePair<int, byte[][]> whisper)
+        private void 处理_出牌(int playerid, byte[][] p)
         {
-            throw new NotImplementedException();
+            //todo 再写游戏逻辑和流程
         }
 
-        private void 处理_准备(KeyValuePair<int, byte[][]> whisper)
+        private void 处理_准备(int playerid)
         {
-            throw new NotImplementedException();
+            if (_players.ContainsKey(playerid))
+            {
+                _players[playerid].clientState = ClientStates.已发_已准备好;
+            }
         }
 
-        private void 处理_进入(KeyValuePair<int, byte[][]> whisper)
+        private void 处理_进入(int playerid)
         {
-            throw new NotImplementedException();
+            if (_players.ContainsKey(playerid))
+            {
+                _players[playerid].clientState = ClientStates.已发_要求进入;
+                发出_请准备(playerid);
+            }
         }
 
-        private void 处理_能否进入(KeyValuePair<int, byte[][]> whisper)
+        private void 处理_能否进入(int playerid)
         {
             if (_currentStateHander.CanIJoinIt(_players.Count))
             {
+                var tempPlayer = new Character();
+                tempPlayer.超时_进入超时 = GameLooper.Counter + 10;
+                发出_能进入(playerid);
+
+            }
+            else
+            {
+                发出_不能进入(playerid);
+            }
+        }
+        #endregion
+        #region 发出消息
+        private void 发出_请准备(int playerID)
+        {
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(playerID), BitConverter.GetBytes((int)DDZActions.S_请准备) };
+            发出消息(sendData);
+        }
+
+        private void 发出_不能进入(int playerID)
+        {
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(playerID), BitConverter.GetBytes((int)DDZActions.S_不能进入) };
+            发出消息(sendData);
+        }
+
+        private void 发出_能进入(int playerID)
+        {
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(playerID), BitConverter.GetBytes((int)DDZActions.S_能进入) };
+            发出消息(sendData);
+        }
+
+
+
+        private void 发出_服务数据()
+        {
+            List<int> playerIdsList = new List<int>();
+            foreach (var tempPlayer in _players)
+            {
+                playerIdsList.Add(tempPlayer.Key);
+            }
+            int[] playerIDs = playerIdsList.ToArray();
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(0),
+                BitConverter.GetBytes((int)DDZActions.S_返回服务数据),
+                playerIDs.ToBinary() };
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(GameMainID, sendData));
+            }
+        }
+        #endregion
+        /// <summary>
+        /// 发送消息给绑定的大厅
+        /// </summary>
+        /// <param name="sendData">消息</param>
+        private void 发出消息(byte[][] sendData)
+        {
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(GameMainID, sendData));
+            }
+        }
+        /// <summary>
+        /// 发送消息给指定的ID
+        /// </summary>
+        /// <param name="sendTo">指定的ID</param>
+        /// <param name="sendData">消息</param>
+        private void 发出消息(int sendTo, byte[][] sendData)
+        {
+            lock (_sync_sendWhispers)
+            {
+                _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(sendTo, sendData));
             }
         }
         //todo 实现Server端数据处理
