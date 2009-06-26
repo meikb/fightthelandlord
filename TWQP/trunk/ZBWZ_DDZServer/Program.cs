@@ -175,6 +175,7 @@ namespace ZBWZ_DDZServer
                     case DDZActions.GM_请求服务数据:
                         处理_GM_请求服务数据();
                         break;
+                        //todo 再写分配地主
                 }
             }
             #region 游戏状态管理
@@ -434,6 +435,10 @@ namespace ZBWZ_DDZServer
         /// 玩家ID
         /// </summary>
         public int PlayerID { get; set; }
+        /// <summary>
+        /// 是否是地主
+        /// </summary>
+        public int IsTheLandLord { get; set; }
     }
 
     protected class PlayerCollection : Dictionary<int, DDZCharacter>
