@@ -96,6 +96,10 @@
       <Project>{94780E41-9078-4D3B-B2FD-464A0B54D79D}</Project>
       <Name>ConosleHelper</Name>
     </ProjectReference>
+    <ProjectReference Include="..\ZBWZ_DDZ\ZBWZ_DDZ.csproj">
+      <Project>{D22A25A1-5EC8-4387-9F79-DEB90F12A34D}</Project>
+      <Name>ZBWZ_DDZ</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -7,7 +7,7 @@ using System.Timers;
 using System.Threading;
 using System.ComponentModel;
 using ConsoleHelper;
-using ZBWZ;
+using ZBWZ_DDZ;
 using DAL;
 
 namespace ZBWZ_GameMain
@@ -57,7 +57,7 @@ namespace ZBWZ_GameMain
         /// <summary>
         /// 玩家集合
         /// </summary>
-        private PlayerCollections _player = new PlayerCollections();
+        private PlayerCollection _player = new PlayerCollection();
         /// <summary>
         /// 游戏服务ID集合
         /// </summary>
@@ -166,7 +166,7 @@ namespace ZBWZ_GameMain
                         处理_C_准备(playerID);
                         break;
                     case DDZActions.C_出牌:
-                        处理_C_出牌(playerID);
+                        处理_C_出牌(playerID, whisper.Value);
                         break;
                     case DDZActions.C_断开:
                         处理_C_断开(playerID);
@@ -297,7 +297,7 @@ namespace ZBWZ_GameMain
             }
         }
 
-        private void 处理_C_出牌(int p)
+        private void 处理_C_出牌(int p,byte[][] p_2)
         {
             if (_player.ContainsKey(p))
             {
@@ -346,7 +346,7 @@ namespace ZBWZ_GameMain
                         lock (_sync_sendWhispers)
                         {
                             _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(service.Key, sendData));
-                            var tempPlayer = new Character();
+                            var tempPlayer = new DDZCharacter();
                             tempPlayer.DestTopID = service.Key;
                             tempPlayer.ProxyID = p;
                             _player.Add(p, tempPlayer);
@@ -359,7 +359,7 @@ namespace ZBWZ_GameMain
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(selectedServiceID, sendData));
-                    var tempPlayer = new Character();
+                    var tempPlayer = new DDZCharacter();
                     tempPlayer.DestTopID = selectedServiceID;
                     tempPlayer.ProxyID = p;
                     _player.Add(p, tempPlayer);
@@ -370,7 +370,7 @@ namespace ZBWZ_GameMain
         {
             lock (_sync_sendWhispers)
             {
-                byte[][] sendData = new byte[][] {0, BitConverter.GetBytes((int)DDZActions.GM_请求服务数据)};
+                byte[][] sendData = new byte[][] { BitConverter.GetBytes(0), BitConverter.GetBytes((int)DDZActions.GM_请求服务数据) };
                 _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(serviceID, sendData));
             }
         }

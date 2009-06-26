@@ -35,6 +35,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -45,7 +48,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Poker.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,9 +68,9 @@
       <Project>{BCF3DAA8-8ED5-4F40-A14D-4787198143D5}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZBWZ\ZBWZ.csproj">
-      <Project>{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}</Project>
-      <Name>ZBWZ</Name>
+    <ProjectReference Include="..\ZBWZ_DDZ\ZBWZ_DDZ.csproj">
+      <Project>{D22A25A1-5EC8-4387-9F79-DEB90F12A34D}</Project>
+      <Name>ZBWZ_DDZ</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

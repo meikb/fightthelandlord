@@ -7,7 +7,7 @@ using System.Timers;
 using System.Threading;
 using System.ComponentModel;
 using ConsoleHelper;
-using ZBWZ;
+using ZBWZ_DDZ;
 using DAL;
 
 namespace ZBWZ_DDZProxy
