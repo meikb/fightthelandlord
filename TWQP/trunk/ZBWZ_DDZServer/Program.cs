@@ -7,7 +7,7 @@ using System.Timers;
 using System.Threading;
 using System.ComponentModel;
 using ConsoleHelper;
-using ZBWZ;
+using ZBWZ_DDZ;
 using DAL;
 
 namespace ZBWZ_DDZServer
@@ -166,6 +166,9 @@ namespace ZBWZ_DDZServer
                     case DDZActions.C_准备:
                         处理_准备(playerid);
                         break;
+                    case DDZActions.C_叫地主:
+                        处理_叫地主(playerid);
+                        break;
                     case DDZActions.C_出牌:
                         处理_出牌(playerid, whisper.Value);
                         break;
@@ -205,16 +208,25 @@ namespace ZBWZ_DDZServer
             }
             else if (serviceState == ServiceStates.正在游戏)
             {
-                var h = _currentStateHander as IWatingThrow;
+
             }
             #endregion
         }
+
         #region 处理消息
         private void 处理_GM_请求服务数据()
         {
             发出_服务数据();
         }
 
+
+        private void 处理_叫地主(int playerid)
+        {
+            var tempPlayer = _players[playerid];
+            tempPlayer.clientState = DDZClientStates.等待出牌;
+            tempPlayer.IsTheLandLord = true;
+            发出_请出牌(playerid);
+        }
 
         private void 处理_Pass(int playerid)
         {
@@ -230,13 +242,13 @@ namespace ZBWZ_DDZServer
 
         private void 处理_出牌(int playerid, byte[][] p)
         {
-            //todo 再写游戏逻辑和流程
             DDZCharacter thisPlayer = _players[playerid];
             PokerGroup tempPG = new PokerGroup();
-            PokerGroup LastPlayerPokerGroup = thisPlayer.前面的玩家.LastPokerGroup[thisPlayer.前面的玩家.LastPokerGroup.Count - 1];
+            PokerGroup LastPlayerPokerGroup = thisPlayer.前面的玩家.LastPokerGroup;
             if (tempPG > LastPlayerPokerGroup && thisPlayer.clientState == DDZClientStates.等待出牌)
             {
                 thisPlayer.clientState = DDZClientStates.已出牌;
+                thisPlayer.LastPokerGroup = tempPG;
                 thisPlayer.后面的玩家.clientState = DDZClientStates.等待出牌;
                 thisPlayer.后面的玩家.超时_出牌超时 = GameLooper.Counter + 30; //30秒出牌
                 发出_请出牌(thisPlayer.后面的玩家.PlayerID);
@@ -279,7 +291,8 @@ namespace ZBWZ_DDZServer
         {
             if (_players.ContainsKey(playerid))
             {
-                _players[playerid].clientState = DDZClientStates.已进入;
+                var tempPlayer = _players[playerid];
+                tempPlayer.clientState = DDZClientStates.已进入;
                 发出_请准备(playerid);
             }
         }
@@ -291,6 +304,7 @@ namespace ZBWZ_DDZServer
                 var tempPlayer = new DDZCharacter();
                 tempPlayer.超时_进入超时 = GameLooper.Counter + 10;
                 tempPlayer.PlayerID = playerid;
+                tempPlayer.clientState = DDZClientStates.等待进入;
                 _players.Add(playerid, tempPlayer);
                 发出_能进入(playerid);
 
@@ -403,46 +417,5 @@ namespace ZBWZ_DDZServer
         }
 
         #endregion
-    }
-
-    protected class DDZCharacter : Character
-    {
-        /// <summary>
-        /// 玩家状态
-        /// </summary>
-        public DDZClientStates clientState { get; set; }
-        /// <summary>
-        /// 出牌超时时间
-        /// </summary>
-        public long 超时_出牌超时 { get; set; }
-        /// <summary>
-        /// 初始牌组
-        /// </summary>
-        public PokerGroup MyPokerGroup { get; set; }
-        /// <summary>
-        /// 已出牌组
-        /// </summary>
-        public List<PokerGroup> LastPokerGroup { get; set; }
-        /// <summary>
-        /// 之前的玩家
-        /// </summary>
-        public DDZCharacter 前面的玩家 { get; set; }
-        /// <summary>
-        /// 之后的玩家
-        /// </summary>
-        public DDZCharacter 后面的玩家 { get; set; }
-        /// <summary>
-        /// 玩家ID
-        /// </summary>
-        public int PlayerID { get; set; }
-        /// <summary>
-        /// 是否是地主
-        /// </summary>
-        public int IsTheLandLord { get; set; }
-    }
-
-    protected class PlayerCollection : Dictionary<int, DDZCharacter>
-    {
-        public bool IsInit { get; set; }
     }
 }

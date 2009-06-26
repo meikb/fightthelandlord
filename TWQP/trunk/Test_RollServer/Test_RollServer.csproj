@@ -83,9 +83,9 @@
       <Project>{C6DF216B-1772-422B-99D4-676E20BB940E}</Project>
       <Name>Test_Roll</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZBWZ\ZBWZ.csproj">
+    <ProjectReference Include="..\ZBWZ\ZBWZ_Roll.csproj">
       <Project>{AAEF7FA1-6B0F-4D2E-8F7D-F838BD7AD057}</Project>
-      <Name>ZBWZ</Name>
+      <Name>ZBWZ_Roll</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
