@@ -11,7 +11,7 @@ namespace ZBWZ_DDZ
 
         #region IWatingReady 成员
 
-        public bool EveryOneIsReady(Dictionary<int, DDZCharacter> players)
+        public bool EveryOneIsReady(PlayerCollection players)
         {
             var ReadyPlayer = 0;
             foreach (var onePlayer in players)
@@ -52,7 +52,7 @@ namespace ZBWZ_DDZ
                 return false;
             }
         }
-        public bool JoinSuccess(Dictionary<int, DDZCharacter> players)
+        public bool JoinSuccess(PlayerCollection players)
         {
             var joinSuccessPlayer = 0;
             foreach (var onePlayer in players)
@@ -133,6 +133,20 @@ namespace ZBWZ_DDZ
     public class PlayerCollection : Dictionary<int, DDZCharacter>
     {
         public bool IsInit { get; set; }
+        /// <summary>
+        /// 用类似List的方式索引
+        /// </summary>
+        /// <param name="index">索引</param>
+        /// <returns>DDZCharacter</returns>
+        public DDZCharacter 顺序索引(int index)
+        {
+            List<int> playerIds = new List<int>();
+            foreach (var player in this)
+            {
+                playerIds.Add(player.Key);
+            }
+            return this[playerIds[index]];
+        }
     }
 
 
@@ -283,7 +297,6 @@ namespace ZBWZ_DDZ
         /// 牌组的类型
         /// </summary>
         public PokerGroupType type;
-
         /// <summary>
         /// 序列化一个PokerGroup对象,返回一个byte数组
         /// </summary>
@@ -505,13 +518,43 @@ namespace ZBWZ_DDZ
             }
             return bytePoker;
         }
-
+        /// <summary>
+        /// 解码并新建PokerGroup
+        /// </summary>
+        /// <param name="bytePokers"></param>
         public PokerGroup(byte[] bytePokers)
         {
             this.GetPokerGroup(bytePokers);
         }
+        /// <summary>
+        /// 创建PokerGroup
+        /// </summary>
         public PokerGroup()
         {
+        }
+        /// <summary>
+        /// 创建所有的牌
+        /// </summary>
+        /// <param name="IsAll">是否创建所有的牌</param>
+        public PokerGroup(bool IsAll)
+        {
+            if (IsAll)
+            {
+                for (int i = 3; i < 18; i++)  //嵌套for循环初始化54张牌
+                {
+                    for (int j = 1; j < 5; j++)
+                    {
+                        if (i <= 15)
+                        {
+                            this.Add(new Poker((PokerNum)i, (PokerColor)j));
+                        }
+                    }
+                    if (i >= 16)
+                    {
+                        this.Add(new Poker((PokerNum)i, PokerColor.黑桃)); //大小王
+                    }
+                }
+            }
         }
         /// <summary>
         /// 通过一个byte[]反序列化为PokerGroup对象
@@ -793,7 +836,6 @@ namespace ZBWZ_DDZ
         {
             return (RP > LP);
         }
-
         /// <summary>
         /// 牌组是否有效
         /// </summary>
@@ -1356,9 +1398,4 @@ namespace ZBWZ_DDZ
             return PG;
         }
     }
-
-
-
-
-
 }

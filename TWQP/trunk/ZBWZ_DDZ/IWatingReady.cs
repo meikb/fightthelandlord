@@ -12,6 +12,6 @@ namespace ZBWZ_DDZ
         /// </summary>
         /// <param name="playerAmount">玩家数量</param>
         /// <returns>是否全部准备</returns>
-        bool EveryOneIsReady(Dictionary<int, DDZCharacter> players);
+        bool EveryOneIsReady(PlayerCollection players);
     }
 }

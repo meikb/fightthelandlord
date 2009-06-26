@@ -22,6 +22,6 @@ namespace ZBWZ_DDZ
         /// </summary>
         /// <param name="players">用户列表</param>
         /// <returns>是否全部加入</returns>
-        bool JoinSuccess(Dictionary<int, DDZCharacter> players);
+        bool JoinSuccess(PlayerCollection players);
     }
 }
