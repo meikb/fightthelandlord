@@ -50,7 +50,6 @@
     <Compile Include="IWatingReady.cs" />
     <Compile Include="IWatingThrow.cs" />
     <Compile Include="Player.cs" />
-    <Compile Include="PlayerCollections.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StateHandler.cs" />
   </ItemGroup>
