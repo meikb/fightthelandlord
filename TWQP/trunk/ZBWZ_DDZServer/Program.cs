@@ -61,7 +61,7 @@ namespace ZBWZ_DDZServer
         /// <summary>
         /// 玩家列表
         /// </summary>
-        private static PlayerCollections _players = new PlayerCollections();
+        private static PlayerCollection _players = new PlayerCollection();
         /// <summary>
         /// 收到消息列队
         /// </summary>
@@ -169,6 +169,9 @@ namespace ZBWZ_DDZServer
                     case DDZActions.C_出牌:
                         处理_出牌(playerid, whisper.Value);
                         break;
+                    case DDZActions.C_Pass:
+                        处理_Pass(playerid);
+                        break;
                     case DDZActions.GM_请求服务数据:
                         处理_GM_请求服务数据();
                         break;
@@ -182,12 +185,28 @@ namespace ZBWZ_DDZServer
             else if (serviceState == ServiceStates.等待客户端准备好)
             {
                 var h = _currentStateHander as IWatingReady;
+
+                if (!_players.IsInit)
+                {
+                    List<int> tempPlayerIDs = new List<int>();
+                    foreach (var tempPlayer in _players)
+                    {
+                        tempPlayerIDs.Add(tempPlayer.Key);
+                    }
+                    _players[tempPlayerIDs[0]].前面的玩家 = _players[tempPlayerIDs[2]];
+                    _players[tempPlayerIDs[0]].后面的玩家 = _players[tempPlayerIDs[1]];
+                    _players[tempPlayerIDs[1]].前面的玩家 = _players[tempPlayerIDs[0]];
+                    _players[tempPlayerIDs[1]].后面的玩家 = _players[tempPlayerIDs[2]];
+                    _players[tempPlayerIDs[2]].前面的玩家 = _players[tempPlayerIDs[1]];
+                    _players[tempPlayerIDs[2]].后面的玩家 = _players[tempPlayerIDs[0]];
+                    _players.IsInit = true;
+                }
             }
             else if (serviceState == ServiceStates.正在游戏)
             {
-
+                var h = _currentStateHander as IWatingThrow;
             }
-            #region
+            #endregion
         }
         #region 处理消息
         private void 处理_GM_请求服务数据()
@@ -195,16 +214,63 @@ namespace ZBWZ_DDZServer
             发出_服务数据();
         }
 
+
+        private void 处理_Pass(int playerid)
+        {
+            DDZCharacter thisPlayer = _players[playerid];
+            if (thisPlayer.clientState != DDZClientStates.已出牌)
+            {
+                thisPlayer.clientState = DDZClientStates.Pass;
+                thisPlayer.后面的玩家.clientState = DDZClientStates.等待出牌;
+                thisPlayer.后面的玩家.超时_出牌超时 = GameLooper.Counter + 30;
+                发出_请出牌(thisPlayer.后面的玩家.PlayerID);
+            }
+        }
+
         private void 处理_出牌(int playerid, byte[][] p)
         {
             //todo 再写游戏逻辑和流程
+            DDZCharacter thisPlayer = _players[playerid];
+            PokerGroup tempPG = new PokerGroup();
+            PokerGroup LastPlayerPokerGroup = thisPlayer.前面的玩家.LastPokerGroup[thisPlayer.前面的玩家.LastPokerGroup.Count - 1];
+            if (tempPG > LastPlayerPokerGroup && thisPlayer.clientState == DDZClientStates.等待出牌)
+            {
+                thisPlayer.clientState = DDZClientStates.已出牌;
+                thisPlayer.后面的玩家.clientState = DDZClientStates.等待出牌;
+                thisPlayer.后面的玩家.超时_出牌超时 = GameLooper.Counter + 30; //30秒出牌
+                发出_请出牌(thisPlayer.后面的玩家.PlayerID);
+                List<int> removeIds = new List<int>();
+                foreach (var tempPoker in tempPG)
+                {
+                    for (int i = 0; i < thisPlayer.MyPokerGroup.Count; i++)
+                    {
+                        var tempPoker2 = thisPlayer.MyPokerGroup[i];
+                        if (tempPoker.pokerColor == tempPoker2.pokerColor && tempPoker.pokerNum == tempPoker2.pokerNum)
+                        {
+                            removeIds.Add(i);
+                        }
+                    }
+                }
+                foreach (var ID in removeIds)
+                {
+                    thisPlayer.MyPokerGroup.RemoveAt(ID);
+                }
+                if (thisPlayer.MyPokerGroup.Count == 0)
+                {
+                    foreach (var player in _players)
+                    {
+                        发送_本局结果(player.Value.PlayerID, thisPlayer.PlayerID);
+                    }
+                }
+            }
         }
+
 
         private void 处理_准备(int playerid)
         {
             if (_players.ContainsKey(playerid))
             {
-                _players[playerid].clientState = ClientStates.已发_已准备好;
+                _players[playerid].clientState = DDZClientStates.已准备;
             }
         }
 
@@ -212,7 +278,7 @@ namespace ZBWZ_DDZServer
         {
             if (_players.ContainsKey(playerid))
             {
-                _players[playerid].clientState = ClientStates.已发_要求进入;
+                _players[playerid].clientState = DDZClientStates.已进入;
                 发出_请准备(playerid);
             }
         }
@@ -221,8 +287,10 @@ namespace ZBWZ_DDZServer
         {
             if (_currentStateHander.CanIJoinIt(_players.Count))
             {
-                var tempPlayer = new Character();
+                var tempPlayer = new DDZCharacter();
                 tempPlayer.超时_进入超时 = GameLooper.Counter + 10;
+                tempPlayer.PlayerID = playerid;
+                _players.Add(playerid, tempPlayer);
                 发出_能进入(playerid);
 
             }
@@ -233,6 +301,21 @@ namespace ZBWZ_DDZServer
         }
         #endregion
         #region 发出消息
+
+        private void 发送_本局结果(int playerID, int WinerID)
+        {
+            byte[][] sendData = new byte[][] {BitConverter.GetBytes(playerID),
+                BitConverter.GetBytes((int)DDZActions.S_结果),
+                BitConverter.GetBytes(WinerID)};
+            发出消息(sendData);
+        }
+
+        private void 发出_请出牌(int playerID)
+        {
+            byte[][] sendData = new byte[][] { BitConverter.GetBytes(playerID), BitConverter.GetBytes((int)DDZActions.S_请出牌) };
+            发出消息(sendData);
+        }
+
         private void 发出_请准备(int playerID)
         {
             byte[][] sendData = new byte[][] { BitConverter.GetBytes(playerID), BitConverter.GetBytes((int)DDZActions.S_请准备) };
@@ -270,6 +353,7 @@ namespace ZBWZ_DDZServer
             }
         }
         #endregion
+        #region 发出消息公共方法
         /// <summary>
         /// 发送消息给绑定的大厅
         /// </summary>
@@ -293,6 +377,7 @@ namespace ZBWZ_DDZServer
                 _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(sendTo, sendData));
             }
         }
+        #endregion
         //todo 实现Server端数据处理
         public void SendMessage(object sender, DoWorkEventArgs e)
         {
@@ -317,5 +402,42 @@ namespace ZBWZ_DDZServer
         }
 
         #endregion
+    }
+
+    protected class DDZCharacter : Character
+    {
+        /// <summary>
+        /// 玩家状态
+        /// </summary>
+        public DDZClientStates clientState { get; set; }
+        /// <summary>
+        /// 出牌超时时间
+        /// </summary>
+        public long 超时_出牌超时 { get; set; }
+        /// <summary>
+        /// 初始牌组
+        /// </summary>
+        public PokerGroup MyPokerGroup { get; set; }
+        /// <summary>
+        /// 已出牌组
+        /// </summary>
+        public List<PokerGroup> LastPokerGroup { get; set; }
+        /// <summary>
+        /// 之前的玩家
+        /// </summary>
+        public DDZCharacter 前面的玩家 { get; set; }
+        /// <summary>
+        /// 之后的玩家
+        /// </summary>
+        public DDZCharacter 后面的玩家 { get; set; }
+        /// <summary>
+        /// 玩家ID
+        /// </summary>
+        public int PlayerID { get; set; }
+    }
+
+    protected class PlayerCollection : Dictionary<int, DDZCharacter>
+    {
+        public bool IsInit { get; set; }
     }
 }

@@ -62,14 +62,14 @@ namespace ZBWZ
 
     public enum DDZClientStates
     {
-        已发_能进否,
-        已发_要求进入,
-        已发_已准备好,
-        已发_接收到牌,
-        已发_已看成绩单,
-        收到_断开,
-        收到_请准备,
-        收到_请出牌
+        等待进入,
+        已进入,
+        等待准备,
+        已准备,
+        等待出牌,
+        已出牌,
+        Pass,
+        断开
     }
 
     public enum DDZActions
@@ -79,6 +79,7 @@ namespace ZBWZ
         C_选择桌子,
         C_准备,
         C_出牌,
+        C_Pass,
         C_断开,
         C_请求桌子数据,
         S_能进入,
