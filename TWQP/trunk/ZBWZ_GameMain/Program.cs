@@ -160,50 +160,84 @@ namespace ZBWZ_GameMain
                         处理_C_能否进入(playerID, whisper.Value);
                         break;
                     case DDZActions.C_进入:
-                        处理_C_进入(playerID);
+                        处理_C_进入(playerID, whisper.Value);
                         break;
                     case DDZActions.C_准备:
-                        处理_C_准备(playerID);
+                        处理_C_准备(playerID, whisper.Value);
                         break;
                     case DDZActions.C_出牌:
                         处理_C_出牌(playerID, whisper.Value);
                         break;
                     case DDZActions.C_Pass:
-
+                        处理_C_Pass(playerID, whisper.Value);
                         break;
                     case DDZActions.C_不叫:
-
+                        处理_C_不叫(playerID, whisper.Value);
                         break;
                     case DDZActions.C_叫地主:
-
+                        处理_C_叫地主(playerID, whisper.Value);
                         break;
                     case DDZActions.C_断开:
-                        处理_C_断开(playerID);
+                        处理_C_断开(playerID, whisper.Value);
                         break;
                     case DDZActions.C_请求桌子数据:
                         处理_C_请求桌子数据(playerID);
                         break;
                     case DDZActions.S_能进入:
-                        处理_S_能进入(playerID);
+                        处理_S_能进入(playerID, whisper.Value);
                         break;
                     case DDZActions.S_不能进入:
-                        处理_S_不能进入(playerID);
+                        处理_S_不能进入(playerID, whisper.Value);
                         break;
                     case DDZActions.S_请准备:
-                        处理_S_请准备(playerID);
+                        处理_S_请准备(playerID, whisper.Value);
                         break;
                     case DDZActions.S_请出牌:
-                        处理_S_请出牌(playerID);
+                        处理_S_请出牌(playerID, whisper.Value);
                         break;
                     case DDZActions.S_结果:
-                        处理_S_结果(playerID);
+                        处理_S_结果(playerID, whisper.Value);
                         break;
                     case DDZActions.S_踢出:
-                        处理_S_踢出(playerID);
+                        处理_S_踢出(playerID, whisper.Value);
                         break;
                     case DDZActions.S_返回服务数据:
                         处理_S_返回服务数据(whisper.Key, whisper.Value);
                         break;
+                }
+            }
+        }
+
+        #region 处理消息方法
+        private void 处理_C_Pass(int playerID, byte[][] sendData)
+        {
+            if (_player.ContainsKey(playerID))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].DestTopID, sendData));
+                }
+            }
+        }
+
+        private void 处理_C_不叫(int playerID, byte[][] sendData)
+        {
+            if (_player.ContainsKey(playerID))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].DestTopID, sendData));
+                }
+            }
+        }
+
+        private void 处理_C_叫地主(int playerID, byte[][] sendData)
+        {
+            if (_player.ContainsKey(playerID))
+            {
+                lock (_sync_sendWhispers)
+                {
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].DestTopID, sendData));
                 }
             }
         }
@@ -213,11 +247,10 @@ namespace ZBWZ_GameMain
             _gameService.Add(p, whisper[2].ToObject<int[]>());
         }
 
-        private void 处理_S_踢出(int p)
+        private void 处理_S_踢出(int p,byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
-                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_踢出) };
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
@@ -225,11 +258,10 @@ namespace ZBWZ_GameMain
             }
         }
 
-        private void 处理_S_结果(int p)
+        private void 处理_S_结果(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
-                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_结果) };
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
@@ -237,11 +269,10 @@ namespace ZBWZ_GameMain
             }
         }
 
-        private void 处理_S_请出牌(int p)
+        private void 处理_S_请出牌(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
-                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_请出牌) };
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
@@ -249,12 +280,11 @@ namespace ZBWZ_GameMain
             }
         }
 
-        private void 处理_S_请准备(int p)
+        private void 处理_S_请准备(int p,byte[][] sendData)
         {
             
             if (_player.ContainsKey(p))
             {
-                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_请准备) };
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
@@ -262,11 +292,10 @@ namespace ZBWZ_GameMain
             }
         }
 
-        private void 处理_S_不能进入(int p)
+        private void 处理_S_不能进入(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
-                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_不能进入) };
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
@@ -274,11 +303,10 @@ namespace ZBWZ_GameMain
             }
         }
 
-        private void 处理_S_能进入(int p)
+        private void 处理_S_能进入(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
-                byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.S_能进入) };
                 lock (_sync_sendWhispers)
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
@@ -293,50 +321,46 @@ namespace ZBWZ_GameMain
             _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].ProxyID, sendData));
         }
 
-        private void 处理_C_断开(int p)
+        private void 处理_C_断开(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
                 lock (_sync_sendWhispers)
                 {
-                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_断开) };
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
                 }
                 _player.Remove(p);
             }
         }
 
-        private void 处理_C_出牌(int p,byte[][] p_2)
+        private void 处理_C_出牌(int p,byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
                 lock (_sync_sendWhispers)
                 {
-                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_出牌), p_2[2] };
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
                 }
             }
         }
 
-        private void 处理_C_准备(int p)
+        private void 处理_C_准备(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
                 lock (_sync_sendWhispers)
                 {
-                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_准备) };
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
                 }
             }
         }
 
-        private void 处理_C_进入(int p)
+        private void 处理_C_进入(int p, byte[][] sendData)
         {
             if (_player.ContainsKey(p))
             {
                 lock (_sync_sendWhispers)
                 {
-                    byte[][] sendData = new byte[][] { BitConverter.GetBytes(p), BitConverter.GetBytes((int)DDZActions.C_进入) };
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
                 }
             }
@@ -375,6 +399,8 @@ namespace ZBWZ_GameMain
                 }
             }
         }
+        #endregion
+        #region 发送消息方法
         private void 发送_GM_请求服务数据(int serviceID)
         {
             lock (_sync_sendWhispers)
@@ -383,6 +409,7 @@ namespace ZBWZ_GameMain
                 _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(serviceID, sendData));
             }
         }
+        #endregion
 
         public void SendMessage(object sender, DoWorkEventArgs e)
         {
