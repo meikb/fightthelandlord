@@ -168,6 +168,15 @@ namespace ZBWZ_GameMain
                     case DDZActions.C_出牌:
                         处理_C_出牌(playerID, whisper.Value);
                         break;
+                    case DDZActions.C_Pass:
+
+                        break;
+                    case DDZActions.C_不叫:
+
+                        break;
+                    case DDZActions.C_叫地主:
+
+                        break;
                     case DDZActions.C_断开:
                         处理_C_断开(playerID);
                         break;
