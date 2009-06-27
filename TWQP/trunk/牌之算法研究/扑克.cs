@@ -35,7 +35,7 @@ namespace 扑克
                 else if (p.点 == 13) 点显示 = "K";
                 else 点显示 = p.点.ToString();
             }
-            return string.Format("{1} {2} x {0}", p.张, 花显示, 点显示);
+            return string.Format("{1}{2} x {0}", p.张, 花显示, 点显示);
         }
     }
 
