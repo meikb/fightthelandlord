@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
+using 扑克;
+
 namespace 牌之算法研究
 {
     class Program
@@ -10,10 +12,11 @@ namespace 牌之算法研究
 
         static void Main(string[] args)
         {
-            for (int i = 0; i < 扑克.一副牌.Length; i++)
+            var ps = 扑克.Handler.一副牌;
+            for (int i = 0; i < ps.Length; i++)
             {
-                var p = 扑克.一副牌[i];
-                Console.WriteLine(p);
+                var p = ps[i];
+                Console.WriteLine(p.ToDisplayString());
             }
 
             Console.ReadLine();
