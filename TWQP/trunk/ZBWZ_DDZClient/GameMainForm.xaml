@@ -1,0 +1,8 @@
+﻿<Window x:Class="ZBWZ_DDZClient.GameMainForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="游戏大厅" Height="600" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid Height="600" Width="800">
+        
+    </Grid>
+</Window>

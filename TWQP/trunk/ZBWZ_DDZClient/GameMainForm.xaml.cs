@@ -17,9 +17,9 @@ namespace ZBWZ_DDZClient
     /// <summary>
     /// Window1.xaml 的交互逻辑
     /// </summary>
-    public partial class Window1 : Window
+    public partial class GameMainForm : Window
     {
-        public Window1()
+        public GameMainForm()
         {
             InitializeComponent();
         }
