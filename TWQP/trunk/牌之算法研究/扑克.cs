@@ -22,7 +22,7 @@ namespace 扑克
                 case 4:
                     花显示 = "方块"; break;
                 case 5:
-                    花显示 = "小丑"; break;
+                    花显示 = ""; break;
                 default:
                     花显示 = p.花.ToString(); break;
             }
