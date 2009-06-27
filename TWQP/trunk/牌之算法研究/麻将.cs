@@ -32,11 +32,11 @@ namespace 麻将
             {
                 switch (p.点)
                 {
-                    case 1:
+                    case 0x10:
                         点显示 = "红中"; break;
-                    case 2:
+                    case 0x20:
                         点显示 = "发财"; break;
-                    case 3:
+                    case 0x30:
                         点显示 = "白板"; break;
                     default:
                         点显示 = p.点.ToString(); break;
@@ -46,13 +46,13 @@ namespace 麻将
             {
                 switch (p.点)
                 {
-                    case 1:
+                    case 0x10:
                         点显示 = "东"; break;
-                    case 2:
+                    case 0x20:
                         点显示 = "南"; break;
-                    case 3:
+                    case 0x30:
                         点显示 = "西"; break;
-                    case 4:
+                    case 0x40:
                         点显示 = "北"; break;
                     default:
                         点显示 = p.点.ToString(); break;
@@ -62,29 +62,21 @@ namespace 麻将
             {
                 switch (p.点)
                 {
-                    case 1:
+                    case 0x10:
                         点显示 = "春"; break;
-                    case 2:
+                    case 0x20:
                         点显示 = "夏"; break;
-                    case 3:
+                    case 0x30:
                         点显示 = "秋"; break;
-                    case 4:
+                    case 0x40:
                         点显示 = "冬"; break;
-                    default:
-                        点显示 = p.点.ToString(); break;
-                }
-            }
-            else if (p.花 == 7)
-            {
-                switch (p.点)
-                {
-                    case 1:
+                    case 0x11:
                         点显示 = "梅"; break;
-                    case 2:
+                    case 0x21:
                         点显示 = "兰"; break;
-                    case 3:
+                    case 0x31:
                         点显示 = "竹"; break;
-                    case 4:
+                    case 0x41:
                         点显示 = "菊"; break;
                     default:
                         点显示 = p.点.ToString(); break;
@@ -117,7 +109,7 @@ namespace 麻将
                 }
             }
 
-            return string.Format("{1}{2} x {0}", p.张, 花显示, 点显示);
+            return string.Format("{2}{1} x {0}", p.张, 花显示, 点显示);
         }
     }
 
