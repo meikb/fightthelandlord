@@ -5,7 +5,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 
 /// <summary>
-/// 表示一张牌（由高到低：状态, 张数，花色，点数，每个占 1 byte）
+/// 表示一张牌（麻将，扑克）（由高到低：状态, 张数，花色，点数，每个占 1 byte）
 /// </summary>
 [StructLayout(LayoutKind.Explicit, Size = 4, CharSet = CharSet.Ansi)]
 public struct 牌
