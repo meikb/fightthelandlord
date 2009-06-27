@@ -215,7 +215,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].TableID, sendData));
                 }
             }
         }
@@ -226,7 +226,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].TableID, sendData));
                 }
             }
         }
@@ -237,7 +237,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[playerID].TableID, sendData));
                 }
             }
         }
@@ -327,7 +327,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].TableID, sendData));
                 }
                 _player.Remove(p);
             }
@@ -339,7 +339,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].TableID, sendData));
                 }
             }
         }
@@ -350,7 +350,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].TableID, sendData));
                 }
             }
         }
@@ -361,7 +361,7 @@ namespace ZBWZ_GameMain
             {
                 lock (_sync_sendWhispers)
                 {
-                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].DestTopID, sendData));
+                    _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(_player[p].TableID, sendData));
                 }
             }
         }
@@ -380,7 +380,7 @@ namespace ZBWZ_GameMain
                         {
                             _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(service.Key, sendData));
                             var tempPlayer = new DDZCharacter();
-                            tempPlayer.DestTopID = service.Key;
+                            tempPlayer.TableID = service.Key;
                             tempPlayer.ProxyID = p;
                             _player.Add(p, tempPlayer);
                         }
@@ -393,7 +393,7 @@ namespace ZBWZ_GameMain
                 {
                     _sendWhispers.Enqueue(new KeyValuePair<int, byte[][]>(selectedServiceID, sendData));
                     var tempPlayer = new DDZCharacter();
-                    tempPlayer.DestTopID = selectedServiceID;
+                    tempPlayer.TableID = selectedServiceID;
                     tempPlayer.ProxyID = p;
                     _player.Add(p, tempPlayer);
                 }
