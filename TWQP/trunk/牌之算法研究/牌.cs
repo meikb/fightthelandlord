@@ -14,7 +14,7 @@ public struct 牌
     /// UInt32 类型，包含牌的　状态, 张数，花色，点数　数据
     /// </summary>
     [FieldOffset(0)]
-    public uint 整个;
+    public uint 数据;
     /// <summary>
     /// UInt16 类型，包含牌的　花色，点数　数据
     /// </summary>
