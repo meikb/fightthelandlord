@@ -8,108 +8,31 @@ namespace 麻将
 {
     public static class ExtendMethods
     {
+        public static readonly string[][] _牌显示 = new string[][]
+        {
+            new string[] {},
+	        new string[] { "", "一万", "二万", "三万", "四万", "五万", "六万", "七万", "八万", "九万" },
+	        new string[] { "", "一条", "二条", "三条", "四条", "五条", "六条", "七条", "八条", "九条" },
+	        new string[] { "", "一筒", "二筒", "三筒", "四筒", "五筒", "六筒", "七筒", "八筒", "九筒" },
+	        new string[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "红中", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", 
+                "发财", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "白板" },
+            new string[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "东风", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "南风", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "西风", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "北风" },
+            new string[] { "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "春", "梅", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "夏", "兰", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "秋", "竹", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+                "冬", "菊" },
+        };
+
         public static string ToDisplayString(this 牌 p)
         {
-            string 花显示, 点显示;
-            switch (p.花)
-            {
-                case 1:
-                    花显示 = "万"; break;
-                case 2:
-                    花显示 = "条"; break;
-                case 3:
-                    花显示 = "筒"; break;
-                case 4:
-                    花显示 = ""; break;
-                case 5:
-                    花显示 = "风"; break;
-                case 6:
-                    花显示 = ""; break;
-                default:
-                    花显示 = p.花.ToString(); break;
-            }
-            if (p.花 == 4)
-            {
-                switch (p.点)
-                {
-                    case 0x10:
-                        点显示 = "红中"; break;
-                    case 0x20:
-                        点显示 = "发财"; break;
-                    case 0x30:
-                        点显示 = "白板"; break;
-                    default:
-                        点显示 = p.点.ToString(); break;
-                }
-            }
-            else if (p.花 == 5)
-            {
-                switch (p.点)
-                {
-                    case 0x10:
-                        点显示 = "东"; break;
-                    case 0x20:
-                        点显示 = "南"; break;
-                    case 0x30:
-                        点显示 = "西"; break;
-                    case 0x40:
-                        点显示 = "北"; break;
-                    default:
-                        点显示 = p.点.ToString(); break;
-                }
-            }//春夏秋冬梅兰竹菊
-            else if (p.花 == 6)
-            {
-                switch (p.点)
-                {
-                    case 0x10:
-                        点显示 = "春"; break;
-                    case 0x20:
-                        点显示 = "夏"; break;
-                    case 0x30:
-                        点显示 = "秋"; break;
-                    case 0x40:
-                        点显示 = "冬"; break;
-                    case 0x11:
-                        点显示 = "梅"; break;
-                    case 0x21:
-                        点显示 = "兰"; break;
-                    case 0x31:
-                        点显示 = "竹"; break;
-                    case 0x41:
-                        点显示 = "菊"; break;
-                    default:
-                        点显示 = p.点.ToString(); break;
-                }
-            }
-            else
-            {
-                switch (p.点)
-                {
-                    case 1:
-                        点显示 = "一"; break;
-                    case 2:
-                        点显示 = "二"; break;
-                    case 3:
-                        点显示 = "三"; break;
-                    case 4:
-                        点显示 = "四"; break;
-                    case 5:
-                        点显示 = "五"; break;
-                    case 6:
-                        点显示 = "六"; break;
-                    case 7:
-                        点显示 = "七"; break;
-                    case 8:
-                        点显示 = "八"; break;
-                    case 9:
-                        点显示 = "九"; break;
-                    default:
-                        点显示 = p.点.ToString(); break;
-                }
-            }
-
-            return string.Format("{2}{1} x {0}", p.张, 花显示, 点显示);
+            return string.Format("{0} x {1}", _牌显示[p.花][p.点], p.张);
         }
     }
 
@@ -179,7 +102,7 @@ namespace 麻将
                     {
                         for (int i = 0; i < p.张; i++)
                         {
-                            _一副牌单张序列[counter++].花点 = p.花点;
+                            _一副牌单张序列[counter++].整个 = p.花点 | 0x010000;
                         }
                     }
                 }

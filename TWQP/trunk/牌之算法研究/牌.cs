@@ -23,3 +23,19 @@ public struct 牌
     [FieldOffset(0)]
     public byte 点;
 }
+
+public static class ExtendMethods_
+{
+    public static 牌[] 转为单张序列(this IEnumerable<牌> ps)
+    {
+        var tmp = new List<牌>();
+        foreach (var p in ps)
+        {
+            for (int i = 0; i < p.张; i++)
+            {
+                tmp.Add(new 牌 { 花点 = p.花点 });
+            }
+        }
+        return tmp.ToArray();
+    }
+}
