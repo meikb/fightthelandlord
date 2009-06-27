@@ -6,59 +6,58 @@ using System.Runtime.InteropServices;
 
 namespace 牌之算法研究
 {
+    /// <summary>
+    /// 表示一张牌（由高到低：状态, 张数，花色，点数，每个占 1 byte）
+    /// </summary>
+    [StructLayout(LayoutKind.Explicit, Size = 4, CharSet = CharSet.Ansi)]
+    public struct 牌
+    {
+        [FieldOffset(0)]
+        public int 整个;
+        [FieldOffset(0)]
+        public ushort 花点;
+        [FieldOffset(3)]
+        public byte 态;
+        [FieldOffset(2)]
+        public byte 张;
+        [FieldOffset(1)]
+        public byte 花;
+        [FieldOffset(0)]
+        public byte 点;
+
+        public override string ToString()
+        {
+            string 花显示, 点显示;
+            switch (花)
+            {
+                case 1:
+                    花显示 = "黑桃"; break;
+                case 2:
+                    花显示 = "红桃"; break;
+                case 3:
+                    花显示 = "樱花"; break;
+                case 4:
+                    花显示 = "方块"; break;
+                case 5:
+                    花显示 = "小丑"; break;
+                default:
+                    花显示 = 花.ToString(); break;
+            }
+            if (花 == 5) 点显示 = 点 == 1 ? "大王" : "小王";
+            else
+            {
+                if (点 == 1) 点显示 = "A";
+                else if (点 == 11) 点显示 = "J";
+                else if (点 == 12) 点显示 = "Q";
+                else if (点 == 13) 点显示 = "K";
+                else 点显示 = 点.ToString();
+            }
+            return string.Format("{1} {2} x {0}", 张, 花显示, 点显示);
+        }
+    }
+
     public class 扑克
     {
-
-        /// <summary>
-        /// 表示一张牌（由高到低：状态, 张数，花色，点数，每个占 1 byte）
-        /// </summary>
-        [StructLayout(LayoutKind.Explicit, Size = 4, CharSet = CharSet.Ansi)]
-        public struct 牌
-        {
-            [FieldOffset(0)]
-            public int 整个;
-            [FieldOffset(0)]
-            public ushort 花点;
-            [FieldOffset(3)]
-            public byte 态;
-            [FieldOffset(2)]
-            public byte 张;
-            [FieldOffset(1)]
-            public byte 花;
-            [FieldOffset(0)]
-            public byte 点;
-
-            public override string ToString()
-            {
-                string 花显示, 点显示;
-                switch (花)
-                {
-                    case 1:
-                        花显示 = "黑桃"; break;
-                    case 2:
-                        花显示 = "红桃"; break;
-                    case 3:
-                        花显示 = "樱花"; break;
-                    case 4:
-                        花显示 = "方块"; break;
-                    case 5:
-                        花显示 = "小丑"; break;
-                    default:
-                        花显示 = 花.ToString(); break;
-                }
-                if (花 == 5) 点显示 = 点 == 1 ? "大王" : "小王";
-                else
-                {
-                    if (点 == 1) 点显示 = "A";
-                    else if (点 == 11) 点显示 = "J";
-                    else if (点 == 12) 点显示 = "Q";
-                    else if (点 == 13) 点显示 = "K";
-                    else 点显示 = 点.ToString();
-                }
-                return string.Format("{1} {2} x {0}", 张, 花显示, 点显示);
-            }
-        }
-
         public static readonly 牌[] 一副牌 = new 牌[] {
             // 黑
             new 牌 { 整个 = 0x010101 },   // A
