@@ -17,7 +17,7 @@
                 Console.WriteLine(扑克.ExtendMethods.ToDisplayString(p));
             }
 
-            var ms = 麻将.Handler.一副牌;
+            var ms = 麻将.Handler.一副牌单张序列;
             for (int i = 0; i < ms.Length; i++)
             {
                 var m = ms[i];

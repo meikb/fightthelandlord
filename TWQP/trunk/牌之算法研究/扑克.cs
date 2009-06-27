@@ -8,35 +8,21 @@ namespace 扑克
 {
     public static class ExtendMethods
     {
+        public static readonly string[][] _牌显示 = new string[][]
+        {
+            new string[] {},
+	        new string[] { "", "黑桃Ａ", "黑桃２", "黑桃３", "黑桃４", "黑桃５", "黑桃６", "黑桃７", "黑桃８", "黑桃９", "黑桃Ｊ", "黑桃Ｑ", "黑桃Ｋ" },
+	        new string[] { "", "红桃Ａ", "红桃２", "红桃３", "红桃４", "红桃５", "红桃６", "红桃７", "红桃８", "红桃９", "红桃Ｊ", "红桃Ｑ", "红桃Ｋ" },
+	        new string[] { "", "樱花Ａ", "樱花２", "樱花３", "樱花４", "樱花５", "樱花６", "樱花７", "樱花８", "樱花９", "樱花Ｊ", "樱花Ｑ", "樱花Ｋ" },
+            new string[] { "", "方块Ａ", "方块２", "方块３", "方块４", "方块５", "方块６", "方块７", "方块８", "方块９", "方块Ｊ", "方块Ｑ", "方块Ｋ" },
+            new string[] { "", "大王", "小王" },
+        };
+
         public static string ToDisplayString(this 牌 p)
         {
-            string 花显示, 点显示;
-            switch (p.花)
-            {
-                case 1:
-                    花显示 = "黑桃"; break;
-                case 2:
-                    花显示 = "红桃"; break;
-                case 3:
-                    花显示 = "樱花"; break;
-                case 4:
-                    花显示 = "方块"; break;
-                case 5:
-                    花显示 = ""; break;
-                default:
-                    花显示 = p.花.ToString(); break;
-            }
-            if (p.花 == 5) 点显示 = p.点 == 1 ? "大王" : "小王";
-            else
-            {
-                if (p.点 == 1) 点显示 = "A";
-                else if (p.点 == 11) 点显示 = "J";
-                else if (p.点 == 12) 点显示 = "Q";
-                else if (p.点 == 13) 点显示 = "K";
-                else 点显示 = p.点.ToString();
-            }
-            return string.Format("{1}{2} x {0}", p.张, 花显示, 点显示);
+            return string.Format("{0} x {1}", _牌显示[p.花][p.点], p.张);
         }
+
     }
 
     public class Handler
@@ -99,8 +85,8 @@ namespace 扑克
             new 牌 { 整个 = 0x01040C },   // Q
             new 牌 { 整个 = 0x01040D },   // K
             // 王
-            new 牌 { 整个 = 0x010501 }, 
-            new 牌 { 整个 = 0x010502 }, 
+            new 牌 { 整个 = 0x010501 },   // 大
+            new 牌 { 整个 = 0x010502 },   // 小
         };
     }
 }
