@@ -45,9 +45,18 @@
     </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="WindowsBase" />
-    <Reference Include="PresentationCore" />
-    <Reference Include="PresentationFramework" />
+    <Reference Include="UIAutomationProvider">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="WindowsBase">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationCore">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="PresentationFramework">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -57,6 +66,10 @@
     <Page Include="GameMainForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -68,6 +81,11 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="enums.cs" />
+    <Compile Include="GameTable.xaml.cs">
+      <DependentUpon>GameTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -96,6 +114,10 @@
     <ProjectReference Include="..\ConosleHelper\ConosleHelper.csproj">
       <Project>{94780E41-9078-4D3B-B2FD-464A0B54D79D}</Project>
       <Name>ConosleHelper</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DAL\DAL.csproj">
+      <Project>{B5FB0399-580B-4F40-8AF1-3999FC6312CB}</Project>
+      <Name>DAL</Name>
     </ProjectReference>
     <ProjectReference Include="..\ZBWZ_DDZ\ZBWZ_DDZ.csproj">
       <Project>{D22A25A1-5EC8-4387-9F79-DEB90F12A34D}</Project>
