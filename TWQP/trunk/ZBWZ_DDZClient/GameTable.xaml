@@ -1,0 +1,11 @@
+﻿<UserControl x:Class="ZBWZ_DDZClient.GameTable"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Height="150" Width="150">
+    <Canvas Width="150" Height="150" >
+        <Path Fill="#FFFFFFFF" Stretch="Fill" Stroke="#FF000000" Canvas.Left="35.074" Canvas.Top="20.13" Width="80" Height="64" Data="M74,20 L40,66 107.5,66 z"/>
+        <Button Width="26.852" Height="26.852" Content="空" Canvas.Left="8.222" Canvas.Top="20.13" Click="Button_Click" />
+        <Button Width="26.852" Height="26.852" Content="空" Canvas.Left="63.778" Canvas.Top="103.001"/>
+        <Button Width="26.852" Height="26.852" Content="空" Canvas.Left="115.074" Canvas.Top="20.13" />
+    </Canvas>
+</UserControl>

@@ -15,13 +15,18 @@ using System.Windows.Shapes;
 namespace GameTable
 {
     /// <summary>
-    /// UserControl1.xaml 的交互逻辑
+    /// GameTable.xaml 的交互逻辑
     /// </summary>
-    public partial class UserControl1 : UserControl
+    public partial class GameTable : UserControl
     {
-        public UserControl1()
+        /// <summary>
+        /// 桌子ID
+        /// </summary>
+        public int ID { get; set; }
+        public GameTable(int id)
         {
             InitializeComponent();
+            this.ID = id;
         }
     }
 }
