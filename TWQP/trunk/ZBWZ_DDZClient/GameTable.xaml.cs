@@ -23,7 +23,7 @@ namespace ZBWZ_DDZClient
         /// 桌子ID
         /// </summary>
         public int ID { get; set; }
-        public GameTable(int id)
+        public GameTable(int id,int[] playerID)
         {
             InitializeComponent();
             this.ID = id;
@@ -31,7 +31,21 @@ namespace ZBWZ_DDZClient
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-
+            var tempButton = (Button)sender;
+            switch ((int)tempButton.Tag)
+            {
+                case 1:
+                    MessageHandler.发送_能否进入(ID); //todo以后再写选择座位
+                    break;
+                case 2:
+                    MessageHandler.发送_能否进入(ID);
+                    break;
+                case 3:
+                    MessageHandler.发送_能否进入(ID);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

@@ -9,29 +9,18 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace ZBWZ_DDZClient
 {
     /// <summary>
-    /// Window1.xaml 的交互逻辑
+    /// LoginForm.xaml 的交互逻辑
     /// </summary>
-    public partial class GameMainForm : Window
+    public partial class LoginForm : Window
     {
-        public GameMainForm()
+        public LoginForm()
         {
             InitializeComponent();
-        }
-
-        public void PaintLogin()
-        {
-            
-        }
-
-        public void ClearLogin()
-        {
-
         }
     }
 }

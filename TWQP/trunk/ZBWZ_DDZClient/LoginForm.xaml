@@ -1,0 +1,8 @@
+﻿<Window x:Class="ZBWZ_DDZClient.LoginForm"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="LoginForm" Height="300" Width="300">
+    <Grid>
+        <TextBlock>LoginForm</TextBlock>
+    </Grid>
+</Window>
