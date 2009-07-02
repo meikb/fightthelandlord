@@ -15,23 +15,20 @@ using System.Windows.Shapes;
 namespace ZBWZ_DDZClient
 {
     /// <summary>
-    /// Window1.xaml 的交互逻辑
+    /// LoginPage.xaml 的交互逻辑
     /// </summary>
-    public partial class GameMainForm : Window
+    public partial class LoginPage : Page
     {
-        public GameMainForm()
+        public LoginPage()
         {
             InitializeComponent();
         }
 
-        public void PaintLogin()
+        private void button1_Click(object sender, RoutedEventArgs e)
         {
-            
-        }
-
-        public void ClearLogin()
-        {
-
+            MessageHandler.PlayerID = int.Parse(this.textBox1.Text);
+            MessageHandler.h = new Handler(MessageHandler.PlayerID);
+            MessageHandler.发送_请求桌子数据();
         }
     }
 }

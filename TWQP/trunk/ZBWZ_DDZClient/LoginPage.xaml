@@ -1,0 +1,17 @@
+﻿<Page x:Class="ZBWZ_DDZClient.LoginPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    Title="LoginPage" Height="100">
+    <Grid Height="97" Width="300">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <TextBlock Text="请输入ID" Margin="44,12,0,16.5" HorizontalAlignment="Left" Width="58" />
+        <TextBox Name="textBox1" Margin="108,9,42,19.5" />
+        <Button Grid.Row="1" Margin="111,14,114,12" Name="btnSubmit" Click="button1_Click" Width="50">确定</Button>
+    </Grid>
+</Page>

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using DAL;
 
 namespace ZBWZ_DDZ
 {
@@ -81,8 +80,9 @@ namespace ZBWZ_DDZ
     }
 
     [Serializable]
-    public class Character : OO.User_Character
+    public class Character
     {
+        public int PlayerID;
         public long 超时_进入超时;
         public long 超时_准备超时;
         public long 超时_投掷超时;

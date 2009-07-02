@@ -37,6 +37,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -71,6 +74,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="LoginForm.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Tables.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -81,9 +96,26 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="enums.cs" />
+    <Compile Include="..\ZBWZ_DDZ\enums.cs">
+      <Link>enums.cs</Link>
+    </Compile>
+    <Compile Include="..\ZBWZ_DDZ\IWatingJoin.cs">
+      <Link>IWatingJoin.cs</Link>
+    </Compile>
+    <Compile Include="..\ZBWZ_DDZ\IWatingReady.cs">
+      <Link>IWatingReady.cs</Link>
+    </Compile>
+    <Compile Include="..\ZBWZ_DDZ\StateHandler.cs">
+      <Link>StateHandler.cs</Link>
+    </Compile>
     <Compile Include="GameTable.xaml.cs">
       <DependentUpon>GameTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginForm.xaml.cs">
+      <DependentUpon>LoginForm.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="MessageHandler.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -98,6 +130,9 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="Tables.xaml.cs">
+      <DependentUpon>Tables.xaml</DependentUpon>
     </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -115,13 +150,17 @@
       <Project>{94780E41-9078-4D3B-B2FD-464A0B54D79D}</Project>
       <Name>ConosleHelper</Name>
     </ProjectReference>
-    <ProjectReference Include="..\DAL\DAL.csproj">
-      <Project>{B5FB0399-580B-4F40-8AF1-3999FC6312CB}</Project>
-      <Name>DAL</Name>
+    <ProjectReference Include="..\Constructs\Constructs.csproj">
+      <Project>{301592A6-B6EA-44A3-A24D-7C4CCAC4726C}</Project>
+      <Name>Constructs</Name>
     </ProjectReference>
-    <ProjectReference Include="..\ZBWZ_DDZ\ZBWZ_DDZ.csproj">
-      <Project>{D22A25A1-5EC8-4387-9F79-DEB90F12A34D}</Project>
-      <Name>ZBWZ_DDZ</Name>
+    <ProjectReference Include="..\DataCenter\DataCenter.csproj">
+      <Project>{EB257EA3-E3D8-4BCD-AE21-1C8E5A3E2E2F}</Project>
+      <Name>DataCenter</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Extensions\Extensions.csproj">
+      <Project>{BCF3DAA8-8ED5-4F40-A14D-4787198143D5}</Project>
+      <Name>Extensions</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

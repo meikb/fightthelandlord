@@ -15,23 +15,13 @@ using System.Windows.Shapes;
 namespace ZBWZ_DDZClient
 {
     /// <summary>
-    /// Window1.xaml 的交互逻辑
+    /// Tables.xaml 的交互逻辑
     /// </summary>
-    public partial class GameMainForm : Window
+    public partial class Tables : Page
     {
-        public GameMainForm()
+        public Tables()
         {
             InitializeComponent();
-        }
-
-        public void PaintLogin()
-        {
-            
-        }
-
-        public void ClearLogin()
-        {
-
         }
     }
 }
