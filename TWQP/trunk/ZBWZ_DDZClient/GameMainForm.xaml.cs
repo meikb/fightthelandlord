@@ -22,16 +22,34 @@ namespace ZBWZ_DDZClient
         public GameMainForm()
         {
             InitializeComponent();
+            PaintLogin();
         }
 
         public void PaintLogin()
         {
-            
+            TextBlock txt = new TextBlock();
+            txt.Text = "请输入ID: ";
+            TextBox tb = new TextBox();
+            Button btn = new Button();
+            tb.Width = 100;
+            btn.Width = 30; btn.Height = 20; btn.Content = "确定";
+            btn.Click += (sender, ea1) =>
+                {
+                    MessageHandler.PlayerID = int.Parse(tb.Text);
+                    ClearLogin();
+                };
+            DockPanel dockPanel = new DockPanel();
+            dockPanel.Children.Add(txt);
+            dockPanel.Children.Add(tb);
+            dockPanel.Children.Add(btn);
+            canvas.Children.Add(dockPanel);
+            Canvas.SetTop(dockPanel, 300);
+            Canvas.SetLeft(dockPanel, 300);
         }
 
         public void ClearLogin()
         {
-
+            
         }
     }
 }
