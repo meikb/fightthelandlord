@@ -1,0 +1,358 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+namespace ConsoleApplication2
+{
+    class Recursive
+    {
+        public static void RunSnippet()
+        {
+            Console.WindowHeight = 50;
+            do
+            {
+
+                var foos = Foo.GetFooList(9, 3, 4, 17, true);
+                WL(foos.Dump());
+                var fr = new FooResult { Nodes = new List<FooResult>() };
+                GetFilersFoos(fr, foos);
+                // WL(fr);
+
+                WL("Press Enter To Continue Calculate");
+            } while (Console.ReadKey().Key == ConsoleKey.Enter);
+
+            //do
+            //{
+            //    WL(Environment.NewLine + "============" + Environment.NewLine);
+            //    var foos = Foo.GetFooList(9, 3, 4, 14, true);
+            //    WL(foos.Dump());
+            //    for (int i = 0; i < Filter.SchemaCount; i++)
+            //    {
+            //        var fg = Filter.GetFilterGroup(i);
+
+            //        var results = foos.GetFooss(Filter.GetFilterGroup(i));
+            //        foreach (var result in results)
+            //        {
+            //            WL(result.Dump());
+            //        }
+            //    }
+            //    WL("Press Enter To Continue Calculate");
+            //} while (Console.ReadKey().Key == ConsoleKey.Enter);
+        }
+
+
+
+        public static void GetFilersFoos(FooResult results, List<Foo> foos)
+        {
+            for (int i = 0; i < Filter.SchemaCount; i++)
+            {
+                var fg = Filter.GetFilterGroup(i);
+                var result = foos.GetFooss(fg);
+                foreach (var fs in result)
+                {
+                    var fr = new FooResult
+                    {
+                        FilterGroup = fg,
+                        Current = fs,
+                        Left = foos.Copy().Minus(fs),
+                        Nodes = new List<FooResult>()
+                    };
+                    results.Nodes.Add(fr);
+                    if (fr.Left.Count > 0) GetFilersFoos(fr, fr.Left);
+                }
+            }
+        }
+
+        #region Helper methods
+
+        public static void Main()
+        {
+            try
+            {
+                RunSnippet();
+            }
+            catch (Exception e)
+            {
+                string error = string.Format("---\nThe following error occurred while executing the snippet:\n{0}\n---", e.ToString());
+                Console.WriteLine(error);
+            }
+            finally
+            {
+                Console.Write("Press any key to continue...");
+                Console.ReadKey();
+            }
+        }
+
+        private static void WL(object text, params object[] args)
+        {
+            Console.WriteLine(text.ToString(), args);
+        }
+
+        private static void RL()
+        {
+            Console.ReadLine();
+        }
+
+        private static void Break()
+        {
+            System.Diagnostics.Debugger.Break();
+        }
+
+        #endregion
+    }
+
+    public class FooResult
+    {
+        public Filter[] FilterGroup { get; set; }
+        public List<Foo> Current { get; set; }
+        public List<Foo> Left { get; set; }
+        public List<FooResult> Nodes { get; set; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new StringBuilder();
+            sb.Append(string.Format("FilterGroup : {0} , Current : {1} , Left : {2}"
+                , this.FilterGroup == null ? "" : this.FilterGroup.Dump()
+                , this.Current == null ? "" : this.Current.Dump()
+                , this.Left == null ? "" : this.Left.Dump()));
+            if (Nodes != null && Nodes.Count > 0)
+            {
+                sb.Append("Nodes : [" + Environment.NewLine);
+                foreach (var o in Nodes) sb.Append(o.ToString() + Environment.NewLine);
+                sb.Append("]");
+            }
+            return sb.ToString();
+        }
+    }
+
+    #region Filter
+
+    public class Filter
+    {
+        public int? P { get; set; }
+        public int? T { get; set; }
+
+        public Filter(int? p, int? t)
+        {
+            this.P = p; this.T = t;
+        }
+
+        public static int SchemaCount = 3;
+        private static Filter[][] _FilterGroups = null;
+        public static Filter[] GetFilterGroup(int schema)
+        {
+            if (_FilterGroups == null)
+            {
+                _FilterGroups = new Filter[6][];
+                _FilterGroups[0] = new Filter[]{new Filter(null, null), new Filter(0, 0), new Filter(0, 0)};
+                _FilterGroups[1] = new Filter[] { new Filter(null, null), new Filter(1, 0), new Filter(2, 0) };
+                _FilterGroups[2] = new Filter[] { new Filter(null, null), new Filter(0, 0) };
+                _FilterGroups[3] = new Filter[] { new Filter(null, null), new Filter(1, 0) };
+                _FilterGroups[4] = new Filter[] { new Filter(null, null), new Filter(2, 0) };
+                _FilterGroups[5] = new Filter[] { new Filter(null, null) };
+            }
+            return _FilterGroups[schema];
+        }
+
+        public override string ToString()
+        {
+            return string.Format("P : {0} , T : {1}", this.P, this.T);
+        }
+    }
+
+
+    #endregion
+
+    #region Foo
+
+    public class Foo
+    {
+        public int ID { get; set; }
+        public int P { get; set; }
+        public int T { get; set; }
+
+        public override string ToString()
+        {
+            return string.Format("T: {0} , P: {1} , ID: {2}", this.T, this.P, this.ID.ToString("0##"));
+        }
+
+        public static List<Foo> GetFooList(int p, int t, int repeat)
+        {
+            var id = 1;
+            var result = new List<Foo>();
+            for (int i = 1; i <= p; i++)
+                for (int j = 1; j <= t; j++)
+                    for (int k = 1; k <= repeat; k++)
+                        result.Add(new Foo { ID = id++, P = i, T = j });
+            return result;
+        }
+
+        public static List<Foo> GetFooList(int p, int t, int repeat, int num, bool isSorted)
+        {
+            var foos = GetFooList(9, 3, 4);
+            var result = new List<Foo>();
+            for (int i = 0; i < num; i++)
+            {
+                var foo = foos[_rnd.Next(foos.Count)];
+                result.Add(foo);
+                foos.Remove(foo);
+            }
+            if (isSorted) return result.SortByTP();
+            return result;
+        }
+
+        public static Random _rnd = new Random(Environment.TickCount);
+    }
+
+    #endregion
+
+    #region Ext
+
+    public static class Ext
+    {
+        public static string Dump(this List<Foo> foos)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < foos.Count; i++) sb.Append(string.Format("Index: {0} , Value: [ {1} ]" + Environment.NewLine, i.ToString("0#"), foos[i]));
+            return sb.ToString();
+        }
+        public static string Dump(this Filter[] filters)
+        {
+            var sb = new StringBuilder();
+            for (int i = 0; i < filters.Length; i++) sb.Append(string.Format("Index: {0} , Value: [ {1} ]" + Environment.NewLine, i.ToString("0#"), filters[i]));
+            return sb.ToString();
+        }
+
+        public static List<Foo> SortByTP(this List<Foo> foos)
+        {
+            foos.Sort((a, b) =>
+            {
+                if (a.T == b.T) return a.P.CompareTo(b.P);
+                return a.T.CompareTo(b.T);
+            });
+            return foos;
+        }
+
+        public static List<Foo> Minus(this List<Foo> original, List<Foo> foos)
+        {
+            foreach (var foo in foos)
+            {
+                var result = original.Find(o => o.ID == foo.ID);
+                if (result != null) original.Remove(result);
+            }
+            return original;
+        }
+
+        //public static List<Foo> Copy(this List<Foo> foos)
+        //{
+        //    var result = new List<Foo>();
+        //    foreach (var foo in foos) result.Add(new Foo { ID = foo.ID, P = foo.P, T = foo.T });
+        //    return result;
+        //}
+
+        public static List<Foo> Copy(this List<Foo> foos)
+        {
+            return Copy(foos, 0);
+        }
+        public static List<Foo> Copy(this List<Foo> foos, int startIndex)
+        {
+            var result = new List<Foo>();
+            for (int i = startIndex; i < foos.Count; i++) result.Add(foos[i]);
+            return result;
+        }
+        public static List<List<Foo>> GetFooss(this List<Foo> foos, Filter[] filters)
+        {
+            var results = new List<List<Foo>>();
+            for (int i = 0; i < foos.Count - filters.Length + 1; i++)
+            {
+                var result = foos.Copy(i).GetFoos(filters);
+                if (result != null)
+                {
+                    bool isExists;
+                    isExists = false;
+                    foreach (var existsResult in results)
+                    {
+                        if (existsResult.Count == result.Count)
+                        {
+                            int j;
+                            for (j = 0; j < result.Count; j++)
+                            {
+                                if (existsResult[j].P != result[j].P || existsResult[j].T != result[j].T) break;
+                            }
+                            if (j == result.Count)
+                            {
+                                isExists = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (!isExists) results.Add(result);
+                }
+            }
+            return results;
+        }
+        public static List<Foo> GetFoos(this List<Foo> foos, Filter[] filters)
+        {
+            var foos2 = foos.Copy();
+            var result = new List<Foo>();
+            var filter = filters[0];
+            Foo foo = null;
+            // if null, p, t, p+t
+            if (filter.P == null && filter.T == null)
+            {
+                foo = foos2[0];
+            }
+            else if (filter.P != null && filter.T == null)
+            {
+                foo = foos2.Find(o => o.P == filter.P.Value);
+            }
+            else if (filter.P == null && filter.T != null)
+            {
+                foo = foos2.Find(o => o.T == filter.T.Value);
+            }
+            else if (filter.P != null && filter.T != null)
+            {
+                foo = foos2.Find(o => o.P == filter.P.Value && o.T == filter.T.Value);
+            }
+            if (foo != null)
+            {
+                foos2.Remove(foo);
+                result.Add(foo);
+                foo = null;
+            }
+            for (int i = 1; i < filters.Length; i++)
+            {
+                filter = filters[i];
+                // if null, p, t, p+t
+                if (filter.P == null && filter.T == null)
+                {
+                    foo = foos2[0];
+                }
+                else if (filter.P != null && filter.T == null)
+                {
+                    foo = foos2.Find(o => o.P == result[0].P + filter.P.Value);
+                }
+                else if (filter.P == null && filter.T != null)
+                {
+                    foo = foos2.Find(o => o.T == result[0].T + filter.T.Value);
+                }
+                else if (filter.P != null && filter.T != null)
+                {
+                    foo = foos2.Find(o => o.P == result[0].P + filter.P.Value && o.T == result[0].T + filter.T.Value);
+                }
+                if (foo != null)
+                {
+                    foos2.Remove(foo);
+                    result.Add(foo);
+                    foo = null;
+                }
+            }
+            if (result.Count != filters.Length) result = null;
+            return result;
+        }
+
+    }
+
+    #endregion
+}
