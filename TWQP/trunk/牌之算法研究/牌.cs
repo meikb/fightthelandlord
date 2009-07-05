@@ -121,4 +121,38 @@ public static class ExtendMethods
                      select new 牌 { 花点 = g.Key, 张 = (byte)g.Count() };
         return result.ToArray();
     }
+
+    /// <summary>
+    /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
+    /// </summary>
+    /// <param name="Source">被减的牌组</param>
+    /// <param name="Target">减去的牌组</param>
+    /// <returns>剩下的牌</returns>
+    public static 牌[] Remove(this 牌[] Source, 牌[] Target)
+    {
+        var singleSource = Source.转为单张序列();
+        var singleTarget = Target.转为单张序列();
+        var Result = new List<牌>();
+        for (int i = 0; i < singleSource.Length; i++)
+        {
+            bool IsSame = false;
+            for (int j = 0; j < singleTarget.Length; i++)
+            {
+                if (singleSource[i].花点 == singleTarget[i].花点)
+                {
+                    IsSame = true;
+                    break;
+                }
+                else
+                {
+                    IsSame = false;
+                }
+            }
+            if (!IsSame)
+            {
+                Result.Add(singleSource[i]);
+            }
+        }
+        return Result.ToArray().转为计数牌序列();
+    }
 }
