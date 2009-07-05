@@ -44,7 +44,9 @@ namespace 麻将
             return Math.Abs(rand % m);
         }
 
-
+        /// <summary>
+        /// 判断并返回一手牌中的所有的“顺子”（三张连续的）
+        /// </summary>
         public static 牌[][] Get123(this 牌[] ps)
         {
             var maxCount = ps.Length - 2;
@@ -69,9 +71,12 @@ namespace 麻将
             return result;
         }
 
-        public static 牌[][] Get111(this 牌[] tpcs)
+        /// <summary>
+        /// 判断并返回一手牌中的所有的“刻子”（三张一样的）
+        /// </summary>
+        public static 牌[][] Get111(this 牌[] ps)
         {
-            return (from kv in tpcs
+            return (from kv in ps
                     where kv.张 >= 3
                     select new 牌[] { 
                         new 牌{ 花点=kv.花点, 张=1},
@@ -80,9 +85,12 @@ namespace 麻将
                     }).ToArray();
         }
 
-        public static 牌[][] Get11(this 牌[] tpcs)
+        /// <summary>
+        /// 判断并返回一手牌中的所有的“对子”（两张一样的）
+        /// </summary>
+        public static 牌[][] Get11(this 牌[] ps)
         {
-            return (from kv in tpcs
+            return (from kv in ps
                     where kv.张 >= 2
                     select new 牌[] { 
                         new 牌{ 花点=kv.花点, 张=1},
