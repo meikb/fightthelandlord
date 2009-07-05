@@ -136,9 +136,9 @@ public static class ExtendMethods
         for (int i = 0; i < singleSource.Length; i++)
         {
             bool IsSame = false;
-            for (int j = 0; j < singleTarget.Length; i++)
+            for (int j = 0; j < singleTarget.Length; j++)
             {
-                if (singleSource[i].花点 == singleTarget[i].花点)
+                if (singleSource[i].花点 == singleTarget[j].花点)
                 {
                     IsSame = true;
                     break;
