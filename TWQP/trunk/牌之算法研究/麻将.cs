@@ -47,7 +47,7 @@ namespace 麻将
         /// <summary>
         /// 判断并返回一手牌中的所有的“顺子”（三张连续的）
         /// </summary>
-        public static 牌[][] Get123(this 牌[] ps)
+        public static 牌[][] 获取所有顺子(this 牌[] ps)
         {
             var maxCount = ps.Length - 2;
             if (maxCount <= 0) return new 牌[0][];
@@ -74,7 +74,7 @@ namespace 麻将
         /// <summary>
         /// 判断并返回一手牌中的所有的“刻子”（三张一样的）
         /// </summary>
-        public static 牌[][] Get111(this 牌[] ps)
+        public static 牌[][] 获取所有刻子(this 牌[] ps)
         {
             return (from kv in ps
                     where kv.张 >= 3
@@ -86,9 +86,9 @@ namespace 麻将
         }
 
         /// <summary>
-        /// 判断并返回一手牌中的所有的“对子”（两张一样的）
+        /// 判断并返回一手牌中的所有的“对子”（两张一样的），如果有 4 张，只取 2 张，无重复
         /// </summary>
-        public static 牌[][] Get11(this 牌[] ps)
+        public static 牌[][] 获取所有对子(this 牌[] ps)
         {
             return (from kv in ps
                     where kv.张 >= 2
@@ -97,6 +97,87 @@ namespace 麻将
                         new 牌{ 花点=kv.花点, 张=1} 
                     }).ToArray();
         }
+
+        /// <summary>
+        /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
+        /// </summary>
+        public static 牌[] Remove(this 牌[] source, 牌[] target)
+        {
+            // 1. 找到 source 中的 target 第一张的位置, 
+            // 2. 做减法之后判断下一张牌是否相同，
+            // 3. 相同则做减法，如果减法结果为 0，则从 source 中剔除该牌
+            // 4. 之后判断 s & t 中的下一张牌是否相同，跳到 2
+            // 5. 不同则从 s 的下一张开始找到 t 中的下一张的位置，跳到 2
+            // 6. 如果 target 没有下一张牌，则执行完成并返回
+
+            int sIdx = 0, tIdx = 0, sCount = source.Length, tCount = target.Length;
+            while (sIdx < sCount && tIdx < tCount)
+            {
+                if (source[sIdx].花点 == target[tIdx].花点)
+                {
+                    source[sIdx].张 -= target[tIdx].张;
+                    if (source[sIdx].张 == 0)
+                    {
+                        sCount--;
+                        if (sIdx < sCount)
+                        {
+                            Array.Copy(source, sIdx + 1, source, sIdx, sCount - sIdx);
+                        }
+                    }
+                    sIdx++; tIdx++;
+                    continue;
+                }
+                else
+                {
+                    sIdx++;
+                    continue;
+                }
+            }
+            if (sIdx == sCount) throw new Exception("数组中没有足够的牌做减法");
+            Array.Resize<牌>(ref source, sCount);
+            return source;
+        }
+
+
+        public static List<规则组> 按每组第一张的花点排序(this List<规则组> gs)
+        {
+            gs.Sort(new Comparison<规则组>((a, b) =>
+            {
+                if (a.分组规则 == b.分组规则)
+                    return a.计数牌数组[0].花点.CompareTo(b.计数牌数组[0].花点);
+                return a.分组规则.CompareTo(b.分组规则);
+            }));
+            return gs;
+        }
+
+        //public static List<Result> SortByRank(this List<Result> results)
+        //{
+        //    results.Sort(new Comparison<Result>((b, a) =>
+        //    {
+        //        if (a.Rank == b.Rank)
+        //            if (a.Gs.Count == b.Gs.Count)
+        //                return b.LeftTPs.Length.CompareTo(a.LeftTPs.Length);
+        //            else return a.Gs.Count.CompareTo(b.Gs.Count);
+        //        else return a.Rank.CompareTo(b.Rank);
+        //    }));
+        //    return results;
+        //}
+
+        //public static bool CheckExists(this List<Result> results, List<Group> groups)
+        //{
+        //    int count = groups.Count, idx;
+        //    foreach (var result in results)
+        //    {
+        //        var gs = result.Gs;
+        //        if (gs.Count < count) continue;
+        //        idx = 0;
+        //        for (idx = 0; idx < count; idx++)
+        //            if (gs[idx].HashCode != groups[idx].HashCode) break;
+        //        if (idx == count) return true;
+        //    }
+        //    return false;
+        //}
+
 
     }
 
