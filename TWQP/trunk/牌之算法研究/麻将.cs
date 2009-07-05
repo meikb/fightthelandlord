@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 namespace 麻将
 {
@@ -30,7 +31,131 @@ namespace 麻将
         {
             return string.Format("{0} x {1}", _牌显示[p.花][p.点], p.张);
         }
+
+        /// <summary>
+        /// 返回一个随机数（0 ~ m-1）（线程安全）
+        /// </summary>
+        public static int Rnd(int m)
+        {
+            RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider();
+            byte[] rndBytes = new byte[4];
+            rng.GetBytes(rndBytes);
+            int rand = BitConverter.ToInt32(rndBytes, 0);
+            return Math.Abs(rand % m);
+        }
+
+
+        public static 牌[][] Get123(this 牌[] ps)
+        {
+            var maxCount = ps.Length - 2;
+            if (maxCount <= 0) return new 牌[0][];
+            var result = new 牌[maxCount][];
+            int idx = 0;
+            for (int i = 0; i < maxCount; i++)
+            {
+                var 花点 = ps[i].花点;
+                if (花点 + 1 == ps[i + 1].花点 &&
+                    花点 + 2 == ps[i + 2].花点)
+                {
+                    result[idx++] = new 牌[] {
+                        new 牌 { 花点 = 花点, 张 = 1 }, 
+                        new 牌 { 花点 = (ushort)(花点 + 1), 张 = 1 }, 
+                        new 牌 { 花点 = (ushort)(花点 + 2), 张 = 1 } 
+                    };
+                }
+            }
+            if (idx < maxCount) Array.Resize<牌[]>(ref result, idx);
+            if (idx == 0) return new 牌[0][];
+            return result;
+        }
+
+        public static 牌[][] Get111(this 牌[] tpcs)
+        {
+            return (from kv in tpcs
+                    where kv.张 >= 3
+                    select new 牌[] { 
+                        new 牌{ 花点=kv.花点, 张=1},
+                        new 牌{ 花点=kv.花点, 张=1},
+                        new 牌{ 花点=kv.花点, 张=1} 
+                    }).ToArray();
+        }
+
+        public static 牌[][] Get11(this 牌[] tpcs)
+        {
+            return (from kv in tpcs
+                    where kv.张 >= 2
+                    select new 牌[] { 
+                        new 牌{ 花点=kv.花点, 张=1},
+                        new 牌{ 花点=kv.花点, 张=1} 
+                    }).ToArray();
+        }
+
     }
+
+    /// <summary>
+    /// 根据麻将规则所归纳出来的，包括 一对（两张一样的），顺子（三张连续的），刻子（三张一样的）
+    /// </summary>
+    public enum 分组规则枚举 : int
+    {
+        Get11 = 1,
+        Get123 = 2,
+        Get111 = 3,
+    }
+
+    /// <summary>
+    /// 按麻将分组规则将一手牌存为数个“小组合”，该类实例用于描述其中之一
+    /// </summary>
+    public class 规则组
+    {
+        public 牌[] 计数牌数组;
+        public 分组规则枚举 分组规则;
+        public int 计数牌数组哈希码;
+        public 规则组(牌[] ps, 分组规则枚举 gr)
+        {
+            this.计数牌数组 = ps;
+            this.分组规则 = gr;
+            if (ps.Length == 1)
+            {
+                // 同样花色的牌，直接过滤掉状态信息即为 hash
+                this.计数牌数组哈希码 = (int)(ps[0].数据 & 0x00FFFFFFu);
+            }
+            else
+            {
+                // 因为麻将的情况不可能超过 3bit 的存放能力
+                // 3 张则各占 9bit , 即：张, 花, 点 = 3 + 3 + 3,  9 * 3 = 27bit
+                var p1 = ps[0];
+                var p2 = ps[1];
+                var p3 = ps[2];
+                this.计数牌数组哈希码 =
+                        ((p1.张 << 6) | (p1.花 << 3) | p1.点) |
+                        (((p2.张 << 6) | (p2.花 << 3) | p2.点) << 9) |
+                        (((p3.张 << 6) | (p3.花 << 3) | p3.点) << 18);
+            }
+        }
+    }
+
+    /// <summary>
+    /// 规则组的数组 + 剩下的牌（没办法用规则去匹配的散牌） 的组合体，含 对规则组的数组 的等级（用于判断牌的好坏，是否胡牌( > 1000 )）
+    /// </summary>
+    public class 分组结果
+    {
+        public int 等级;
+        public List<规则组> 规则组数组;
+        public 牌[] 剩下的计数牌数组;
+
+        public 分组结果(List<规则组> groups, 牌[] left)
+        {
+            this.规则组数组 = groups;
+            this.剩下的计数牌数组 = left;
+            if (groups != null && groups.Count > 0)
+            {
+                this.等级 = groups.Sum(o => (int)o.分组规则);
+            }
+            else this.等级 = 0;
+            if (left == null || left.Length == 0) this.等级 += 1000;    // const 1000
+        }
+    }
+
 
     public class Handler
     {
