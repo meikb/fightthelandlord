@@ -53,13 +53,16 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		TWQP.vsmdi = TWQP.vsmdi
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{F4738947-9367-4180-ABBD-77E2950DFDAA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataService", "DataService\DataService.csproj", "{64B0A21F-0231-41DE-B9DE-2AF2400399C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LobbyService", "LobbyService\LobbyService.csproj", "{C2933E59-20B2-41F8-A42E-02D09E964776}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
 		Manager = AnkhSVN - Subversion Support for Visual Studio
-	EndGlobalSection
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = TWQP.vsmdi
 	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -150,6 +153,14 @@ Global
 		{51E9ED6D-970C-4524-8E28-E5163C9041EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{51E9ED6D-970C-4524-8E28-E5163C9041EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{51E9ED6D-970C-4524-8E28-E5163C9041EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B0A21F-0231-41DE-B9DE-2AF2400399C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B0A21F-0231-41DE-B9DE-2AF2400399C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B0A21F-0231-41DE-B9DE-2AF2400399C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B0A21F-0231-41DE-B9DE-2AF2400399C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C2933E59-20B2-41F8-A42E-02D09E964776}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C2933E59-20B2-41F8-A42E-02D09E964776}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C2933E59-20B2-41F8-A42E-02D09E964776}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C2933E59-20B2-41F8-A42E-02D09E964776}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -171,5 +182,7 @@ Global
 		{19F40B65-92B4-44CF-AB42-8197F0DCDAB4} = {DCF41B9B-D75A-43C5-A2BB-2FA3B031CBAA}
 		{D22A25A1-5EC8-4387-9F79-DEB90F12A34D} = {DCF41B9B-D75A-43C5-A2BB-2FA3B031CBAA}
 		{22CFD82D-2429-4947-B59D-7534D44E5E38} = {DCF41B9B-D75A-43C5-A2BB-2FA3B031CBAA}
+		{64B0A21F-0231-41DE-B9DE-2AF2400399C8} = {F4738947-9367-4180-ABBD-77E2950DFDAA}
+		{C2933E59-20B2-41F8-A42E-02D09E964776} = {F4738947-9367-4180-ABBD-77E2950DFDAA}
 	EndGlobalSection
 EndGlobal
