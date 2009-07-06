@@ -20,7 +20,7 @@ namespace ZBWZ_DDZServer
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new Handler(id);
             Console.CursorVisible = false;
-            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            new ContactCenterCallback(h);  // 连接至 ContactCenter 并准备好回调实例
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += new DoWorkEventHandler(h.SendMessage);
             bw.RunWorkerAsync();
@@ -31,7 +31,7 @@ namespace ZBWZ_DDZServer
         }
     }
 
-    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
+    public class Handler : IContactCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
         /// <summary>
@@ -45,7 +45,7 @@ namespace ZBWZ_DDZServer
         }
         #endregion
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
         /// <summary>
         /// 自己的ID
         /// </summary>
@@ -54,7 +54,7 @@ namespace ZBWZ_DDZServer
         /// 占用服务的大厅ID
         /// </summary>
         public int GameMainID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
         /// <summary>
         /// 玩家列表锁
         /// </summary>
@@ -539,7 +539,7 @@ namespace ZBWZ_DDZServer
                     _sendWhispers.Clear();
                     foreach (var whisper in whispers)
                     {
-                        this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                        this.ContactCenterProxy.Whisper(whisper.Key, whisper.Value);
                     }
                     Thread.Sleep(1);
                 }

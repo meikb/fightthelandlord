@@ -18,12 +18,12 @@ namespace ZBWZ_RollServer
         {
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new Handler(id);
-            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            new ContactCenterCallback(h);  // 连接至 ContactCenter 并准备好回调实例
             new GameLooper(h).Loop();   // 创建游戏循环并运行
         }
     }
 
-    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
+    public class Handler : IContactCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
         /// <summary>
@@ -42,10 +42,10 @@ namespace ZBWZ_RollServer
         }
         #endregion
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {
@@ -93,7 +93,7 @@ namespace ZBWZ_RollServer
                             byte[][] dataStart = {DataType.Action.ToBinary(),ActionType.Start.ToBinary()};
                             foreach (Player onePlayer in Players)
                             {
-                                DataCenterProxy.Whisper(onePlayer.Id, dataStart);
+                                ContactCenterProxy.Whisper(onePlayer.Id, dataStart);
                             }
                         }
                         w.WL(id + " 已准备 " + Environment.NewLine);
@@ -107,13 +107,13 @@ namespace ZBWZ_RollServer
                             {
                                 onePlayer.Num = new Random().Next(1, 7);
                                 byte[][] dataNum = {DataType.Num.ToBinary(),onePlayer.Num.ToBinary()};
-                                DataCenterProxy.Whisper(id, dataNum);
+                                ContactCenterProxy.Whisper(id, dataNum);
                                 foreach (Player otherPlayer in Players)
                                 {
                                     if (otherPlayer.Id != id)
                                     {
                                         byte[][] dataOtherNum = { DataType.OtherNum.ToBinary(), id.ToBinary(), onePlayer.Num.ToBinary() };
-                                        DataCenterProxy.Whisper(otherPlayer.Id, dataOtherNum);
+                                        ContactCenterProxy.Whisper(otherPlayer.Id, dataOtherNum);
                                     }
                                 }
                             }

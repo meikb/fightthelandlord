@@ -19,7 +19,7 @@ namespace ZBWZ_GameMain
         {
             var h = new Handler(150);  //大厅暂为ID为150
             Console.CursorVisible = false;
-            new DataCenterCallback(h);  // 连接至 DataCenter 并准备好回调实例
+            new ContactCenterCallback(h);  // 连接至 ContactCenter 并准备好回调实例
             BackgroundWorker bw = new BackgroundWorker();
             bw.DoWork += new DoWorkEventHandler(h.SendMessage);
             bw.RunWorkerAsync();
@@ -30,7 +30,7 @@ namespace ZBWZ_GameMain
         }
     }
 
-    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
+    public class Handler : IContactCenterCallbackHandler, IGameLoopHandler
     {
         private Writer w = Writer.Instance;
         #region Constructor
@@ -40,10 +40,10 @@ namespace ZBWZ_GameMain
         }
         #endregion
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
         private static object _sync_whispers = new object();
         private static object _sync_sendWhispers = new object();
         /// <summary>
@@ -422,7 +422,7 @@ namespace ZBWZ_GameMain
                     _sendWhispers.Clear();
                     foreach (var whisper in whispers)
                     {
-                        this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                        this.ContactCenterProxy.Whisper(whisper.Key, whisper.Value);
                     }
                     Thread.Sleep(1);
                 }

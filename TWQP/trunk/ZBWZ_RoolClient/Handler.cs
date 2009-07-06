@@ -9,7 +9,7 @@ using ZBWZ;
 
 namespace ZBWZ_RoolClient
 {
-    public class Handler : IDataCenterCallbackHandler
+    public class Handler : IContactCenterCallbackHandler
     {
         private Writer w = Writer.Instance;
         public object _syncWhispers = new object();
@@ -47,12 +47,12 @@ namespace ZBWZ_RoolClient
             this.ServiceID = PlayerId;
         }
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
         /// <summary>
         /// 玩家ID
         /// </summary>
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {
@@ -188,7 +188,7 @@ namespace ZBWZ_RoolClient
             KeyValuePair<int, byte[][]>[]  whispers = new KeyValuePair<int, byte[][]>[_sendWhispers.Count];
             _sendWhispers.CopyTo(whispers, 0);
             _sendWhispers.Clear();
-            foreach (var whisper in whispers) DataCenterProxy.Whisper(ServerID, whisper.Value);
+            foreach (var whisper in whispers) ContactCenterProxy.Whisper(ServerID, whisper.Value);
         }
         #endregion
         #region 处理超时

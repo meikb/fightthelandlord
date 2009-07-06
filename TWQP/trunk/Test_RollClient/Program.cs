@@ -14,12 +14,12 @@ namespace Test_RollClient
         {
             var id = int.Parse(w.RL("请输入小于 100 的 Player ID"));
             var h = new Handler(id);
-            new DataCenterCallback(h);
+            new ContactCenterCallback(h);
             Console.ReadLine();
         }
     }
 
-    public class Handler : IDataCenterCallbackHandler
+    public class Handler : IContactCenterCallbackHandler
     {
         private Writer w = Writer.Instance;
         private object _syncObj = new object();
@@ -31,10 +31,10 @@ namespace Test_RollClient
             this.ServiceID = serviceId;
         }
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {
@@ -53,7 +53,7 @@ namespace Test_RollClient
             //            w.WL("所有玩家准备就绪,开始游戏..." + Environment.NewLine + "请按回车投掷色子" + Environment.NewLine);
             //            Console.ReadLine();
             //            byte[][] dataThrow = { DataType.Action.ToBinary(), ActionType.Throw.ToBinary() };
-            //            this.DataCenterProxy.Whisper(this.ServiceID, dataThrow);
+            //            this.ContactCenterProxy.Whisper(this.ServiceID, dataThrow);
             //            w.WE();
             //        }
             //        break;

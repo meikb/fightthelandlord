@@ -4,10 +4,10 @@ using System.Collections.Generic;
 using System.ServiceModel;
 using System.Runtime.Remoting.Messaging;
 
-namespace DataCenter
+namespace ContactCenter
 {
-    [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IDataCenterCallback))]
-    interface IDataCenter
+    [ServiceContract(SessionMode = SessionMode.Required, CallbackContract = typeof(IContactCenterCallback))]
+    interface IContactCenter
     {
         [OperationContract(IsOneWay = false, IsInitiating = true, IsTerminating = false)]
         int[] Join(int id);
@@ -22,7 +22,7 @@ namespace DataCenter
         void Leave();
     }
 
-    interface IDataCenterCallback
+    interface IContactCenterCallback
     {
         [OperationContract(IsOneWay = true)]
         void Receive(int senderId, byte[][] data);
@@ -51,7 +51,7 @@ namespace DataCenter
     }
 
     [ServiceBehavior(InstanceContextMode = InstanceContextMode.PerSession, ConcurrencyMode = ConcurrencyMode.Multiple)]
-    public class DataCenterService : IDataCenter
+    public class ContactCenterService : IContactCenter
     {
         private static Object _syncObj = new Object();
         private static Dictionary<int, MessageEventHandler> _services = new Dictionary<int, MessageEventHandler>();
@@ -60,7 +60,7 @@ namespace DataCenter
 
         private int _id = 0;
         private MessageEventHandler _myEventHandler = null;
-        private IDataCenterCallback _callbackInstance = null;
+        private IContactCenterCallback _callbackInstance = null;
         public delegate void MessageEventHandler(object sender, MessageEventArgs e);
 
         public int[] Join(int id)
@@ -110,7 +110,7 @@ namespace DataCenter
 
             if (isAdded)
             {
-                _callbackInstance = OperationContext.Current.GetCallbackChannel<IDataCenterCallback>();
+                _callbackInstance = OperationContext.Current.GetCallbackChannel<IContactCenterCallback>();
                 Broadcast(this, new MessageEventArgs { Id = id, MessageType = MessageType.ServiceEnter });
                 MessageEvent += _myEventHandler;
                 int[] list = new int[_services.Count];
@@ -151,7 +151,7 @@ namespace DataCenter
             Broadcast(this, new MessageEventArgs { Id = this._id, MessageType = MessageType.ServiceLeave });
         }
 
-        public static void Broadcast(DataCenterService sender, MessageEventArgs e)
+        public static void Broadcast(ContactCenterService sender, MessageEventArgs e)
         {
             var temp = MessageEvent;
             if (temp != null)

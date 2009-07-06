@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-public interface IDataCenterCallbackHandler
+public interface IContactCenterCallbackHandler
 {
     int ServiceID { get; set; }
-    DataCenterProxy DataCenterProxy { get; set; }
+    ContactCenterProxy ContactCenterProxy { get; set; }
 
     void Receive(int id, byte[][] data);
     void ReceiveWhisper(int id, byte[][] data);

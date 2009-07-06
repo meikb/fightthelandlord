@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Test1
 {
-    class Handler : IDataCenterCallbackHandler
+    class Handler : IContactCenterCallbackHandler
     {
 
         public Handler(int serviceId)
@@ -13,10 +13,10 @@ namespace Test1
             this.ServiceID = serviceId;
         }
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {
