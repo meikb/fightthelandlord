@@ -75,11 +75,6 @@ public static class ExtendMethods
         return tmp.ToArray();
     }
 
-    public static 牌[] 按花点排序(this 牌[] ps)
-    {
-        Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
-        return ps;
-    }
 
     /// <summary>
     /// 按花色，点数，从小到大排列元素，统计并 Resize 数组本身
@@ -127,6 +122,66 @@ public static class ExtendMethods
                      select new 牌 { 花点 = g.Key, 张 = (byte)g.Count() };
         return result.ToArray();
     }
+
+
+
+
+    /// <summary>
+    /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
+    /// 要求：传入的牌数组是经过由小到大排序的
+    /// </summary>
+    public static 牌[] 移走牌数组(this 牌[] source, 牌[] target)
+    {
+        // 原理：先遍历 source 和 target 中第一张牌匹配，同时递增判断下一张。如果匹配，继续递增判断。如果不匹配，继续在 source 中找。
+        // 特殊处理：如果匹配牌的 张 数相减之后为零，则将 source 当前单元后面所有单元的数据，前移1并覆盖掉当前单元
+
+        int sIdx = 0, tIdx = 0, sCount = source.Length, tCount = target.Length;
+        while (sIdx < sCount && tIdx < tCount)
+        {
+            if (source[sIdx].花点 == target[tIdx].花点)
+            {
+                source[sIdx].张 -= target[tIdx].张;
+                if (source[sIdx].张 == 0)
+                {
+                    sCount--;
+                    if (sIdx < sCount)
+                    {
+                        Array.Copy(source, sIdx + 1, source, sIdx, sCount - sIdx);
+                    }
+                }
+                else
+                {
+                    sIdx++;
+                }
+                tIdx++;
+                continue;
+            }
+            else
+            {
+                sIdx++;
+                continue;
+            }
+        }
+        if (sIdx == sCount) throw new Exception("source 中没有足够的牌做减法");
+        Array.Resize<牌>(ref source, sCount);
+        return source;
+    }
+
+    /// <summary>
+    /// 按花点从小到大排列数组
+    /// </summary>
+    public static 牌[] 按花点排序(this 牌[] ps)
+    {
+        Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
+        return ps;
+    }
+
+
+
+
+
+
+
 
     /// <summary>
     /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
