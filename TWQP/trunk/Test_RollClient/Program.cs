@@ -98,7 +98,7 @@ namespace Test_RollClient
             //foreach (var id in serviceIdList)
             //    if (id > 100) _rollServiceIdList.Add(id);
 
-            //w.WL("已于" + DateTime.Now.ToString() + " 连入数据中心");
+            //w.WL("已于" + DateTime.Now.ToString() + " 连入联络中心");
             //if (_rollServiceIdList.Count > 0)
             //{
             //    w.W("发现 Roll 游戏服务器：");

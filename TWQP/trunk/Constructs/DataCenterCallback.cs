@@ -6,7 +6,7 @@ using System.Text;
 using System.ServiceModel;
 
 /// <summary>
-/// 数据中心回调对象
+/// 联络中心回调对象
 /// </summary>
 public partial class ContactCenterCallback : IContactCenterCallback
 {
