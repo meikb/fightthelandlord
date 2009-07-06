@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{B5FB0399-580B-4F40-8AF1-3999FC6312CB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCenter", "DataCenter\DataCenter.csproj", "{EB257EA3-E3D8-4BCD-AE21-1C8E5A3E2E2F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContactCenter", "DataCenter\ContactCenter.csproj", "{EB257EA3-E3D8-4BCD-AE21-1C8E5A3E2E2F}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test1", "Test1\Test1.csproj", "{19891425-AAAF-42CF-B18D-EE44CA615F00}"
 EndProject
