@@ -57,8 +57,8 @@
             new 牌 { 数据 = 0x010107u }, 
             };
 
-            //一组牌.按花点排序();
-            //另一组牌.按花点排序();
+            一组牌.按花点排序();
+            另一组牌.按花点排序();
 
             Stopwatch stopwatch1 = new Stopwatch();
             Stopwatch stopwatch2 = new Stopwatch();
@@ -71,8 +71,8 @@
             {
                 牌[] ps1 = (牌[])一组牌.Clone();
                 牌[] ps2 = (牌[])另一组牌.Clone();
-                
-                Result1 = ps1.Remove(ps2);
+
+                Result1 = ps1.LinqRemove(ps2);
             }
             stopwatch1.Stop();
 
@@ -96,6 +96,43 @@
             }
             Console.WriteLine(stopwatch1.ElapsedTicks + "\r\n" + stopwatch2.ElapsedTicks);
             Console.ReadLine();
+
+            MainClass.RunSnippet();
+            Console.ReadLine();
+        }
+    }
+
+    class Foo
+    {
+        public int ID;
+        public int Count;
+        public Foo(int id, int count)
+        {
+            this.ID = id;
+            this.Count = count;
+        }
+        public override string ToString()
+        {
+            return string.Format("ID={0}, Count={1}\r\n", this.ID, this.Count);
+        }
+    }
+
+    public class MainClass
+    {
+        public static void RunSnippet()
+        {
+            var foos1 = new Foo[] { new Foo(1, 1), new Foo(2, 3), new Foo(5, 2) };
+            var foos2 = new Foo[] { new Foo(2, 3), new Foo(5, 1) };
+
+            var result = from foo1 in foos1
+                         join foo2 in foos2 on foo1.ID equals foo2.ID
+                         where foo1.Count > foo2.Count
+                         select new Foo(foo1.ID, foo1.Count - foo2.Count);
+
+            result = result.Concat(from foo1 in foos1
+                                   where !foos2.Any(foo => { return foo.ID == foo1.ID; })
+                                   select foo1);
+            foreach (var foo in result) Console.Write(foo);
         }
     }
 }
