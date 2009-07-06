@@ -75,6 +75,12 @@ public static class ExtendMethods
         return tmp.ToArray();
     }
 
+    public static 牌[] 按花点排序(this 牌[] ps)
+    {
+        Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
+        return ps;
+    }
+
     /// <summary>
     /// 按花色，点数，从小到大排列元素，统计并 Resize 数组本身
     /// </summary>

@@ -133,7 +133,7 @@ namespace 麻将
                     continue;
                 }
             }
-            if (sIdx == sCount) throw new Exception("source 中没有足够的牌做减法");
+            //if (sIdx == sCount) throw new Exception("source 中没有足够的牌做减法");
             Array.Resize<牌>(ref source, sCount);
             return source;
         }
