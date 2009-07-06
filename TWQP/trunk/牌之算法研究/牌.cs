@@ -167,6 +167,18 @@ public static class ExtendMethods
         return source;
     }
 
+    public static 牌[] LinqRemove(this 牌[] Source, 牌[] Target)
+    {
+        var result = from sPoker in Source
+                     from tPoker in Target
+                     where sPoker.花点 == tPoker.花点
+                     select new 牌 
+    }
+
+
+
+
+
     /// <summary>
     /// 按花点从小到大排列数组
     /// </summary>
