@@ -98,46 +98,6 @@ namespace 麻将
                     }).ToArray();
         }
 
-        /// <summary>
-        /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
-        /// </summary>
-        public static 牌[] Remove(this 牌[] source, 牌[] target)
-        {
-            // 1. 找到 source 中的 target 第一张的位置, 
-            // 2. 做减法之后判断下一张牌是否相同，
-            // 3. 相同则做减法，如果减法结果为 0，则从 source 中剔除该牌
-            // 4. 之后判断 s & t 中的下一张牌是否相同，跳到 2
-            // 5. 不同则从 s 的下一张开始找到 t 中的下一张的位置，跳到 2
-            // 6. 如果 target 没有下一张牌，则执行完成并返回
-
-            int sIdx = 0, tIdx = 0, sCount = source.Length, tCount = target.Length;
-            while (sIdx < sCount && tIdx < tCount)
-            {
-                if (source[sIdx].花点 == target[tIdx].花点)
-                {
-                    source[sIdx].张 -= target[tIdx].张;
-                    if (source[sIdx].张 == 0)
-                    {
-                        sCount--;
-                        if (sIdx < sCount)
-                        {
-                            Array.Copy(source, sIdx + 1, source, sIdx, sCount - sIdx);
-                        }
-                    }
-                    sIdx++; tIdx++;
-                    continue;
-                }
-                else
-                {
-                    sIdx++;
-                    continue;
-                }
-            }
-            //if (sIdx == sCount) throw new Exception("source 中没有足够的牌做减法");
-            Array.Resize<牌>(ref source, sCount);
-            return source;
-        }
-
 
         public static List<规则组> 按每组第一张的花点排序(this List<规则组> gs)
         {
@@ -150,11 +110,6 @@ namespace 麻将
             return gs;
         }
 
-        public static 牌[] 按花点排序(this 牌[] ps)
-        {
-            Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
-            return ps;
-        }
 
         //public static List<Result> SortByRank(this List<Result> results)
         //{
