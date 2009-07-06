@@ -57,8 +57,8 @@
             new 牌 { 数据 = 0x010107u }, 
             };
 
-            一组牌.按花点排序();
-            另一组牌.按花点排序();
+            //一组牌.按花点排序();
+            //另一组牌.按花点排序();
 
             Stopwatch stopwatch1 = new Stopwatch();
             Stopwatch stopwatch2 = new Stopwatch();
