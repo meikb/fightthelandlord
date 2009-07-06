@@ -11,7 +11,7 @@ namespace Test2
         public static Writer w = Writer.Instance;
         static void Main(string[] args)
         {
-            new DataCenterCallback(new Handler(1));
+            new ContactCenterCallback(new Handler(1));
             w.WE();
         }
     }

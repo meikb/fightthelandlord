@@ -7,7 +7,7 @@ using ConsoleHelper;
 
 namespace Test2
 {
-    public class Handler : IDataCenterCallbackHandler
+    public class Handler : IContactCenterCallbackHandler
     {
         private Writer w = Writer.Instance;
 
@@ -17,10 +17,10 @@ namespace Test2
             // 测试修改一下（看SVN的效果）
         }
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {

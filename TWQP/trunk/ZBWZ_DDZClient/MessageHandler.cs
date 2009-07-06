@@ -109,7 +109,7 @@ namespace ZBWZ_DDZClient
         #endregion
     }
 
-    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
+    public class Handler : IContactCenterCallbackHandler, IGameLoopHandler
     {
         #region Constructor
         public Handler(int serviceId)
@@ -118,10 +118,10 @@ namespace ZBWZ_DDZClient
         }
         #endregion
 
-        #region IDataCenterCallbackHandler Members
+        #region IContactCenterCallbackHandler Members
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {
@@ -198,7 +198,7 @@ namespace ZBWZ_DDZClient
                     MessageHandler._sendWhispers.Clear();
                     foreach (var whisper in whispers)
                     {
-                        this.DataCenterProxy.Whisper(whisper.Key, whisper.Value);
+                        this.ContactCenterProxy.Whisper(whisper.Key, whisper.Value);
                     }
                     Thread.Sleep(1);
                 }

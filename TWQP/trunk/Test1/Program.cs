@@ -28,8 +28,8 @@ namespace Test1
                 var m2 = m.Add(2, "设置服务编号", (cm) => { int.TryParse(w.RL("请输入服务编号："), out sId); });
                 var m3 = m.Add(3, "开始运行服务", (cm) =>
                 {
-                    var h = new DataCenterCallback(sType == 1 ?
-                        (IDataCenterCallbackHandler)new Handler_RollClient(sId) : new Handler_RollServer(sId));
+                    var h = new ContactCenterCallback(sType == 1 ?
+                        (IContactCenterCallbackHandler)new Handler_RollClient(sId) : new Handler_RollServer(sId));
                     w.RL("服务运行中...按回车中断...");
                     w.WL("服务已终止！");
                 }, (cm) => { return (sType == 0 || sId == 0) ? null : new bool?(true); });

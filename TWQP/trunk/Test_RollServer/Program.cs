@@ -11,7 +11,7 @@
         {
             var id = int.Parse(w.RL("请输入大于 100 的 Service ID"));
             var h = new RollGame.Handler(id);
-            new DataCenterCallback(h);                                    // 连接至 DataCenter 并准备好回调实例
+            new ContactCenterCallback(h);                                    // 连接至 ContactCenter 并准备好回调实例
             new GameLooper(h) { LoopDurationLimit = 1000 }.Loop();        // 创建游戏循环并运行
         }
     }
@@ -36,7 +36,7 @@ namespace RollGame
 
     #endregion
 
-    public class Handler : IDataCenterCallbackHandler, IGameLoopHandler
+    public class Handler : IContactCenterCallbackHandler, IGameLoopHandler
     {
         #region 环境变量
 
@@ -156,7 +156,7 @@ namespace RollGame
                     {
                         // todo: 改为异步调用？？
 
-                        DataCenterProxy.Whisper(msg.ID,
+                        ContactCenterProxy.Whisper(msg.ID,
                             new byte[][] { BitConverter.GetBytes((int)msg.RollAction), msg.Data });
                     }
                     msgs = null;
@@ -424,7 +424,7 @@ namespace RollGame
 
 
         public int ServiceID { get; set; }
-        public DataCenterProxy DataCenterProxy { get; set; }
+        public ContactCenterProxy ContactCenterProxy { get; set; }
 
         public void Receive(int id, byte[][] data)
         {

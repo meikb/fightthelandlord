@@ -29,7 +29,7 @@ namespace ZBWZ_RoolClient
             h = new Handler(inputId.PlayerId);
             lblID.Text = inputId.PlayerId.ToString();
             h.player = new Character();
-            new DataCenterCallback(h);
+            new ContactCenterCallback(h);
             timer1.Enabled = true;
             inputId.Dispose();
         }

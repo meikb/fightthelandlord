@@ -2,80 +2,80 @@
 // Modified by Nikola Paljetak
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-[System.ServiceModel.ServiceContractAttribute(CallbackContract = typeof(IDataCenterCallback), SessionMode = System.ServiceModel.SessionMode.Required)]
-public interface IDataCenter
+[System.ServiceModel.ServiceContractAttribute(CallbackContract = typeof(IContactCenterCallback), SessionMode = System.ServiceModel.SessionMode.Required)]
+public interface IContactCenter
 {
 
-    [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://tempuri.org/IDataCenter/Join", ReplyAction = "http://tempuri.org/IDataCenter/JoinResponse")]
+    [System.ServiceModel.OperationContractAttribute(AsyncPattern = true, Action = "http://tempuri.org/IContactCenter/Join", ReplyAction = "http://tempuri.org/IContactCenter/JoinResponse")]
     System.IAsyncResult BeginJoin(int id, System.AsyncCallback callback, object asyncState);
 
     int[] EndJoin(System.IAsyncResult result);
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, IsInitiating = false, Action = "http://tempuri.org/IDataCenter/Leave")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, IsInitiating = false, Action = "http://tempuri.org/IContactCenter/Leave")]
     void Leave();
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, IsInitiating = false, Action = "http://tempuri.org/IDataCenter/Say")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, IsInitiating = false, Action = "http://tempuri.org/IContactCenter/Say")]
     void Say(byte[][] data);
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, IsInitiating = false, Action = "http://tempuri.org/IDataCenter/Whisper")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, IsInitiating = false, Action = "http://tempuri.org/IContactCenter/Whisper")]
     void Whisper(int to, byte[][] data);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-public interface IDataCenterCallback
+public interface IContactCenterCallback
 {
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IDataCenter/Receive")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IContactCenter/Receive")]
     void Receive(int senderId, byte[][] data);
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IDataCenter/ReceiveWhisper")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IContactCenter/ReceiveWhisper")]
     void ReceiveWhisper(int senderId, byte[][] data);
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IDataCenter/ServiceEnter")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IContactCenter/ServiceEnter")]
     void ServiceEnter(int id);
 
-    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IDataCenter/ServiceLeave")]
+    [System.ServiceModel.OperationContractAttribute(IsOneWay = true, Action = "http://tempuri.org/IContactCenter/ServiceLeave")]
     void ServiceLeave(int id);
 
-    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IDataCenter/Ping", ReplyAction = "http://tempuri.org/IDataCenter/PingResponse")]
+    [System.ServiceModel.OperationContractAttribute(Action = "http://tempuri.org/IContactCenter/Ping", ReplyAction = "http://tempuri.org/IContactCenter/PingResponse")]
     bool Ping(byte[][] data);
 }
 
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-public interface IDataCenterChannel : IDataCenter, System.ServiceModel.IClientChannel
+public interface IContactCenterChannel : IContactCenter, System.ServiceModel.IClientChannel
 {
 }
 
 [System.Diagnostics.DebuggerStepThroughAttribute()]
 [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "3.0.0.0")]
-public partial class DataCenterProxy : System.ServiceModel.DuplexClientBase<IDataCenter>, IDataCenter
+public partial class ContactCenterProxy : System.ServiceModel.DuplexClientBase<IContactCenter>, IContactCenter
 {
 
-    public DataCenterProxy(System.ServiceModel.InstanceContext callbackInstance)
+    public ContactCenterProxy(System.ServiceModel.InstanceContext callbackInstance)
         :
             base(callbackInstance)
     {
     }
 
-    public DataCenterProxy(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName)
+    public ContactCenterProxy(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName)
         :
             base(callbackInstance, endpointConfigurationName)
     {
     }
 
-    public DataCenterProxy(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress)
+    public ContactCenterProxy(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, string remoteAddress)
         :
             base(callbackInstance, endpointConfigurationName, remoteAddress)
     {
     }
 
-    public DataCenterProxy(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress)
+    public ContactCenterProxy(System.ServiceModel.InstanceContext callbackInstance, string endpointConfigurationName, System.ServiceModel.EndpointAddress remoteAddress)
         :
             base(callbackInstance, endpointConfigurationName, remoteAddress)
     {
     }
 
-    public DataCenterProxy(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress)
+    public ContactCenterProxy(System.ServiceModel.InstanceContext callbackInstance, System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress)
         :
             base(callbackInstance, binding, remoteAddress)
     {

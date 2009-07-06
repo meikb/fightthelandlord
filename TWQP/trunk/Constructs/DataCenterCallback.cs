@@ -8,21 +8,21 @@ using System.ServiceModel;
 /// <summary>
 /// 数据中心回调对象
 /// </summary>
-public partial class DataCenterCallback : IDataCenterCallback
+public partial class ContactCenterCallback : IContactCenterCallback
 {
-    private IDataCenterCallbackHandler _handler;
-    private DataCenterProxy _proxy;
+    private IContactCenterCallbackHandler _handler;
+    private ContactCenterProxy _proxy;
 
-    public DataCenterCallback(IDataCenterCallbackHandler handler)
+    public ContactCenterCallback(IContactCenterCallbackHandler handler)
     {
         this._handler = handler;
         InstanceContext site = new InstanceContext(this);
-        this._proxy = new DataCenterProxy(site);
-        handler.DataCenterProxy = this._proxy;
+        this._proxy = new ContactCenterProxy(site);
+        handler.ContactCenterProxy = this._proxy;
         this._proxy.BeginJoin(handler.ServiceID, new AsyncCallback(OnEndJoin), null);
     }
 
-    #region IDataCenterCallback Members
+    #region IContactCenterCallback Members
 
     public void Receive(int senderId, byte[][] data)
     {
