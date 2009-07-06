@@ -150,6 +150,12 @@ namespace 麻将
             return gs;
         }
 
+        public static 牌[] 按花点排序(this 牌[] ps)
+        {
+            Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
+            return ps;
+        }
+
         //public static List<Result> SortByRank(this List<Result> results)
         //{
         //    results.Sort(new Comparison<Result>((b, a) =>
