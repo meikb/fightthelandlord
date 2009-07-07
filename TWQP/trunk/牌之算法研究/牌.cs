@@ -171,8 +171,9 @@ public static class ExtendMethods
     {
         var result = from sPoker in Source
                      from tPoker in Target
-                     where sPoker.花点 == tPoker.花点
-                     select new 牌 
+                     where sPoker.花点 == tPoker.花点 && sPoker.张 > tPoker.张
+                     select new 牌 { 张 = (byte)(sPoker.张 - tPoker.张), 花点 = sPoker.花点 };
+        return result.ToArray();
     }
 
 
