@@ -8,7 +8,7 @@ using System.Security.Cryptography;
 namespace ConsoleApplication2
 {
     /// <summary>
-    /// adsfasdfasdf
+    /// 
     /// </summary>
     public class Scaner
     {
@@ -141,6 +141,7 @@ namespace ConsoleApplication2
 
                     new_groups.SortByCT();
                     if (results.CheckExists(new_groups)) return;
+                //todo 看到这里了...
 
                     var left = leftTPCs.Remove(tps);
                     if (left != null && left.Length > 0)
@@ -216,18 +217,26 @@ namespace ConsoleApplication2
     #region Ext
 
     #region Class Declare
-
+    /// <summary>
+    /// 类型,点,张数
+    /// </summary>
     public struct TPC
     {
         public int TP;
         public int Count;
     }
+    /// <summary>
+    /// 牌组类型
+    /// </summary>
     public enum CheckTypes
     {
         Get11,
         Get123,
         Get111,
     }
+    /// <summary>
+    /// 牌组对象,将1张或2张或3张牌压缩为一个int
+    /// </summary>
     public class Group
     {
         public int[] TPs;
@@ -251,6 +260,9 @@ namespace ConsoleApplication2
             }
         }
     }
+    /// <summary>
+    /// 结果?
+    /// </summary>
     public class Result
     {
         public int Rank;
@@ -389,7 +401,11 @@ namespace ConsoleApplication2
         #endregion
 
         #region Scan Methods
-
+        /// <summary>
+        /// 获取两两相连的三张牌组成的牌组
+        /// </summary>
+        /// <param name="tpcs"></param>
+        /// <returns>以 int[][] 表示的牌组</returns>
         public static int[][] Get123(this TPC[] tpcs)
         {
             var maxCount = tpcs.Length - 2;
@@ -405,12 +421,18 @@ namespace ConsoleApplication2
             if (idx == 0) return new int[0][];
             return result;
         }
-
+        /// <summary>
+        /// 获取TPC[]中连续三个相同的出现的牌组成的牌组
+        /// </summary>
+        /// <param name="tpcs"></param>
+        /// <returns></returns>
         public static int[][] Get111(this TPC[] tpcs)
         {
             return (from kv in tpcs where kv.Count >= 3 select new int[] { kv.TP, kv.TP, kv.TP }).ToArray();
         }
-
+        /// <summary>
+        /// 获取TPC[]中成对出现的牌组成的牌组
+        /// </summary>
         public static int[][] Get11(this TPC[] tpcs)
         {
             return (from kv in tpcs where kv.Count >= 2 select new int[] { kv.TP, kv.TP }).ToArray();
@@ -471,7 +493,12 @@ namespace ConsoleApplication2
         #endregion
 
         #region CheckExists Methods
-
+        /// <summary>
+        /// 检测一个List<Group>是否完全包含于调用该方法的List<Result>里
+        /// </summary>
+        /// <param name="results">List<Result>对象</param>
+        /// <param name="groups">List<Group>对象</param>
+        /// <returns>是否包含</returns>
         public static bool CheckExists(this List<Result> results, List<Group> groups)
         {
             int count = groups.Count, idx;
