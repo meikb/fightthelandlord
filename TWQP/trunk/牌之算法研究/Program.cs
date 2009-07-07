@@ -67,7 +67,7 @@
             牌[] Result2 = null;
 
             stopwatch1.Start();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 5000000; i++)
             {
                 牌[] ps1 = (牌[])一组牌.Clone();
                 牌[] ps2 = (牌[])另一组牌.Clone();
@@ -77,7 +77,7 @@
             stopwatch1.Stop();
 
             stopwatch2.Start();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < 5000000; i++)
             {
                 牌[] ps1 = (牌[])一组牌.Clone();
                 牌[] ps2 = (牌[])另一组牌.Clone();

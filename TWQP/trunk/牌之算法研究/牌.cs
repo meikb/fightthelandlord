@@ -170,9 +170,12 @@ public static class ExtendMethods
     public static 牌[] LinqRemove(this 牌[] Source, 牌[] Target)
     {
         var result = from sPoker in Source
-                     from tPoker in Target
-                     where sPoker.花点 == tPoker.花点 && sPoker.张 > tPoker.张
+                     join tPoker in Target on sPoker.花点 equals tPoker.花点
+                     where sPoker.张 > tPoker.张
                      select new 牌 { 张 = (byte)(sPoker.张 - tPoker.张), 花点 = sPoker.花点 };
+        result = result.Concat(from sPoker in Source
+                               where !Target.Any(tPoker => { return sPoker.花点 == tPoker.花点; })
+                               select sPoker);
         return result.ToArray();
     }
 
