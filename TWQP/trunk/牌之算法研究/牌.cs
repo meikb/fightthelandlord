@@ -1,8 +1,12 @@
-﻿using System;
+﻿#region using
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Runtime.InteropServices;
+#endregion
+
+#region 牌 结构
 
 /// <summary>
 /// 表示一张牌（麻将，扑克）（由高到低：状态, 张数，花色，点数，每个占 1 byte）
@@ -42,8 +46,11 @@ public struct 牌
     public byte 点;
 }
 
+#endregion
+
 public static class ExtendMethods
 {
+    #region 单张/多张序列互转相关
 
     /// <summary>
     /// 将多张的计数牌数组转为单张牌数组（Resize）
@@ -123,14 +130,28 @@ public static class ExtendMethods
         return result.ToArray();
     }
 
+    #endregion
 
+    #region 排序相关
 
+    /// <summary>
+    /// 按花点从小到大排列数组
+    /// </summary>
+    public static 牌[] 排序(this 牌[] ps)
+    {
+        Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
+        return ps;
+    }
+
+    #endregion
+
+    #region 元素移动相关
 
     /// <summary>
     /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
     /// 要求：传入的牌数组是经过由小到大排序的
     /// </summary>
-    public static 牌[] 移走牌数组(this 牌[] source, 牌[] target)
+    public static 牌[] 移走(this 牌[] source, 牌[] target)
     {
         // 原理：先遍历 source 和 target 中第一张牌匹配，同时递增判断下一张。如果匹配，继续递增判断。如果不匹配，继续在 source 中找。
         // 特殊处理：如果匹配牌的 张 数相减之后为零，则将 source 当前单元后面所有单元的数据，前移1并覆盖掉当前单元
@@ -167,69 +188,57 @@ public static class ExtendMethods
         return source;
     }
 
-    public static 牌[] LinqRemove(this 牌[] Source, 牌[] Target)
-    {
-        var result = from sPoker in Source
-                     join tPoker in Target on sPoker.花点 equals tPoker.花点
-                     where sPoker.张 > tPoker.张
-                     select new 牌 { 张 = (byte)(sPoker.张 - tPoker.张), 花点 = sPoker.花点 };
-        result = result.Concat(from sPoker in Source
-                               where !Target.Any(tPoker => { return sPoker.花点 == tPoker.花点; })
-                               select sPoker);
-        return result.ToArray();
-    }
+
+    #endregion
+
+    #region 抛弃的一些算法
+
+    //public static 牌[] LinqRemove(this 牌[] Source, 牌[] Target)
+    //{
+    //    var result = from sPoker in Source
+    //                 join tPoker in Target on sPoker.花点 equals tPoker.花点
+    //                 where sPoker.张 > tPoker.张
+    //                 select new 牌 { 张 = (byte)(sPoker.张 - tPoker.张), 花点 = sPoker.花点 };
+    //    result = result.Concat(from sPoker in Source
+    //                           where !Target.Any(tPoker => { return sPoker.花点 == tPoker.花点; })
+    //                           select sPoker);
+    //    return result.ToArray();
+    //}
 
 
+    ///// <summary>
+    ///// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
+    ///// </summary>
+    ///// <param name="Source">被减的牌组</param>
+    ///// <param name="Target">减去的牌组</param>
+    ///// <returns>剩下的牌</returns>
+    //public static 牌[] Remove(this 牌[] Source, 牌[] Target)
+    //{
+    //    var singleSource = Source.转为单张序列();
+    //    var singleTarget = Target.转为单张序列();
+    //    var Result = new List<牌>();
+    //    for (int i = 0; i < singleSource.Length; i++)
+    //    {
+    //        bool IsSame = false;
+    //        for (int j = 0; j < singleTarget.Length; j++)
+    //        {
+    //            if (singleSource[i].花点 == singleTarget[j].花点)
+    //            {
+    //                IsSame = true;
+    //                break;
+    //            }
+    //            else
+    //            {
+    //                IsSame = false;
+    //            }
+    //        }
+    //        if (!IsSame)
+    //        {
+    //            Result.Add(singleSource[i]);
+    //        }
+    //    }
+    //    return Result.ToArray().转为计数牌序列();
+    //}
 
-
-
-    /// <summary>
-    /// 按花点从小到大排列数组
-    /// </summary>
-    public static 牌[] 按花点排序(this 牌[] ps)
-    {
-        Array.Sort<牌>(ps, new Comparison<牌>((a, b) => { return a.花点.CompareTo(b.花点); }));
-        return ps;
-    }
-
-
-
-
-
-
-
-
-    /// <summary>
-    /// 从一个牌数组中 减去 另一个牌数组 并返回剩下的牌（表现为 张 变化，结果不含 张 为 0 的）
-    /// </summary>
-    /// <param name="Source">被减的牌组</param>
-    /// <param name="Target">减去的牌组</param>
-    /// <returns>剩下的牌</returns>
-    public static 牌[] Remove(this 牌[] Source, 牌[] Target)
-    {
-        var singleSource = Source.转为单张序列();
-        var singleTarget = Target.转为单张序列();
-        var Result = new List<牌>();
-        for (int i = 0; i < singleSource.Length; i++)
-        {
-            bool IsSame = false;
-            for (int j = 0; j < singleTarget.Length; j++)
-            {
-                if (singleSource[i].花点 == singleTarget[j].花点)
-                {
-                    IsSame = true;
-                    break;
-                }
-                else
-                {
-                    IsSame = false;
-                }
-            }
-            if (!IsSame)
-            {
-                Result.Add(singleSource[i]);
-            }
-        }
-        return Result.ToArray().转为计数牌序列();
-    }
+    #endregion
 }

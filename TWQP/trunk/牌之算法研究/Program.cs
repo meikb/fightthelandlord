@@ -31,74 +31,74 @@
             //Console.ReadLine();
 
 
-            var 一组牌 = new 牌[] { 
-                            // 黑
-            new 牌 { 数据 = 0x010106u }, 
-            new 牌 { 数据 = 0x010107u }, 
-            new 牌 { 数据 = 0x010108u }, 
-            new 牌 { 数据 = 0x090101u },   // A
-            new 牌 { 数据 = 0x090102u }, 
-            new 牌 { 数据 = 0x010103u }, 
-            new 牌 { 数据 = 0x010104u }, 
-            new 牌 { 数据 = 0x010105u }, 
-            new 牌 { 数据 = 0x010109u }, 
-            new 牌 { 数据 = 0x01010Au },   // 10
-            new 牌 { 数据 = 0x01010Bu },   // J
-            new 牌 { 数据 = 0x01010Cu },   // Q
-            new 牌 { 数据 = 0x01010Du },   // K
-            };
-            var 另一组牌 = new 牌[] {            
-            new 牌 { 数据 = 0x010103u }, 
-            new 牌 { 数据 = 0x010104u }, 
-            new 牌 { 数据 = 0x010105u }, 
-            new 牌 { 数据 = 0x070101u },   // A
-            new 牌 { 数据 = 0x070102u }, 
-            new 牌 { 数据 = 0x010106u }, 
-            new 牌 { 数据 = 0x010107u }, 
-            };
+            //var 一组牌 = new 牌[] { 
+            //                // 黑
+            //new 牌 { 数据 = 0x010106u }, 
+            //new 牌 { 数据 = 0x010107u }, 
+            //new 牌 { 数据 = 0x010108u }, 
+            //new 牌 { 数据 = 0x090101u },   // A
+            //new 牌 { 数据 = 0x090102u }, 
+            //new 牌 { 数据 = 0x010103u }, 
+            //new 牌 { 数据 = 0x010104u }, 
+            //new 牌 { 数据 = 0x010105u }, 
+            //new 牌 { 数据 = 0x010109u }, 
+            //new 牌 { 数据 = 0x01010Au },   // 10
+            //new 牌 { 数据 = 0x01010Bu },   // J
+            //new 牌 { 数据 = 0x01010Cu },   // Q
+            //new 牌 { 数据 = 0x01010Du },   // K
+            //};
+            //var 另一组牌 = new 牌[] {            
+            //new 牌 { 数据 = 0x010103u }, 
+            //new 牌 { 数据 = 0x010104u }, 
+            //new 牌 { 数据 = 0x010105u }, 
+            //new 牌 { 数据 = 0x070101u },   // A
+            //new 牌 { 数据 = 0x070102u }, 
+            //new 牌 { 数据 = 0x010106u }, 
+            //new 牌 { 数据 = 0x010107u }, 
+            //};
 
-            一组牌.按花点排序();
-            另一组牌.按花点排序();
+            //一组牌.按花点排序();
+            //另一组牌.按花点排序();
 
-            Stopwatch stopwatch1 = new Stopwatch();
-            Stopwatch stopwatch2 = new Stopwatch();
+            //Stopwatch stopwatch1 = new Stopwatch();
+            //Stopwatch stopwatch2 = new Stopwatch();
 
-            牌[] Result1 = null;
-            牌[] Result2 = null;
+            //牌[] Result1 = null;
+            //牌[] Result2 = null;
 
-            stopwatch1.Start();
-            for (int i = 0; i < 5000000; i++)
-            {
-                牌[] ps1 = (牌[])一组牌.Clone();
-                牌[] ps2 = (牌[])另一组牌.Clone();
+            //stopwatch1.Start();
+            //for (int i = 0; i < 5000000; i++)
+            //{
+            //    牌[] ps1 = (牌[])一组牌.Clone();
+            //    牌[] ps2 = (牌[])另一组牌.Clone();
 
-                Result1 = ps1.LinqRemove(ps2);
-            }
-            stopwatch1.Stop();
+            //    Result1 = ps1.LinqRemove(ps2);
+            //}
+            //stopwatch1.Stop();
 
-            stopwatch2.Start();
-            for (int i = 0; i < 5000000; i++)
-            {
-                牌[] ps1 = (牌[])一组牌.Clone();
-                牌[] ps2 = (牌[])另一组牌.Clone();
+            //stopwatch2.Start();
+            //for (int i = 0; i < 5000000; i++)
+            //{
+            //    牌[] ps1 = (牌[])一组牌.Clone();
+            //    牌[] ps2 = (牌[])另一组牌.Clone();
 
-                Result2 = ps1.移走牌数组(ps2);
-            }
-            stopwatch2.Stop();
+            //    Result2 = ps1.移走牌数组(ps2);
+            //}
+            //stopwatch2.Stop();
 
-            foreach (var p in Result1)
-            {
-                Console.WriteLine(扑克.ExtendMethods.ToDisplayString(p));
-            }
-            foreach (var p in Result2)
-            {
-                Console.WriteLine("\r\n四核的算法" + 扑克.ExtendMethods.ToDisplayString(p));
-            }
-            Console.WriteLine(stopwatch1.ElapsedTicks + "\r\n" + stopwatch2.ElapsedTicks);
-            Console.ReadLine();
+            //foreach (var p in Result1)
+            //{
+            //    Console.WriteLine(扑克.ExtendMethods.ToDisplayString(p));
+            //}
+            //foreach (var p in Result2)
+            //{
+            //    Console.WriteLine("\r\n四核的算法" + 扑克.ExtendMethods.ToDisplayString(p));
+            //}
+            //Console.WriteLine(stopwatch1.ElapsedTicks + "\r\n" + stopwatch2.ElapsedTicks);
+            //Console.ReadLine();
 
-            MainClass.RunSnippet();
-            Console.ReadLine();
+            //MainClass.RunSnippet();
+            //Console.ReadLine();
         }
     }
 
