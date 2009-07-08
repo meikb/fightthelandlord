@@ -46,7 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="老算法.txt" />
-    <Compile Include="老算法（最新）.cs" />
+    <None Include="老算法（最新）.cs" />
     <Compile Include="麻将.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
