@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 
 namespace 扑克
 {
-    public static class ExtendMethods
+    public static class Handler
     {
         public static readonly string[][] _牌显示 = new string[][]
         {
@@ -72,10 +72,11 @@ namespace 扑克
             return result.ToArray();
         }
 
-    }
 
-    public class Handler
-    {
+
+
+
+
         public static readonly 牌[] 一副牌 = new 牌[] {
             // 黑
             new 牌 { 数据 = 0x010101u },   // A
@@ -138,4 +139,5 @@ namespace 扑克
             new 牌 { 数据 = 0x01050Fu },   // 大鬼
         };
     }
+
 }
