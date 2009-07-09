@@ -170,10 +170,10 @@ namespace 麻将
         /// </summary>
         public static 牌[][] 获取所有刻子(this 牌[] ps)
         {
-            return (from kv in ps
-                    where kv.张 >= 3
+            return (from p in ps
+                    where p.张 >= 3
                     select new 牌[] { 
-                        new 牌{ 花点 = kv.花点, 张 = 3}
+                        new 牌{ 花点 = p.花点, 张 = 3}
                     }).ToArray();
         }
 
