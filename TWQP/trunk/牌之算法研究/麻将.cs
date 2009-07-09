@@ -94,7 +94,7 @@ namespace 麻将
 
     #endregion
 
-    public static class ExtendMethods
+    public static class Handler
     {
         #region 牌显示 相关
         public static readonly string[][] _牌显示 = new string[][]
@@ -376,12 +376,8 @@ namespace 麻将
 
         #endregion
 
-    }
+        #region 一副牌的数据
 
-    #region 麻将 处理 类
-
-    public class Handler
-    {
         public static readonly 牌[] 一副牌 = new 牌[] {
             // 万
             new 牌 { 数据 = 0x040101u }, 
@@ -453,7 +449,8 @@ namespace 麻将
                 return _一副牌单张序列;
             }
         }
+
+        #endregion
     }
 
-    #endregion
 }

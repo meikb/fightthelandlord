@@ -117,18 +117,9 @@
                 new 牌{ 数据=0x010108u },
                 new 牌{ 数据=0x030109u },
             };
-
             ps.排序();
 
-
-            var o = 麻将.ExtendMethods.获取所有刻子(ps);
-
-
-
-
-
             System.Diagnostics.Stopwatch w = new System.Diagnostics.Stopwatch();
-
             w.Start();
 
             for (int i = 0; i < 3000; i++)
@@ -160,14 +151,10 @@
 
                 }
             }
-
-            Console.WriteLine("算 3000 次 用时：" + w.ElapsedMilliseconds);
-
             w.Stop();
 
+            Console.WriteLine("算 3000 次 用时：" + w.ElapsedMilliseconds);
             Console.ReadLine();
-
-
         }
     }
 
