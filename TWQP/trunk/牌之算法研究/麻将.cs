@@ -250,7 +250,7 @@ namespace 麻将
         /// <summary>
         /// 暂时采用的算法：第一次先 拿出一个 对子，之后持续拿三张的顺子或刻子
         /// </summary>
-        public static List<分组结果> 计算分组结果集合(牌[] 手牌)
+        public static List<分组结果> 计算分组结果集合(this 牌[] 手牌)
         {
             var 分组结果集合 = new List<分组结果>();
             if (手牌 == null || 手牌.Length == 0) return 分组结果集合;
