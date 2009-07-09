@@ -93,16 +93,16 @@ namespace ConsoleApplication2
             //    else
             //        results.Add(new Result(groups, left));
             //}
-            var get11_results = tpcs.Get11();
-            foreach (var tps in get11_results)
+            var get11_results = tpcs.Get11(); //获取牌组中成对出现的牌
+            foreach (var tps in get11_results) //迭代之
             {
                 var groups = new List<Group>();
-                groups.Add(new Group(tps, CheckTypes.Get11));
-                var left = tpcs.Remove(tps);
-                if (left != null && left.Length > 0)
-                    Calc(results, groups, left);
+                groups.Add(new Group(tps, CheckTypes.Get11)); //转换牌的集合为Group对象并添加的List<Group>中
+                var left = tpcs.Remove(tps);  //通过Remove方法把已经转换为牌组的对象从中删除,得出剩余的牌
+                if (left != null && left.Length > 0) //如果有剩余的牌
+                    Calc(results, groups, left);  //该方法的意思是???
                 else
-                    results.Add(new Result(groups, left));
+                    results.Add(new Result(groups, left)); //
             }
 
             if (
@@ -118,7 +118,7 @@ namespace ConsoleApplication2
         }
         public static void Calc(List<Result> results, List<Group> groups, TPC[] leftTPCs)
         {
-            var get111_results = leftTPCs.Get111();
+            var get111_results = leftTPCs.Get111(); //得到三张相连牌组
             if (get111_results != null) foreach (var tps in get111_results)
                 {
                     var new_groups = new List<Group>(groups);
@@ -235,7 +235,7 @@ namespace ConsoleApplication2
         Get111,
     }
     /// <summary>
-    /// 牌组对象,将1张或2张或3张牌压缩为一个int
+    /// 牌组对象,将1张或2张或3张牌压缩为一个int,表示两张相同的牌或者三张连续的牌或者三张相同的牌
     /// </summary>
     public class Group
     {
@@ -494,10 +494,10 @@ namespace ConsoleApplication2
 
         #region CheckExists Methods
         /// <summary>
-        /// 检测一个List<Group>是否完全包含于调用该方法的List<Result>里
+        /// 检测一个List Group是否完全包含于调用该方法的List Result里
         /// </summary>
-        /// <param name="results">List<Result>对象</param>
-        /// <param name="groups">List<Group>对象</param>
+        /// <param name="results">List Result对象</param>
+        /// <param name="groups">List Group对象</param>
         /// <returns>是否包含</returns>
         public static bool CheckExists(this List<Result> results, List<Group> groups)
         {
