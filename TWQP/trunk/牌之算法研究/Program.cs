@@ -6,6 +6,8 @@
     using System.Text;
     using System.Diagnostics;
 
+    using 麻将;
+
     class Program
     {
 
@@ -129,15 +131,14 @@
 
             w.Start();
 
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 3000; i++)
             {
-                var results = 麻将.ExtendMethods.计算分组结果集合(ps);
-                麻将.ExtendMethods.排序(results);
+                var results = ps.计算分组结果集合().排序();
 
                 if (i == 0)
                 {
                     Console.WriteLine("结果数 = " + results.Count);
-                    for (int j = 0; j < results.Count; j++)
+                    for (int j = 0; j < 1; j++)
                     {
                         var result = results[j];
                         Console.WriteLine("\n结果" + j);
@@ -147,20 +148,20 @@
                             Console.WriteLine(zp.分组规则.ToString());
                             foreach (var p in zp.牌数组)
                             {
-                                Console.WriteLine(麻将.ExtendMethods.获取显示字串(p));
+                                Console.WriteLine(p.获取显示字串());
                             }
                         }
                         Console.WriteLine("剩牌 = ");
                         foreach (var p in result.剩牌数组)
                         {
-                            Console.WriteLine(麻将.ExtendMethods.获取显示字串(p));
+                            Console.WriteLine(p.获取显示字串());
                         }
                     }
 
                 }
             }
 
-            Console.WriteLine(w.ElapsedMilliseconds);
+            Console.WriteLine("算 3000 次 用时：" + w.ElapsedMilliseconds);
 
             w.Stop();
 
