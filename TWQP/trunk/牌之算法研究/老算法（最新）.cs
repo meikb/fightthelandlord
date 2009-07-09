@@ -28,6 +28,7 @@ namespace ConsoleApplication2
             System.Diagnostics.Stopwatch w = new System.Diagnostics.Stopwatch();
 
             w.Start();
+            
 
             for (int i = 0; i < 1000; i++)
             {
