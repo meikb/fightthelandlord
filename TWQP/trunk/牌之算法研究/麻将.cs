@@ -9,12 +9,12 @@ using System.Security.Cryptography;
 
 namespace 麻将
 {
-    #region 分组规则枚举
+    #region 分组规则 枚举
 
     /// <summary>
     /// 根据麻将规则所归纳出来的，包括 一对（两张一样的），顺子（三张连续的），刻子（三张一样的）
     /// </summary>
-    public enum 分组规则枚举 : int
+    public enum 分组规则 : int
     {
         对子 = 1,
         顺子 = 2,
@@ -31,29 +31,38 @@ namespace 麻将
     public class 组牌
     {
         public 牌[] 牌数组;
-        public 分组规则枚举 分组规则;
-        public int 哈希码;
-        public 组牌(牌[] ps, 分组规则枚举 gr)
+        public 分组规则 分组规则;
+        //public int 哈希码;
+        public 组牌(牌[] ps, 分组规则 gr)
         {
             this.牌数组 = ps;
             this.分组规则 = gr;
-            if (ps.Length == 1)
-            {
-                // 同样花色的牌，直接过滤掉状态信息即为 hash
-                this.哈希码 = (int)(ps[0].数据 & 0x00FFFFFFu);
-            }
-            else
-            {
-                // 因为麻将的情况不可能超过 每张牌 10bit 的存放能力
-                // 3 张共占 10bit , 即：张, 花, 点 = 3 + 3 + 4,  10 * 3 = 30bit
-                var p1 = ps[0];
-                var p2 = ps[1];
-                var p3 = ps[2];
-                this.哈希码 =
-                        ((p1.张 << 7) | (p1.花 << 4) | p1.点) |
-                        (((p2.张 << 7) | (p2.花 << 4) | p2.点) << 10) |
-                        (((p3.张 << 7) | (p3.花 << 4) | p3.点) << 20);
-            }
+
+            //// 因为麻将的情况不可能超过 每张牌 10bit 的存放能力
+            //// 3 张共占 10bit , 即：张, 花, 点 = 3 + 3 + 4,  10 * 3 = 30bit
+            //if (ps.Length == 1)
+            //{
+            //    var p1 = ps[0];
+            //    this.哈希码 = ((p1.张 << 7) | (p1.花 << 4) | p1.点);
+            //}
+            //else if (ps.Length == 2)
+            //{
+            //    var p1 = ps[0];
+            //    var p2 = ps[1];
+            //    this.哈希码 =
+            //            ((p1.张 << 7) | (p1.花 << 4) | p1.点) |
+            //            (((p2.张 << 7) | (p2.花 << 4) | p2.点) << 10);
+            //}
+            //else
+            //{
+            //    var p1 = ps[0];
+            //    var p2 = ps[1];
+            //    var p3 = ps[2];
+            //    this.哈希码 =
+            //            ((p1.张 << 7) | (p1.花 << 4) | p1.点) |
+            //            (((p2.张 << 7) | (p2.花 << 4) | p2.点) << 10) |
+            //            (((p3.张 << 7) | (p3.花 << 4) | p3.点) << 20);
+            //}
         }
     }
 
@@ -68,12 +77,12 @@ namespace 麻将
     {
         public int 等级;
         public List<组牌> 组牌集合;
-        public 牌[] 剩下的计数牌数组;
+        public 牌[] 剩牌数组;
 
         public 分组结果(List<组牌> groups, 牌[] left)
         {
             this.组牌集合 = groups;
-            this.剩下的计数牌数组 = left;
+            this.剩牌数组 = left;
             if (groups != null && groups.Count > 0)
             {
                 this.等级 = groups.Sum(o => (int)o.分组规则);
@@ -182,7 +191,7 @@ namespace 麻将
 
         #endregion
 
-        #region 排序相关
+        #region 排序 相关
 
         /// <summary>
         /// 按每组第一张的花点排序
@@ -204,7 +213,7 @@ namespace 麻将
             {
                 if (a.等级 == b.等级)
                     if (a.组牌集合.Count == b.组牌集合.Count)
-                        return b.剩下的计数牌数组.Length.CompareTo(a.剩下的计数牌数组.Length);
+                        return b.剩牌数组.Length.CompareTo(a.剩牌数组.Length);
                     else return a.组牌集合.Count.CompareTo(b.组牌集合.Count);
                 else return a.等级.CompareTo(b.等级);
             }));
@@ -224,7 +233,11 @@ namespace 麻将
                 if (gs.Count < count) continue;
                 idx = 0;
                 for (idx = 0; idx < count; idx++)
-                    if (gs[idx].哈希码 != groups[idx].哈希码) break;
+                {
+                    if (gs[idx].分组规则 != groups[idx].分组规则 ||
+                        gs[idx].牌数组[0].数据 != groups[idx].牌数组[0].数据
+                        ) break;
+                }
                 if (idx == count) return true;
             }
             return false;
@@ -237,41 +250,41 @@ namespace 麻将
         /// <summary>
         /// 暂时采用的算法：第一次先 拿出一个 对子，之后持续拿三张的顺子或刻子
         /// </summary>
-        public static List<分组结果> 计算分组结果集合(牌[] ps)
+        public static List<分组结果> 计算分组结果集合(牌[] 手牌)
         {
             var 分组结果集合 = new List<分组结果>();
-            if (ps == null || ps.Length == 0) return 分组结果集合;
+            if (手牌 == null || 手牌.Length == 0) return 分组结果集合;
 
-            var 所有刻子 = ps.获取所有刻子();
-            foreach (var 刻子 in 所有刻子)
-            {
-                var 组牌集合 = new List<组牌>();
-                组牌集合.Add(new 组牌(刻子, 分组规则枚举.刻子));
-                var 剩牌 = ps.移走(刻子);
-                if (剩牌 != null && 剩牌.Length > 0)
-                    计算分组结果集合(分组结果集合, 组牌集合, 剩牌);
-                else
-                    分组结果集合.Add(new 分组结果(组牌集合, 剩牌));
-            }
+            //var 所有刻子 = 手牌.获取所有刻子();
+            //foreach (var 刻子 in 所有刻子)
+            //{
+            //    var 组牌集合 = new List<组牌>();
+            //    组牌集合.Add(new 组牌(刻子, 分组规则.刻子));
+            //    var 剩牌 = ((牌[])手牌.Clone()).移走(刻子);
+            //    if (剩牌 != null && 剩牌.Length > 0)
+            //        计算分组结果集合(分组结果集合, 组牌集合, 剩牌);
+            //    else
+            //        分组结果集合.Add(new 分组结果(组牌集合, 剩牌));
+            //}
 
-            var 所有顺子 = ps.获取所有顺子();
-            foreach (var 顺子 in 所有顺子)
-            {
-                var 组牌集合 = new List<组牌>();
-                组牌集合.Add(new 组牌(顺子, 分组规则枚举.顺子));
-                var 剩牌 = ps.移走(顺子);
-                if (剩牌 != null && 剩牌.Length > 0)
-                    计算分组结果集合(分组结果集合, 组牌集合, 剩牌);
-                else
-                    分组结果集合.Add(new 分组结果(组牌集合, 剩牌));
-            }
+            //var 所有顺子 = 手牌.获取所有顺子();
+            //foreach (var 顺子 in 所有顺子)
+            //{
+            //    var 组牌集合 = new List<组牌>();
+            //    组牌集合.Add(new 组牌(顺子, 分组规则.顺子));
+            //    var 剩牌 = ((牌[])手牌.Clone()).移走(顺子);
+            //    if (剩牌 != null && 剩牌.Length > 0)
+            //        计算分组结果集合(分组结果集合, 组牌集合, 剩牌);
+            //    else
+            //        分组结果集合.Add(new 分组结果(组牌集合, 剩牌));
+            //}
 
-            var 所有对子 = ps.获取所有对子();
+            var 所有对子 = 手牌.获取所有对子();
             foreach (var 对子 in 所有对子)
             {
                 var 组牌集合 = new List<组牌>();
-                组牌集合.Add(new 组牌(对子, 分组规则枚举.对子));
-                var 剩牌 = ps.移走(对子);
+                组牌集合.Add(new 组牌(对子, 分组规则.对子));
+                var 剩牌 = ((牌[])手牌.Clone()).移走(对子);
                 if (剩牌 != null && 剩牌.Length > 0)
                     计算分组结果集合(分组结果集合, 组牌集合, 剩牌);
                 else
@@ -284,7 +297,7 @@ namespace 麻将
                 所有对子.Length == 0
             )
             {
-                分组结果集合.Add(new 分组结果(new List<组牌>(), ps));
+                分组结果集合.Add(new 分组结果(new List<组牌>(), 手牌));
             }
 
             return 分组结果集合;
@@ -298,12 +311,12 @@ namespace 麻将
                 foreach (var 刻子 in 所有刻子)
                 {
                     var 新组牌 = new List<组牌>(原组牌集合);
-                    新组牌.Add(new 组牌(刻子, 分组规则枚举.刻子));
+                    新组牌.Add(new 组牌(刻子, 分组规则.刻子));
 
                     新组牌.排序();
                     if (分组结果集合.检查是否存在(新组牌)) return;
 
-                    var 剩牌 = 原剩牌.移走(刻子);
+                    var 剩牌 = ((牌[])原剩牌.Clone()).移走(刻子);
                     if (剩牌 != null && 剩牌.Length > 0)
                         计算分组结果集合(分组结果集合, 新组牌, 剩牌);
                     else
@@ -317,12 +330,12 @@ namespace 麻将
                 foreach (var 顺子 in 所有顺子)
                 {
                     var 新组牌 = new List<组牌>(原组牌集合);
-                    新组牌.Add(new 组牌(顺子, 分组规则枚举.顺子));
+                    新组牌.Add(new 组牌(顺子, 分组规则.顺子));
 
                     新组牌.排序();
                     if (分组结果集合.检查是否存在(新组牌)) return;
 
-                    var 剩牌 = 原剩牌.移走(顺子);
+                    var 剩牌 = ((牌[])原剩牌.Clone()).移走(顺子);
                     if (剩牌 != null && 剩牌.Length > 0)
                         计算分组结果集合(分组结果集合, 新组牌, 剩牌);
                     else
@@ -330,24 +343,24 @@ namespace 麻将
                 }
             }
 
-            var 所有对子 = 原剩牌.获取所有对子();
-            if (所有对子 != null)
-            {
-                foreach (var 对子 in 所有对子)
-                {
-                    var 新组牌 = new List<组牌>(原组牌集合);
-                    新组牌.Add(new 组牌(对子, 分组规则枚举.对子));
+            //var 所有对子 = 原剩牌.获取所有对子();
+            //if (所有对子 != null)
+            //{
+            //    foreach (var 对子 in 所有对子)
+            //    {
+            //        var 新组牌 = new List<组牌>(原组牌集合);
+            //        新组牌.Add(new 组牌(对子, 分组规则.对子));
 
-                    新组牌.排序();
-                    if (分组结果集合.检查是否存在(新组牌)) return;
+            //        新组牌.排序();
+            //        if (分组结果集合.检查是否存在(新组牌)) return;
 
-                    var 剩牌 = 原剩牌.移走(对子);
-                    if (剩牌 != null && 剩牌.Length > 0)
-                        计算分组结果集合(分组结果集合, 新组牌, 剩牌);
-                    else
-                        分组结果集合.Add(new 分组结果(新组牌, 剩牌));
-                }
-            }
+            //        var 剩牌 = ((牌[])原剩牌.Clone()).移走(对子);
+            //        if (剩牌 != null && 剩牌.Length > 0)
+            //            计算分组结果集合(分组结果集合, 新组牌, 剩牌);
+            //        else
+            //            分组结果集合.Add(new 分组结果(新组牌, 剩牌));
+            //    }
+            //}
 
             if (
                 所有刻子.Length == 0 &&

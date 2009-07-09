@@ -99,6 +99,74 @@
 
             //MainClass.RunSnippet();
             //Console.ReadLine();
+
+
+
+
+            // 九莲宝灯
+            var ps = new 牌[]{
+                new 牌{ 数据=0x030101u },
+                new 牌{ 数据=0x010102u },
+                new 牌{ 数据=0x010103u },
+                new 牌{ 数据=0x010104u },
+                new 牌{ 数据=0x020105u },
+                new 牌{ 数据=0x010106u },
+                new 牌{ 数据=0x010107u },
+                new 牌{ 数据=0x010108u },
+                new 牌{ 数据=0x030109u },
+            };
+
+            ps.排序();
+
+
+            var o = 麻将.ExtendMethods.获取所有刻子(ps);
+
+
+
+
+
+            System.Diagnostics.Stopwatch w = new System.Diagnostics.Stopwatch();
+
+            w.Start();
+
+            for (int i = 0; i < 1000; i++)
+            {
+                var results = 麻将.ExtendMethods.计算分组结果集合(ps);
+                麻将.ExtendMethods.排序(results);
+
+                if (i == 0)
+                {
+                    Console.WriteLine("结果数 = " + results.Count);
+                    for (int j = 0; j < results.Count; j++)
+                    {
+                        var result = results[j];
+                        Console.WriteLine("\n结果" + j);
+                        Console.WriteLine("等级 = " + result.等级);
+                        foreach (var zp in result.组牌集合)
+                        {
+                            Console.WriteLine(zp.分组规则.ToString());
+                            foreach (var p in zp.牌数组)
+                            {
+                                Console.WriteLine(麻将.ExtendMethods.获取显示字串(p));
+                            }
+                        }
+                        Console.WriteLine("剩牌 = ");
+                        foreach (var p in result.剩牌数组)
+                        {
+                            Console.WriteLine(麻将.ExtendMethods.获取显示字串(p));
+                        }
+                    }
+
+                }
+            }
+
+            Console.WriteLine(w.ElapsedMilliseconds);
+
+            w.Stop();
+
+            Console.ReadLine();
+
+
         }
     }
 

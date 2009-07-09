@@ -155,8 +155,8 @@ public static class ExtendMethods
     {
         // 原理：先遍历 source 和 target 中第一张牌匹配，同时递增判断下一张。如果匹配，继续递增判断。如果不匹配，继续在 source 中找。
         // 特殊处理：如果匹配牌的 张 数相减之后为零，则将 source 当前单元后面所有单元的数据，前移1并覆盖掉当前单元
-
         int sIdx = 0, tIdx = 0, sCount = source.Length, tCount = target.Length;
+
         while (sIdx < sCount && tIdx < tCount)
         {
             if (source[sIdx].花点 == target[tIdx].花点)
@@ -183,7 +183,7 @@ public static class ExtendMethods
                 continue;
             }
         }
-        if (sIdx == sCount) throw new Exception("source 中没有足够的牌做减法");
+        //if (sIdx == sCount) throw new Exception("source 中没有足够的牌做减法");
         Array.Resize<牌>(ref source, sCount);
         return source;
     }
