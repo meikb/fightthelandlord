@@ -64,6 +64,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Class1.cs" />
     <Compile Include="Diamond.xaml.cs">
       <DependentUpon>Diamond.xaml</DependentUpon>
     </Compile>
