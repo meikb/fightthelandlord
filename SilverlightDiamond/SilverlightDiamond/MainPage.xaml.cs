@@ -14,6 +14,16 @@ namespace SilverlightDiamond
 	{
 		public MainPage()
 		{
+            //
+            sbChangeImage.Completed += (object sender1, EventArgs e1) =>
+            {
+                Storyboard sb = (Storyboard)sender1;
+                daChangeImage.To = 0;
+                daChangeImage2.To = 0;
+                int zindex1 = Canvas.GetZIndex(image1and0);
+                Canvas.SetZIndex(image1and1, zindex1 + 1);
+                sb.Begin();
+            };
 			// Required to initialize variables
 			InitializeComponent();
             Diamond d = new Diamond();
@@ -21,24 +31,6 @@ namespace SilverlightDiamond
             gridGameMain.Children.Add(d);
             Grid.SetColumn(d, 0); Grid.SetRow(d, 0);
 		}
-
-        //private void gridGameMain_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    sbChangeImage.Completed += (object sender1, EventArgs e1) =>
-        //        {
-        //            Storyboard sb = (Storyboard)sender1;
-        //            daChangeImage.To = 0;
-        //            daChangeImage2.To = 0;
-        //            int zindex1 = Canvas.GetZIndex(image1and0);
-        //            Canvas.SetZIndex(image1and1, zindex1 + 1);
-        //            sb.Begin();
-        //        };
-        //    daChangeImage.To = 64;
-        //    daChangeImage2.To = -64;
-        //    int zindex = Canvas.GetZIndex(image1and1);
-        //    Canvas.SetZIndex(image1and0, zindex + 1);
-        //    sbChangeImage.Begin();
-        //}
 
         private void gridGameMain_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
@@ -66,15 +58,6 @@ namespace SilverlightDiamond
                 daChangeImage.SetValue(Storyboard.TargetNameProperty, movedDiamond.Name);
                 daChangeImage.SetValue(Storyboard.TargetPropertyProperty, new PropertyPath("TranslateTransform.XProperty"));
             }
-            sbChangeImage.Completed += (object sender1, EventArgs e1) =>
-            {
-                Storyboard sb = (Storyboard)sender1;
-                daChangeImage.To = 0;
-                daChangeImage2.To = 0;
-                int zindex1 = Canvas.GetZIndex(image1and0);
-                Canvas.SetZIndex(image1and1, zindex1 + 1);
-                sb.Begin();
-            };
             daChangeImage.To = 64;
             daChangeImage2.To = -64;
             int zindex = Canvas.GetZIndex(image1and1);

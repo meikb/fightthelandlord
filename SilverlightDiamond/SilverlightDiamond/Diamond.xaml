@@ -12,4 +12,5 @@
 			<ImageBrush x:Name="Image"/>
 		</Border.Background>
 	</Border>
+    
 </UserControl>
