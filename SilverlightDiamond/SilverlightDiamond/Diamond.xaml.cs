@@ -10,7 +10,7 @@ using System.Windows.Shapes;
 
 namespace SilverlightDiamond
 {
-	public partial class Diamond : UserControl
+	public partial class Diamond : Canvas
 	{
         public int Column { get; set; }
 
