@@ -14,22 +14,10 @@ namespace SilverlightDiamond
 	{
 		public MainPage()
 		{
-            //
-            sbChangeImage.Completed += (object sender1, EventArgs e1) =>
-            {
-                Storyboard sb = (Storyboard)sender1;
-                daChangeImage.To = 0;
-                daChangeImage2.To = 0;
-                int zindex1 = Canvas.GetZIndex(image1and0);
-                Canvas.SetZIndex(image1and1, zindex1 + 1);
-                sb.Begin();
-            };
 			// Required to initialize variables
 			InitializeComponent();
             testd.SetImageSource("Images/5.png");
 		}
-
-<<<<<<< .mine
         private void gridGameMain_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             //daChange1.SetValue(Storyboard.TargetNameProperty, testd.Name);
@@ -38,9 +26,6 @@ namespace SilverlightDiamond
             //daChange1.AutoReverse = true;
             sbChangeImage.Begin();
         }
-
-=======
->>>>>>> .r186
         private void gridGameMain_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             //if (e.OriginalSource.GetType() == typeof(System.Windows.Controls.Border))
@@ -57,7 +42,6 @@ namespace SilverlightDiamond
 
         private void PlayAnimation(Diamond movedDiamond)
         {
-<<<<<<< .mine
             //if (movedDiamond.direction == Direction.Up || movedDiamond.direction == Direction.Down)
             //{
             //    movedDiamond.Margin.
@@ -83,23 +67,21 @@ namespace SilverlightDiamond
             //int zindex = Canvas.GetZIndex(image1and1);
             //Canvas.SetZIndex(image1and0, zindex + 1);
             //sbChangeImage.Begin();
-=======
-            if (movedDiamond.direction == Direction.Up || movedDiamond.direction == Direction.Down)
-            {
-                daChangeImage.SetValue(Storyboard.TargetNameProperty, movedDiamond.Name);
-                daChangeImage.SetValue(Storyboard.TargetPropertyProperty, new PropertyPath("TranslateTransform.YProperty"));
-            }
-            if (movedDiamond.direction == Direction.Left || movedDiamond.direction == Direction.Right)
-            {
-                daChangeImage.SetValue(Storyboard.TargetNameProperty, movedDiamond.Name);
-                daChangeImage.SetValue(Storyboard.TargetPropertyProperty, new PropertyPath("TranslateTransform.XProperty"));
-            }
-            daChangeImage.To = 64;
-            daChangeImage2.To = -64;
-            int zindex = Canvas.GetZIndex(image1and1);
-            Canvas.SetZIndex(image1and0, zindex + 1);
-            sbChangeImage.Begin();
->>>>>>> .r186
+            //if (movedDiamond.direction == Direction.Up || movedDiamond.direction == Direction.Down)
+            //{
+            //    daChangeImage.SetValue(Storyboard.TargetNameProperty, movedDiamond.Name);
+            //    daChangeImage.SetValue(Storyboard.TargetPropertyProperty, new PropertyPath("TranslateTransform.YProperty"));
+            //}
+            //if (movedDiamond.direction == Direction.Left || movedDiamond.direction == Direction.Right)
+            //{
+            //    daChangeImage.SetValue(Storyboard.TargetNameProperty, movedDiamond.Name);
+            //    daChangeImage.SetValue(Storyboard.TargetPropertyProperty, new PropertyPath("TranslateTransform.XProperty"));
+            //}
+            //daChangeImage.To = 64;
+            //daChangeImage2.To = -64;
+            //int zindex = Canvas.GetZIndex(image1and1);
+            //Canvas.SetZIndex(image1and0, zindex + 1);
+            //sbChangeImage.Begin();
         }
 
         private void sbChangeImage_Completed(object sender, EventArgs e)
