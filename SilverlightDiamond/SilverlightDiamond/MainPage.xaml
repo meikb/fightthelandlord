@@ -7,15 +7,16 @@
 	Width="800" Height="640">
 	<UserControl.Resources>
 		<Storyboard x:Name="sbChangeImage" Completed="sbChangeImage_Completed" >
-			<DoubleAnimation x:Name="daChange1"
-				Storyboard.TargetName="aaaaaa"
-				Storyboard.TargetProperty="X"
-				To="64"
+            <DoubleAnimation x:Name="daChange1"
+                To="64" FillBehavior="Stop" AutoReverse="True" 
 				Duration="0:0:0.5"/>
+            <!--<DoubleAnimation x:Name="daChange2"
+                To="-64"
+                Duration="0:0:0.5"/>-->
 		</Storyboard>
 	</UserControl.Resources>
 	<StackPanel x:Name="LayoutRoot" UseLayoutRounding="True" Orientation="Horizontal">
-		<Grid x:Name="gridGameMain" UseLayoutRounding="True" HorizontalAlignment="Left" Width="576" MouseLeftButtonDown="gridGameMain_MouseLeftButtonDown" >
+		<Grid x:Name="gridGameMain" UseLayoutRounding="True" HorizontalAlignment="Left" Width="576" MouseLeftButtonDown="gridGameMain_MouseLeftButtonDown" MouseLeftButtonUp="gridGameMain_MouseLeftButtonUp" >
 			<Grid.RowDefinitions>
 				<RowDefinition/>
 				<RowDefinition/>
@@ -45,16 +46,6 @@
 					<GradientStop Color="#FF52EEDE" Offset="1"/>
 				</LinearGradientBrush>
 			</Grid.Background>
-			<local:Diamond x:Name="testd" Grid.Row="2" Grid.Column="3" >
-				<local:Diamond.RenderTransform>
-					<TranslateTransform x:Name="aaaaaa" />
-				</local:Diamond.RenderTransform>
-			</local:Diamond>
-			<Image x:Name="tenpImage" Grid.Column="1" Grid.Row="1" Source="Images/2.png" Stretch="Fill" >
-				<Image.RenderTransform>
-					<TranslateTransform x:Name="bbbb" />
-				</Image.RenderTransform>
-			</Image>
 		</Grid>
 		<Grid x:Name="gridGameInfo" HorizontalAlignment="Right" Width="224">
 			<Grid.RowDefinitions>
