@@ -27,23 +27,31 @@ namespace SilverlightDiamond
             }
         }
 
-        public int Column { get; set; }
-
-        public int Row { get; set; }
-
         private bool isMouseLeftButtonDown;
 
         private Point mouseUpBeforePoint;
 
+        public int Type { get; set; }
+
+        public int Column { get; set; }
+
+        public int Row { get; set; }
+
         public Direction direction { get; set; }
 
-        public Diamond()
+        public Diamond(string ImagePath, int Column, int Row, int Type)
         {
             // Required to initialize variables
             this.MouseLeftButtonDown += new MouseButtonEventHandler(Diamond_MouseLeftButtonDown);
             this.MouseLeftButtonUp += new MouseButtonEventHandler(Diamond_MouseLeftButtonUp);
             this.MouseMove += new MouseEventHandler(Diamond_MouseMove);
             this.RenderTransform = new TranslateTransform();
+            this.direction = Direction.Nothing;
+
+            this.ImageSource = ImagePath;
+            this.Column = Column;
+            this.Row = Row;
+            this.Type = Type;
         }
 
         void Diamond_MouseMove(object sender, MouseEventArgs e)
@@ -53,54 +61,57 @@ namespace SilverlightDiamond
                 Point mousePoint = e.GetPosition(null);
                 double XCha = mousePoint.X - mouseUpBeforePoint.X;
                 double YCha = mousePoint.Y - mouseUpBeforePoint.Y;
+                double absXCha = Math.Abs(XCha);
+                double absYCha = Math.Abs(YCha);
                 #region 判断移动方向
-                if (XCha > 20 && YCha < 20)
+                if (absXCha > 20 || absYCha > 20)
                 {
-                    if (Math.Abs(XCha) > Math.Abs(YCha))
+                    if (XCha > 20 && YCha < 20)
                     {
-                        this.direction = Direction.Right;
+                        if (absXCha > absYCha)
+                        {
+                            this.direction = Direction.Right;
+                        }
+                        else
+                        {
+                            this.direction = Direction.Up;
+                        }
                     }
-                    else
+                    else if (XCha > 20 && YCha > 20)
                     {
-                        this.direction = Direction.Left;
+                        if (absXCha > absYCha)
+                        {
+                            this.direction = Direction.Right;
+                        }
+                        else
+                        {
+                            this.direction = Direction.Down;
+                        }
                     }
-                }
-                else if (XCha > 20 && YCha > 20)
-                {
-                    if (Math.Abs(XCha) > Math.Abs(YCha))
+                    else if (XCha < 20 && YCha > 20)
                     {
-                        this.direction = Direction.Right;
+                        if (absXCha > absYCha)
+                        {
+                            this.direction = Direction.Left;
+                        }
+                        else
+                        {
+                            this.direction = Direction.Down;
+                        }
                     }
-                    else
+                    else if (XCha < 20 && YCha < 20)
                     {
-                        this.direction = Direction.Down;
-                    }
-                }
-                else if (XCha < 20 && YCha > 20)
-                {
-                    if (Math.Abs(XCha) > Math.Abs(YCha))
-                    {
-                        this.direction = Direction.Left;
-                    }
-                    else
-                    {
-                        this.direction = Direction.Down;
-                    }
-                }
-                else if (XCha < 20 && YCha < 20)
-                {
-                    if (Math.Abs(XCha) > Math.Abs(YCha))
-                    {
-                        this.direction = Direction.Left;
-                    }
-                    else
-                    {
-                        this.direction = Direction.Up;
+                        if (absXCha > absYCha)
+                        {
+                            this.direction = Direction.Left;
+                        }
+                        else
+                        {
+                            this.direction = Direction.Up;
+                        }
                     }
                 }
                 #endregion
-
-
             }
 
         }
@@ -110,6 +121,7 @@ namespace SilverlightDiamond
             Diamond dia = sender as Diamond;
             dia.ReleaseMouseCapture();
             isMouseLeftButtonDown = false;
+            this.direction = Direction.Nothing;
         }
 
         void Diamond_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
