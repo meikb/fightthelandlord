@@ -27,7 +27,19 @@ namespace SilverlightDiamond
             }
         }
 
-        private bool isMouseLeftButtonDown;
+        public bool isMouseLeftButtonDown
+        {
+            get
+            {
+                return _isMouseLeftButtonDown;
+            }
+            set
+            {
+                _isMouseLeftButtonDown = value;
+            }
+        }
+
+        private bool _isMouseLeftButtonDown;
 
         private Point mouseUpBeforePoint;
 
@@ -111,6 +123,10 @@ namespace SilverlightDiamond
                         }
                     }
                 }
+                else
+                {
+                    this.direction = Direction.Nothing;
+                }
                 #endregion
             }
 
@@ -130,6 +146,13 @@ namespace SilverlightDiamond
             dia.CaptureMouse();
             isMouseLeftButtonDown = true;
             mouseUpBeforePoint = e.GetPosition(null);
+        }
+
+        void PlayAnimation()
+        {
+            Storyboard sb = new Storyboard();
+            DoubleAnimation da = new DoubleAnimation();
+
         }
 
     }

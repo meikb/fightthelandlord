@@ -8,12 +8,16 @@
 	<UserControl.Resources>
 		<Storyboard x:Name="sbChangeImage" Completed="sbChangeImage_Completed" >
             <DoubleAnimation x:Name="daChange1"
-                To="64" FillBehavior="Stop" AutoReverse="True"
 				Duration="0:0:0.3"/>
-            <!--<DoubleAnimation x:Name="daChange2"
-                To="-64"
-                Duration="0:0:0.5"/>-->
+            <DoubleAnimation x:Name="daChange2"
+                Duration="0:0:0.3"/>
 		</Storyboard>
+        <Storyboard x:Name="sbGoBackImage" >
+            <DoubleAnimation x:Name="daGoBack1"
+                             Duration="0:0:0.3" />
+            <DoubleAnimation x:Name="daGoBack2"
+                             Duration="0:0:0.3" />
+        </Storyboard>
 	</UserControl.Resources>
 	<StackPanel x:Name="LayoutRoot" UseLayoutRounding="True" Orientation="Horizontal">
 		<Grid x:Name="gridGameMain" UseLayoutRounding="True" HorizontalAlignment="Left" Width="576" MouseLeftButtonDown="gridGameMain_MouseLeftButtonDown" MouseLeftButtonUp="gridGameMain_MouseLeftButtonUp" MouseMove="gridGameMain_MouseMove">
