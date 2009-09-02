@@ -43,6 +43,8 @@ namespace SilverlightDiamond
 
         private Point mouseUpBeforePoint;
 
+        private Action<Diamond> callBack;
+
         public int Type { get; set; }
 
         public int Column { get; set; }
@@ -64,6 +66,10 @@ namespace SilverlightDiamond
             this.Column = Column;
             this.Row = Row;
             this.Type = Type;
+
+            Storyboard sb = new Storyboard();
+            sb.Children.Add(new DoubleAnimation());
+            Resources.Add("sb", sb);
         }
 
         void Diamond_MouseMove(object sender, MouseEventArgs e)
@@ -137,7 +143,7 @@ namespace SilverlightDiamond
             Diamond dia = sender as Diamond;
             dia.ReleaseMouseCapture();
             isMouseLeftButtonDown = false;
-            this.direction = Direction.Nothing;
+            //this.direction = Direction.Nothing;
         }
 
         void Diamond_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -148,11 +154,36 @@ namespace SilverlightDiamond
             mouseUpBeforePoint = e.GetPosition(null);
         }
 
+        public void Disponse(Action<Diamond> callback)
+        {
+            PlayAnimation();
+            this.callBack = callback;
+        }
+
         void PlayAnimation()
         {
-            Storyboard sb = new Storyboard();
-            DoubleAnimation da = new DoubleAnimation();
+            Storyboard sb = (Storyboard)Resources["sb"];
+            DoubleAnimation da = (DoubleAnimation)sb.Children[0];
+            try
+            {
+                Storyboard.SetTarget(da, this);
+                Storyboard.SetTargetProperty(da, new PropertyPath("Opacity"));
+            }
+            catch
+            {
+            }
+            da.To = 0;
+            da.Duration = new Duration(TimeSpan.FromMilliseconds(300.0));
+            sb.Completed += sb_Completed;
+            sb.Begin();
+        }
 
+        void sb_Completed(object sender, EventArgs e)
+        {
+            var sb = sender as Storyboard;
+            sb.Completed -= sb_Completed;
+            sb.Stop();
+            this.callBack(this);
         }
 
     }
