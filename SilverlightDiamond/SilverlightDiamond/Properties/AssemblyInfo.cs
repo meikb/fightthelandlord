@@ -5,12 +5,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SilverlightDiamond")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("钻石迷情")]
+[assembly: AssemblyDescription("Silverlight初学者试手之作,望高人指教.QQ:234446552")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("CHINA")]
-[assembly: AssemblyProduct("SilverlightDiamond")]
-[assembly: AssemblyCopyright("Copyright © CHINA 2009")]
+[assembly: AssemblyCompany("猪笨无罪")]
+[assembly: AssemblyProduct("钻石迷情")]
+[assembly: AssemblyCopyright("猪笨无罪版权所有")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

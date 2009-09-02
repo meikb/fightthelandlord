@@ -6,17 +6,17 @@
 	x:Class="SilverlightDiamond.MainPage"
 	Width="800" Height="640">
 	<UserControl.Resources>
-		<Storyboard x:Name="sbChangeImage" Completed="sbChangeImage_Completed" >
+		<Storyboard x:Name="sbChangeImage" Duration="0:0:0.3" >
             <DoubleAnimation x:Name="daChange1"
 				Duration="0:0:0.3"/>
             <DoubleAnimation x:Name="daChange2"
                 Duration="0:0:0.3"/>
 		</Storyboard>
-        <Storyboard x:Name="sbGoBackImage" >
+        <Storyboard x:Name="sbGoBackImage" Duration="0:0:0.3">
             <DoubleAnimation x:Name="daGoBack1"
-                             Duration="0:0:0.3" />
+                Duration="0:0:0.3"/>
             <DoubleAnimation x:Name="daGoBack2"
-                             Duration="0:0:0.3" />
+                Duration="0:0:0.3"/>
         </Storyboard>
 	</UserControl.Resources>
 	<StackPanel x:Name="LayoutRoot" UseLayoutRounding="True" Orientation="Horizontal">
