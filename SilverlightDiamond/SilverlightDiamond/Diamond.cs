@@ -39,6 +39,8 @@ namespace SilverlightDiamond
             }
         }
 
+        public bool TestMode { get; set; }
+
         private bool _isMouseLeftButtonDown;
 
         private Point mouseUpBeforePoint;
@@ -47,9 +49,42 @@ namespace SilverlightDiamond
 
         public int Type { get; set; }
 
-        public int Column { get; set; }
+        private int _column;
 
-        public int Row { get; set; }
+        public int Column
+        {
+            get
+            {
+                return this._column;
+            }
+            set
+            {
+                Grid.SetColumn(this, value);
+                this._column = value;
+                if (TestMode)
+                {
+                    UpdateTestInfo();
+                }
+            }
+        }
+
+        private int _row;
+        public int Row
+        {
+            get
+            {
+                return this._row;
+            }
+            set
+            {
+                Grid.SetRow(this, value);
+                this._row = value;
+                if (TestMode)
+                {
+                    UpdateTestInfo();
+                }
+            }
+        }
 
         public Direction direction { get; set; }
 
@@ -184,6 +219,21 @@ namespace SilverlightDiamond
             sb.Completed -= sb_Completed;
             sb.Stop();
             this.callBack(this);
+        }
+
+        public void OnTestMode()
+        {
+            TextBlock tb = new TextBlock();
+            tb.Text = string.Format("行:{0},列:{1}", this.Row.ToString(), this.Column.ToString());
+            tb.FontSize = 12;
+            this.Children.Add(tb);
+            this.TestMode = true;
+        }
+
+        public void UpdateTestInfo()
+        {
+            TextBlock tb = this.Children[0] as TextBlock;
+            tb.Text = string.Format("行:{0},列:{1}", this.Row.ToString(), this.Column.ToString());
         }
 
     }
