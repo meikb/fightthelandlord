@@ -84,8 +84,8 @@ namespace SilverlightDiamond
                         {
                             firstDiamond = movedDiamond;
                             bool canChange = CheckAround(secondDiamond, false);
-                            ChangeImage(firstDiamond, secondDiamond, !canChange);
                             AnimationIsPlaying = true;
+                            ChangeImage(firstDiamond, secondDiamond, !canChange);
                         }
                     }
                 }
@@ -101,7 +101,7 @@ namespace SilverlightDiamond
                 for (int i = diamond.Row + 1; i <= 9; i++)
                 {
                     Diamond tempDiamond = diamonds[diamond.Column, i];
-                    if (tempDiamond.Type == firstDiamond.Type)
+                    if (tempDiamond!= null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedRowDiamond.Add(tempDiamond);
                     }
@@ -116,7 +116,7 @@ namespace SilverlightDiamond
                 for (int i = diamond.Row - 1; i >= 0; i--)
                 {
                     Diamond tempDiamond = diamonds[diamond.Column, i];
-                    if (tempDiamond.Type == firstDiamond.Type)
+                    if (tempDiamond != null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedRowDiamond.Add(tempDiamond);
                     }
@@ -131,7 +131,7 @@ namespace SilverlightDiamond
                 for (int i = diamond.Column + 1; i <= 8; i++)
                 {
                     Diamond tempDiamond = diamonds[i, diamond.Row];
-                    if (tempDiamond.Type == firstDiamond.Type)
+                    if (tempDiamond != null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedColumnDiamond.Add(tempDiamond);
                     }
@@ -146,7 +146,7 @@ namespace SilverlightDiamond
                 for (int i = diamond.Column - 1; i >= 0; i--)
                 {
                     Diamond tempDiamond = diamonds[i, diamond.Row];
-                    if (tempDiamond.Type == firstDiamond.Type)
+                    if (tempDiamond != null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedColumnDiamond.Add(tempDiamond);
                     }
@@ -202,28 +202,32 @@ namespace SilverlightDiamond
                     if (firstDiamond.Row != 0)
                     {
                         secondDiamond = diamonds[firstDiamond.Column, firstDiamond.Row - 1];
-                        secondDiamond.direction = Direction.Down;
+                        if (secondDiamond != null)
+                            secondDiamond.direction = Direction.Down;
                     }
                     break;
                 case Direction.Down:
                     if (firstDiamond.Row != 9)
                     {
                         secondDiamond = diamonds[firstDiamond.Column, firstDiamond.Row + 1];
-                        secondDiamond.direction = Direction.Up;
+                        if (secondDiamond != null)
+                            secondDiamond.direction = Direction.Up;
                     }
                     break;
                 case Direction.Left:
                     if (firstDiamond.Column != 0)
                     {
                         secondDiamond = diamonds[firstDiamond.Column - 1, firstDiamond.Row];
-                        secondDiamond.direction = Direction.Right;
+                        if (secondDiamond != null)
+                            secondDiamond.direction = Direction.Right;
                     }
                     break;
                 case Direction.Right:
                     if (firstDiamond.Column != 8)
                     {
                         secondDiamond = diamonds[firstDiamond.Column + 1, firstDiamond.Row];
-                        secondDiamond.direction = Direction.Left;
+                        if (secondDiamond != null)
+                            secondDiamond.direction = Direction.Left;
                     }
                     break;
             }
@@ -311,6 +315,8 @@ namespace SilverlightDiamond
             ChangeZIndex(secondDiamond, firstDiamond);
             sbGoBackImage.Completed += sbGoBackImage_Completed;
             sbGoBackImage.Begin();
+            firstDiamond.direction = Direction.Nothing;
+            secondDiamond.direction = Direction.Nothing;
             //ShowTranslateTransformXandY();
         }
 
@@ -318,11 +324,13 @@ namespace SilverlightDiamond
         {
             sbGoBackImage.Completed -= sbGoBackImage_Completed;
             sbGoBackImage.Stop();
+            AnimationIsPlaying = false;
             firstDiamond.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
             firstDiamond.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
             secondDiamond.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
             secondDiamond.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
-            AnimationIsPlaying = false;
+            firstDiamond.direction = Direction.Nothing;
+            secondDiamond.direction = Direction.Nothing;
         }
 
         private void sbChangeImage_Completed_Success(object sender, EventArgs e)
@@ -332,13 +340,16 @@ namespace SilverlightDiamond
             double firstx = (double)firstDiamond.RenderTransform.GetValue(TranslateTransform.XProperty);
             double firsty = (double)firstDiamond.RenderTransform.GetValue(TranslateTransform.YProperty);
             sbChangeImage.Stop();
+            AnimationIsPlaying = false;
             firstDiamond.RenderTransform.SetValue(TranslateTransform.XProperty, firstx);
             firstDiamond.RenderTransform.SetValue(TranslateTransform.YProperty, firsty);
             CheckAround(secondDiamond, true);
+            diamonds[secondDiamond.Column, secondDiamond.Row] = null;
             secondDiamond.Row = firstDiamond.Row;
             secondDiamond.Column = firstDiamond.Column;
             diamonds[firstDiamond.Column, firstDiamond.Row] = secondDiamond;
-            AnimationIsPlaying = false;
+            firstDiamond.direction = Direction.Nothing;
+            secondDiamond.direction = Direction.Nothing;
         }
 
         private void InitGame()
