@@ -378,6 +378,22 @@ namespace SilverlightDiamond
             Canvas.SetZIndex(firstDiamond, secDiaZindex + 1);
         }
 
+        private void FillNull()
+        {
+            for (int i = 0; i <= 8; i++)
+            {
+                int nullNum = 0;
+                for (int j = 0; i <= 9; j++)
+                {
+                    if (diamonds[i, j] == null)
+                    {
+                        nullNum++;
+                        //todo 填充被消除的图案
+                    }
+                }
+            }
+        }
+
         private void ShowTranslateTransformXandY()
         {
             MessageBox.Show(firstDiamond.RenderTransform.GetValue(TranslateTransform.XProperty).ToString());
