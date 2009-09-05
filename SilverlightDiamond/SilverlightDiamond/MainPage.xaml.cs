@@ -350,6 +350,7 @@ namespace SilverlightDiamond
             diamonds[firstDiamond.Column, firstDiamond.Row] = secondDiamond;
             firstDiamond.direction = Direction.Nothing;
             secondDiamond.direction = Direction.Nothing;
+            FillNull();
         }
 
         private void InitGame()
@@ -383,15 +384,42 @@ namespace SilverlightDiamond
             for (int i = 0; i <= 8; i++)
             {
                 int nullNum = 0;
-                for (int j = 0; i <= 9; j++)
+                int row = 0;
+                for (int j = 0; j <= 9; j++)
                 {
                     if (diamonds[i, j] == null)
                     {
+                        if (j > row) row = j;
                         nullNum++;
                         //todo 填充被消除的图案
                     }
                 }
+                for (int k = row - nullNum; k >=0 ; k--)
+                {
+                    DoubleAnimation da = new DoubleAnimation();
+                    Storyboard.SetTarget(da, diamonds[i, k].RenderTransform);
+                    Storyboard.SetTargetProperty(da, new PropertyPath("Y"));
+                    da.To = 64 * nullNum;
+                    da.Duration = new Duration(TimeSpan.FromMilliseconds(300 * nullNum));
+                    sbFill.Children.Add(da);
+                }
+                for (int l = nullNum - 1; l >= 0; l--)
+                {
+                    int randomNum = new Random().Next(0, 16);
+                    string imagePath = string.Format("images/{0}.png", randomNum);
+                    diamonds[i, l] = new Diamond(imagePath, i, l, randomNum);
+                    Diamond tempdia = diamonds[i, l] ;
+                    tempdia.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
+                    DoubleAnimation da = new DoubleAnimation();
+                    da.Duration = new Duration(TimeSpan.FromMilliseconds(300 * nullNum));
+                    da.To = 0;
+                    Storyboard.SetTarget(da, tempdia.RenderTransform);
+                    Storyboard.SetTargetProperty(da, new PropertyPath("Y"));
+                    sbFill.Children.Add(da);
+                    this.gridGameMain.Children.Add(tempdia);
+                }
             }
+            sbFill.Begin();
         }
 
         private void ShowTranslateTransformXandY()
@@ -400,6 +428,12 @@ namespace SilverlightDiamond
             MessageBox.Show(firstDiamond.RenderTransform.GetValue(TranslateTransform.YProperty).ToString());
             MessageBox.Show(secondDiamond.RenderTransform.GetValue(TranslateTransform.XProperty).ToString());
             MessageBox.Show(secondDiamond.RenderTransform.GetValue(TranslateTransform.YProperty).ToString());
+        }
+
+        private void sbFill_Completed(object sender, EventArgs e)
+        {
+            Storyboard sb = sender as Storyboard;
+            sb.Stop();
         }
 	}
 }
