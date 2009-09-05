@@ -18,8 +18,7 @@
             <DoubleAnimation x:Name="daGoBack2"
                 Duration="0:0:0.3"/>
         </Storyboard>
-        <Storyboard x:Name="sbFill">
-            <DoubleAnimation x:Name="daFill"/>
+        <Storyboard x:Name="sbFill" Completed="sbFill_Completed" >
         </Storyboard>
 	</UserControl.Resources>
 	<StackPanel x:Name="LayoutRoot" UseLayoutRounding="True" Orientation="Horizontal">
