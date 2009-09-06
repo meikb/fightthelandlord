@@ -14,9 +14,23 @@ namespace SilverlightDiamond
 {
 	public partial class MainPage : UserControl
 	{
-        public Transform imageTransform { get; set; }
-        public Diamond[,] diamonds { get; set; }
+
+        public Diamond this[int Column, int Row]
+        {
+            get
+            {
+                return (Diamond)gridGameMain.Children[Column * 10 + Row];
+            }
+            set
+            {
+                gridGameMain.Children[Column * 10 + Row] = (Diamond)value;
+                //todo 值不在预期的范围内。
+            }
+
+        }
         private Diamond _firstDiamond, _secondDiamond;
+        private List<Diamond> changedDiamonds;
+        private List<Diamond> removedDiamonds;
         private Diamond firstDiamond
         {
             get
@@ -92,15 +106,17 @@ namespace SilverlightDiamond
             }
         }
 
+
         private bool CheckAround(Diamond diamond, bool removeNow)
         {
             List<Diamond> removedRowDiamond = new List<Diamond>();
             List<Diamond> removedColumnDiamond = new List<Diamond>();
+            removedDiamonds = new List<Diamond>();
             if (firstDiamond.direction != Direction.Up)
             {
                 for (int i = diamond.Row + 1; i <= 9; i++)
                 {
-                    Diamond tempDiamond = diamonds[diamond.Column, i];
+                    Diamond tempDiamond = this[diamond.Column, i];
                     if (tempDiamond!= null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedRowDiamond.Add(tempDiamond);
@@ -115,7 +131,7 @@ namespace SilverlightDiamond
             {
                 for (int i = diamond.Row - 1; i >= 0; i--)
                 {
-                    Diamond tempDiamond = diamonds[diamond.Column, i];
+                    Diamond tempDiamond = this[diamond.Column, i];
                     if (tempDiamond != null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedRowDiamond.Add(tempDiamond);
@@ -130,7 +146,7 @@ namespace SilverlightDiamond
             {
                 for (int i = diamond.Column + 1; i <= 8; i++)
                 {
-                    Diamond tempDiamond = diamonds[i, diamond.Row];
+                    Diamond tempDiamond = this[diamond.Column, i];
                     if (tempDiamond != null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedColumnDiamond.Add(tempDiamond);
@@ -145,7 +161,7 @@ namespace SilverlightDiamond
             {
                 for (int i = diamond.Column - 1; i >= 0; i--)
                 {
-                    Diamond tempDiamond = diamonds[i, diamond.Row];
+                    Diamond tempDiamond = this[diamond.Column, i];
                     if (tempDiamond != null && tempDiamond.Type == firstDiamond.Type)
                     {
                         removedColumnDiamond.Add(tempDiamond);
@@ -159,7 +175,7 @@ namespace SilverlightDiamond
             Action<Diamond> callBack = new Action<Diamond>(delegate(Diamond removediamond) {
                 if (gridGameMain.Children.Contains(removediamond))
                 {
-                    gridGameMain.Children.Remove(removediamond);
+                    removediamond = null;
                 } });
 
             if (removedRowDiamond.Count >= 2 || removedColumnDiamond.Count >= 2)
@@ -172,6 +188,7 @@ namespace SilverlightDiamond
                         foreach (var tempDiamond in removedRowDiamond)
                         {
                             tempDiamond.Disponse(callBack);
+                            removedDiamonds.Add(tempDiamond);
                         }
                     }
                     if (removedColumnDiamond.Count >= 2)
@@ -180,6 +197,7 @@ namespace SilverlightDiamond
                         foreach (var tempDiamond in removedColumnDiamond)
                         {
                             tempDiamond.Disponse(callBack);
+                            removedDiamonds.Add(tempDiamond);
                         }
                     }
                 }
@@ -201,7 +219,7 @@ namespace SilverlightDiamond
                 case Direction.Up:
                     if (firstDiamond.Row != 0)
                     {
-                        secondDiamond = diamonds[firstDiamond.Column, firstDiamond.Row - 1];
+                        secondDiamond = this[firstDiamond.Column, firstDiamond.Row - 1];
                         if (secondDiamond != null)
                             secondDiamond.direction = Direction.Down;
                     }
@@ -209,7 +227,7 @@ namespace SilverlightDiamond
                 case Direction.Down:
                     if (firstDiamond.Row != 9)
                     {
-                        secondDiamond = diamonds[firstDiamond.Column, firstDiamond.Row + 1];
+                        secondDiamond = this[firstDiamond.Column, firstDiamond.Row + 1];
                         if (secondDiamond != null)
                             secondDiamond.direction = Direction.Up;
                     }
@@ -217,7 +235,7 @@ namespace SilverlightDiamond
                 case Direction.Left:
                     if (firstDiamond.Column != 0)
                     {
-                        secondDiamond = diamonds[firstDiamond.Column - 1, firstDiamond.Row];
+                        secondDiamond = this[firstDiamond.Column - 1, firstDiamond.Row];
                         if (secondDiamond != null)
                             secondDiamond.direction = Direction.Right;
                     }
@@ -225,7 +243,7 @@ namespace SilverlightDiamond
                 case Direction.Right:
                     if (firstDiamond.Column != 8)
                     {
-                        secondDiamond = diamonds[firstDiamond.Column + 1, firstDiamond.Row];
+                        secondDiamond = this[firstDiamond.Column + 1, firstDiamond.Row];
                         if (secondDiamond != null)
                             secondDiamond.direction = Direction.Left;
                     }
@@ -335,7 +353,6 @@ namespace SilverlightDiamond
 
         private void sbChangeImage_Completed_Success(object sender, EventArgs e)
         {
-            //to 完善动画
             sbChangeImage.Completed -= sbChangeImage_Completed_Success;
             double firstx = (double)firstDiamond.RenderTransform.GetValue(TranslateTransform.XProperty);
             double firsty = (double)firstDiamond.RenderTransform.GetValue(TranslateTransform.YProperty);
@@ -344,27 +361,28 @@ namespace SilverlightDiamond
             firstDiamond.RenderTransform.SetValue(TranslateTransform.XProperty, firstx);
             firstDiamond.RenderTransform.SetValue(TranslateTransform.YProperty, firsty);
             CheckAround(secondDiamond, true);
-            diamonds[secondDiamond.Column, secondDiamond.Row] = null;
             secondDiamond.Row = firstDiamond.Row;
             secondDiamond.Column = firstDiamond.Column;
-            diamonds[firstDiamond.Column, firstDiamond.Row] = secondDiamond;
+            this[firstDiamond.Column, firstDiamond.Row] = secondDiamond;
             firstDiamond.direction = Direction.Nothing;
             secondDiamond.direction = Direction.Nothing;
+            foreach (var tempdia in removedDiamonds)
+            {
+                this[tempdia.Column, tempdia.Row] = null;
+            }
             FillNull();
         }
 
         private void InitGame()
         {
-            diamonds = new Diamond[9, 10];
             Random r = new Random();
             for (int i = 0; i < 9; i++)
             {
                 for (int j = 0; j < 10; j++)
                 {
-                    int randomNum = r.Next(1,16);
+                    int randomNum = r.Next(1,6);
                     string imagePath = string.Format("images/{0}.png", randomNum);
-                    diamonds[i, j] = new Diamond(imagePath, i, j, randomNum);
-                    var tempDiamond = diamonds[i, j];
+                    var tempDiamond = new Diamond(imagePath, i, j, randomNum);
                     tempDiamond.Column = i; tempDiamond.Row = j;
                     gridGameMain.Children.Add(tempDiamond);
                     tempDiamond.OnTestMode(); //测试状态
@@ -379,36 +397,50 @@ namespace SilverlightDiamond
             Canvas.SetZIndex(firstDiamond, secDiaZindex + 1);
         }
 
+        //private void UpdateMatrix()
+        //{
+        //    foreach (var item in gridGameMain.Children)
+        //    {
+        //        Diamond dia = (Diamond)item;
+        //        diamonds[dia.Column, dia.Row] = dia;
+        //    }
+        //}
+
         private void FillNull()
         {
+            changedDiamonds = new List<Diamond>();
             for (int i = 0; i <= 8; i++)
             {
                 int nullNum = 0;
                 int row = 0;
                 for (int j = 0; j <= 9; j++)
                 {
-                    if (diamonds[i, j] == null)
+                    if (this[i, j] == null)
                     {
                         if (j > row) row = j;
                         nullNum++;
                         //todo 填充被消除的图案
                     }
                 }
-                for (int k = row - nullNum; k >=0 ; k--)
+                for (int k = row - nullNum; k >=0 && nullNum != 0 ; k--)
                 {
                     DoubleAnimation da = new DoubleAnimation();
-                    Storyboard.SetTarget(da, diamonds[i, k].RenderTransform);
+                    Diamond tempdia = this[i, k];
+                    Storyboard.SetTarget(da, tempdia.RenderTransform);
                     Storyboard.SetTargetProperty(da, new PropertyPath("Y"));
-                    da.To = 64 * nullNum;
+                    tempdia.Row = tempdia.Row + nullNum;
+                    tempdia.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
+                    da.To = 0;
                     da.Duration = new Duration(TimeSpan.FromMilliseconds(300 * nullNum));
                     sbFill.Children.Add(da);
+                    changedDiamonds.Add(tempdia);
                 }
-                for (int l = nullNum - 1; l >= 0; l--)
+                for (int l = nullNum - 1; l >= 0 && nullNum != 0; l--)
                 {
                     int randomNum = new Random().Next(0, 16);
                     string imagePath = string.Format("images/{0}.png", randomNum);
-                    diamonds[i, l] = new Diamond(imagePath, i, l, randomNum);
-                    Diamond tempdia = diamonds[i, l] ;
+                    this[i, l] = new Diamond(imagePath, i, l, randomNum);
+                    Diamond tempdia = this[i, l] ;
                     tempdia.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
                     DoubleAnimation da = new DoubleAnimation();
                     da.Duration = new Duration(TimeSpan.FromMilliseconds(300 * nullNum));
@@ -417,6 +449,7 @@ namespace SilverlightDiamond
                     Storyboard.SetTargetProperty(da, new PropertyPath("Y"));
                     sbFill.Children.Add(da);
                     this.gridGameMain.Children.Add(tempdia);
+                    changedDiamonds.Add(tempdia);
                 }
             }
             sbFill.Begin();
@@ -434,6 +467,21 @@ namespace SilverlightDiamond
         {
             Storyboard sb = sender as Storyboard;
             sb.Stop();
+            sb.Children.Clear();
+            foreach (var tempdia in changedDiamonds)
+            {
+                tempdia.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
+            }
+        }
+
+        private Diamond GetDiamondByMatrix(int Column, int Row)
+        {
+            return (Diamond)gridGameMain.Children[Column * 10 + Row];
+        }
+
+        private void SetDiamondByMatrix(int Column, int Row, Diamond diamondValue)
+        {
+            gridGameMain.Children[Column * 10 + Row] = diamondValue;
         }
 	}
 }
