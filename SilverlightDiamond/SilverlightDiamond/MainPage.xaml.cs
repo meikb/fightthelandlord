@@ -19,11 +19,11 @@ namespace SilverlightDiamond
         {
             get
             {
-                return (Diamond)gridGameMain.Children[Column * 10 + Row];
+                return (Diamond)gridGameMain.Children[Row * 10 + Column];
             }
             set
             {
-                gridGameMain.Children[Column * 10 + Row] = (Diamond)value;
+                gridGameMain.Children[Row * 10 + Column] = value;
                 //todo 值不在预期的范围内。
             }
 
