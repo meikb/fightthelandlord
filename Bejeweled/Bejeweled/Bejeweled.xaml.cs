@@ -37,7 +37,9 @@ namespace Bejeweled
             }
             set
             {
-                this.LayoutRoot.Children[Row * 9 + Column] = (UIElement)value;
+                int index = Row * 9 + Column;
+                this.LayoutRoot.Children.RemoveAt(index);
+                this.LayoutRoot.Children.Insert(index, value); //todo 这里还是有问题呀...
             }
         }
 
@@ -70,6 +72,7 @@ namespace Bejeweled
         {
             this[bijou1.Column, bijou1.Row] = bijou2;
             this[bijou2.Column, bijou2.Row] = bijou1;
+
             int bijouColumn = bijou1.Column;
             int bijouRow = bijou1.Row;
             bijou1.Column = bijou2.Column;
