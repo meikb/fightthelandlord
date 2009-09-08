@@ -38,8 +38,8 @@ namespace Bejeweled
             set
             {
                 int index = Row * 9 + Column;
-                this.LayoutRoot.Children.RemoveAt(index);
-                this.LayoutRoot.Children.Insert(index, value); //todo 这里还是有问题呀...
+                this.LayoutRoot.Children.Remove(value);
+                this.LayoutRoot.Children.Insert(index, value);
             }
         }
 
@@ -117,7 +117,6 @@ namespace Bejeweled
                 this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
                 this.BeginAnimation();
             }
-            //bijou.Children.Add(new TextBlock() { Text = "UP" });
         }
         /// <summary>
         /// 将指定的宝石向下移动一格
@@ -125,7 +124,26 @@ namespace Bejeweled
         /// <param name="bijou">要移动的宝石</param>
         public void Down(bijou bijou)
         {
-            bijou.Children.Add(new TextBlock() { Text = "down" });
+            var near = GetbijouByDirection(bijou, Direction.Down);
+            if (near != null)
+            {
+                this.ExchangeLocation(bijou, near); //调换两个宝石的位置
+                AddingZindexBybijou(bijou, near); //让bijou的Zindex比near大
+                bijou.RenderTransform = new TranslateTransform();
+                bijou.RenderTransform.SetValue(TranslateTransform.YProperty, -64.0); //实际位置已经往上移了一位,所以往下平移64
+                near.RenderTransform = new TranslateTransform();
+                near.RenderTransform.SetValue(TranslateTransform.YProperty, 64.0); //实际位置已经往下移了一位,所以网上平移64
+                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
+                });
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+                this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+                this.BeginAnimation();
+            }
         }
         /// <summary>
         /// 将指定的宝石向左移动一格
@@ -133,7 +151,26 @@ namespace Bejeweled
         /// <param name="bijou">要移动的宝石</param>
         public void Left(bijou bijou)
         {
-            bijou.Children.Add(new TextBlock() { Text = "left" });
+            var near = GetbijouByDirection(bijou, Direction.Left);
+            if (near != null)
+            {
+                this.ExchangeLocation(bijou, near); //调换两个宝石的位置
+                AddingZindexBybijou(bijou, near); //让bijou的Zindex比near大
+                bijou.RenderTransform = new TranslateTransform();
+                bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 64.0); //实际位置已经往上移了一位,所以往下平移64
+                near.RenderTransform = new TranslateTransform();
+                near.RenderTransform.SetValue(TranslateTransform.XProperty, -64.0); //实际位置已经往下移了一位,所以网上平移64
+                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
+                });
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+                this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+                this.BeginAnimation();
+            }
         }
         /// <summary>
         /// 将指定的宝石向右移动一格
@@ -141,7 +178,26 @@ namespace Bejeweled
         /// <param name="bijou">要移动的宝石</param>
         public void Right(bijou bijou)
         {
-            bijou.Children.Add(new TextBlock() { Text = "right" });
+            var near = GetbijouByDirection(bijou, Direction.Right);
+            if (near != null)
+            {
+                this.ExchangeLocation(bijou, near); //调换两个宝石的位置
+                AddingZindexBybijou(bijou, near); //让bijou的Zindex比near大
+                bijou.RenderTransform = new TranslateTransform();
+                bijou.RenderTransform.SetValue(TranslateTransform.XProperty, -64.0); //实际位置已经往上移了一位,所以往下平移64
+                near.RenderTransform = new TranslateTransform();
+                near.RenderTransform.SetValue(TranslateTransform.XProperty, 64.0); //实际位置已经往下移了一位,所以网上平移64
+                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
+                });
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+                this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+                this.BeginAnimation();
+            }
         }
 
         /// <summary>
