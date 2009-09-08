@@ -58,7 +58,7 @@ namespace Bejeweled
             {
                 for (int column = 0; column < 9; column++)
                 {
-                    int type = r.Next(1,6);
+                    int type = r.Next(1,11);
                     this.LayoutRoot.Children.Add(new bijou(string.Format("Images/{0}.png", type), type, column, row));
                 }
             }
@@ -106,15 +106,33 @@ namespace Bejeweled
                 bijou.RenderTransform.SetValue(TranslateTransform.YProperty, 64.0); //实际位置已经往上移了一位,所以往下平移64
                 near.RenderTransform = new TranslateTransform();
                 near.RenderTransform.SetValue(TranslateTransform.YProperty, -64.0); //实际位置已经往下移了一位,所以网上平移64
-                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+
+                EventHandler neareh = new EventHandler((object sender1, EventArgs ea1) =>
                 {
                     var da = sender1 as DoubleAnimation;
                     sbAll.Children.Remove(da);
                     bijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0); //播放完后还原平移变换
                     near.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
                 });
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
-                this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+
+                EventHandler bijoueh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
+                    var erasableBjous = GetErasablebijou();
+                    if (erasableBjous == null)
+                    {
+                        Up(near);
+                    }
+                    else
+                    {
+                        //todo 移除相同宝石
+                    }
+                });
+                this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -133,15 +151,33 @@ namespace Bejeweled
                 bijou.RenderTransform.SetValue(TranslateTransform.YProperty, -64.0); //实际位置已经往上移了一位,所以往下平移64
                 near.RenderTransform = new TranslateTransform();
                 near.RenderTransform.SetValue(TranslateTransform.YProperty, 64.0); //实际位置已经往下移了一位,所以网上平移64
-                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+
+                EventHandler neareh = new EventHandler((object sender1, EventArgs ea1) =>
                 {
                     var da = sender1 as DoubleAnimation;
                     sbAll.Children.Remove(da);
                     bijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0); //播放完后还原平移变换
                     near.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
                 });
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
-                this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+
+                EventHandler bijoueh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
+                    var erasableBjous = GetErasablebijou();
+                    if (erasableBjous == null)
+                    {
+                        Down(near);
+                    }
+                    else
+                    {
+                        //todo 移除相同宝石
+                    }
+                });
+                this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -160,15 +196,33 @@ namespace Bejeweled
                 bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 64.0); //实际位置已经往上移了一位,所以往下平移64
                 near.RenderTransform = new TranslateTransform();
                 near.RenderTransform.SetValue(TranslateTransform.XProperty, -64.0); //实际位置已经往下移了一位,所以网上平移64
-                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+
+                EventHandler neareh = new EventHandler((object sender1, EventArgs ea1) =>
                 {
                     var da = sender1 as DoubleAnimation;
                     sbAll.Children.Remove(da);
                     bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0); //播放完后还原平移变换
                     near.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
                 });
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
-                this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+
+                EventHandler bijoueh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
+                    var erasableBjous = GetErasablebijou();
+                    if (erasableBjous == null)
+                    {
+                        Left(near);
+                    }
+                    else
+                    {
+                        //todo 移除相同宝石
+                    }
+                });
+                this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -187,15 +241,33 @@ namespace Bejeweled
                 bijou.RenderTransform.SetValue(TranslateTransform.XProperty, -64.0); //实际位置已经往上移了一位,所以往下平移64
                 near.RenderTransform = new TranslateTransform();
                 near.RenderTransform.SetValue(TranslateTransform.XProperty, 64.0); //实际位置已经往下移了一位,所以网上平移64
-                EventHandler eh = new EventHandler((object sender1, EventArgs ea1) =>
+
+                EventHandler neareh = new EventHandler((object sender1, EventArgs ea1) =>
                 {
                     var da = sender1 as DoubleAnimation;
                     sbAll.Children.Remove(da);
                     bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0); //播放完后还原平移变换
                     near.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
                 });
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
-                this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), eh); //添加动画
+
+                EventHandler bijoueh = new EventHandler((object sender1, EventArgs ea1) =>
+                {
+                    var da = sender1 as DoubleAnimation;
+                    sbAll.Children.Remove(da);
+                    bijou.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0); //播放完后还原平移变换
+                    near.RenderTransform.SetValue(TranslateTransform.XProperty, 0.0);
+                    var erasableBjous = GetErasablebijou();
+                    if (erasableBjous == null)
+                    {
+                        Right(near);
+                    }
+                    else
+                    {
+                        //todo 移除相同宝石
+                    }
+                });
+                this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
+                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -273,7 +345,96 @@ namespace Bejeweled
         /// <returns>可以被消除的宝石列表,返回值为null表示不可消除</returns>
         public List<bijou> GetErasablebijou()
         {
-            return null;
+            List<bijou> columnSameBijou = new List<bijou>();
+            List<bijou> rowSameBijou = new List<bijou>();
+            #region 检测横着排列的是否可消除并保存可消除的宝石到columnSameBijou
+            for (int row = 0; row <= 8; row++)
+            {
+                int sameNum = 0;
+                for (int column = 0; column <= 8; column++)
+                {
+                    while (true)
+                    {
+                        if (column >= 8)
+                            break;
+                        if (this[column, row].Type == this[column + 1, row].Type)
+                        {
+                            sameNum++;
+                            column++;
+                        }
+                        else
+                        {
+                            if (sameNum >= 2)
+                            {
+                                for (; sameNum >= 0; sameNum--)
+                                {
+                                    columnSameBijou.Add(this[column - sameNum, row]);
+                                }
+                            }
+                            else
+                            {
+                                sameNum = 0;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            #endregion
+
+            #region 检测竖着排列的是否可消除并保存可消除的宝石到rowSameBijou
+            for (int column = 0; column <= 8; column++)
+            {
+                int sameNum = 0;
+                for (int row = 0; row <= 8; row++)
+                {
+                    while (true)
+                    {
+                        if (row >= 8)
+                            break;
+                        if (this[column, row].Type == this[column, row + 1].Type)
+                        {
+                            sameNum++;
+                            row++;
+                        }
+                        else
+                        {
+                            if (sameNum >= 2)
+                            {
+                                for (; sameNum >= 0; sameNum--)
+                                {
+                                    rowSameBijou.Add(this[column, row - sameNum]);
+                                }
+                            }
+                            else
+                            {
+                                sameNum = 0;
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            #endregion
+            #region 合并两个集合并返回
+            if (columnSameBijou.Count >= 3 || rowSameBijou.Count >= 3)
+            {
+                List<bijou> returnBijous = new List<bijou>();
+                foreach (var tempBijou in columnSameBijou)
+                {
+                    returnBijous.Add(tempBijou);
+                }
+                foreach (var tempBijou in rowSameBijou)
+                {
+                    returnBijous.Add(tempBijou);
+                }
+                return returnBijous;
+            }
+            else
+            {
+                return null;
+            }
+            #endregion
         }
         #region 事件处理程序
         private void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -367,7 +528,14 @@ namespace Bejeweled
             sb.Stop();
             AnimationIsPlaying = false;
         }
+
+        private void sbRollback_Completed(object sender, EventArgs e)
+        {
+
+        }
     }
+
+#region 方向枚举
     public enum Direction
     {
         Up = 1,
@@ -375,4 +543,5 @@ namespace Bejeweled
         Left = 3,
         Right = 4
     }
+#endregion
 }
