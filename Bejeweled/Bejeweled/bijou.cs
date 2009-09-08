@@ -72,6 +72,13 @@ namespace Bejeweled
         /// </summary>
         public bool isMouseLeftButtonDown { get; set; }
 
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="imageSource">图片路径</param>
+        /// <param name="type">类型</param>
+        /// <param name="column">列</param>
+        /// <param name="row">行</param>
         public bijou(string imageSource, int type, int column, int row)
         {
             this.ImageSource = imageSource;
@@ -81,6 +88,17 @@ namespace Bejeweled
             this.MouseLeftButtonDown += new MouseButtonEventHandler(bijou_MouseLeftButtonDown);
             this.MouseLeftButtonUp += new MouseButtonEventHandler(bijou_MouseLeftButtonUp);
             isMouseLeftButtonDown = false;
+        }
+        /// <summary>
+        /// 构造一个空Bijou
+        /// </summary>
+        /// <param name="column">bijou所在的行</param>
+        /// <param name="row">bijou所在的列</param>
+        public bijou(int column, int row)
+        {
+            this.Column = column;
+            this.Row = row;
+            this.Type = 0;
         }
 
         void bijou_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
