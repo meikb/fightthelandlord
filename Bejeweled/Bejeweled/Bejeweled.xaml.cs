@@ -38,7 +38,10 @@ namespace Bejeweled
             set
             {
                 int index = Row * 9 + Column;
-                this.LayoutRoot.Children.Remove(value);
+                if (LayoutRoot.Children.Contains(value))
+                {
+                    this.LayoutRoot.Children.Remove(value);
+                }
                 this.LayoutRoot.Children.Insert(index, value);
             }
         }
@@ -62,6 +65,7 @@ namespace Bejeweled
                     this.LayoutRoot.Children.Add(new bijou(string.Format("Images/{0}.png", type), type, column, row));
                 }
             }
+            RemoveListBijou(GetErasablebijou());
         }
         /// <summary>
         /// 调换两个bijou的位置
@@ -95,7 +99,7 @@ namespace Bejeweled
         /// 将指定的宝石向上移动一格
         /// </summary>
         /// <param name="bijou">要移动的宝石</param>
-        public void Up(bijou bijou)
+        public void Up(bijou bijou, bool isRollBack)
         {
             var near = GetbijouByDirection(bijou, Direction.Up);
             if (near != null)
@@ -124,15 +128,18 @@ namespace Bejeweled
                     var erasableBjous = GetErasablebijou();
                     if (erasableBjous == null)
                     {
-                        Up(near);
+                        Up(near,false);
                     }
                     else
                     {
-                        //todo 移除相同宝石
+                        //RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                if (isRollBack)
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                else
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -140,7 +147,7 @@ namespace Bejeweled
         /// 将指定的宝石向下移动一格
         /// </summary>
         /// <param name="bijou">要移动的宝石</param>
-        public void Down(bijou bijou)
+        public void Down(bijou bijou, bool isRollBack)
         {
             var near = GetbijouByDirection(bijou, Direction.Down);
             if (near != null)
@@ -169,15 +176,18 @@ namespace Bejeweled
                     var erasableBjous = GetErasablebijou();
                     if (erasableBjous == null)
                     {
-                        Down(near);
+                        Down(near, false);
                     }
                     else
                     {
-                        //todo 移除相同宝石
+                        //RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                if (isRollBack)
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                else
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -185,7 +195,7 @@ namespace Bejeweled
         /// 将指定的宝石向左移动一格
         /// </summary>
         /// <param name="bijou">要移动的宝石</param>
-        public void Left(bijou bijou)
+        public void Left(bijou bijou, bool isRollBack)
         {
             var near = GetbijouByDirection(bijou, Direction.Left);
             if (near != null)
@@ -214,15 +224,18 @@ namespace Bejeweled
                     var erasableBjous = GetErasablebijou();
                     if (erasableBjous == null)
                     {
-                        Left(near);
+                        Left(near, false);
                     }
                     else
                     {
-                        //todo 移除相同宝石
+                        //RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                if (isRollBack)
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                else
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -230,7 +243,7 @@ namespace Bejeweled
         /// 将指定的宝石向右移动一格
         /// </summary>
         /// <param name="bijou">要移动的宝石</param>
-        public void Right(bijou bijou)
+        public void Right(bijou bijou, bool isRollBack)
         {
             var near = GetbijouByDirection(bijou, Direction.Right);
             if (near != null)
@@ -259,15 +272,18 @@ namespace Bejeweled
                     var erasableBjous = GetErasablebijou();
                     if (erasableBjous == null)
                     {
-                        Right(near);
+                        Right(near, false);
                     }
                     else
                     {
-                        //todo 移除相同宝石
+                        //RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
-                this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                if (isRollBack)
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), bijoueh); //添加动画
+                else
+                    this.AddAnimationToStoryboard(bijou.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
                 this.BeginAnimation();
             }
         }
@@ -336,6 +352,28 @@ namespace Bejeweled
         {
             AnimationIsPlaying = true;
             sbAll.Begin();
+        }
+
+        /// <summary>
+        /// 从LayoutRoot.Children中移除bijou列表
+        /// </summary>
+        /// <param name="bijous">要移除的bijou列表</param>
+        public void RemoveListBijou(List<bijou> bijous)
+        {
+            foreach (var tempBijou in bijous)
+            {
+                AddAnimationToStoryboard(tempBijou, "Opacity", 0.0, TimeSpan.FromMilliseconds(1000),
+                    new EventHandler((object sender1, EventArgs ea1) =>
+                    {
+                        var da = sender1 as DoubleAnimation;
+                        sbAll.Children.Remove(da);
+                        foreach (var tempBijou2 in bijous)
+                        {
+                            tempBijou2.Opacity = 0.0;
+                        }
+                    }));
+            }
+            BeginAnimation();
         }
 
         
@@ -466,44 +504,44 @@ namespace Bejeweled
                         {
                             if (absXCha > absYCha)
                             {
-                                this.Right(movedbijou);
+                                this.Right(movedbijou, true);
                             }
                             else
                             {
-                                this.Up(movedbijou);
+                                this.Up(movedbijou, true);
                             }
                         }
                         else if (XCha > 10 && YCha > 10)
                         {
                             if (absXCha > absYCha)
                             {
-                                this.Right(movedbijou);
+                                this.Right(movedbijou, true);
                             }
                             else
                             {
-                                this.Down(movedbijou);
+                                this.Down(movedbijou, true);
                             }
                         }
                         else if (XCha < 10 && YCha > 10)
                         {
                             if (absXCha > absYCha)
                             {
-                                this.Left(movedbijou);
+                                this.Left(movedbijou, true);
                             }
                             else
                             {
-                                this.Down(movedbijou);
+                                this.Down(movedbijou, true);
                             }
                         }
                         else if (XCha < 10 && YCha < 10)
                         {
                             if (absXCha > absYCha)
                             {
-                                this.Left(movedbijou);
+                                this.Left(movedbijou, true);
                             }
                             else
                             {
-                                this.Up(movedbijou);
+                                this.Up(movedbijou, true);
                             }
                         }
                     }
@@ -527,11 +565,6 @@ namespace Bejeweled
             Storyboard sb = sender as Storyboard;
             sb.Stop();
             AnimationIsPlaying = false;
-        }
-
-        private void sbRollback_Completed(object sender, EventArgs e)
-        {
-
         }
     }
 

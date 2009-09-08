@@ -5,8 +5,6 @@
     <UserControl.Resources>
         <Storyboard x:Name="sbAll" Completed="sbAll_Completed">
         </Storyboard>
-        <Storyboard x:Name="sbRollback" Completed="sbRollback_Completed">
-        </Storyboard>
     </UserControl.Resources>
     <Grid x:Name="LayoutRoot" MouseLeftButtonDown="LayoutRoot_MouseLeftButtonDown" MouseMove="LayoutRoot_MouseMove" MouseLeftButtonUp="LayoutRoot_MouseLeftButtonUp" >
         <Grid.RowDefinitions>
