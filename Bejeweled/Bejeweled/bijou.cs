@@ -88,7 +88,7 @@ namespace Bejeweled
             this.MouseLeftButtonDown += new MouseButtonEventHandler(bijou_MouseLeftButtonDown);
             this.MouseLeftButtonUp += new MouseButtonEventHandler(bijou_MouseLeftButtonUp);
             isMouseLeftButtonDown = false;
-            Children.Add(new TextBlock() { Text = string.Format("{0},{0}", this.Row, this.Column) });
+            Children.Add(new TextBlock() { Text = string.Format("{0},{1}", this.Row, this.Column) });
         }
         /// <summary>
         /// 构造一个空Bijou
