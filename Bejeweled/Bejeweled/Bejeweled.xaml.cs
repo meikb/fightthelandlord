@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace Bejeweled
 {
@@ -68,7 +69,8 @@ namespace Bejeweled
         public void InitGame()
         {
             this.Visibility = Visibility.Collapsed;
-            Random r = new Random();
+            long tick = DateTime.Now.Ticks;
+            Random r = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
             for (int row = 0; row < 9; row++)
             {
                 for (int column = 0; column < 9; column++)
@@ -480,6 +482,11 @@ namespace Bejeweled
                     tempBijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
                 }
                 Resources.Remove("sbFill");
+                var erasableBijous = GetErasablebijou();
+                if (erasableBijous != null)
+                {
+                    RemoveListBijou(erasableBijous);
+                }
             };
             Resources.Add("sbFill", sb);
             for (int i = 0; i <= 8; i++)
@@ -506,14 +513,17 @@ namespace Bejeweled
                 }
                 for (int l = nullNum - 1; l >= 0 && nullNum != 0; l--)  //创建新的Bijou填充已消除的
                 {
-                    int randomNum = new Random().Next(1, 9);
+                    Thread.Sleep(10);
+                    long tick = DateTime.Now.Ticks;
+                    Random ran = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
+                    int randomNum = ran.Next(1, 9);
                     string imagePath = string.Format("images/{0}.png", randomNum);
                     bijou tempBijou = new bijou(imagePath, randomNum, i, l);
                     tempBijou.RenderTransform = new TranslateTransform();
                     tempBijou.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
                     AddAnimationToStoryboard(sb, tempBijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300 * nullNum));
                     this[tempBijou.Column, tempBijou.Row] = tempBijou;
-                    changedBijou.Add(tempBijou);
+                    changedBijou.Add(tempBijou); 
                 }
             }
             BeginAnimation(sb);
@@ -603,7 +613,10 @@ namespace Bejeweled
                 }
                 foreach (var tempBijou in rowSameBijou)
                 {
-                    returnBijous.Add(tempBijou);
+                    if (!columnSameBijou.Contains(tempBijou)) //不允许重复添加
+                    {
+                        returnBijous.Add(tempBijou);
+                    }
                 }
                 return returnBijous;
             }
