@@ -22,6 +22,10 @@ namespace Bejeweled
         /// 鼠标左键单击坐标
         /// </summary>
         private Point mouseUpBeforePoint;
+        /// <summary>
+        /// 宝石矩阵
+        /// </summary>
+        private bijou[,] bijous = new bijou[9, 9];
 
         /// <summary>
         /// 通过列号和行号获取bijou
@@ -33,39 +37,66 @@ namespace Bejeweled
         {
             get
             {
-                return (bijou)this.LayoutRoot.Children[Row * 9 + Column];
+                return bijous[Column, Row];
             }
             set
             {
-                int index = Row * 9 + Column;
-                if (LayoutRoot.Children.Contains(value))
+                if (value != null)
                 {
-                    this.LayoutRoot.Children.Remove(value);
+                    value.Column = Column;
+                    value.Row = Row;
+                    bijous[Column, Row] = value;
+                    if (!LayoutRoot.Children.Contains(value))
+                    {
+                        this.LayoutRoot.Children.Add(value);
+                    }
                 }
-                this.LayoutRoot.Children.Insert(index, value);
+                else
+                {
+                    bijous[Column, Row] = null;
+                }
             }
         }
 
         public Bejeweled()
         {
             InitializeComponent();
-            InitGame();
         }
         /// <summary>
         /// 初始化游戏
         /// </summary>
         public void InitGame()
         {
+            this.Visibility = Visibility.Collapsed;
             Random r = new Random();
             for (int row = 0; row < 9; row++)
             {
                 for (int column = 0; column < 9; column++)
                 {
-                    int type = r.Next(1,11);
-                    this.LayoutRoot.Children.Add(new bijou(string.Format("Images/{0}.png", type), type, column, row));
+                    int type = r.Next(1,9);
+                    var tempbijou = new bijou(string.Format("Images/{0}.png", type), type, column, row);
+                    this[column, row] = tempbijou;
                 }
             }
-            RemoveListBijou(GetErasablebijou());
+            while (true)
+            {
+                var earsablebijous = GetErasablebijou();
+                if (earsablebijous != null)
+                {
+                    foreach (var tempBijou in earsablebijous)
+                    {
+                        var random = new Random();
+                        int type = random.Next(1, 9);
+                        this.LayoutRoot.Children.Remove(this[tempBijou.Column, tempBijou.Row]);
+                        this[tempBijou.Column, tempBijou.Row] = new bijou(string.Format("Images/{0}.png", type), type, tempBijou.Column, tempBijou.Row);
+                    }
+                }
+                else
+                {
+                    break;
+                }
+            }
+            this.Visibility = Visibility.Visible;
         }
         /// <summary>
         /// 调换两个bijou的位置
@@ -74,15 +105,19 @@ namespace Bejeweled
         /// <param name="bijou2">第二个bijou</param>
         public void ExchangeLocation(bijou bijou1, bijou bijou2)
         {
-            this[bijou1.Column, bijou1.Row] = bijou2;
-            this[bijou2.Column, bijou2.Row] = bijou1;
+            int bijou1Column = bijou1.Column;
+            int bijou1Row = bijou1.Row;
+            int bijou2Column = bijou2.Column;
+            int bijou2Row = bijou2.Row;
+            this[bijou1Column, bijou1Row] = bijou2;
+            this[bijou2Column, bijou2Row] = bijou1;
 
-            int bijouColumn = bijou1.Column;
-            int bijouRow = bijou1.Row;
-            bijou1.Column = bijou2.Column;
-            bijou1.Row = bijou2.Row;
-            bijou2.Column = bijouColumn;
-            bijou2.Row = bijouRow;
+            //int bijouColumn = bijou1.Column;
+            //int bijouRow = bijou1.Row;
+            //bijou1.Column = bijou2.Column;
+            //bijou1.Row = bijou2.Row;
+            //bijou2.Column = bijouColumn;
+            //bijou2.Row = bijouRow;
         }
 
         /// <summary>
@@ -132,7 +167,7 @@ namespace Bejeweled
                     }
                     else
                     {
-                        //RemoveListBijou(erasableBjous);
+                        RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
@@ -180,7 +215,7 @@ namespace Bejeweled
                     }
                     else
                     {
-                        //RemoveListBijou(erasableBjous);
+                        RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
@@ -228,7 +263,7 @@ namespace Bejeweled
                     }
                     else
                     {
-                        //RemoveListBijou(erasableBjous);
+                        RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
@@ -276,7 +311,7 @@ namespace Bejeweled
                     }
                     else
                     {
-                        //RemoveListBijou(erasableBjous);
+                        RemoveListBijou(erasableBjous);
                     }
                 });
                 this.AddAnimationToStoryboard(near.RenderTransform, "X", 0.0, TimeSpan.FromMilliseconds(300), neareh); //添加动画
@@ -345,8 +380,44 @@ namespace Bejeweled
             da.Completed += eh;
             sbAll.Children.Add(da);
         }
+
         /// <summary>
-        /// 开始动画
+        /// 向Storyboard添加动画
+        /// </summary>
+        /// <param name="dobj">动画目标</param>
+        /// <param name="property">被改变的值</param>
+        /// <param name="to">动画完毕后的最终值</param>
+        /// <param name="Duration">动画持续时间</param>
+        public void AddAnimationToStoryboard(DependencyObject dobj, string property, double to, TimeSpan Duration)
+        {
+            DoubleAnimation da = new DoubleAnimation();
+            Storyboard.SetTarget(da, dobj);
+            Storyboard.SetTargetProperty(da, new PropertyPath(property));
+            da.To = to;
+            da.Duration = new Duration(Duration);
+            sbAll.Children.Add(da);
+        }
+
+        /// <summary>
+        /// 向Storyboard添加动画
+        /// </summary>
+        /// <param name="sb">目标Storyboard</param>
+        /// <param name="dobj">动画目标</param>
+        /// <param name="property">被改变的值</param>
+        /// <param name="to">动画完毕后的最终值</param>
+        /// <param name="Duration">动画持续时间</param>
+        /// <param name="eh">Storyboard完成事件处理程序</param>
+        public void AddAnimationToStoryboard(Storyboard sb, DependencyObject dobj, string property, double to, TimeSpan Duration)
+        {
+            DoubleAnimation da = new DoubleAnimation();
+            Storyboard.SetTarget(da, dobj);
+            Storyboard.SetTargetProperty(da, new PropertyPath(property));
+            da.To = to;
+            da.Duration = new Duration(Duration);
+            sb.Children.Add(da);
+        }
+        /// <summary>
+        /// 开始动画,使用默认的sbAll
         /// </summary>
         public void BeginAnimation()
         {
@@ -355,25 +426,97 @@ namespace Bejeweled
         }
 
         /// <summary>
+        /// 开始指定的Storyboard动画
+        /// </summary>
+        public void BeginAnimation(Storyboard sb)
+        {
+            AnimationIsPlaying = true;
+            sb.Begin();
+        }
+
+        /// <summary>
         /// 从LayoutRoot.Children中移除bijou列表
         /// </summary>
         /// <param name="bijous">要移除的bijou列表</param>
-        public void RemoveListBijou(List<bijou> bijous)
+        public void RemoveListBijou(List<bijou> removebijous)
         {
-            foreach (var tempBijou in bijous)
+            Storyboard sb = new Storyboard();
+            sb.Completed += (object sender1, EventArgs ea1) =>
             {
-                AddAnimationToStoryboard(tempBijou, "Opacity", 0.0, TimeSpan.FromMilliseconds(1000),
-                    new EventHandler((object sender1, EventArgs ea1) =>
-                    {
-                        var da = sender1 as DoubleAnimation;
-                        sbAll.Children.Remove(da);
-                        foreach (var tempBijou2 in bijous)
-                        {
-                            tempBijou2.Opacity = 0.0;
-                        }
-                    }));
+                var sb2 = sender1 as Storyboard;
+                sb.Stop();
+                AnimationIsPlaying = false;
+                foreach (var tempBijou2 in removebijous)
+                {
+                    tempBijou2.Opacity = 0.0;
+                    this.LayoutRoot.Children.Remove(tempBijou2);
+                    this[tempBijou2.Column, tempBijou2.Row] = null;
+                }
+                Resources.Remove("RemoveBijou");
+                FillNull();
+            };
+            Resources.Add("RemoveBijou", sb);
+            foreach (var tempBijou in removebijous)
+            {
+                AddAnimationToStoryboard(sb, tempBijou, "Opacity", 0.0, TimeSpan.FromMilliseconds(200));
             }
-            BeginAnimation();
+            BeginAnimation(sb);
+        }
+
+        /// <summary>
+        /// 创建并播放填充动画
+        /// </summary>
+        private void FillNull()
+        {
+            List<bijou> changedBijou = new List<bijou>();
+            Storyboard sb = new Storyboard();
+            sb.Completed += (object sender1, EventArgs ea1) =>
+            {
+                var sb2 = sender1 as Storyboard;
+                sb2.Stop();
+                AnimationIsPlaying = false;
+                foreach (var tempBijou in changedBijou)
+                {
+                    tempBijou.RenderTransform.SetValue(TranslateTransform.YProperty, 0.0);
+                }
+                Resources.Remove("sbFill");
+            };
+            Resources.Add("sbFill", sb);
+            for (int i = 0; i <= 8; i++)
+            {
+                int nullNum = 0;
+                int row = 0;
+                for (int j = 0; j <= 8; j++)
+                {
+                    if (this[i, j] == null)
+                    {
+                        if (j > row) row = j;
+                        nullNum++;
+                    }
+                }
+                for (int k = row - nullNum; k >= 0 && nullNum != 0; k--) //添加被删除Bijou上面的Bijou下落动画
+                {
+                    DoubleAnimation da = new DoubleAnimation();
+                    bijou tempBijou = this[i, k];
+                    tempBijou.RenderTransform = new TranslateTransform();
+                    tempBijou.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
+                    AddAnimationToStoryboard(sb, tempBijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300 * nullNum));
+                    this[tempBijou.Column, tempBijou.Row + nullNum] = tempBijou;
+                    changedBijou.Add(tempBijou);
+                }
+                for (int l = nullNum - 1; l >= 0 && nullNum != 0; l--)  //创建新的Bijou填充已消除的
+                {
+                    int randomNum = new Random().Next(1, 9);
+                    string imagePath = string.Format("images/{0}.png", randomNum);
+                    bijou tempBijou = new bijou(imagePath, randomNum, i, l);
+                    tempBijou.RenderTransform = new TranslateTransform();
+                    tempBijou.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
+                    AddAnimationToStoryboard(sb, tempBijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300 * nullNum));
+                    this[tempBijou.Column, tempBijou.Row] = tempBijou;
+                    changedBijou.Add(tempBijou);
+                }
+            }
+            BeginAnimation(sb);
         }
 
         
@@ -393,9 +536,7 @@ namespace Bejeweled
                 {
                     while (true)
                     {
-                        if (column >= 8)
-                            break;
-                        if (this[column, row].Type == this[column + 1, row].Type)
+                        if (column < 8 && this[column, row].Type == this[column + 1, row].Type)
                         {
                             sameNum++;
                             column++;
@@ -428,9 +569,7 @@ namespace Bejeweled
                 {
                     while (true)
                     {
-                        if (row >= 8)
-                            break;
-                        if (this[column, row].Type == this[column, row + 1].Type)
+                        if (row < 8 && this[column, row].Type == this[column, row + 1].Type)
                         {
                             sameNum++;
                             row++;

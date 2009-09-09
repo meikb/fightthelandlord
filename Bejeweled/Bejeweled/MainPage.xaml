@@ -6,7 +6,8 @@
     d:DesignWidth="640" d:DesignHeight="480">
   <Grid x:Name="LayoutRoot" Height="576">
         
-  	<local:Bejeweled Margin="0,0,64,0"/>
+  	<local:Bejeweled Margin="0,0,64,0" x:Name="GameMain" />
+  	<TextBlock x:Name="tbStartGame" Margin="206,0,256,128" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" FontSize="29.333" Text="Start Game" TextWrapping="Wrap" Height="45" VerticalAlignment="Bottom"/>
         
   </Grid>
 </UserControl>
