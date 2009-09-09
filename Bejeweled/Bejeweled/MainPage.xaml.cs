@@ -9,6 +9,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using Bejeweled;
 
 namespace Bejeweled
 {
@@ -17,6 +18,13 @@ namespace Bejeweled
         public MainPage()
         {
             InitializeComponent();
+        }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            var tb = sender as TextBlock;
+            this.LayoutRoot.Children.Remove(tb);
+            GameMain.InitGame();
         }
     }
 }
