@@ -504,7 +504,7 @@ namespace Bejeweled
                 for (int k = row - nullNum; k >= 0 && nullNum != 0; k--) //添加被删除Bijou上面的Bijou下落动画
                 {
                     DoubleAnimation da = new DoubleAnimation();
-                    bijou tempBijou = this[i, k];
+                    bijou tempBijou = this[i, k]; //有Bug...如果一列中有两组被消除就完了,明天再写
                     tempBijou.RenderTransform = new TranslateTransform();
                     tempBijou.RenderTransform.SetValue(TranslateTransform.YProperty, (double)-64 * nullNum);
                     AddAnimationToStoryboard(sb, tempBijou.RenderTransform, "Y", 0.0, TimeSpan.FromMilliseconds(300 * nullNum));
