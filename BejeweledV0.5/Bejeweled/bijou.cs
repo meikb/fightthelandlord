@@ -114,7 +114,7 @@ namespace Bejeweled
             this.MouseLeave += new MouseEventHandler(bijou_MouseLeave);
             isMouseLeftButtonDown = false;
             dispatcherTimer.Tick += new EventHandler(dispatcherTimer_Tick);
-            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(50);
+            dispatcherTimer.Interval = TimeSpan.FromMilliseconds(25);
         }
 
         /// <summary>

@@ -11,6 +11,7 @@
         
   	<local:Bejeweled x:Name="GameMain" HorizontalAlignment="Left" VerticalAlignment="Top" />
   	<TextBlock x:Name="tbStartGame" Margin="184,0,278,128" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" FontSize="29.333" Text="Start Game" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
+  	<local:Score HorizontalAlignment="Right" d:LayoutOverrides="Width"/>
         
   </Grid>
 </UserControl>
