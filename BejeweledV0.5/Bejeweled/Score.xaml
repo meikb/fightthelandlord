@@ -1,0 +1,14 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="Bejeweled.Score"
+	d:DesignWidth="640" d:DesignHeight="480" Width="188" Height="600">
+
+	<Grid x:Name="LayoutRoot">
+		<Image Height="103" Margin="0,72,0,0" VerticalAlignment="Top" Source="Images/scorepod.png" Stretch="Fill"/>
+		<Image Margin="0,285,0,63" Source="Images/classicmode.png" Stretch="Fill"/>
+	</Grid>
+</UserControl>
