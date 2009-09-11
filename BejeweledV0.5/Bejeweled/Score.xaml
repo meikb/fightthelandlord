@@ -9,6 +9,12 @@
 
 	<Canvas>
 		<Image Height="103" Source="Images/scorepod.png" Stretch="Fill" Width="188" Canvas.Top="22" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Top"/>
-		<Image x:Name="imageHint" Source="Images/classicmode.png" Stretch="Fill" Height="250" Width="188" Canvas.Top="219" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Bottom" MouseEnter="imageHint_MouseEnter" MouseLeave="imageHint_MouseLeave" MouseLeftButtonDown="imageHint_MouseLeftButtonDown" MouseLeftButtonUp="imageHint_MouseLeftButtonUp"/>
+		<Border Height="250" Width="188" Canvas.Top="219">
+			<Border.Background>
+				<ImageBrush ImageSource="Images/hint_background.png"/>
+			</Border.Background>
+			<Image x:Name="imageHint" Stretch="Fill" d:LayoutOverrides="HorizontalAlignment" MouseEnter="imageHint_MouseEnter" MouseLeave="imageHint_MouseLeave" MouseLeftButtonDown="imageHint_MouseLeftButtonDown" MouseLeftButtonUp="imageHint_MouseLeftButtonUp" Margin="21,97,19,3" Source="Images/hint_btn.png">
+			</Image>
+		</Border>
 	</Canvas>
 </UserControl>
