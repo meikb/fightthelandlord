@@ -17,5 +17,25 @@ namespace Bejeweled
 			// Required to initialize variables
 			InitializeComponent();
 		}
+
+		private void imageHint_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			// TODO: Add event handler implementation here.
+		}
+
+		private void imageHint_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+		{
+			// TODO: Add event handler implementation here.
+		}
+
+		private void imageHint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			// TODO: Add event handler implementation here.
+		}
+
+		private void imageHint_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+		{
+			// TODO: Add event handler implementation here.
+		}
 	}
 }
