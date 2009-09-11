@@ -244,15 +244,16 @@
     <Resource Include="Images\7\7_7.png" />
     <Resource Include="Images\7\7_8.png" />
     <Resource Include="Images\7\7_9.png" />
-    <Resource Include="Images\hint.png" />
     <Resource Include="Images\scorepod.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Properties\OutOfBrowserSettings.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Images\hint_click.png" />
-    <Resource Include="Images\hint_mouseenter.png" />
+    <Resource Include="Images\hint_background.png" />
+    <Resource Include="Images\hint_btn.png" />
+    <Resource Include="Images\hint_btn_click.png" />
+    <Resource Include="Images\hint_btn_mouseenter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
