@@ -9,6 +9,6 @@
 
 	<Canvas>
 		<Image Height="103" Source="Images/scorepod.png" Stretch="Fill" Width="188" Canvas.Top="22" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Top"/>
-		<Image Source="Images/classicmode.png" Stretch="Fill" Height="250" Width="188" Canvas.Top="219" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Bottom"/>
+		<Image x:Name="imageHint" Source="Images/classicmode.png" Stretch="Fill" Height="250" Width="188" Canvas.Top="219" d:LayoutOverrides="HorizontalAlignment" VerticalAlignment="Bottom" MouseEnter="imageHint_MouseEnter" MouseLeave="imageHint_MouseLeave" MouseLeftButtonDown="imageHint_MouseLeftButtonDown" MouseLeftButtonUp="imageHint_MouseLeftButtonUp"/>
 	</Canvas>
 </UserControl>
