@@ -13,13 +13,62 @@ namespace Bejeweled
 	public partial class Score : UserControl
 	{
         private ImageSourceConverter ISC = new ImageSourceConverter();
+        /// <summary>
+        /// 提示功能
+        /// </summary>
         public Action hint { get; set; }
+
+        /// <summary>
+        /// 到下一关
+        /// </summary>
+        public Action NextLevel { get; set; }
+
+        /// <summary>
+        /// 更新进度条
+        /// </summary>
+        public Action<Double> UpdateProgressBar { get; set; }
+
+        private int levelNum = 1;
+
+        private int _score = 0;
+
+        private int allScore = 0;
+
+        public int ScoreNow
+        {
+            get
+            {
+                return _score;
+            }
+            set
+            {
+                _score = value;
+            }
+        }
+
+        private int targetScore = 1000;
 
 		public Score()
 		{
 			// Required to initialize variables
 			InitializeComponent();
 		}
+
+        public void UpdateScore(int pushscore)
+        {
+            this.ScoreNow += pushscore;
+            this.allScore += pushscore;
+            tbScore.Text = allScore.ToString();
+            UpdateProgressBar((double)ScoreNow / (double)targetScore * 100);
+            if (ScoreNow >= targetScore)
+            {
+                ScoreNow = 0;
+                levelNum++;
+                NextLevel();
+                targetScore = (int)Math.Pow(levelNum, 1.1) * targetScore;
+                UpdateProgressBar(0.0);
+            }
+        }
 
         private void SetSource(Image image, string path)
         {
@@ -46,5 +95,5 @@ namespace Bejeweled
         {
             SetSource(imageHint, "Images/hint_btn_mouseenter.png");
 		}
-	}
+    }
 }

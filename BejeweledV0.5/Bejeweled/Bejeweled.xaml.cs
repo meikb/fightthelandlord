@@ -28,7 +28,15 @@ namespace Bejeweled
         /// </summary>
         private bijou[,] bijous = new bijou[MaxColumn, MaxRow];
 
+        public Action<int> UpdateScoure;
+
+        /// <summary>
+        /// 最大列,不包含0
+        /// </summary>
         const int MaxColumn = 8;
+        /// <summary>
+        /// 最大行,不包含0
+        /// </summary>
         const int MaxRow = 8;
 
         /// <summary>
@@ -468,6 +476,7 @@ namespace Bejeweled
                 }
                 Resources.Remove("RemoveBijou");
                 FillNull();
+                UpdateScoure(45 + (removebijous.Count - 3) * 45);
             };
             Resources.Add("RemoveBijou", sb);
             foreach (var tempBijou in removebijous)
@@ -475,6 +484,15 @@ namespace Bejeweled
                 AddAnimationToStoryboard(sb, tempBijou, "Opacity", 0.0, TimeSpan.FromMilliseconds(200));
             }
             BeginAnimation(sb);
+        }
+
+        /// <summary>
+        /// 下一关
+        /// </summary>
+        public void NextLevel()
+        {
+            this.LayoutRoot.Children.Clear();
+            this.InitGame();
         }
 
         /// <summary>
@@ -611,18 +629,18 @@ namespace Bejeweled
                         {
                             if (row > 0)
                             {
-                                if (this[column, row - 1].Type == this[column, row].Type) //中间向上
+                                if (this[column + 1, row - 1].Type == this[column, row].Type) //中间向上
                                 {
-                                    this[column, row - 1].Hint();
+                                    this[column + 1, row - 1].Hint();
                                     Find = true;
                                     break;
                                 }
                             }
                             if (row < MaxRow - 1)
                             {
-                                if (this[column, row + 1].Type == this[column, row].Type) //中间向下
+                                if (this[column + 1, row + 1].Type == this[column, row].Type) //中间向下
                                 {
-                                    this[column, row + 1].Hint();
+                                    this[column + 1, row + 1].Hint();
                                     Find = true;
                                     break;
                                 }
@@ -663,17 +681,17 @@ namespace Bejeweled
                             }
                             if (row > 0 && column > 0)
                             {
-                                if (this[column - 1, row + 1].Type == this[column, row].Type) //左上相同
+                                if (this[column - 1, row - 1].Type == this[column, row].Type) //左上相同
                                 {
-                                    this[column - 1, row + 1].Hint();
+                                    this[column - 1, row - 1].Hint();
                                     Find = true;
                                     break;
                                 }
                                 if (column < MaxColumn - 1)
                                 {
-                                    if (this[column + 1, row + 1].Type == this[column, row].Type) //右上相同
+                                    if (this[column + 1, row - 1].Type == this[column, row].Type) //右上相同
                                     {
-                                        this[column + 1, row + 1].Hint();
+                                        this[column + 1, row - 1].Hint();
                                         Find = true;
                                         break;
                                     }
@@ -682,7 +700,7 @@ namespace Bejeweled
 
                             if (row > 1)
                             {
-                                if (this[column, row - 2].Type == this[column, row].Type) // 左边第二个相同
+                                if (this[column, row - 2].Type == this[column, row].Type) // 上边第二个相同
                                 {
                                     this[column, row - 2].Hint();
                                     Find = true;
@@ -691,9 +709,9 @@ namespace Bejeweled
                             }
                             if (row < MaxRow - 3)
                             {
-                                if (this[column, row + 2].Type == this[column, row].Type) //右边第二个相同
+                                if (this[column, row + 3].Type == this[column, row].Type) //下边第二个相同
                                 {
-                                    this[column, row + 2].Hint();
+                                    this[column, row + 3].Hint();
                                     Find = true;
                                     break;
                                 }
@@ -705,18 +723,18 @@ namespace Bejeweled
                             {
                                 if (column > 0)
                                 {
-                                    if (this[column - 1, row].Type == this[column, row].Type) //中间向右
+                                    if (this[column - 1, row + 1].Type == this[column, row].Type) //中间向右
                                     {
-                                        this[column - 1, row].Hint();
+                                        this[column - 1, row + 1].Hint();
                                         Find = true;
                                         break;
                                     }
                                 }
                                 if (column < MaxColumn - 1)
                                 {
-                                    if (this[column + 1, row].Type == this[column, row].Type) //中间向左
+                                    if (this[column + 1, row + 1].Type == this[column, row].Type) //中间向左
                                     {
-                                        this[column + 1, row].Hint();
+                                        this[column + 1, row + 1].Hint();
                                         Find = true;
                                         break;
                                     }

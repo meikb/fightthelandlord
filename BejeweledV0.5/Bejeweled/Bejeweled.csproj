@@ -71,7 +71,6 @@
       <DependentUpon>Bejeweled.xaml</DependentUpon>
     </Compile>
     <Compile Include="bijou.cs" />
-    <Compile Include="FakeBijou.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -99,7 +98,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="ClassDiagram1.cd" />
     <None Include="Properties\AppManifest.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -255,6 +253,7 @@
     <Resource Include="Images\hint_btn.png" />
     <Resource Include="Images\hint_btn_click.png" />
     <Resource Include="Images\hint_btn_mouseenter.png" />
+    <Resource Include="Images\purple-loader.jpg" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Fonts\" />
