@@ -25,6 +25,7 @@ namespace Bejeweled
             var tb = sender as TextBlock;
             this.LayoutRoot.Children.Remove(tb);
             GameMain.InitGame();
+            GameScore.hint = new Action(GameMain.Hint);
         }
     }
 }

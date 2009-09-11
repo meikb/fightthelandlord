@@ -71,6 +71,7 @@
       <DependentUpon>Bejeweled.xaml</DependentUpon>
     </Compile>
     <Compile Include="bijou.cs" />
+    <Compile Include="FakeBijou.cs" />
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -255,6 +256,9 @@
     <Resource Include="Images\hint_btn_click.png" />
     <Resource Include="Images\hint_btn_mouseenter.png" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -270,4 +274,5 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\Expression\Blend\3.0\Silverlight\Microsoft.Expression.Blend.Silverlight.targets" />
 </Project>

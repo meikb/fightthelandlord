@@ -159,6 +159,11 @@ namespace Bejeweled
             this.Type = this.Type;
         }
 
+        public void Hint()
+        {
+            Roll();
+        }
+
         void bijou_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             isMouseLeftButtonDown = false;

@@ -13,6 +13,7 @@ namespace Bejeweled
 	public partial class Score : UserControl
 	{
         private ImageSourceConverter ISC = new ImageSourceConverter();
+        public Action hint { get; set; }
 
 		public Score()
 		{
@@ -38,6 +39,7 @@ namespace Bejeweled
 		private void imageHint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             SetSource(imageHint, "Images/hint_btn_click.png");
+            hint();
 		}
 
 		private void imageHint_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
