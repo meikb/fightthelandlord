@@ -13,8 +13,9 @@
 			<Border.Background>
 				<ImageBrush ImageSource="Images/hint_background.png"/>
 			</Border.Background>
-			<Image x:Name="imageHint" Stretch="Fill" d:LayoutOverrides="HorizontalAlignment" MouseEnter="imageHint_MouseEnter" MouseLeave="imageHint_MouseLeave" MouseLeftButtonDown="imageHint_MouseLeftButtonDown" MouseLeftButtonUp="imageHint_MouseLeftButtonUp" Margin="21,97,19,3" Source="Images/hint_btn.png">
-			</Image>
+			<Image x:Name="imageHint" Stretch="Fill" d:LayoutOverrides="HorizontalAlignment" MouseEnter="imageHint_MouseEnter" MouseLeave="imageHint_MouseLeave" MouseLeftButtonDown="imageHint_MouseLeftButtonDown" MouseLeftButtonUp="imageHint_MouseLeftButtonUp" Margin="21,97,19,3" Source="Images/hint_btn.png" Cursor="Hand"/>
 		</Border>
+		<TextBlock Height="39" Width="74" Canvas.Left="58" Canvas.Top="370" Text="Hint" TextWrapping="Wrap" TextAlignment="Center" FontSize="26.667" FontWeight="Bold" Cursor="Hand" Foreground="White" Opacity="0.605" MouseEnter="imageHint_MouseEnter" MouseLeave="imageHint_MouseLeave" MouseLeftButtonDown="imageHint_MouseLeftButtonDown" MouseLeftButtonUp="imageHint_MouseLeftButtonUp"/>
+		<TextBlock x:Name="tbScore" Height="39" Width="143" Canvas.Left="23" Canvas.Top="46" TextWrapping="Wrap" TextAlignment="Center" FontSize="26.667" FontWeight="Bold" Cursor="None" Foreground="White" Opacity="0.605" Text="0"/>
 	</Canvas>
 </UserControl>
