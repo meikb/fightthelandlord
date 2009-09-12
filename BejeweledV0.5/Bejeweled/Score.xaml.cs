@@ -70,6 +70,11 @@ namespace Bejeweled
             }
         }
 
+        public int GetScore()
+        {
+            return this.ScoreNow;
+        }
+
         private void SetSource(Image image, string path)
         {
             image.Source = (ImageSource)ISC.ConvertFromString(path);

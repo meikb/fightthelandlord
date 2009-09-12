@@ -5,17 +5,17 @@
     mc:Ignorable="d" xmlns:local="clr-namespace:Bejeweled" x:Class="Bejeweled.MainPage"
     d:DesignWidth="700" d:DesignHeight="600">
     <UserControl.Resources>
-        <Storyboard x:Name="sbProgress"/>
+        <Storyboard x:Name="sbProgress" Completed="sbProgress_Completed"/>
     </UserControl.Resources>
   <Grid x:Name="LayoutRoot" Width="700" Height="600">
   	<Grid.Background>
   		<ImageBrush ImageSource="Images/backdrop00.jpg"/>
   	</Grid.Background>
-        
-  	<local:Bejeweled x:Name="GameMain" HorizontalAlignment="Left" VerticalAlignment="Top" />
-  	<TextBlock x:Name="tbStartGame" Margin="184,0,278,128" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" FontSize="29.333" Text="Start Game" TextWrapping="Wrap" VerticalAlignment="Bottom"/>
-  	<local:Score x:Name="GameScore" HorizontalAlignment="Right" d:LayoutOverrides="Width"/>
-  	<ProgressBar x:Name="pbGame" Margin="0,0,188,26" Height="36" VerticalAlignment="Bottom" Background="{x:Null}" Value="-121" BorderBrush="{x:Null}" Canvas.ZIndex="1">
+
+        <local:BejeweledGameMain x:Name="GameMain" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" />
+            <TextBlock x:Name="tbStartGame" Margin="184,233,337,0" MouseLeftButtonDown="TextBlock_MouseLeftButtonDown" FontSize="29.333" Text="Start Game" TextWrapping="Wrap" VerticalAlignment="Top"/>
+        <local:Score x:Name="GameScore" HorizontalAlignment="Right" d:LayoutOverrides="Width" RenderTransformOrigin="0.5,0.5"/>
+            <ProgressBar x:Name="pbGame" Margin="0,0,188,26" Height="36" VerticalAlignment="Bottom" Canvas.ZIndex="1" BorderBrush="{x:Null}" Background="{x:Null}">
   		<ProgressBar.Foreground>
   			<ImageBrush ImageSource="Images/purple-loader.jpg"/>
   		</ProgressBar.Foreground>
