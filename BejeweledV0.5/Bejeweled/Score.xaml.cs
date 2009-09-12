@@ -28,6 +28,11 @@ namespace Bejeweled
         /// </summary>
         public Action<Double> UpdateProgressBar { get; set; }
 
+        /// <summary>
+        ///是否已开始游戏
+        /// </summary>
+        public bool IsStart { get; set; }
+
         private int levelNum = 1;
 
         private int _score = 0;
@@ -93,7 +98,10 @@ namespace Bejeweled
 		private void imageHint_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             SetSource(imageHint, "Images/hint_btn_click.png");
-            hint();
+            if (this.IsStart)
+            {
+                hint();
+            }
 		}
 
 		private void imageHint_MouseLeftButtonUp(object sender, System.Windows.Input.MouseButtonEventArgs e)

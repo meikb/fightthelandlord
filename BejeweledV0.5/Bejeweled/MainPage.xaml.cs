@@ -30,6 +30,7 @@ namespace Bejeweled
             GameScore.hint = GameMain.Hint;
             GameScore.NextLevel = GameMain.NextLevel;
             GameScore.UpdateProgressBar = UpdateProgressBar;
+            GameScore.IsStart = true;
         }
         public void UpdateProgressBar(double value)
         {
