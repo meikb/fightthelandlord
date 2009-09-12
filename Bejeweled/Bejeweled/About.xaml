@@ -1,0 +1,15 @@
+﻿<controls:ChildWindow x:Class="Bejeweled.About"
+           xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+           xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" 
+           xmlns:controls="clr-namespace:System.Windows.Controls;assembly=System.Windows.Controls"
+           Width="400" Height="300" 
+           Title="About">
+    <Grid x:Name="LayoutRoot" Margin="2">
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Button x:Name="OKButton" Content="OK" Click="OKButton_Click" Width="75" Height="23" HorizontalAlignment="Right" Margin="0,8,8,4" Grid.Row="1" />
+        <TextBlock TextWrapping="Wrap"><Run Text="程序作者:猪笨无罪(李达)"/><LineBreak/><Run Text="作者博客:http://www.dotnet.pp.ru "/><LineBreak/><Run Text="             http://zhubenwuzui.cnblogs.com"/><LineBreak/><Run Text="作者QQ:234446552"/><LineBreak/><Run Text="图片音乐素材来自网络,版权归原制作公司所有.主程序版权归猪笨无罪(李达)所有."/><LineBreak/><Run Text=""/><LineBreak/><Run Text="Program Author: David Lee "/><LineBreak/><Run Text="Author blog: http://www.dotnet.pp.ru "/><LineBreak/><Run Text="                   http://zhubenwuzui.cnblogs.com "/><LineBreak/><Run Text="Author"/><Run Text=" MSN:zbwz@vip.qq.com"/><LineBreak/><Run Text="Photo"/><Run Text=" and"/><Run Text=" music material from the network, all the copyright of the original production company. The main program copyright "/><Run Text="David Lee "/><Run Text="all."/></TextBlock>
+    </Grid>
+</controls:ChildWindow>
