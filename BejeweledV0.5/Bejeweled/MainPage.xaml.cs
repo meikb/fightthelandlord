@@ -26,6 +26,7 @@ namespace Bejeweled
             this.LayoutRoot.Children.Remove(tb);
             GameMain.InitGame();
             GameMain.UpdateScoure = GameScore.UpdateScore;
+            GameMain.GetScore = GameScore.GetScore;
             GameScore.hint = GameMain.Hint;
             GameScore.NextLevel = GameMain.NextLevel;
             GameScore.UpdateProgressBar = UpdateProgressBar;
@@ -34,10 +35,8 @@ namespace Bejeweled
         {
             if (value >= 0 && value <= 100)
             {
-                double timeSpan = value - pbGame.Value / 10 * 1000;
-                AddAnimationToStoryboard(sbProgress, pbGame, "Value", value, TimeSpan.FromMilliseconds(timeSpan));
+                AddAnimationToStoryboard(sbProgress, pbGame, "Value", value, TimeSpan.FromMilliseconds(500));
                 sbProgress.Begin();
-                //todo 动画有问题
             }
         }
 
@@ -57,7 +56,22 @@ namespace Bejeweled
             Storyboard.SetTargetProperty(da, new PropertyPath(property));
             da.To = to;
             da.Duration = new Duration(Duration);
+            sb.Stop();
             sb.Children.Add(da);
+        }
+
+        private void sbProgress_Completed(object sender, EventArgs e)
+        {
+            var sb = sender as Storyboard;
+            double value = pbGame.Value;
+            sb.Stop();
+            sb.Children.Clear();
+            pbGame.Value = value;
+        }
+
+        private void sbGameSart_Completed(object sender, EventArgs e)
+        {
+            //var sb = sender as Storyboard;
         }
     }
 }

@@ -13,7 +13,7 @@ using System.Threading;
 
 namespace Bejeweled
 {
-    public partial class Bejeweled : UserControl
+    public partial class BejeweledGameMain : UserControl
     {
         /// <summary>
         /// 动画是否正在播放
@@ -28,7 +28,15 @@ namespace Bejeweled
         /// </summary>
         private bijou[,] bijous = new bijou[MaxColumn, MaxRow];
 
+        /// <summary>
+        /// 更新分数
+        /// </summary>
         public Action<int> UpdateScoure;
+
+        /// <summary>
+        /// 获取当前分数
+        /// </summary>
+        public Func<int> GetScore;
 
         /// <summary>
         /// 最大列,不包含0
@@ -70,7 +78,7 @@ namespace Bejeweled
             }
         }
 
-        public Bejeweled()
+        public BejeweledGameMain()
         {
             InitializeComponent();
         }
@@ -560,179 +568,87 @@ namespace Bejeweled
         public void Hint()
         {
             bool Find = false;
-            #region 横条检测是否有可消除宝石
-            for (int row = 0; row < MaxRow; row++)
+            if (GetScore() > 100) //确认现有分数是否足够提示操作的消耗
             {
-                for (int column = 0; column < MaxColumn - 1; column++) //横条
+                #region 横条检测是否有可消除宝石
+                for (int row = 0; row < MaxRow; row++)
                 {
-                    if (this[column, row].Type == this[column + 1, row].Type) //两个连续相同,六种情况
+                    for (int column = 0; column < MaxColumn - 1; column++) //横条
                     {
-                        if (column > 0 && row < MaxRow - 1)
+                        if (this[column, row].Type == this[column + 1, row].Type) //两个连续相同,六种情况
                         {
-                            if (this[column - 1, row + 1].Type == this[column, row].Type) //左下相同
+                            if (column > 0 && row < MaxRow - 1)
                             {
-                                this[column - 1, row + 1].Hint();
-                                Find = true;
-                                break;
-                            }
-                            if (row > 0)
-                            {
-                                if (this[column - 1, row - 1].Type == this[column, row].Type) //左上相同
+                                if (this[column - 1, row + 1].Type == this[column, row].Type) //左下相同
                                 {
-                                    this[column - 1, row - 1].Hint();
+                                    this[column - 1, row + 1].Hint();
                                     Find = true;
                                     break;
                                 }
-                            }
-                        }
-                        if (column < MaxColumn - 2 && row > 0)
-                        {
-                            if (this[column + 2, row - 1].Type == this[column, row].Type) //右上相同
-                            {
-                                this[column + 2, row - 1].Hint();
-                                Find = true;
-                                break;
-                            }
-                            if (row < MaxRow - 1)
-                            {
-                                if (this[column + 2, row + 1].Type == this[column, row].Type) //右下相同
+                                if (row > 0)
                                 {
-                                    this[column + 2, row + 1].Hint();
-                                    Find = true;
-                                    break;
-                                }
-                            }
-                        }
-
-                        if (column > 1)
-                        {
-                            if (this[column - 2, row].Type == this[column, row].Type) // 左边第二个相同
-                            {
-                                this[column - 2, row].Hint();
-                                Find = true;
-                                break;
-                            }
-                        }
-                        if (column < MaxColumn - 3)
-                        {
-                            if (this[column + 3, row].Type == this[column, row].Type) //右边第二个相同
-                            {
-                                this[column + 3, row].Hint();
-                                Find = true;
-                                break;
-                            }
-                        }
-                    }
-                    if (column < MaxColumn - 2)
-                    {
-                        if (this[column, row].Type == this[column + 2, row].Type) //中间隔一个的两个相同,两种情况
-                        {
-                            if (row > 0)
-                            {
-                                if (this[column + 1, row - 1].Type == this[column, row].Type) //中间向上
-                                {
-                                    this[column + 1, row - 1].Hint();
-                                    Find = true;
-                                    break;
-                                }
-                            }
-                            if (row < MaxRow - 1)
-                            {
-                                if (this[column + 1, row + 1].Type == this[column, row].Type) //中间向下
-                                {
-                                    this[column + 1, row + 1].Hint();
-                                    Find = true;
-                                    break;
-                                }
-                            }
-                        }
-                    }
-                }
-                if (Find)
-                    break;
-            }
-            #endregion
-            if (!Find)
-            {
-                #region 竖条检测是否有可消除宝石
-                for (int column = 0; column < MaxColumn; column++)
-                {
-                    for (int row = 0; row < MaxRow - 1; row++) //竖条
-                    {
-                        if (this[column, row].Type == this[column, row + 1].Type) //两个连续相同,六种情况
-                        {
-                            if (row < MaxRow - 2 && column < MaxColumn - 1)
-                            {
-                                if (this[column + 1, row + 2].Type == this[column, row].Type) //右下相同
-                                {
-                                    this[column + 1, row + 2].Hint();
-                                    Find = true;
-                                    break;
-                                }
-                                if (column > 0)
-                                {
-                                    if (this[column - 1, row + 2].Type == this[column, row].Type) //左下相同
+                                    if (this[column - 1, row - 1].Type == this[column, row].Type) //左上相同
                                     {
-                                        this[column - 1, row + 2].Hint();
+                                        this[column - 1, row - 1].Hint();
                                         Find = true;
                                         break;
                                     }
                                 }
                             }
-                            if (row > 0 && column > 0)
+                            if (column < MaxColumn - 2 && row > 0)
                             {
-                                if (this[column - 1, row - 1].Type == this[column, row].Type) //左上相同
+                                if (this[column + 2, row - 1].Type == this[column, row].Type) //右上相同
                                 {
-                                    this[column - 1, row - 1].Hint();
+                                    this[column + 2, row - 1].Hint();
                                     Find = true;
                                     break;
                                 }
-                                if (column < MaxColumn - 1)
+                                if (row < MaxRow - 1)
                                 {
-                                    if (this[column + 1, row - 1].Type == this[column, row].Type) //右上相同
+                                    if (this[column + 2, row + 1].Type == this[column, row].Type) //右下相同
+                                    {
+                                        this[column + 2, row + 1].Hint();
+                                        Find = true;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (column > 1)
+                            {
+                                if (this[column - 2, row].Type == this[column, row].Type) // 左边第二个相同
+                                {
+                                    this[column - 2, row].Hint();
+                                    Find = true;
+                                    break;
+                                }
+                            }
+                            if (column < MaxColumn - 3)
+                            {
+                                if (this[column + 3, row].Type == this[column, row].Type) //右边第二个相同
+                                {
+                                    this[column + 3, row].Hint();
+                                    Find = true;
+                                    break;
+                                }
+                            }
+                        }
+                        if (column < MaxColumn - 2)
+                        {
+                            if (this[column, row].Type == this[column + 2, row].Type) //中间隔一个的两个相同,两种情况
+                            {
+                                if (row > 0)
+                                {
+                                    if (this[column + 1, row - 1].Type == this[column, row].Type) //中间向上
                                     {
                                         this[column + 1, row - 1].Hint();
                                         Find = true;
                                         break;
                                     }
                                 }
-                            }
-
-                            if (row > 1)
-                            {
-                                if (this[column, row - 2].Type == this[column, row].Type) // 上边第二个相同
+                                if (row < MaxRow - 1)
                                 {
-                                    this[column, row - 2].Hint();
-                                    Find = true;
-                                    break;
-                                }
-                            }
-                            if (row < MaxRow - 3)
-                            {
-                                if (this[column, row + 3].Type == this[column, row].Type) //下边第二个相同
-                                {
-                                    this[column, row + 3].Hint();
-                                    Find = true;
-                                    break;
-                                }
-                            }
-                        }
-                        if (row < MaxRow - 2)
-                        {
-                            if (this[column, row].Type == this[column, row + 2].Type) //中间隔一个的两个相同,两种情况
-                            {
-                                if (column > 0)
-                                {
-                                    if (this[column - 1, row + 1].Type == this[column, row].Type) //中间向右
-                                    {
-                                        this[column - 1, row + 1].Hint();
-                                        Find = true;
-                                        break;
-                                    }
-                                }
-                                if (column < MaxColumn - 1)
-                                {
-                                    if (this[column + 1, row + 1].Type == this[column, row].Type) //中间向左
+                                    if (this[column + 1, row + 1].Type == this[column, row].Type) //中间向下
                                     {
                                         this[column + 1, row + 1].Hint();
                                         Find = true;
@@ -746,6 +662,109 @@ namespace Bejeweled
                         break;
                 }
                 #endregion
+                if (!Find)
+                {
+                    #region 竖条检测是否有可消除宝石
+                    for (int column = 0; column < MaxColumn; column++)
+                    {
+                        for (int row = 0; row < MaxRow - 1; row++) //竖条
+                        {
+                            if (this[column, row].Type == this[column, row + 1].Type) //两个连续相同,六种情况
+                            {
+                                if (row < MaxRow - 2 && column < MaxColumn - 1)
+                                {
+                                    if (this[column + 1, row + 2].Type == this[column, row].Type) //右下相同
+                                    {
+                                        this[column + 1, row + 2].Hint();
+                                        Find = true;
+                                        break;
+                                    }
+                                    if (column > 0)
+                                    {
+                                        if (this[column - 1, row + 2].Type == this[column, row].Type) //左下相同
+                                        {
+                                            this[column - 1, row + 2].Hint();
+                                            Find = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                                if (row > 0 && column > 0)
+                                {
+                                    if (this[column - 1, row - 1].Type == this[column, row].Type) //左上相同
+                                    {
+                                        this[column - 1, row - 1].Hint();
+                                        Find = true;
+                                        break;
+                                    }
+                                    if (column < MaxColumn - 1)
+                                    {
+                                        if (this[column + 1, row - 1].Type == this[column, row].Type) //右上相同
+                                        {
+                                            this[column + 1, row - 1].Hint();
+                                            Find = true;
+                                            break;
+                                        }
+                                    }
+                                }
+
+                                if (row > 1)
+                                {
+                                    if (this[column, row - 2].Type == this[column, row].Type) // 上边第二个相同
+                                    {
+                                        this[column, row - 2].Hint();
+                                        Find = true;
+                                        break;
+                                    }
+                                }
+                                if (row < MaxRow - 3)
+                                {
+                                    if (this[column, row + 3].Type == this[column, row].Type) //下边第二个相同
+                                    {
+                                        this[column, row + 3].Hint();
+                                        Find = true;
+                                        break;
+                                    }
+                                }
+                            }
+                            if (row < MaxRow - 2)
+                            {
+                                if (this[column, row].Type == this[column, row + 2].Type) //中间隔一个的两个相同,两种情况
+                                {
+                                    if (column > 0)
+                                    {
+                                        if (this[column - 1, row + 1].Type == this[column, row].Type) //中间向右
+                                        {
+                                            this[column - 1, row + 1].Hint();
+                                            Find = true;
+                                            break;
+                                        }
+                                    }
+                                    if (column < MaxColumn - 1)
+                                    {
+                                        if (this[column + 1, row + 1].Type == this[column, row].Type) //中间向左
+                                        {
+                                            this[column + 1, row + 1].Hint();
+                                            Find = true;
+                                            break;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        if (Find)
+                            break;
+                    }
+                    #endregion
+                }
+                if (Find)
+                {
+                    UpdateScoure(-100);
+                }
+            }
+            else
+            {
+                 //todo 提示分数不够
             }
         }
 
