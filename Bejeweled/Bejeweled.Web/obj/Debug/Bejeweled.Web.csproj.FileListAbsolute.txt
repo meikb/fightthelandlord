@@ -1,0 +1,5 @@
+D:\My Documents\Visual Studio 2008\Projects\Bejeweled\Bejeweled.Web\bin\Bejeweled.Web.dll
+D:\My Documents\Visual Studio 2008\Projects\Bejeweled\Bejeweled.Web\bin\Bejeweled.Web.pdb
+D:\My Documents\Visual Studio 2008\Projects\Bejeweled\Bejeweled.Web\obj\Debug\ResolveAssemblyReference.cache
+D:\My Documents\Visual Studio 2008\Projects\Bejeweled\Bejeweled.Web\obj\Debug\Bejeweled.Web.dll
+D:\My Documents\Visual Studio 2008\Projects\Bejeweled\Bejeweled.Web\obj\Debug\Bejeweled.Web.pdb
