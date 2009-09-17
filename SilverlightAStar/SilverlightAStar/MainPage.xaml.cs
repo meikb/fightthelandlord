@@ -40,9 +40,8 @@ namespace SilverlightAStar
 
         private void Init()
         {
-            this.LayoutRoot.Width = MaxColumn * GridSize;
-            this.LayoutRoot.Height = MaxRow * GridSize;
-            this.Width = MaxColumn * GridSize + 200;
+            MaxColumn = (int)this.LayoutRoot.Width / GridSize;
+            MaxRow = (int)this.LayoutRoot.Height / GridSize;
             Matrix = new byte[MaxColumn, MaxRow];
             for (int i = MaxColumn; i >= 0; i--)
             {
@@ -236,9 +235,19 @@ namespace SilverlightAStar
 
         private void btnUpdate_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.MaxColumn = Convert.ToInt32(tbMaxColumn.Text);
-            this.MaxRow = Convert.ToInt32(tbMaxRow.Text);
             this.GridSize = Convert.ToInt32(tbGridSize.Text);
+            var lines = new List<Line>(); 
+            foreach (var uie in this.LayoutRoot.Children)
+            {
+                if (uie.GetType() == typeof(Line))
+                {
+                    lines.Add((Line)uie);
+                }
+            }
+            foreach (var line in lines)
+            {
+                this.LayoutRoot.Children.Remove(line);
+            }
             Init();
         }
 

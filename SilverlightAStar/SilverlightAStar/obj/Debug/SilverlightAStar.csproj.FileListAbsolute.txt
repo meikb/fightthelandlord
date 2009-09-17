@@ -10,3 +10,15 @@ F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\ob
 F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\SilverlightAStar.dll
 F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\SilverlightAStar.pdb
 F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\XapCacheFile.xml
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\Bin\Debug\AppManifest.xaml
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\Bin\Debug\SilverlightAStar.dll
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\Bin\Debug\SilverlightAStar.pdb
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\Bin\Debug\SilverlightAStar.xap
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\Bin\Debug\TestPage.html
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\ResolveAssemblyReference.cache
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\App.g.cs
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\MainPage.g.cs
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\SilverlightAStar.g.resources
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\SilverlightAStar.dll
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\SilverlightAStar.pdb
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar\obj\Debug\XapCacheFile.xml
