@@ -1,5 +1,0 @@
-F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\bin\SilverlightAStar.Web.dll
-F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\bin\SilverlightAStar.Web.pdb
-F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\ResolveAssemblyReference.cache
-F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\SilverlightAStar.Web.dll
-F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\SilverlightAStar.Web.pdb
