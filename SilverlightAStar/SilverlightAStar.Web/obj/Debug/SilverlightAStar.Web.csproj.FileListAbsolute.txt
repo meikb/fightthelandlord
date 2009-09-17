@@ -3,3 +3,8 @@ F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.We
 F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\ResolveAssemblyReference.cache
 F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\SilverlightAStar.Web.dll
 F:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\SilverlightAStar.Web.pdb
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\bin\SilverlightAStar.Web.dll
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\bin\SilverlightAStar.Web.pdb
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\ResolveAssemblyReference.cache
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\SilverlightAStar.Web.dll
+D:\My Documents\Visual Studio 2008\Projects\SilverlightAStar\SilverlightAStar.Web\obj\Debug\SilverlightAStar.Web.pdb

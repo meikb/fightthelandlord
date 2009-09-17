@@ -44,89 +44,103 @@ namespace SilverlightAStar
 
         public List<Point> StartFindPath()
         {
-            var pathNote = new PathNote() { F = 0, G = 0, H = 0, X = (int)startPoint.X, Y = (int)startPoint.Y, parentNote = null };
-            return StartFindPath(pathNote);
-        }
-
-        public List<Point> StartFindPath(PathNote pathNote)
-        {
-            List<Point> resultPoints = null;
             var found = false;
-            for (int i = 0; i < 8; i++)
+            var pathNote = new PathNote() { F = 0, G = 0, H = 0, X = (int)startPoint.X, Y = (int)startPoint.Y, parentNote = null };
+            List<Point> resultPoints = null;
+            while (true)
             {
-                var newPathNote = new PathNote();
-                newPathNote.parentNote = pathNote;
-                newPathNote.X = newPathNote.parentNote.X + direction[i, 0];
-                newPathNote.Y = newPathNote.parentNote.Y + direction[i, 1];
-
-                if (newPathNote.X < 0 || newPathNote.Y < 0 || newPathNote.X > matrix.GetUpperBound(0) || newPathNote.Y > matrix.GetUpperBound(1)) //坐标过界
-                    continue;
-
-                bool isClosed = false;
-                bool isOpened = false;
-                PathNote theOpendandSameNote = null;
-                foreach (var closedNote in colsedList)
+                for (int i = 0; i < 8; i++)
                 {
-                    if (closedNote.X == newPathNote.X && closedNote.Y == newPathNote.Y)
-                    {
-                        isClosed = true;
-                    }
-                }
+                    var newPathNote = new PathNote();
+                    newPathNote.parentNote = pathNote;
+                    newPathNote.X = newPathNote.parentNote.X + direction[i, 0];
+                    newPathNote.Y = newPathNote.parentNote.Y + direction[i, 1];
 
+                    if (newPathNote.X < 0 || newPathNote.Y < 0 || newPathNote.X > matrix.GetUpperBound(0) || newPathNote.Y > matrix.GetUpperBound(1)) //坐标过界
+                        continue;
+
+                    bool isClosed = false;
+                    bool isOpened = false;
+                    PathNote theOpendandSameNote = null;
+                    foreach (var closedNote in colsedList)
+                    {
+                        if (closedNote.X == newPathNote.X && closedNote.Y == newPathNote.Y)
+                        {
+                            isClosed = true;
+                        }
+                    }
+
+                    foreach (var openedNote in openedList)
+                    {
+                        if (openedNote.X == newPathNote.X && openedNote.Y == newPathNote.Y)
+                        {
+                            isOpened = true;
+                            theOpendandSameNote = openedNote;
+                        }
+                    }
+
+                    if (matrix[newPathNote.X, newPathNote.Y] != 0 || isClosed) //不能通行或者已经在关闭列表中存在
+                        continue;
+
+                    if (Math.Abs(direction[i, 0] + direction[i, 1]) == 2)  //G值
+                    {
+                        newPathNote.G = newPathNote.parentNote.G + 14;
+                    }
+                    else
+                    {
+                        newPathNote.G = newPathNote.parentNote.G + 10;
+                    }
+
+                    newPathNote.H = (int)(Math.Abs(endPoint.X - newPathNote.X) + Math.Abs(endPoint.Y - newPathNote.Y)) * 10;  //H值
+                    newPathNote.F = newPathNote.G + newPathNote.H;  //F值
+
+
+                    if (isOpened)
+                    {
+                        if (newPathNote.G >= theOpendandSameNote.G)
+                        {
+                            this.openedList.Remove(pathNote);
+                            continue;
+                        }
+                        else
+                        {
+                            this.openedList.Remove(theOpendandSameNote);
+                            this.openedList.Add(newPathNote);
+                            continue;
+                        }
+                    }
+
+                    this.openedList.Add(newPathNote);
+                }
+                this.colsedList.Add(pathNote);
+                this.openedList.Remove(pathNote);
                 foreach (var openedNote in openedList)
                 {
-                    if (openedNote.X == newPathNote.X && openedNote.Y == newPathNote.Y)
+                    if (openedNote.X == (int)endPoint.X && openedNote.Y == (int)endPoint.Y) // 到达终点
                     {
-                        isOpened = true;
-                        theOpendandSameNote = openedNote;
+                        resultPoints = GetPointListByParent(openedNote, null);
+                        found = true;
+                        break;
                     }
                 }
 
-                if (matrix[newPathNote.X, newPathNote.Y] != 0 || isClosed) //不能通行或者已经在关闭列表中存在
-                    continue;
-
-                if (Math.Abs(direction[i, 0] + direction[i, 1]) == 2)  //G值
+                if (found)
                 {
-                    newPathNote.G = newPathNote.parentNote.G + 14;
+                    break;
                 }
                 else
                 {
-                    newPathNote.G = newPathNote.parentNote.G + 10;
-                }
-
-                newPathNote.H = (int)(Math.Abs(endPoint.X - newPathNote.X) + Math.Abs(endPoint.Y - newPathNote.Y)) * 10;  //H值
-                newPathNote.F = newPathNote.G + newPathNote.H;  //F值
-
-
-                if (isOpened)
-                {
-                    if (newPathNote.G >= theOpendandSameNote.G)
-                        continue;
+                    if (openedList.Count == 0)
+                    {
+                        break;
+                    }
                     else
                     {
-                        this.openedList.Remove(theOpendandSameNote);
-                        this.openedList.Add(newPathNote);
-                        continue;
+                        openedList.Sort(Compare);
+                        pathNote = openedList[0];
                     }
                 }
-
-                this.openedList.Add(newPathNote);
-                this.openedList.Remove(pathNote);
-                this.openedList.Sort(Compare);
             }
-            this.colsedList.Add(pathNote);
-            foreach (var openedNote in openedList)
-            {
-                if (openedNote.X == (int)endPoint.X && openedNote.Y == (int)endPoint.Y) // 到达终点
-                {
-                    resultPoints = GetPointListByParent(openedNote, null);
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
-                StartFindPath(openedList[0]);
             return resultPoints;
         }
 
