@@ -24,20 +24,53 @@ namespace SilverlightAStar
 
     public class PathFinder
     {
+        /// <summary>
+        /// 矩阵
+        /// </summary>
         private byte[,] matrix;
+        /// <summary>
+        /// 开始点
+        /// </summary>
         private Point startPoint;
+        /// <summary>
+        /// 结束点
+        /// </summary>
         private Point endPoint;
+        /// <summary>
+        /// 开启列表
+        /// </summary>
         private List<PathNote> openedList = new List<PathNote>(); //开启列表
+        /// <summary>
+        /// 关闭列表
+        /// </summary>
         private List<PathNote> colsedList = new List<PathNote>(); //关闭列表
+        /// <summary>
+        /// 是否允许斜线行走
+        /// </summary>
         private bool diagonals;
+        /// <summary>
+        /// 方向
+        /// </summary>
         private sbyte[,] direction = new sbyte[8, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { 1, -1 }, { 1, 1 }, { -1, 1 }, { -1, -1 } }; //默认方向
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="matrix">待检测矩阵</param>
+        /// <param name="startPoint">开始点</param>
+        /// <param name="endPoint">结束点</param>
         public PathFinder(byte[,] matrix, Point startPoint, Point endPoint)
         {
             this.matrix = matrix;
             this.startPoint = startPoint;
             this.endPoint = endPoint;
         }
-
+        /// <summary>
+        /// 构造函数
+        /// </summary>
+        /// <param name="matrix">矩阵</param>
+        /// <param name="startPoint">开始点</param>
+        /// <param name="endPoint">结束点</param>
+        /// <param name="diagonals">是否允许斜线行走</param>
         public PathFinder(byte[,] matrix, Point startPoint, Point endPoint, bool diagonals)
         {
             this.matrix = matrix;
@@ -49,7 +82,10 @@ namespace SilverlightAStar
                 direction = new sbyte[4, 2] { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } }; //不允许穿角,4方向
             }
         }
-
+        /// <summary>
+        /// 开始寻找路径
+        /// </summary>
+        /// <returns></returns>
         public List<Point> StartFindPath()
         {
             var found = false;
@@ -129,7 +165,7 @@ namespace SilverlightAStar
                 {
                     if (openedNote.X == (int)endPoint.X && openedNote.Y == (int)endPoint.Y) // 到达终点
                     {
-                        resultPoints = GetPointListByParent(openedNote, null);
+                        resultPoints = GetPointListByParent(openedNote, null); //得到以Point构成的路径
                         found = true;
                         break;
                     }
@@ -155,6 +191,12 @@ namespace SilverlightAStar
             return resultPoints;
         }
 
+        /// <summary>
+        /// 组织传入的PathNote的所有父节点为List
+        /// </summary>
+        /// <param name="pathNote">PathNote</param>
+        /// <param name="pathPoints">列表</param>
+        /// <returns>路径</returns>
         private List<Point> GetPointListByParent(PathNote pathNote, List<Point> pathPoints)
         {
             if (pathPoints == null)
@@ -167,6 +209,12 @@ namespace SilverlightAStar
             return pathPoints;
         }
 
+        /// <summary>
+        /// 比较两个节点的F值
+        /// </summary>
+        /// <param name="x">第一个节点</param>
+        /// <param name="y">第二个节点</param>
+        /// <returns></returns>
         private int Compare(PathNote x, PathNote y)
         {
             if (x.F > y.F)
