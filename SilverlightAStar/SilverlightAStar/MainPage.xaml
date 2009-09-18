@@ -6,18 +6,21 @@
     <Canvas>
 		<Canvas x:Name="LayoutRoot" Width="800" Height="600" MouseLeftButtonDown="LayoutRoot_MouseLeftButtonDown" MouseLeftButtonUp="LayoutRoot_MouseLeftButtonUp" MouseMove="LayoutRoot_MouseMove" Background="Black" HorizontalAlignment="Left" d:LayoutOverrides="Height"/>
 		<Canvas x:Name="caControls" Canvas.Left="804" Height="600" Width="196">
-			<Button x:Name="btnStartPoint" Height="27" Width="85" Canvas.Left="1" Canvas.Top="114" Content="StartPoint" Click="btnStartPoint_Click"/>
-			<Button x:Name="btnEndPoint" Height="27" Width="85" Canvas.Left="95" Canvas.Top="114" Content="EndPoint" Click="btnEndPoint_Click"/>
-			<Button x:Name="btnImpediment" Height="27" Width="85" Canvas.Left="1" Canvas.Top="158" Content="Impediment" Click="btnImpediment_Click"/>
-			<TextBox x:Name="tbGridSize" Height="25" Width="85" Canvas.Left="0" Canvas.Top="390" TextWrapping="Wrap"/>
-			<Button x:Name="btnUpdate" Height="27" Width="85" Canvas.Top="444" Content="Set" Click="btnUpdate_Click"/>
-			<TextBlock Height="25" Width="85" Canvas.Left="95" Canvas.Top="390" Text="GridSize:" TextWrapping="Wrap"/>
-			<Button x:Name="btnStartFindPath" Height="27" Width="85" Canvas.Left="0" Canvas.Top="505" Content="StartFindPath" Click="btnStartFindPath_Click" />
+			<Button x:Name="btnStartPoint" Height="27" Width="85" Canvas.Left="5" Canvas.Top="18" Content="StartPoint" Click="btnStartPoint_Click"/>
+			<Button x:Name="btnEndPoint" Height="27" Width="85" Canvas.Left="99" Canvas.Top="18" Content="EndPoint" Click="btnEndPoint_Click"/>
+			<Button x:Name="btnImpediment" Height="27" Width="85" Canvas.Left="5" Canvas.Top="62" Content="Impediment" Click="btnImpediment_Click"/>
+			<TextBox x:Name="tbGridSize" Height="25" Width="85" Canvas.Left="107" Canvas.Top="291" TextWrapping="Wrap"/>
+			<Button x:Name="btnUpdate" Height="27" Width="85" Canvas.Top="348" Content="Set" Click="btnUpdate_Click" Canvas.Left="4"/>
+			<TextBlock Height="25" Width="85" Canvas.Left="5" Canvas.Top="291" Text="GridSize:" TextWrapping="Wrap"/>
+			<Button x:Name="btnStartFindPath" Height="27" Width="85" Canvas.Left="4" Canvas.Top="409" Content="StartFindPath" Click="btnStartFindPath_Click" />
         
-			<TextBlock Height="16" Width="95" Canvas.Left="0" Canvas.Top="561" TextWrapping="Wrap"><Run Text="Completed Tim"/><Run Text=":"/><LineBreak/><Run Text=""/></TextBlock>
-			<TextBlock x:Name="tbTim" Height="16" Width="85" Canvas.Left="95" Canvas.Top="561" TextWrapping="Wrap"/>
-			<Button x:Name="btnClear" Height="27" Width="85" Canvas.Left="95" Canvas.Top="444" Content="Clear" Click="btnClear_Click"/>
-			<CheckBox x:Name="cbDiagonals" Height="16" Width="86" Canvas.Left="0" Canvas.Top="289" Content="Diagonals" IsChecked="True" Checked="cbDiagonals_Checked" Unchecked="cbDiagonals_Unchecked"/>
+			<TextBlock Height="16" Width="95" Canvas.Left="4" Canvas.Top="497" TextWrapping="Wrap"><Run Text="Completed Tim"/><Run Text=":"/><LineBreak/><Run Text=""/></TextBlock>
+			<TextBlock x:Name="tbTim" Height="16" Width="85" Canvas.Left="99" Canvas.Top="497" TextWrapping="Wrap"/>
+			<Button x:Name="btnClear" Height="27" Width="85" Canvas.Left="99" Canvas.Top="348" Content="Clear" Click="btnClear_Click"/>
+			<CheckBox x:Name="cbDiagonals" Height="16" Width="86" Canvas.Left="4" Canvas.Top="193" Content="Diagonals" IsChecked="True" Checked="cbDiagonals_Checked" Unchecked="cbDiagonals_Unchecked"/>
+			<TextBlock Height="78" Width="192" Canvas.Left="4" Canvas.Top="522" TextWrapping="Wrap"><Run Text="作者:猪笨无罪(李达)"/><LineBreak/><Run Text="联系QQ:234446552"/><LineBreak/><Run Text="博客:"/><LineBreak/><Run Text=""/><LineBreak/><Run Text=""/><LineBreak/><Run Text=""/></TextBlock>
+			<HyperlinkButton Canvas.Top="567" Content="http://zhubenwuzui.cnblogs.com" NavigateUri="http://zhubenwuzui.cnblogs.com" TargetName="_blank" Canvas.Left="2"/>
+			<HyperlinkButton Canvas.Top="583" Content="http://www.dotnet.pp.ru" NavigateUri="http://www.dotnet.pp.ru" TargetName="_blank" Canvas.Left="2"/>
 		</Canvas>
 	</Canvas>
 </UserControl>
