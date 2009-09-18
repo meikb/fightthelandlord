@@ -3,14 +3,21 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="d" d:DesignWidth="1000" d:DesignHeight="600">
-    <Canvas x:Name="LayoutRoot" Width="800" Height="600" MouseLeftButtonDown="LayoutRoot_MouseLeftButtonDown" MouseLeftButtonUp="LayoutRoot_MouseLeftButtonUp" MouseMove="LayoutRoot_MouseMove" Background="Black" HorizontalAlignment="Left">
-    	<Button x:Name="btnStartPoint" Height="27" Width="85" Canvas.Left="809" Canvas.Top="116" Content="StartPoint" Click="btnStartPoint_Click"/>
-    	<Button x:Name="btnEndPoint" Height="27" Width="85" Canvas.Left="907" Canvas.Top="116" Content="EndPoint" Click="btnEndPoint_Click"/>
-    	<Button x:Name="btnImpediment" Height="27" Width="85" Canvas.Left="809" Canvas.Top="158" Content="Impediment" Click="btnImpediment_Click"/>
-    	<TextBox x:Name="tbGridSize" Height="25" Width="85" Canvas.Left="907" Canvas.Top="390" TextWrapping="Wrap"/>
-    	<Button x:Name="btnUpdate" Height="27" Width="85" Canvas.Left="809" Canvas.Top="443" Content="Set" Click="btnUpdate_Click"/>
-    	<TextBlock Height="25" Width="85" Canvas.Left="809" Canvas.Top="390" Text="GridSize:" TextWrapping="Wrap"/>
-    	<Button x:Name="btnStartFindPath" Height="27" Width="85" Canvas.Left="809" Canvas.Top="505" Content="StartFindPath" Click="btnStartFindPath_Click" />
+    <Canvas>
+		<Canvas x:Name="LayoutRoot" Width="800" Height="600" MouseLeftButtonDown="LayoutRoot_MouseLeftButtonDown" MouseLeftButtonUp="LayoutRoot_MouseLeftButtonUp" MouseMove="LayoutRoot_MouseMove" Background="Black" HorizontalAlignment="Left" d:LayoutOverrides="Height"/>
+		<Canvas x:Name="caControls" Canvas.Left="804" Height="600" Width="196">
+			<Button x:Name="btnStartPoint" Height="27" Width="85" Canvas.Left="1" Canvas.Top="114" Content="StartPoint" Click="btnStartPoint_Click"/>
+			<Button x:Name="btnEndPoint" Height="27" Width="85" Canvas.Left="95" Canvas.Top="114" Content="EndPoint" Click="btnEndPoint_Click"/>
+			<Button x:Name="btnImpediment" Height="27" Width="85" Canvas.Left="1" Canvas.Top="158" Content="Impediment" Click="btnImpediment_Click"/>
+			<TextBox x:Name="tbGridSize" Height="25" Width="85" Canvas.Left="0" Canvas.Top="390" TextWrapping="Wrap"/>
+			<Button x:Name="btnUpdate" Height="27" Width="85" Canvas.Top="444" Content="Set" Click="btnUpdate_Click"/>
+			<TextBlock Height="25" Width="85" Canvas.Left="95" Canvas.Top="390" Text="GridSize:" TextWrapping="Wrap"/>
+			<Button x:Name="btnStartFindPath" Height="27" Width="85" Canvas.Left="0" Canvas.Top="505" Content="StartFindPath" Click="btnStartFindPath_Click" />
         
-    </Canvas>
+			<TextBlock Height="16" Width="95" Canvas.Left="0" Canvas.Top="561" TextWrapping="Wrap"><Run Text="Completed Tim"/><Run Text=":"/><LineBreak/><Run Text=""/></TextBlock>
+			<TextBlock x:Name="tbTim" Height="16" Width="85" Canvas.Left="95" Canvas.Top="561" TextWrapping="Wrap"/>
+			<Button x:Name="btnClear" Height="27" Width="85" Canvas.Left="95" Canvas.Top="444" Content="Clear" Click="btnClear_Click"/>
+			<CheckBox x:Name="cbDiagonals" Height="16" Width="86" Canvas.Left="0" Canvas.Top="289" Content="Diagonals" IsChecked="True" Checked="cbDiagonals_Checked" Unchecked="cbDiagonals_Unchecked"/>
+		</Canvas>
+	</Canvas>
 </UserControl>

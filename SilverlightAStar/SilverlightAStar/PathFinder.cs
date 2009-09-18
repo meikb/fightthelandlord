@@ -27,9 +27,10 @@ namespace SilverlightAStar
         private byte[,] matrix;
         private Point startPoint;
         private Point endPoint;
-        private List<PathNote> openedList = new List<PathNote>();
-        private List<PathNote> colsedList = new List<PathNote>();
-        private sbyte[,] direction = new sbyte[8,2]{ {0,-1} , {1,0}, {0,1}, {-1,0}, {1,-1}, {1,1}, {-1,1}, {-1,-1}};
+        private List<PathNote> openedList = new List<PathNote>(); //开启列表
+        private List<PathNote> colsedList = new List<PathNote>(); //关闭列表
+        private bool diagonals;
+        private sbyte[,] direction = new sbyte[8, 2] { { 0, -1 }, { 1, 0 }, { 0, 1 }, { -1, 0 }, { 1, -1 }, { 1, 1 }, { -1, 1 }, { -1, -1 } }; //默认方向
         public PathFinder(byte[,] matrix, Point startPoint, Point endPoint)
         {
             this.matrix = matrix;
@@ -37,9 +38,16 @@ namespace SilverlightAStar
             this.endPoint = endPoint;
         }
 
-        private void GetPathNote(PathNote parentNote)
+        public PathFinder(byte[,] matrix, Point startPoint, Point endPoint, bool diagonals)
         {
-            var pathNote = new PathNote() { parentNote = parentNote };
+            this.matrix = matrix;
+            this.startPoint = startPoint;
+            this.endPoint = endPoint;
+            this.diagonals = diagonals;
+            if (!diagonals)
+            {
+                direction = new sbyte[4, 2] { { 0, -1 }, { 0, 1 }, { -1, 0 }, { 1, 0 } }; //不允许穿角,4方向
+            }
         }
 
         public List<Point> StartFindPath()
@@ -49,15 +57,18 @@ namespace SilverlightAStar
             List<Point> resultPoints = null;
             while (true)
             {
-                for (int i = 0; i < 8; i++)
+                for (int i = 0; i < (diagonals ? 8 : 4); i++)  //找到pathNote四方向或八方向周围节点,取F值最小的那个继续此过程
                 {
+                    var x = pathNote.X + direction[i, 0];
+                    var y = pathNote.Y + direction[i, 1];
+
+                    if (x < 0 || y < 0 || x > matrix.GetUpperBound(0) || y > matrix.GetUpperBound(1)) //坐标过界
+                        continue;
+
                     var newPathNote = new PathNote();
                     newPathNote.parentNote = pathNote;
-                    newPathNote.X = newPathNote.parentNote.X + direction[i, 0];
-                    newPathNote.Y = newPathNote.parentNote.Y + direction[i, 1];
-
-                    if (newPathNote.X < 0 || newPathNote.Y < 0 || newPathNote.X > matrix.GetUpperBound(0) || newPathNote.Y > matrix.GetUpperBound(1)) //坐标过界
-                        continue;
+                    newPathNote.X = x;
+                    newPathNote.Y = y;
 
                     bool isClosed = false;
                     bool isOpened = false;
@@ -66,7 +77,7 @@ namespace SilverlightAStar
                     {
                         if (closedNote.X == newPathNote.X && closedNote.Y == newPathNote.Y)
                         {
-                            isClosed = true;
+                            isClosed = true;  //节点已经在关闭列表中
                         }
                     }
 
@@ -74,7 +85,7 @@ namespace SilverlightAStar
                     {
                         if (openedNote.X == newPathNote.X && openedNote.Y == newPathNote.Y)
                         {
-                            isOpened = true;
+                            isOpened = true; //节点已经在开启列表中,稍后比较两条路径
                             theOpendandSameNote = openedNote;
                         }
                     }
@@ -95,7 +106,7 @@ namespace SilverlightAStar
                     newPathNote.F = newPathNote.G + newPathNote.H;  //F值
 
 
-                    if (isOpened)
+                    if (isOpened) //比较已在开启列表中的节点G值和准备创建的节点G值
                     {
                         if (newPathNote.G >= theOpendandSameNote.G)
                         {
@@ -110,10 +121,10 @@ namespace SilverlightAStar
                         }
                     }
 
-                    this.openedList.Add(newPathNote);
+                    this.openedList.Add(newPathNote); //创建节点(添加进开启列表)
                 }
-                this.colsedList.Add(pathNote);
-                this.openedList.Remove(pathNote);
+                this.colsedList.Add(pathNote); //把当前节点放进关闭列表
+                this.openedList.Remove(pathNote); //从开启列表移除当前节点
                 foreach (var openedNote in openedList)
                 {
                     if (openedNote.X == (int)endPoint.X && openedNote.Y == (int)endPoint.Y) // 到达终点
@@ -130,7 +141,7 @@ namespace SilverlightAStar
                 }
                 else
                 {
-                    if (openedList.Count == 0)
+                    if (openedList.Count == 0)  //找不到路径
                     {
                         break;
                     }
