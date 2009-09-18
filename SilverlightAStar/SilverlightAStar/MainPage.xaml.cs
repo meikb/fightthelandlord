@@ -254,11 +254,14 @@ namespace SilverlightAStar
         private void btnStartFindPath_Click(object sender, RoutedEventArgs e)
         {
             var pathFinder = new PathFinder(Matrix, StartPoint, EndPoint);
+            var time1 = DateTime.Now;
             var pathPoints = pathFinder.StartFindPath();
+            var time2 = DateTime.Now;
             foreach (var p in pathPoints)
             {
                 AddRectangle(Colors.Yellow, (int)p.X, (int)p.Y);
             }
+            MessageBox.Show((time2 - time1).Milliseconds);
         }
 
     }
