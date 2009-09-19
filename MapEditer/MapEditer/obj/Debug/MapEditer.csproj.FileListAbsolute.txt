@@ -10,3 +10,15 @@ F:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEdi
 F:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditerForm.g.cs
 F:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.exe
 F:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.pdb
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.exe
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.pdb
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\bin\Debug\MapEditer.exe
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\bin\Debug\MapEditer.pdb
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\ResolveAssemblyReference.cache
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditerForm.baml
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditerForm.g.cs
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\App.g.cs
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer_MarkupCompile.cache
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.g.resources
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.Properties.Resources.resources
+D:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\MapEditer.csproj.GenerateResource.Cache
