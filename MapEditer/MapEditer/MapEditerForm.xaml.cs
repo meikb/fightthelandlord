@@ -14,7 +14,7 @@ using System.Windows.Shapes;
 using PathFinderSpace;
 using Microsoft.Win32;
 using System.IO;
-using System.Xml.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 namespace MapEditer
 {
@@ -29,7 +29,6 @@ namespace MapEditer
 
         private int MaxRow;
 
-        [XmlAnyElement("Matrix")]
         public byte[,] Matrix;
 
         private List<Point> changedNotes = new List<Point>();
@@ -66,6 +65,8 @@ namespace MapEditer
                 Init();
                 Canvas.SetZIndex(value.MapImage, -1);
                 this.LayoutRoot.Children.Add(value.MapImage);
+                if (value.Matrix != null)
+                    this.Matrix = value.Matrix;
             }
         }
 
@@ -80,6 +81,10 @@ namespace MapEditer
             MaxColumn = (int)this.LayoutRoot.Width / GridSize;
             MaxRow = (int)this.LayoutRoot.Height / GridSize;
             Matrix = new byte[MaxColumn, MaxRow];
+        }
+        private void RePaintLine()
+        {
+            RemoveAllLine();
             for (int i = MaxColumn; i >= 0; i--)
             {
                 var line = new Line() { X1 = i * GridSize, Y1 = 0, X2 = i * GridSize, Y2 = MaxRow * GridSize };
@@ -96,10 +101,42 @@ namespace MapEditer
 
         private void AddRectangle(Color color, int column, int row)
         {
-            var rect = new Rectangle() { Width = GridSize, Height = GridSize, Fill = new SolidColorBrush(color) };
+            var rect = new Rectangle() { Width = GridSize, Height = GridSize, Opacity = 50.0, Fill = new SolidColorBrush(color) };
             Canvas.SetLeft(rect, column * GridSize);
             Canvas.SetTop(rect, row * GridSize);
             this.LayoutRoot.Children.Add(rect);
+        }
+
+        private void RemoveAllLine()
+        {
+            var uies = new List<UIElement>();
+            foreach (var uie in this.LayoutRoot.Children)
+            {
+                if (uie.GetType() == typeof(Line))
+                {
+                    uies.Add((UIElement)uie);
+                }
+            }
+            foreach (var uie in uies)
+            {
+                this.LayoutRoot.Children.Remove(uie);
+            }
+        }
+
+        private void RemoveAllRectangle()
+        {
+            var uies = new List<UIElement>();
+            foreach (var uie in this.LayoutRoot.Children)
+            {
+                if (uie.GetType() == typeof(Rectangle))
+                {
+                    uies.Add((UIElement)uie);
+                }
+            }
+            foreach (var uie in uies)
+            {
+                this.LayoutRoot.Children.Remove(uie);
+            }
         }
 
         private void RemoveRectangleByColor(Color color)
@@ -229,31 +266,37 @@ namespace MapEditer
 
         private void ChangeNote(int column, int row)
         {
-            if (Matrix[column, row] == 0)
+            try
             {
-                Matrix[column, row] = 1;
-                AddRectangle(Colors.Green, column, row);
-            }
-            else
-            {
-                Matrix[column, row] = 0;
-                List<Rectangle> removeRect = new List<Rectangle>();
-                foreach (var uielement in this.LayoutRoot.Children)
+                if (Matrix[column, row] == 0)
                 {
-                    if (uielement.GetType() == typeof(System.Windows.Shapes.Rectangle))
+                    Matrix[column, row] = 1;
+                    AddRectangle(Colors.Green, column, row);
+                }
+                else
+                {
+                    Matrix[column, row] = 0;
+                    List<Rectangle> removeRect = new List<Rectangle>();
+                    foreach (var uielement in this.LayoutRoot.Children)
                     {
-                        var rect = uielement as Rectangle;
-                        var point = GetPointByUIElement(rect);
-                        if (point.X == column && point.Y == row)
+                        if (uielement.GetType() == typeof(System.Windows.Shapes.Rectangle))
                         {
-                            removeRect.Add(rect);
+                            var rect = uielement as Rectangle;
+                            var point = GetPointByUIElement(rect);
+                            if (point.X == column && point.Y == row)
+                            {
+                                removeRect.Add(rect);
+                            }
                         }
                     }
+                    foreach (var rect in removeRect)
+                    {
+                        this.LayoutRoot.Children.Remove(rect);
+                    }
                 }
-                foreach (var rect in removeRect)
-                {
-                    this.LayoutRoot.Children.Remove(rect);
-                }
+            }
+            catch (IndexOutOfRangeException iofre)
+            {
             }
         }
 
@@ -339,24 +382,25 @@ namespace MapEditer
             this.diagonals = false;
         }
 
-        private void MenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-        	// TODO: Add event handler implementation here.
-        }
-        
         private void OpenMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-        	// TODO: Add event handler implementation here.
+            OpenMap();
+            RefreshMatrix();
         }
 
         private void NewMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
+
         }
 
         private void SaveMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             if (this.Map != null)
             {
+                var binaryFormatter = new BinaryFormatter();
+                var fs = new FileStream(Map.Path + ".map", FileMode.Create, FileAccess.Write);
+                binaryFormatter.Serialize(fs, this.Map);
+                fs.Close();
             }
         }
 
@@ -368,13 +412,95 @@ namespace MapEditer
         private void OpenImage()
         {
             var openFile = new OpenFileDialog();
-            openFile.ShowDialog();
-            var bitmapImage = new BitmapImage(new Uri(openFile.FileName));
-            bitmapImage.CacheOption = BitmapCacheOption.OnDemand;
-            var imageMap = new Image();
-            imageMap.Source = bitmapImage;
-            this.Map = new Map(imageMap, bitmapImage.Width, bitmapImage.Height, openFile.FileName);
-            this.Map.Matrix = this.Matrix;
+            if ((bool)openFile.ShowDialog())
+            {
+                var bitmapImage = new BitmapImage(new Uri(openFile.FileName));
+                var imageMap = new Image();
+                imageMap.Source = bitmapImage;
+                this.Map = new Map(imageMap, bitmapImage.Width, bitmapImage.Height, openFile.FileName);
+                this.Map.Matrix = this.Matrix;
+                RePaintLine();
+            }
+        }
+
+        private Image GetImageByPath(string imagePath)
+        {
+            var bitmapImage = new BitmapImage(new Uri(imagePath));
+            var image = new Image();
+            image.Source = bitmapImage;
+            return image;
+        }
+
+        private void OpenMap()
+        {
+            var openFile = new OpenFileDialog();
+            if ((bool)openFile.ShowDialog())
+            {
+                var fileStream = new FileStream(openFile.FileName, FileMode.Open, FileAccess.Read);
+                BinaryFormatter bf = new BinaryFormatter();
+                var readedMap = (Map)bf.Deserialize(fileStream);
+                readedMap.MapImage = GetImageByPath(readedMap.Path);
+                this.Map = readedMap;
+                fileStream.Close();
+                RePaintLine();
+            }
+        }
+
+        private void RefreshMatrix()
+        {
+            for (int x = 0; x < MaxColumn; x++)
+            {
+                for (int y = 0; y < MaxRow; y++)
+                {
+                    if (this.Matrix[x, y] == 1)
+                    {
+                        AddRectangle(Colors.Green, x, y);
+                    }
+                }
+            }
+        }
+
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            var selectedItem = (ComboBoxItem)e.AddedItems[0];
+            if ((string)selectedItem.Content == "100%")
+            {
+                SetScaleTransform(1F);
+            }
+            if ((string)selectedItem.Content == "75%")
+            {
+                SetScaleTransform(0.75F);
+            }
+            if ((string)selectedItem.Content == "50%")
+            {
+                SetScaleTransform(0.5F);
+            }
+            if ((string)selectedItem.Content == "25%")
+            {
+                SetScaleTransform(0.25F);
+            }
+            RePaintLine();
+            RefreshMatrix();
+        }
+
+        private void SetScaleTransform(float i)
+        {
+            if (i <= 1F)
+            {
+                GridSize = (int)(20.0F * i);
+                //Map.MapImage.RenderTransform = new ScaleTransform();
+                //Map.MapImage.RenderTransform.SetValue(ScaleTransform.ScaleXProperty, (double)i);
+                //Map.MapImage.RenderTransform.SetValue(ScaleTransform.ScaleYProperty, (double)i);
+                Map.MapImage.Width = Map.Width * i;
+                Map.MapImage.Height = Map.Height * i;
+                UpDateRectangle();
+            }
+        }
+
+        private void UpDateRectangle()
+        {
+            RemoveAllRectangle();
+            RefreshMatrix();
         }
     }
 }
