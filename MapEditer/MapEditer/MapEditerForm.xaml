@@ -1,9 +1,9 @@
 ﻿<Window x:Class="MapEditer.MapEditerForm"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    Title="MapEditer" Height="656" Width="999">
+    Title="MapEditer" Height="700" Width="1010" SizeChanged="Window_SizeChanged">
     <Canvas>
-        <Canvas x:Name="caControls" Canvas.Left="798" Height="600" Width="180" Canvas.Top="22">
+        <Canvas x:Name="caControls" Canvas.Left="806" Height="600" Width="180" Canvas.Top="22">
             <Button x:Name="btnStartPoint" Height="27" Width="75" Canvas.Left="5" Canvas.Top="18" Content="StartPoint" Click="btnStartPoint_Click"/>
             <Button x:Name="btnEndPoint" Height="27" Width="75" Canvas.Left="86" Canvas.Top="18" Content="EndPoint" Click="btnEndPoint_Click"/>
             <Button x:Name="btnImpediment" Height="27" Width="75" Canvas.Left="5" Canvas.Top="62" Content="Impediment" Click="btnImpediment_Click"/>
@@ -32,7 +32,7 @@
                 <MenuItem Header="保存地图" Click="SaveMenuItem_Click" />
             </MenuItem>
         </Menu>
-        <ScrollViewer Width="798" Height="600" Canvas.Top="22" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto">
+        <ScrollViewer Width="805" Height="640" Canvas.Top="22" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" x:Name="svPanel">
         	<Canvas x:Name="LayoutRoot" Width="800" Height="600" MouseLeftButtonDown="LayoutRoot_MouseLeftButtonDown" MouseLeftButtonUp="LayoutRoot_MouseLeftButtonUp" MouseMove="LayoutRoot_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </ScrollViewer>
     </Canvas>
