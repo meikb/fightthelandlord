@@ -1,0 +1,5 @@
+F:\My Documents\Visual Studio 2008\Projects\MapEditer\RPG.Web\bin\RPG.Web.dll
+F:\My Documents\Visual Studio 2008\Projects\MapEditer\RPG.Web\bin\RPG.Web.pdb
+F:\My Documents\Visual Studio 2008\Projects\MapEditer\RPG.Web\obj\Debug\ResolveAssemblyReference.cache
+F:\My Documents\Visual Studio 2008\Projects\MapEditer\RPG.Web\obj\Debug\RPG.Web.dll
+F:\My Documents\Visual Studio 2008\Projects\MapEditer\RPG.Web\obj\Debug\RPG.Web.pdb
