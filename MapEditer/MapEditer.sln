@@ -3,6 +3,10 @@ Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditer", "MapEditer\MapEditer.csproj", "{089303A6-E9B4-4756-B57C-27DD413A50E1}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPG", "RPG\RPG.csproj", "{15E7DA9D-F219-433C-8E12-29BEEFB4E9E2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RPG.Web", "RPG.Web\RPG.Web.csproj", "{E82768EA-BFC7-44FC-9BAC-C1104B08CB4C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +17,14 @@ Global
 		{089303A6-E9B4-4756-B57C-27DD413A50E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{089303A6-E9B4-4756-B57C-27DD413A50E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{089303A6-E9B4-4756-B57C-27DD413A50E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{15E7DA9D-F219-433C-8E12-29BEEFB4E9E2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{15E7DA9D-F219-433C-8E12-29BEEFB4E9E2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{15E7DA9D-F219-433C-8E12-29BEEFB4E9E2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{15E7DA9D-F219-433C-8E12-29BEEFB4E9E2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E82768EA-BFC7-44FC-9BAC-C1104B08CB4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E82768EA-BFC7-44FC-9BAC-C1104B08CB4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E82768EA-BFC7-44FC-9BAC-C1104B08CB4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E82768EA-BFC7-44FC-9BAC-C1104B08CB4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

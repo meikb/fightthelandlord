@@ -20,14 +20,17 @@ namespace MapEditer
 
         public double Height { get; set; }
 
-        public string Path { get; set; }
+        public string ImageFileName { get; set; }
 
-        public Map(Image mapImage, double width, double height, string path)
+        [NonSerialized]
+        public string Directory;
+
+        public Map(Image mapImage, double width, double height, string imageFileName)
         {
             this.MapImage = mapImage;
             this.Width = width;
             this.Height = height;
-            this.Path = path;
+            this.ImageFileName = imageFileName;
         }
 
         public Map()
