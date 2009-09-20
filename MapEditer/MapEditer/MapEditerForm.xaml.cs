@@ -31,6 +31,8 @@ namespace MapEditer
 
         public byte[,] Matrix;
 
+        private byte[,] beforeEditMatrix;
+
         private List<Point> changedNotes = new List<Point>();
 
         private bool isMouseLeftButtonDown;
@@ -78,8 +80,8 @@ namespace MapEditer
         private void Init()
         {
             this.LayoutRoot.Children.Clear();
-            MaxColumn = (int)this.LayoutRoot.Width / GridSize;
-            MaxRow = (int)this.LayoutRoot.Height / GridSize;
+            MaxColumn = (int)this.LayoutRoot.Width / 20;
+            MaxRow = (int)this.LayoutRoot.Height / 20;
             Matrix = new byte[MaxColumn, MaxRow];
         }
         private void RePaintLine()
@@ -397,10 +399,7 @@ namespace MapEditer
         {
             if (this.Map != null)
             {
-                var binaryFormatter = new BinaryFormatter();
-                var fs = new FileStream(Map.Path + ".map", FileMode.Create, FileAccess.Write);
-                binaryFormatter.Serialize(fs, this.Map);
-                fs.Close();
+                SaveMap();
             }
         }
 
@@ -433,6 +432,14 @@ namespace MapEditer
 
         private void OpenMap()
         {
+            if (CheckMatrixVal())
+            {
+                var res = MessageBox.Show("地图已被修改,是否保存", "提示", MessageBoxButton.YesNo);
+                if (res == MessageBoxResult.Yes)
+                {
+                    SaveMap();
+                }
+            }
             var openFile = new OpenFileDialog();
             if ((bool)openFile.ShowDialog())
             {
@@ -442,8 +449,51 @@ namespace MapEditer
                 readedMap.MapImage = GetImageByPath(readedMap.Path);
                 this.Map = readedMap;
                 fileStream.Close();
+                GridSize = 20;
+                this.beforeEditMatrix = this.Matrix;
                 RePaintLine();
             }
+        }
+
+        private void SaveMap()
+        {
+            var binaryFormatter = new BinaryFormatter();
+            var fs = new FileStream(Map.Path + ".map", FileMode.Create, FileAccess.Write);
+            binaryFormatter.Serialize(fs, this.Map);
+            fs.Close();
+        }
+
+        /// <summary>
+        /// 检测matrix是否已被修改
+        /// </summary>
+        /// <returns>是否已被修改</returns>
+        private bool CheckMatrixVal()
+        {
+            if (beforeEditMatrix == null)
+            {
+                return false;
+            }
+            else
+            {
+                for (int x = 0; x < MaxColumn; x++)
+                {
+                    for (int y = 0; y < MaxRow; y++)
+                    {
+                        if (Matrix[x, y] != beforeEditMatrix[x, y])
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            foreach (var i in Matrix)
+            {
+                if (i != 0)
+                {
+                    return true;
+                }
+            }
+            return false;
         }
 
         private void RefreshMatrix()
@@ -493,6 +543,8 @@ namespace MapEditer
                 //Map.MapImage.RenderTransform.SetValue(ScaleTransform.ScaleYProperty, (double)i);
                 Map.MapImage.Width = Map.Width * i;
                 Map.MapImage.Height = Map.Height * i;
+                this.LayoutRoot.Width = Map.Width * i;
+                this.LayoutRoot.Height = Map.Height * i;
                 UpDateRectangle();
             }
         }
@@ -501,6 +553,13 @@ namespace MapEditer
         {
             RemoveAllRectangle();
             RefreshMatrix();
+        }
+
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            this.svPanel.Width = e.NewSize.Width - 212;
+            this.svPanel.Height = e.NewSize.Height - 100;
+            Canvas.SetLeft(this.caControls, 798 + e.NewSize.Width - 1010);
         }
     }
 }
