@@ -34,12 +34,12 @@
                 <MenuItem Header="新建地图" Click="NewMenuItem_Click" />
                 <MenuItem Header="保存地图" Click="SaveMenuItem_Click" />
             </MenuItem>
-            <MenuItem Header="地图" AllowDrop="True">
+            <MenuItem Header="图片" AllowDrop="True">
                 <MenuItem Header="导入图片" Click="OpenImageMenuItem_Click" />
             </MenuItem>
         </Menu>
         <ScrollViewer Width="805" Height="640" Canvas.Top="22" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" x:Name="svPanel">
-        	<Canvas x:Name="LayoutRoot" Width="800" Height="600" MouseLeftButtonDown="LayoutRoot_MouseLeftButtonDown" MouseLeftButtonUp="LayoutRoot_MouseLeftButtonUp" MouseMove="LayoutRoot_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+        	<Canvas x:Name="GameMain" Width="800" Height="600" MouseLeftButtonDown="GameMain_MouseLeftButtonDown" MouseLeftButtonUp="GameMain_MouseLeftButtonUp" MouseMove="GameMain_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
         </ScrollViewer>
     </Canvas>
 </Window>

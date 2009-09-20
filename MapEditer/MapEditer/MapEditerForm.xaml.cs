@@ -33,8 +33,6 @@ namespace MapEditer
 
         private byte[,] beforeEditMatrix;
 
-        private List<Point> changedNotes = new List<Point>();
-
         /// <summary>
         /// 鼠标是否处于按下状态
         /// </summary>
@@ -71,11 +69,6 @@ namespace MapEditer
         private Point MouseStartPoint;
 
         /// <summary>
-        /// 区域选中状态下鼠标结束点
-        /// </summary>
-        private Point MouseEndPoint;
-
-        /// <summary>
         /// 是否可以走斜线
         /// </summary>
         private bool diagonals;
@@ -97,11 +90,11 @@ namespace MapEditer
             set
             {
                 this._map = value;
-                this.LayoutRoot.Width = value.Width;
-                this.LayoutRoot.Height = value.Height;
+                this.GameMain.Width = value.Width;
+                this.GameMain.Height = value.Height;
                 Init();
                 Canvas.SetZIndex(value.MapImage, -1);
-                this.LayoutRoot.Children.Add(value.MapImage);
+                this.GameMain.Children.Add(value.MapImage);
                 if (value.Matrix != null)
                     this.Matrix = value.Matrix;
             }
@@ -114,9 +107,9 @@ namespace MapEditer
         }
         private void Init()
         {
-            this.LayoutRoot.Children.Clear();
-            MaxColumn = (int)this.LayoutRoot.Width / 20;
-            MaxRow = (int)this.LayoutRoot.Height / 20;
+            this.GameMain.Children.Clear();
+            MaxColumn = (int)this.GameMain.Width / 20;
+            MaxRow = (int)this.GameMain.Height / 20;
             Matrix = new byte[MaxColumn, MaxRow];
         }
         private void RePaintLine()
@@ -126,28 +119,29 @@ namespace MapEditer
             {
                 var line = new Line() { X1 = i * GridSize, Y1 = 0, X2 = i * GridSize, Y2 = MaxRow * GridSize };
                 line.Stroke = new SolidColorBrush(Colors.Black);
-                LayoutRoot.Children.Add(line);
+                GameMain.Children.Add(line);
             }
             for (int j = MaxRow; j >= 0; j--)
             {
                 var line = new Line() { X1 = 0, Y1 = j * GridSize, X2 = MaxColumn * GridSize, Y2 = j * GridSize };
                 line.Stroke = new SolidColorBrush(Colors.Black);
-                LayoutRoot.Children.Add(line);
+                GameMain.Children.Add(line);
             }
         }
 
         private void AddRectangle(Color color, int column, int row)
         {
-            var rect = new Rectangle() { Width = GridSize, Height = GridSize, Fill = new SolidColorBrush(color) };
+            RemoveRectangleByPostion(column, row);
+            var rect = new Rectangle() { Width = GridSize, Height = GridSize, Opacity = 0.5, Fill = new SolidColorBrush(color) };
             Canvas.SetLeft(rect, column * GridSize);
             Canvas.SetTop(rect, row * GridSize);
-            this.LayoutRoot.Children.Add(rect);
+            this.GameMain.Children.Add(rect);
         }
 
         private void RemoveAllLine()
         {
             var uies = new List<UIElement>();
-            foreach (var uie in this.LayoutRoot.Children)
+            foreach (var uie in this.GameMain.Children)
             {
                 if (uie.GetType() == typeof(Line))
                 {
@@ -156,14 +150,14 @@ namespace MapEditer
             }
             foreach (var uie in uies)
             {
-                this.LayoutRoot.Children.Remove(uie);
+                this.GameMain.Children.Remove(uie);
             }
         }
 
         private void RemoveAllRectangle()
         {
             var uies = new List<UIElement>();
-            foreach (var uie in this.LayoutRoot.Children)
+            foreach (var uie in this.GameMain.Children)
             {
                 if (uie.GetType() == typeof(Rectangle))
                 {
@@ -172,14 +166,14 @@ namespace MapEditer
             }
             foreach (var uie in uies)
             {
-                this.LayoutRoot.Children.Remove(uie);
+                this.GameMain.Children.Remove(uie);
             }
         }
 
         private void RemoveRectangleByPostion(int column, int row)
         {
             List<Rectangle> removeRect = new List<Rectangle>();
-            foreach (var uielement in this.LayoutRoot.Children)
+            foreach (var uielement in this.GameMain.Children)
             {
                 if (uielement.GetType() == typeof(System.Windows.Shapes.Rectangle))
                 {
@@ -193,14 +187,14 @@ namespace MapEditer
             }
             foreach (var rect in removeRect)
             {
-                this.LayoutRoot.Children.Remove(rect);
+                this.GameMain.Children.Remove(rect);
             }
         }
 
         private void RemoveRectangleByColor(Color color)
         {
             var rects = new List<Rectangle>();
-            foreach (var uie in this.LayoutRoot.Children)
+            foreach (var uie in this.GameMain.Children)
             {
                 if (uie.GetType() == typeof(Rectangle))
                 {
@@ -214,7 +208,7 @@ namespace MapEditer
             }
             foreach (var rect in rects)
             {
-                this.LayoutRoot.Children.Remove(rect);
+                this.GameMain.Children.Remove(rect);
             }
         }
 
@@ -247,12 +241,12 @@ namespace MapEditer
             this.EndPoint = new Point(column, row);
         }
 
-        private void LayoutRoot_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        private void GameMain_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            this.LayoutRoot.CaptureMouse();
-            var truePoint = e.GetPosition(this.LayoutRoot);
+            this.GameMain.CaptureMouse();
+            var truePoint = e.GetPosition(this.GameMain);
             var mousePoint = GetPointByPoint(truePoint);
-            if (truePoint.X <= this.LayoutRoot.Width && truePoint.Y <= this.LayoutRoot.Height)
+            if (truePoint.X <= this.GameMain.Width && truePoint.Y <= this.GameMain.Height)
             {
                 this.isMouseLeftButtonDown = true;
                 if (MouseState == 1)
@@ -274,12 +268,12 @@ namespace MapEditer
             }
         }
 
-        private void LayoutRoot_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
+        private void GameMain_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
-            this.LayoutRoot.ReleaseMouseCapture();
-            var truePoint = e.GetPosition(this.LayoutRoot);
+            this.GameMain.ReleaseMouseCapture();
+            var truePoint = e.GetPosition(this.GameMain);
             var mousePoint = GetPointByPoint(truePoint);
-            if (truePoint.X <= this.LayoutRoot.Width && truePoint.Y <= this.LayoutRoot.Height)
+            if (truePoint.X <= this.GameMain.Width && truePoint.Y <= this.GameMain.Height)
             {
                 this.isMouseLeftButtonDown = false;
                 if (AreaSelect)
@@ -296,11 +290,11 @@ namespace MapEditer
             }
         }
 
-        private void LayoutRoot_MouseMove(object sender, MouseEventArgs e)
+        private void GameMain_MouseMove(object sender, MouseEventArgs e)
         {
-            var truePoint = e.GetPosition(this.LayoutRoot);
+            var truePoint = e.GetPosition(this.GameMain);
             var mousePoint = GetPointByPoint(truePoint);
-            if (truePoint.X <= this.LayoutRoot.Width && truePoint.Y <= this.LayoutRoot.Height)
+            if (truePoint.X <= this.GameMain.Width && truePoint.Y <= this.GameMain.Height)
             {
                 if (isMouseLeftButtonDown)
                 {
@@ -402,7 +396,7 @@ namespace MapEditer
         private void Clear()
         {
             var uies = new List<UIElement>();
-            foreach (var uie in this.LayoutRoot.Children)
+            foreach (var uie in this.GameMain.Children)
             {
                 if (uie.GetType() == typeof(Line) || uie.GetType() == typeof(Rectangle))
                 {
@@ -411,7 +405,7 @@ namespace MapEditer
             }
             foreach (var uie in uies)
             {
-                this.LayoutRoot.Children.Remove(uie);
+                this.GameMain.Children.Remove(uie);
             }
         }
 
@@ -452,12 +446,14 @@ namespace MapEditer
         private void OpenImage()
         {
             var openFile = new OpenFileDialog();
+            openFile.Title = "打开PNG文件";
+            openFile.Filter = "PNG文件(*.PNG)|*.PNG"; 
             if ((bool)openFile.ShowDialog())
             {
                 var bitmapImage = new BitmapImage(new Uri(openFile.FileName));
                 var imageMap = new Image();
                 imageMap.Source = bitmapImage;
-                this.Map = new Map(imageMap, bitmapImage.Width, bitmapImage.Height, openFile.FileName);
+                this.Map = new Map(imageMap, bitmapImage.Width, bitmapImage.Height, openFile.SafeFileName);
                 this.Map.Matrix = this.Matrix;
                 RePaintLine();
             }
@@ -482,12 +478,16 @@ namespace MapEditer
                 }
             }
             var openFile = new OpenFileDialog();
+            openFile.Title = "打开地图文件";
+            openFile.Filter = "Map文件(*.map)|*.map"; 
             if ((bool)openFile.ShowDialog())
             {
                 var fileStream = new FileStream(openFile.FileName, FileMode.Open, FileAccess.Read);
                 BinaryFormatter bf = new BinaryFormatter();
                 var readedMap = (Map)bf.Deserialize(fileStream);
-                readedMap.MapImage = GetImageByPath(readedMap.Path);
+                var directoryPath = openFile.FileName.Replace(openFile.SafeFileName, "");
+                readedMap.Directory = directoryPath;
+                readedMap.MapImage = GetImageByPath(readedMap.Directory + readedMap.ImageFileName);
                 this.Map = readedMap;
                 fileStream.Close();
                 GridSize = 20;
@@ -498,10 +498,10 @@ namespace MapEditer
 
         private void SaveMap()
         {
-            var binaryFormatter = new BinaryFormatter();
-            var fs = new FileStream(Map.Path + ".map", FileMode.Create, FileAccess.Write);
-            binaryFormatter.Serialize(fs, this.Map);
-            fs.Close();
+                var binaryFormatter = new BinaryFormatter();
+                var fs = new FileStream(Map.Directory + Map.ImageFileName + ".map", FileMode.Create, FileAccess.Write);
+                binaryFormatter.Serialize(fs, this.Map);
+                fs.Close();
         }
 
         /// <summary>
@@ -579,13 +579,10 @@ namespace MapEditer
             if (i <= 1F)
             {
                 GridSize = (int)(20.0F * i);
-                //Map.MapImage.RenderTransform = new ScaleTransform();
-                //Map.MapImage.RenderTransform.SetValue(ScaleTransform.ScaleXProperty, (double)i);
-                //Map.MapImage.RenderTransform.SetValue(ScaleTransform.ScaleYProperty, (double)i);
                 Map.MapImage.Width = Map.Width * i;
                 Map.MapImage.Height = Map.Height * i;
-                this.LayoutRoot.Width = Map.Width * i;
-                this.LayoutRoot.Height = Map.Height * i;
+                this.GameMain.Width = Map.Width * i;
+                this.GameMain.Height = Map.Height * i;
                 UpDateRectangle();
             }
         }
