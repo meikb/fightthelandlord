@@ -35,13 +35,45 @@ namespace MapEditer
 
         private List<Point> changedNotes = new List<Point>();
 
+        /// <summary>
+        /// 鼠标是否处于按下状态
+        /// </summary>
         private bool isMouseLeftButtonDown;
 
+        /// <summary>
+        /// 起点
+        /// </summary>
         private Point StartPoint;
 
+        /// <summary>
+        /// 终点
+        /// </summary>
         private Point EndPoint;
 
-        private byte MouseState;  //0表示障碍物,1表示开始点,2表示结束点
+        /// <summary>
+        /// 鼠标状态,0表示障碍物,1表示开始点,2表示结束点
+        /// </summary>
+        private byte MouseState;
+
+        /// <summary>
+        /// 是否为删除状态
+        /// </summary>
+        private bool RemoveImpediment;
+
+        /// <summary>
+        /// 是否为区域选中状态
+        /// </summary>
+        private bool AreaSelect;
+
+        /// <summary>
+        /// 区域选中状态下鼠标起始点
+        /// </summary>
+        private Point MouseStartPoint;
+
+        /// <summary>
+        /// 区域选中状态下鼠标结束点
+        /// </summary>
+        private Point MouseEndPoint;
 
         /// <summary>
         /// 是否可以走斜线
@@ -53,6 +85,9 @@ namespace MapEditer
         /// </summary>
         private Map _map;
 
+        /// <summary>
+        /// 当前编辑地图
+        /// </summary>
         private Map Map
         {
             get
@@ -103,7 +138,7 @@ namespace MapEditer
 
         private void AddRectangle(Color color, int column, int row)
         {
-            var rect = new Rectangle() { Width = GridSize, Height = GridSize, Opacity = 50.0, Fill = new SolidColorBrush(color) };
+            var rect = new Rectangle() { Width = GridSize, Height = GridSize, Fill = new SolidColorBrush(color) };
             Canvas.SetLeft(rect, column * GridSize);
             Canvas.SetTop(rect, row * GridSize);
             this.LayoutRoot.Children.Add(rect);
@@ -138,6 +173,27 @@ namespace MapEditer
             foreach (var uie in uies)
             {
                 this.LayoutRoot.Children.Remove(uie);
+            }
+        }
+
+        private void RemoveRectangleByPostion(int column, int row)
+        {
+            List<Rectangle> removeRect = new List<Rectangle>();
+            foreach (var uielement in this.LayoutRoot.Children)
+            {
+                if (uielement.GetType() == typeof(System.Windows.Shapes.Rectangle))
+                {
+                    var rect = uielement as Rectangle;
+                    var point = GetPointByUIElement(rect);
+                    if (point.X == column && point.Y == row)
+                    {
+                        removeRect.Add(rect);
+                    }
+                }
+            }
+            foreach (var rect in removeRect)
+            {
+                this.LayoutRoot.Children.Remove(rect);
             }
         }
 
@@ -209,8 +265,12 @@ namespace MapEditer
                     SetEndPoint((int)mousePoint.X, (int)mousePoint.Y);
                     return;
                 }
-                ChangeNote((int)mousePoint.X, (int)mousePoint.Y);
-                changedNotes.Add(mousePoint);
+                if (AreaSelect)
+                {
+                    this.MouseStartPoint = mousePoint;
+                    return;
+                }
+                ChangeNote((int)mousePoint.X, (int)mousePoint.Y, RemoveImpediment);
             }
         }
 
@@ -218,10 +278,21 @@ namespace MapEditer
         {
             this.LayoutRoot.ReleaseMouseCapture();
             var truePoint = e.GetPosition(this.LayoutRoot);
+            var mousePoint = GetPointByPoint(truePoint);
             if (truePoint.X <= this.LayoutRoot.Width && truePoint.Y <= this.LayoutRoot.Height)
             {
                 this.isMouseLeftButtonDown = false;
-                this.changedNotes.Clear();
+                if (AreaSelect)
+                {
+                    for (int x = (int)MouseStartPoint.X; x < mousePoint.X; x++)
+                    {
+                        for (int y = (int)MouseStartPoint.Y; y < mousePoint.Y; y++)
+                        {
+                            ChangeNote(x, y, RemoveImpediment);
+                        }
+                    }
+                    return;
+                }
             }
         }
 
@@ -243,58 +314,27 @@ namespace MapEditer
                         SetEndPoint((int)mousePoint.X, (int)mousePoint.Y);
                         return;
                     }
-                    bool isChanged = false;
-                    int column = (int)mousePoint.X;
-                    int row = (int)mousePoint.Y;
-                    foreach (var changedNote in changedNotes)
+                    if (MouseState == 0 && !AreaSelect)
                     {
-                        if (changedNote.X == column && changedNote.Y == row)
-                        {
-                            isChanged = true;
-                        }
-                        else
-                        {
-                            isChanged = false;
-                        }
-                    }
-                    if (!isChanged)
-                    {
-                        ChangeNote(column, row);
-                        changedNotes.Add(new Point(column, row));
+                        ChangeNote((int)mousePoint.X, (int)mousePoint.Y, RemoveImpediment);
                     }
                 }
             }
         }
 
-        private void ChangeNote(int column, int row)
+        private void ChangeNote(int column, int row, bool removeImpediment)
         {
             try
             {
-                if (Matrix[column, row] == 0)
+                if (removeImpediment)
                 {
-                    Matrix[column, row] = 1;
-                    AddRectangle(Colors.Green, column, row);
+                    RemoveRectangleByPostion(column, row);
+                    Matrix[column, row] = 0;
                 }
                 else
                 {
-                    Matrix[column, row] = 0;
-                    List<Rectangle> removeRect = new List<Rectangle>();
-                    foreach (var uielement in this.LayoutRoot.Children)
-                    {
-                        if (uielement.GetType() == typeof(System.Windows.Shapes.Rectangle))
-                        {
-                            var rect = uielement as Rectangle;
-                            var point = GetPointByUIElement(rect);
-                            if (point.X == column && point.Y == row)
-                            {
-                                removeRect.Add(rect);
-                            }
-                        }
-                    }
-                    foreach (var rect in removeRect)
-                    {
-                        this.LayoutRoot.Children.Remove(rect);
-                    }
+                    Matrix[column, row] = 1;
+                    AddRectangle(Colors.Green, column, row);
                 }
             }
             catch (IndexOutOfRangeException iofre)
@@ -315,6 +355,7 @@ namespace MapEditer
         private void btnImpediment_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.MouseState = 0;
+            this.RemoveImpediment = false;
         }
 
         private void btnUpdate_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -392,7 +433,7 @@ namespace MapEditer
 
         private void NewMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-
+            Clear();
         }
 
         private void SaveMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -403,7 +444,7 @@ namespace MapEditer
             }
         }
 
-        private void btnOpenImage_Click(object sender, System.Windows.RoutedEventArgs e)
+        private void OpenImageMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             OpenImage();
         }
@@ -560,6 +601,21 @@ namespace MapEditer
             this.svPanel.Width = e.NewSize.Width - 212;
             this.svPanel.Height = e.NewSize.Height - 100;
             Canvas.SetLeft(this.caControls, 798 + e.NewSize.Width - 1010);
+        }
+
+        private void btnRemoveImpediment_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.RemoveImpediment = true;
+        }
+
+        private void btnSetArea_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.AreaSelect = true;
+        }
+
+        private void btnSingle_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            this.AreaSelect = false;
         }
     }
 }
