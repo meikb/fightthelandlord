@@ -59,6 +59,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="EventEditer.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="MapEditerForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -78,6 +82,9 @@
       <DependentUpon>DialogEditer.xaml</DependentUpon>
     </Compile>
     <Compile Include="Event.cs" />
+    <Compile Include="EventEditer.xaml.cs">
+      <DependentUpon>EventEditer.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Map.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
