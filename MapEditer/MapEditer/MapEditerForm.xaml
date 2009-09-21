@@ -3,39 +3,42 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="MapEditer" Height="700" Width="1010" SizeChanged="Window_SizeChanged" MinHeight="700" Icon="25_avatar_middle.jpg">
     <Canvas>
-        <Canvas x:Name="caControls" Canvas.Left="806" Height="600" Width="180" Canvas.Top="22">
-            <Button x:Name="btnStartPoint" Height="27" Width="75" Canvas.Left="5" Canvas.Top="18" Content="起点" Click="btnStartPoint_Click"/>
-            <Button x:Name="btnEndPoint" Height="27" Width="75" Canvas.Left="86" Canvas.Top="18" Content="终点" Click="btnEndPoint_Click"/>
-            <Button x:Name="btnImpediment" Height="27" Width="75" Canvas.Left="6" Canvas.Top="111" Content="添加障碍" Click="btnImpediment_Click"/>
-            <TextBox x:Name="tbGridSize" Height="25" Width="85" Canvas.Left="86" Canvas.Top="288" TextWrapping="Wrap"/>
-            <Button x:Name="btnUpdate" Height="27" Width="75" Canvas.Top="376" Content="更新设置" Click="btnUpdate_Click" Canvas.Left="6"/>
-            <TextBlock Height="25" Width="85" Canvas.Left="6" Canvas.Top="291" Text="GridSize:" TextWrapping="Wrap"/>
-            <Button x:Name="btnStartFindPath" Height="27" Width="75" Canvas.Left="6" Canvas.Top="418" Content="开始寻径" Click="btnStartFindPath_Click" />
+        <Canvas x:Name="caControls" Canvas.Left="806" Height="640" Width="180" Canvas.Top="22">
+            <Button x:Name="btnStartPoint" Height="27" Width="75" Canvas.Top="254.667" Content="起点" Click="btnStartPoint_Click" Canvas.Left="7"/>
+            <Button x:Name="btnEndPoint" Height="27" Width="75" Canvas.Left="86.667" Canvas.Top="254.667" Content="终点" Click="btnEndPoint_Click"/>
+            <Button x:Name="btnImpediment" Height="27" Width="75" Canvas.Left="8" Canvas.Top="347.667" Content="添加障碍" Click="btnImpediment_Click"/>
+            <TextBox x:Name="tbGridSize" Height="25" Width="85" Canvas.Left="86.667" Canvas.Top="383.334" TextWrapping="Wrap" Visibility="Collapsed"/>
+            <Button x:Name="btnUpdate" Height="27" Width="75" Canvas.Top="456.001" Content="更新设置" Click="btnUpdate_Click" Canvas.Left="5.667"/>
+            <TextBlock Height="25" Width="85" Canvas.Left="6.667" Canvas.Top="386.334" Text="GridSize:" TextWrapping="Wrap" Visibility="Collapsed"/>
+            <Button x:Name="btnStartFindPath" Height="27" Width="75" Canvas.Left="5.667" Canvas.Top="498.001" Content="开始寻径" Click="btnStartFindPath_Click" />
 
-            <TextBlock Height="16" Width="32.333" Canvas.Left="4" Canvas.Top="497" TextWrapping="Wrap">耗时:</TextBlock>
-            <TextBlock x:Name="tbTim" Height="16" Width="75" Canvas.Left="40.333" Canvas.Top="497" TextWrapping="Wrap"/>
-            <Button x:Name="btnClear" Height="27" Width="75" Canvas.Left="96" Canvas.Top="376" Content="清空" Click="btnClear_Click"/>
-            <CheckBox x:Name="cbDiagonals" Height="16" Width="86" Canvas.Left="6" Canvas.Top="343" Content="Diagonals" IsChecked="True" Checked="cbDiagonals_Checked" Unchecked="cbDiagonals_Unchecked"/>
-            <TextBlock Height="78" Width="192" Canvas.Left="4" Canvas.Top="522" TextWrapping="Wrap"><Run Text="作者:猪笨无罪(李达)"/><LineBreak/><Run Text="联系QQ:234446552"/><LineBreak/><Run Text="博客:"/><LineBreak/><Run Text=""/><LineBreak/><Run Text=""/><LineBreak/><Run Text=""/></TextBlock>
-            <ComboBox Width="105" Canvas.Left="67" Canvas.Top="234" Height="20" MaxDropDownHeight="80" SelectionChanged="ComboBox_SelectionChanged">
+            <TextBlock Height="16" Width="32.333" Canvas.Left="4" Canvas.Top="533" TextWrapping="Wrap">耗时:</TextBlock>
+            <TextBlock x:Name="tbTim" Height="16" Width="105" Canvas.Left="40.333" Canvas.Top="533" TextWrapping="Wrap"/>
+            <Button x:Name="btnClear" Height="27" Width="75" Canvas.Left="95.667" Canvas.Top="456.001" Content="清空" Click="btnClear_Click"/>
+            <CheckBox x:Name="cbDiagonals" Height="16" Width="86" Canvas.Left="5.667" Canvas.Top="423.001" Content="Diagonals" IsChecked="True" Checked="cbDiagonals_Checked" Unchecked="cbDiagonals_Unchecked"/>
+            <TextBlock Height="78" Width="192" Canvas.Left="4" Canvas.Top="558" TextWrapping="Wrap"><Run Text="作者:猪笨无罪(李达)"/><LineBreak/><Run Text="联系QQ:234446552"/><LineBreak/><Run Text="博客:"/><LineBreak/><Run Text=""/><LineBreak/><Run Text=""/><LineBreak/><Run Text=""/></TextBlock>
+            <ComboBox Width="105" Canvas.Left="57.667" Canvas.Top="388.334" Height="20" MaxDropDownHeight="80" SelectionChanged="ComboBox_SelectionChanged">
             	<ComboBoxItem Content="100%"/>
             	<ComboBoxItem Content="75%"/>
             	<ComboBoxItem Content="50%"/>
             	<ComboBoxItem Content="25%"/>
             </ComboBox>
-            <Button x:Name="btnRemoveImpediment" Height="27" Width="75" Canvas.Left="87" Canvas.Top="111" Content="删除障碍" Click="btnRemoveImpediment_Click"/>
-            <TextBlock Width="56" Height="20" Canvas.Left="7" Canvas.Top="234" Text="显示比例" TextWrapping="Wrap"/>
-            <Button x:Name="btnSetArea" Height="27" Width="75" Canvas.Left="5" Canvas.Top="64" Content="一次多个" Click="btnSetArea_Click"/>
-            <Button x:Name="btnSingle" Height="27" Width="75" Canvas.Left="86" Canvas.Top="64" Content="一次单个" Click="btnSingle_Click"/>
+            <Button x:Name="btnRemoveImpediment" Height="27" Width="75" Canvas.Left="87.667" Canvas.Top="347.667" Content="删除障碍" Click="btnRemoveImpediment_Click"/>
+            <TextBlock Width="56" Height="20" Canvas.Left="7" Canvas.Top="388.334" Text="显示比例" TextWrapping="Wrap"/>
+            <Button x:Name="btnSetArea" Height="27" Width="75" Canvas.Top="300.667" Content="一次多个" Click="btnSetArea_Click" Canvas.Left="7"/>
+            <Button x:Name="btnSingle" Height="27" Width="75" Canvas.Left="86.667" Canvas.Top="300.667" Content="一次单个" Click="btnSingle_Click"/>
+            <TreeView x:Name="treeViewProject" Width="180" Height="250.667"/>
         </Canvas>
         <Menu Canvas.Left="0" Canvas.Top="0" Height="22" Name="menu1" Width="360" Background="{x:Null}">
             <MenuItem Header="文件" AllowDrop="True">
-                <MenuItem Header="打开地图" Click="OpenMenuItem_Click" />
-                <MenuItem Header="新建地图" Click="NewMenuItem_Click" />
-                <MenuItem Header="保存地图" Click="SaveMenuItem_Click" />
+                <MenuItem Header="新建项目" Click="NewMenuItem_Click" />
+                <MenuItem Header="打开项目" Click="OpenMenuItem_Click" />
+                <MenuItem Header="保存项目" Click="SaveMenuItem_Click" />
             </MenuItem>
-            <MenuItem Header="图片" AllowDrop="True">
-                <MenuItem Header="导入图片" Click="OpenImageMenuItem_Click" />
+            <MenuItem Header="地图" AllowDrop="True">
+                <MenuItem Header="新建地图" Click="OpenImageMenuItem_Click" />
+                <MenuItem Header="导入地图" Click="OpenImageMenuItem_Click" />
+                <MenuItem Header="保存地图" Click="OpenImageMenuItem_Click" />
             </MenuItem>
         </Menu>
         <ScrollViewer Width="805" Height="640" Canvas.Top="22" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" x:Name="svPanel">
