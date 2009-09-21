@@ -22,6 +22,17 @@ namespace PathFinderSpace
         public PathNote parentNote;
     }
 
+    public struct Vector
+    {
+        public int X;
+        public int Y;
+        public Vector(int x, int y)
+        {
+            this.X = x;
+            this.Y = y;
+        }
+    }
+
     public class PathFinder
     {
         /// <summary>
@@ -31,11 +42,11 @@ namespace PathFinderSpace
         /// <summary>
         /// 开始点
         /// </summary>
-        private Point startPoint;
+        private Vector startPoint;
         /// <summary>
         /// 结束点
         /// </summary>
-        private Point endPoint;
+        private Vector endPoint;
         /// <summary>
         /// 开启列表
         /// </summary>
@@ -58,7 +69,7 @@ namespace PathFinderSpace
         /// <param name="matrix">待检测矩阵</param>
         /// <param name="startPoint">开始点</param>
         /// <param name="endPoint">结束点</param>
-        public PathFinder(byte[,] matrix, Point startPoint, Point endPoint)
+        public PathFinder(byte[,] matrix, Vector startPoint, Vector endPoint)
         {
             this.matrix = matrix;
             this.startPoint = startPoint;
@@ -74,8 +85,8 @@ namespace PathFinderSpace
         public PathFinder(byte[,] matrix, Point startPoint, Point endPoint, bool diagonals)
         {
             this.matrix = matrix;
-            this.startPoint = startPoint;
-            this.endPoint = endPoint;
+            this.startPoint = GetVectorByPoint(startPoint);
+            this.endPoint = GetVectorByPoint(endPoint);
             this.diagonals = diagonals;
             if (!diagonals)
             {
@@ -183,8 +194,24 @@ namespace PathFinderSpace
                     }
                     else
                     {
-                        openedList.Sort(Compare);
-                        pathNote = openedList[0];
+                        PathNote tempNote = null;
+                        foreach (var opendedNote in openedList)
+                        {
+                            if (tempNote == null)
+                            {
+                                tempNote = opendedNote;
+                            }
+                            else
+                            {
+                                if (opendedNote.F < tempNote.F)
+                                {
+                                    tempNote = opendedNote;
+                                }
+                            }
+                        }
+                        //openedList.Sort(Compare);
+
+                        pathNote = tempNote;
                     }
                 }
             }
@@ -197,16 +224,31 @@ namespace PathFinderSpace
         /// <param name="pathNote">PathNote</param>
         /// <param name="pathPoints">列表</param>
         /// <returns>路径</returns>
-        private List<Point> GetPointListByParent(PathNote pathNote, List<Point> pathPoints)
+        private List<Point> GetPointListByParent(PathNote pathNote, List<Vector> pathPoints)
         {
             if (pathPoints == null)
-                pathPoints = new List<Point>();
+                pathPoints = new List<Vector>();
             if (pathNote.parentNote != null)
             {
-                pathPoints.Add(new Point(pathNote.parentNote.X, pathNote.parentNote.Y));
+                pathPoints.Add(new Vector(pathNote.parentNote.X, pathNote.parentNote.Y));
                 GetPointListByParent(pathNote.parentNote, pathPoints);
             }
-            return pathPoints;
+            var points = new List<Point>();
+            foreach (var vector in pathPoints)
+            {
+                points.Add(GetPointByVector(vector));
+            }
+            return points;
+        }
+
+        private Point GetPointByVector(Vector vector)
+        {
+            return new Point(vector.X, vector.Y);
+        }
+
+        private Vector GetVectorByPoint(Point point)
+        {
+            return new Vector((int)point.X, (int)point.Y);
         }
 
         /// <summary>

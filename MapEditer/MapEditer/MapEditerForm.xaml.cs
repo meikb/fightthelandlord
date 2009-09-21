@@ -324,11 +324,30 @@ namespace MapEditer
                 {
                     RemoveRectangleByPostion(column, row);
                     Matrix[column, row] = 0;
+                    if (column >= 0 || row >= 0 || column + 1 <= MaxColumn || row + 1 <= MaxRow) //保证坐标不过界
+                    {
+                        RemoveRectangleByPostion(column + 1, row);
+                        RemoveRectangleByPostion(column + 1, row + 1);
+                        RemoveRectangleByPostion(column, row + 1);
+                        Matrix[column + 1, row] = 0;
+                        Matrix[column + 1, row + 1] = 0;
+                        Matrix[column, row + 1] = 0;
+                    }
+
                 }
                 else
                 {
                     Matrix[column, row] = 1;
                     AddRectangle(Colors.Green, column, row);
+                    if (column >= 0 || row >= 0 || column + 1 <= MaxColumn || row + 1 <= MaxRow) //保证坐标不过界
+                    {
+                        AddRectangle(Colors.Green, column + 1, row);
+                        AddRectangle(Colors.Green, column + 1, row + 1);
+                        AddRectangle(Colors.Green, column, row + 1);
+                        Matrix[column + 1, row] = 1;
+                        Matrix[column + 1, row + 1] = 1;
+                        Matrix[column, row + 1] = 1;
+                    }
                 }
             }
             catch (IndexOutOfRangeException iofre)

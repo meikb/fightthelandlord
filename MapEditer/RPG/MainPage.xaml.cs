@@ -52,16 +52,6 @@ namespace RPG
         private byte MouseState;
 
         /// <summary>
-        /// 是否为删除状态
-        /// </summary>
-        private bool RemoveImpediment;
-
-        /// <summary>
-        /// 是否为区域选中状态
-        /// </summary>
-        private bool AreaSelect;
-
-        /// <summary>
         /// 区域选中状态下鼠标起始点
         /// </summary>
         private Point MouseStartPoint;
