@@ -6,15 +6,50 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Runtime.Serialization;
 
-namespace MapEditer
+namespace MapEditor
 {
     [Serializable]
     public class Map
     {
         /// <summary>
-        /// 矩阵
+        /// 地图名称
         /// </summary>
-        public byte[,] Matrix { get; set; }
+        private string _name;
+
+        /// <summary>
+        /// 设置或获取地图名称
+        /// </summary>
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                this._name = value;
+            }
+        }
+
+        /// <summary>
+        /// 二维矩阵
+        /// </summary>
+        private byte[,] _matrix;
+
+        /// <summary>
+        /// 获取或设置二维矩阵
+        /// </summary>
+        public byte[,] Matrix 
+        {
+            get
+            {
+                return this._matrix;
+            }
+            set
+            {
+                this._matrix = value;
+            }
+        }
 
         /// <summary>
         /// 图片
@@ -46,7 +81,7 @@ namespace MapEditer
         /// <summary>
         /// 事件集
         /// </summary>
-        public List<Event> Events = new List<Event>();
+        public List<Events> Events = new List<Events>();
 
         public Map(Image mapImage, double width, double height, string imageFileName)
         {

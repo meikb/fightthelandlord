@@ -1,10 +1,12 @@
 ﻿<Window
 	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-	x:Class="MapEditer.EventEditer"
+	x:Class="MapEditor.NewEvents"
 	x:Name="Window"
-	Title="EventEditer"
-	Width="640" Height="480">
+	Title="NewEvents"
+	Width="339.5" Height="352.5">
 
-	<Grid x:Name="LayoutRoot"/>
+	<Grid x:Name="LayoutRoot">
+		<ListBox Margin="147.5,0,0,0"/>
+	</Grid>
 </Window>

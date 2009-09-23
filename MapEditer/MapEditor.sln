@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
 # Visual Studio 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditer", "MapEditer\MapEditer.csproj", "{089303A6-E9B4-4756-B57C-27DD413A50E1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MapEditor", "MapEditer\MapEditor.csproj", "{089303A6-E9B4-4756-B57C-27DD413A50E1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

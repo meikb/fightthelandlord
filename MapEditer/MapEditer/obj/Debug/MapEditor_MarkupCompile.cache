@@ -1,18 +1,18 @@
-﻿MapEditer
+﻿MapEditor
 
 
 winexe
 C#
 .cs
 F:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\obj\Debug\
-MapEditer
+MapEditor
 none
 false
 DEBUG;TRACE
 F:\My Documents\Visual Studio 2008\Projects\MapEditer\MapEditer\App.xaml
-31107202512
+51878370787
 
-11-218176756
+18-157797488
 9314880095
-DialogEditor.xaml;EventEditor.xaml;MapEditorForm.xaml;
+DialogEditor.xaml;EventEditor.xaml;MapEditorForm.xaml;NewEvents.xaml;NewMap.xaml;
 

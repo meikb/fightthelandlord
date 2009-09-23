@@ -8,8 +8,8 @@
     <ProjectGuid>{089303A6-E9B4-4756-B57C-27DD413A50E1}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>MapEditer</RootNamespace>
-    <AssemblyName>MapEditer</AssemblyName>
+    <RootNamespace>MapEditor</RootNamespace>
+    <AssemblyName>MapEditor</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -55,15 +55,23 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="DialogEditer.xaml">
+    <Page Include="DialogEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="EventEditer.xaml">
+    <Page Include="EventEditor.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="MapEditerForm.xaml">
+    <Page Include="MapEditorForm.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewEvents.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="NewMap.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -71,21 +79,32 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MapEditerForm.xaml.cs">
-      <DependentUpon>MapEditerForm.xaml</DependentUpon>
+    <Compile Include="MapEditorForm.xaml.cs">
+      <DependentUpon>MapEditorForm.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Dialog.cs" />
-    <Compile Include="DialogEditer.xaml.cs">
-      <DependentUpon>DialogEditer.xaml</DependentUpon>
+    <Compile Include="DialogEvent.cs" />
+    <Compile Include="DialogEditor.xaml.cs">
+      <DependentUpon>DialogEditor.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Event.cs" />
-    <Compile Include="EventEditer.xaml.cs">
-      <DependentUpon>EventEditer.xaml</DependentUpon>
+    <Compile Include="Events.cs" />
+    <Compile Include="EventEditor.xaml.cs">
+      <DependentUpon>EventEditor.xaml</DependentUpon>
     </Compile>
+    <Compile Include="IEvent.cs" />
     <Compile Include="Map.cs" />
+    <Compile Include="MapChangeEvent.cs" />
+    <Compile Include="NewEvents.xaml.cs">
+      <DependentUpon>NewEvents.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="NewMap.xaml.cs">
+      <DependentUpon>NewMap.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="OnOff.cs" />
+    <Compile Include="OnOffEvent.cs" />
+    <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
