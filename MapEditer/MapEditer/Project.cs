@@ -117,7 +117,7 @@ namespace MapEditor
             OnOff selectedOnOff = null;
             foreach (var onOff in globalOnOff)
             {
-                if (onOff.Name == name)
+                if (onOff.OnOffName == name)
                     selectedOnOff = onOff;
             }
             return selectedOnOff;
@@ -132,7 +132,7 @@ namespace MapEditor
         {
             foreach (var onOff in globalOnOff)
             {
-                if (onOff.Name == name)
+                if (onOff.OnOffName == name)
                 {
                     onOff.Value = value;
                 }

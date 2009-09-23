@@ -9,9 +9,9 @@
 
 	<Grid x:Name="LayoutRoot">
 		<ListBox Margin="147.5,95,8,8"/>
-		<Canvas x:Name="canvasSpriteView" VerticalAlignment="Bottom" Height="161.5" HorizontalAlignment="Left" Width="147.5"/>
+		<Canvas x:Name="canvasSpriteView" VerticalAlignment="Bottom" Height="153.5" HorizontalAlignment="Left" Width="141" Margin="0,0,0,8" />
 		<ComboBox x:Name="cbSelectSprite" HorizontalAlignment="Left" Margin="0,0,0,161.5" Width="143.5" VerticalAlignment="Bottom"/>
-		<ComboBox HorizontalAlignment="Left" Margin="5,41,0,0" VerticalAlignment="Top" Width="75"/>
+		<ComboBox x:Name="cbOnOff" HorizontalAlignment="Left" Margin="5,41,0,0" VerticalAlignment="Top" Width="75"/>
 		<TextBlock HorizontalAlignment="Left" Margin="87,44,0,0" VerticalAlignment="Top" Width="42" Height="16.687" Text="为ON" TextWrapping="Wrap"/>
 		<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="104" Height="18" Text="事件执行条件:" TextWrapping="Wrap"/>
 		<TextBlock HorizontalAlignment="Left" Margin="5,158,0,0" VerticalAlignment="Top" Width="84" Height="18" TextWrapping="Wrap"><Run Text="事件精灵选择"/><Run Text=":"/></TextBlock>

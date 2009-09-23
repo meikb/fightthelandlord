@@ -17,11 +17,42 @@ namespace MapEditor
 	/// </summary>
 	public partial class NewEvents : Window
 	{
-		public NewEvents()
+        public Project SelectedProject { get; set; }
+
+		public NewEvents(Project sProject)
 		{
 			this.InitializeComponent();
-			
+            this.Loaded += new RoutedEventHandler(NewEvents_Loaded);
+            this.SelectedProject = sProject;
 			// Insert code required on object creation below this point.
 		}
+
+        void NewEvents_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitSpriteCombox();
+            InitOnOffCombox();
+            InitEventsListBox();
+        }
+
+        private void InitSpriteCombox()
+        {
+            foreach (var sprite in this.SelectedProject.Sprites)
+            {
+                this.cbSelectSprite.Items.Add(new ComboBoxItem() { Content = sprite.SpriteName });
+            }
+        }
+
+        private void InitOnOffCombox()
+        {
+            foreach (var onOff in this.SelectedProject.globalOnOff)
+            {
+                this.cbOnOff.Items.Add(new ComboBoxItem() { Content = onOff.OnOffName });
+            }
+        }
+
+        private void InitEventsListBox()
+        {
+            //todo 初始化事件窗口
+        }
 	}
 }

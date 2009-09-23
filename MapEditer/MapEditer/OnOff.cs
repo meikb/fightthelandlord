@@ -16,7 +16,7 @@ namespace MapEditor
         /// <summary>
         /// 开关名
         /// </summary>
-        public string Name;
+        public string OnOffName;
         /// <summary>
         /// 开关值
         /// </summary>
@@ -29,7 +29,7 @@ namespace MapEditor
         /// <param name="onOff">开关值</param>
         public OnOff(string name, bool onOff)
         {
-            this.Name = name;
+            this.OnOffName = name;
             this.Value = onOff;
         }
 
