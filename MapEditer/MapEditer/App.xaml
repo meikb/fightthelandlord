@@ -1,7 +1,7 @@
-﻿<Application x:Class="MapEditer.App"
+﻿<Application x:Class="MapEditor.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    StartupUri="MapEditerForm.xaml">
+    StartupUri="MapEditorForm.xaml">
     <Application.Resources>
          
     </Application.Resources>

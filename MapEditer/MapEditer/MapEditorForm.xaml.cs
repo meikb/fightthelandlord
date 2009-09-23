@@ -16,12 +16,12 @@ using Microsoft.Win32;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 
-namespace MapEditer
+namespace MapEditor
 {
     /// <summary>
-    /// MapEditer.xaml 的交互逻辑
+    /// MapEditor.xaml 的交互逻辑
     /// </summary>
-    public partial class MapEditerForm : Window
+    public partial class MapEditorForm : Window
     {
         public int GridSize = 20;
 
@@ -74,22 +74,40 @@ namespace MapEditer
         private bool diagonals;
 
         /// <summary>
-        /// 当前编辑地图
+        /// 当前打开项目
         /// </summary>
-        private Map _map;
+        private Project _nowProject;
+
+        private Project NowProject
+        {
+            get
+            {
+                return this._nowProject;
+            }
+            set
+            {
+                this.Title = value.ProjectName;
+                this._nowProject = value;
+            }
+        }
 
         /// <summary>
         /// 当前编辑地图
         /// </summary>
-        private Map Map
+        private Map _selectedMap;
+
+        /// <summary>
+        /// 当前编辑地图
+        /// </summary>
+        private Map SelectedMap
         {
             get
             {
-                return _map;
+                return _selectedMap;
             }
             set
             {
-                this._map = value;
+                this._selectedMap = value;
                 this.GameMain.Width = value.Width;
                 this.GameMain.Height = value.Height;
                 Init();
@@ -100,7 +118,7 @@ namespace MapEditer
             }
         }
 
-        public MapEditerForm()
+        public MapEditorForm()
         {
             InitializeComponent();
             Init();
@@ -438,30 +456,6 @@ namespace MapEditer
             this.diagonals = false;
         }
 
-        private void OpenMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            OpenMap();
-            RefreshMatrix();
-        }
-
-        private void NewMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            Clear();
-        }
-
-        private void SaveMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            if (this.Map != null)
-            {
-                SaveMap();
-            }
-        }
-
-        private void OpenImageMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
-        {
-            OpenImage();
-        }
-
         private void OpenImage()
         {
             var openFile = new OpenFileDialog();
@@ -472,8 +466,10 @@ namespace MapEditer
                 var bitmapImage = new BitmapImage(new Uri(openFile.FileName));
                 var imageMap = new Image();
                 imageMap.Source = bitmapImage;
-                this.Map = new Map(imageMap, bitmapImage.Width, bitmapImage.Height, openFile.SafeFileName);
-                this.Map.Matrix = this.Matrix;
+                this.SelectedMap.MapImage = imageMap;
+                this.SelectedMap.Width = bitmapImage.Width;
+                this.SelectedMap.Height = bitmapImage.Height;
+                this.SelectedMap.Matrix = this.Matrix;
                 RePaintLine();
             }
         }
@@ -488,14 +484,6 @@ namespace MapEditer
 
         private void OpenMap()
         {
-            if (CheckMatrixVal())
-            {
-                var res = MessageBox.Show("地图已被修改,是否保存", "提示", MessageBoxButton.YesNo);
-                if (res == MessageBoxResult.Yes)
-                {
-                    SaveMap();
-                }
-            }
             var openFile = new OpenFileDialog();
             openFile.Title = "打开地图文件";
             openFile.Filter = "Map文件(*.map)|*.map"; 
@@ -507,10 +495,9 @@ namespace MapEditer
                 var directoryPath = openFile.FileName.Replace(openFile.SafeFileName, "");
                 readedMap.Directory = directoryPath;
                 readedMap.MapImage = GetImageByPath(readedMap.Directory + readedMap.ImageFileName);
-                this.Map = readedMap;
+                this.SelectedMap = readedMap;
                 fileStream.Close();
                 GridSize = 20;
-                this.beforeEditMatrix = this.Matrix;
                 RePaintLine();
             }
         }
@@ -518,8 +505,8 @@ namespace MapEditer
         private void SaveMap()
         {
                 var binaryFormatter = new BinaryFormatter();
-                var fs = new FileStream(Map.Directory + Map.ImageFileName + ".map", FileMode.Create, FileAccess.Write);
-                binaryFormatter.Serialize(fs, this.Map);
+                var fs = new FileStream(NowProject.Directory + "Map\\" + SelectedMap.ImageFileName + ".map", FileMode.Create, FileAccess.Write);
+                binaryFormatter.Serialize(fs, this.SelectedMap);
                 fs.Close();
         }
 
@@ -598,10 +585,10 @@ namespace MapEditer
             if (i <= 1F)
             {
                 GridSize = (int)(20.0F * i);
-                Map.MapImage.Width = Map.Width * i;
-                Map.MapImage.Height = Map.Height * i;
-                this.GameMain.Width = Map.Width * i;
-                this.GameMain.Height = Map.Height * i;
+                SelectedMap.MapImage.Width = SelectedMap.Width * i;
+                SelectedMap.MapImage.Height = SelectedMap.Height * i;
+                this.GameMain.Width = SelectedMap.Width * i;
+                this.GameMain.Height = SelectedMap.Height * i;
                 UpDateRectangle();
             }
         }
@@ -632,6 +619,143 @@ namespace MapEditer
         private void btnSingle_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             this.AreaSelect = false;
+        }
+
+        private void NewProjectMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NewProject();
+            RefreshTreeView();
+        }
+
+        private void NewProject()
+        {
+            var saveFile = new SaveFileDialog() { Filter = "Pig RPG Engine 项目文件(*.PREPRO)|*.PREPRO", AddExtension = true, DefaultExt = "PREPRO", Title = "新建项目,文件名即项目名" };
+            if ((bool)saveFile.ShowDialog())
+            {
+                string projectName = saveFile.SafeFileName;
+                this.Title = projectName;
+                this.NowProject = new Project() { ProjectName = projectName };
+                this.NowProject.Directory = saveFile.FileName.Replace(projectName, "");
+                var fs = new FileStream(saveFile.FileName, FileMode.Create, FileAccess.Write);
+                var bf = new BinaryFormatter();
+                bf.Serialize(fs, this.NowProject);
+                fs.Close();
+            }
+        }
+
+        private void OpenProjectMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OpenProject();
+            RefreshTreeView();
+            RefreshMatrix();
+            RePaintLine();
+        }
+
+        private void OpenProject()
+        {
+            var openFile = new OpenFileDialog() { Filter = "Pig RPG Engine 项目文件(*.PREPRO)|*.PREPRO", AddExtension = true, DefaultExt = "PREPRO", Title = "打开项目" };
+            if ((bool)openFile.ShowDialog())
+            {
+                var fs = new FileStream(openFile.FileName, FileMode.Open, FileAccess.Read);
+                var bf = new BinaryFormatter();
+                this.NowProject = (Project)bf.Deserialize(fs);
+                fs.Close();
+                var directoryPath = openFile.FileName.Replace(openFile.SafeFileName, "");
+                this.NowProject.Directory = directoryPath;
+                this.NowProject.InitMap();
+                this.SelectedMap = NowProject.AllMaps[0];
+            }
+        }
+
+        private void SaveProjectMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            SaveProject();
+        }
+
+        private void SaveProject()
+        {
+            var fs = new FileStream(NowProject.Directory + NowProject.ProjectName, FileMode.Create, FileAccess.Write);
+            var bf = new BinaryFormatter();
+            bf.Serialize(fs, this.NowProject);
+            fs.Close();
+        }
+
+        private void ImportMapMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OpenMap();
+            RefreshTreeView();
+            RefreshMatrix();
+            RePaintLine();
+        }
+
+        private void NewMapMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            NewMap();
+            RefreshTreeView();
+            RefreshMatrix();
+            RePaintLine();
+        }
+
+        private void NewMap()
+        {
+            var newMapDialog = new NewMap();
+            newMapDialog.ShowDialog();
+            if (newMapDialog.DialogResult)
+            {
+                string imagePath = NowProject.Directory + "Map\\" + newMapDialog.imageName;
+                if (!Directory.Exists(NowProject.Directory + "Map"))
+                    Directory.CreateDirectory(NowProject.Directory + "Map");
+                File.Copy(newMapDialog.imagePath, imagePath, false);
+                var bitmapImage = new BitmapImage(new Uri(imagePath));
+                var imageMap = new Image();
+                imageMap.Source = bitmapImage;
+                this.SelectedMap = new Map(imageMap, bitmapImage.Width, bitmapImage.Height, newMapDialog.imageName);
+                this.SelectedMap.Matrix = this.Matrix;
+                this.SelectedMap.Name = newMapDialog.MapName;
+                this.NowProject.AddMap(this.SelectedMap);
+                this.SaveMap();
+            }
+        }
+
+        private void SaveMapMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (this.SelectedMap != null)
+            {
+                SaveMap();
+            }
+        }
+
+        private void OpenImageMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OpenImage();
+        }
+
+        private void btnSelectImage_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            OpenImage();
+        }
+
+        private void RefreshTreeView()
+        {
+            this.treeViewProject.Items.Clear();
+            foreach (var singleMap in NowProject.AllMaps)
+            {
+                var item = new TreeViewItem() { Header = singleMap.Name };
+                this.treeViewProject.Items.Add(item);
+            }
+        }
+
+        private void treeViewProject_SelectedItemChanged(object sender, System.Windows.RoutedPropertyChangedEventArgs<object> e)
+        {
+            if (e.NewValue != null)
+            {
+                var selectedItem = (TreeViewItem)e.NewValue;
+                var tempMap = this.NowProject.GetMapByName(selectedItem.Header.ToString());
+                if (tempMap != null)
+                    this.SelectedMap = tempMap;
+                RePaintLine();
+                RefreshMatrix();
+            }
         }
     }
 }

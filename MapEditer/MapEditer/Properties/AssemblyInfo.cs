@@ -7,11 +7,11 @@ using System.Windows;
 // 有关程序集的常规信息通过下列属性集
 // 控制。更改这些属性值可修改
 // 与程序集关联的信息。
-[assembly: AssemblyTitle("MapEditer")]
+[assembly: AssemblyTitle("MapEditor")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("CHINA")]
-[assembly: AssemblyProduct("MapEditer")]
+[assembly: AssemblyProduct("MapEditor")]
 [assembly: AssemblyCopyright("Copyright © CHINA 2009")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]

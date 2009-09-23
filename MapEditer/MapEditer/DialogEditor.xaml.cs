@@ -10,23 +10,21 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MapEditer
+namespace MapEditor
 {
 	/// <summary>
-	/// Interaction logic for DialogEditer.xaml
+	/// Interaction logic for DialogEditor.xaml
 	/// </summary>
-	public partial class DialogEditer : Window
+	public partial class DialogEditor : Window
 	{
-        public Map Map { get; set; }
+        public Events Events { get; set; }
 
-        private Dialog dialogs = new Dialog();
+        private DialogEvent dialogs = new DialogEvent();
 
-		public DialogEditer(Map map, int x, int y)
+		public DialogEditor(Events events, int x, int y)
 		{
 			this.InitializeComponent();
-            this.Map = map;
-            dialogs.X = x;
-            dialogs.Y = y;
+            this.Events = events;
 			// Insert code required on object creation below this point.
 		}
 
@@ -38,13 +36,13 @@ namespace MapEditer
 
 		private void btnSave_Click(object sender, System.Windows.RoutedEventArgs e)
 		{
-            for (int i = 0; i < this.listBoxDialogs.Items.Count; i++)
+            foreach (var item in this.listBoxDialogs.Items)
             {
-                var dialog = (ListBoxItem)listBoxDialogs.Items[0];
-                this.dialogs.Dialogs.Add(new KeyValuePair<int, string>(i, (string)dialog.Content));
+                var dialog = (ListBoxItem)item;
+                this.dialogs.AddDialog((string)dialog.Content);
             }
-            Map.Events.Add(dialogs);
-            this.Close(); //todo 添加对话完成...
+            Events.events.Add(dialogs);
+            this.Close();
 		}
 
 		private void btnQuit_Click(object sender, System.Windows.RoutedEventArgs e)

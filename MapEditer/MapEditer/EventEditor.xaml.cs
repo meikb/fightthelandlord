@@ -10,14 +10,14 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace MapEditer
+namespace MapEditor
 {
 	/// <summary>
-	/// Interaction logic for EventEditer.xaml
+	/// Interaction logic for EventEditor.xaml
 	/// </summary>
-	public partial class EventEditer : Window
+	public partial class EventEditor : Window
 	{
-		public EventEditer()
+		public EventEditor()
 		{
 			this.InitializeComponent();
 			
