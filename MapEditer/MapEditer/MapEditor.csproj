@@ -75,6 +75,14 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="NewSprite.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="SpriteManager.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -102,6 +110,9 @@
     <Compile Include="NewMap.xaml.cs">
       <DependentUpon>NewMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NewSprite.xaml.cs">
+      <DependentUpon>NewSprite.xaml</DependentUpon>
+    </Compile>
     <Compile Include="OnOff.cs" />
     <Compile Include="OnOffEvent.cs" />
     <Compile Include="Project.cs" />
@@ -121,6 +132,12 @@
     <Compile Include="PathFinder.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Sprite.cs" />
+    <Compile Include="SpriteInfo.cs" />
+    <Compile Include="SpriteManager.xaml.cs">
+      <DependentUpon>SpriteManager.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StaticVar.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

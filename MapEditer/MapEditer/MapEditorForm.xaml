@@ -41,6 +41,9 @@
                 <MenuItem Header="导入地图" Click="ImportMapMenuItem_Click" />
                 <MenuItem Header="保存地图" Click="SaveMapMenuItem_Click" />
             </MenuItem>
+            <MenuItem Header="Sprite" AllowDrop="True">
+                <MenuItem Header="Sprite管理器" Click="SpriteManagerMenuItem_Click" />
+            </MenuItem>
         </Menu>
         <ScrollViewer Width="805" Height="640" Canvas.Top="22" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" x:Name="svPanel">
         	<Canvas x:Name="GameMain" Width="800" Height="600" MouseLeftButtonDown="GameMain_MouseLeftButtonDown" MouseLeftButtonUp="GameMain_MouseLeftButtonUp" MouseMove="GameMain_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>

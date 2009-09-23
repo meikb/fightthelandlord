@@ -636,10 +636,15 @@ namespace MapEditor
                 this.Title = projectName;
                 this.NowProject = new Project() { ProjectName = projectName };
                 this.NowProject.Directory = saveFile.FileName.Replace(projectName, "");
+                StaticVar.Directory = this.NowProject.Directory;
                 var fs = new FileStream(saveFile.FileName, FileMode.Create, FileAccess.Write);
                 var bf = new BinaryFormatter();
                 bf.Serialize(fs, this.NowProject);
                 fs.Close();
+                if (!Directory.Exists(StaticVar.Directory + "Map"))
+                    Directory.CreateDirectory(StaticVar.Directory + "Map");
+                if (!Directory.Exists(StaticVar.Directory + "Animation"))
+                    Directory.CreateDirectory(StaticVar.Directory + "Animation");
             }
         }
 
@@ -662,8 +667,11 @@ namespace MapEditor
                 fs.Close();
                 var directoryPath = openFile.FileName.Replace(openFile.SafeFileName, "");
                 this.NowProject.Directory = directoryPath;
+                StaticVar.Directory = directoryPath;
                 this.NowProject.InitMap();
-                this.SelectedMap = NowProject.AllMaps[0];
+                if (NowProject.AllMaps.Count > 0)
+                    this.SelectedMap = NowProject.AllMaps[0];
+                this.NowProject.ConvertSpriteInfoTOSprite();
             }
         }
 
@@ -674,6 +682,7 @@ namespace MapEditor
 
         private void SaveProject()
         {
+            this.NowProject.ConvertSpriteToSpriteInfo();
             var fs = new FileStream(NowProject.Directory + NowProject.ProjectName, FileMode.Create, FileAccess.Write);
             var bf = new BinaryFormatter();
             bf.Serialize(fs, this.NowProject);
@@ -722,6 +731,15 @@ namespace MapEditor
             if (this.SelectedMap != null)
             {
                 SaveMap();
+            }
+        }
+
+        private void SpriteManagerMenuItem_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            if (this.NowProject != null)
+            {
+                var sm = new SpriteManager(this.NowProject.Sprites);
+                sm.ShowDialog();
             }
         }
 

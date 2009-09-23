@@ -1,0 +1,28 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="MapEditor.SpriteManager"
+	x:Name="Window"
+	Title="SpriteManager"
+	Width="574" Height="315">
+
+	<Grid x:Name="LayoutRoot">
+		<Canvas Margin="159.5,0,206.5,3">
+			<TextBox x:Name="tbImageName" Width="120" Height="23" Canvas.Left="62" Canvas.Top="38" TextWrapping="Wrap"/>
+			<TextBlock Width="58" Height="23" Canvas.Left="8" Canvas.Top="42" Text="图片名:" TextWrapping="Wrap"/>
+			<CheckBox x:Name="cbIsAnimation" Width="103" Height="15" Content="是否动画" Canvas.Left="8" Canvas.Top="78" Checked="cbIsAnimation_Checked" Unchecked="cbIsAnimation_Unchecked" IsChecked="True" />
+			<TextBox x:Name="tbFrameNum" Width="116" Height="21" Canvas.Left="62" Canvas.Top="104" TextWrapping="Wrap"/>
+			<TextBox x:Name="tbFrameSpeed" Width="116" Height="21" Canvas.Left="62" Canvas.Top="147" TextWrapping="Wrap"/>
+			<Button x:Name="btnView" Width="69" Height="28" Content="预览" Canvas.Left="109" Canvas.Top="188" Click="btnView_Click" RenderTransformOrigin="0.514,0.857"/>
+			<Button x:Name="btnOk" Width="69" Height="28" Content="确定" Canvas.Left="8" Canvas.Top="220" Click="btnOk_Click"/>
+			<Button x:Name="btnCancel" Width="69" Height="28" Content="取消" Canvas.Left="109" Canvas.Top="220" Click="btnCancel_Click"/>
+			<TextBlock Width="50" Height="21" Canvas.Left="8" Canvas.Top="104" Text="帧数:" TextWrapping="Wrap"/>
+			<TextBlock Width="50" Height="21" Canvas.Left="8" Canvas.Top="147" Text="速度:" TextWrapping="Wrap"/>
+			<TextBox x:Name="tbSpriteName" Width="120" Height="23" Canvas.Left="62" Canvas.Top="11" TextWrapping="Wrap"/>
+			<TextBlock Width="58" Height="23" Canvas.Left="8" Canvas.Top="15" TextWrapping="Wrap"><Run Text="Sprite"/><Run Text="名:"/></TextBlock>
+		</Canvas>
+		<Canvas x:Name="canvasView" HorizontalAlignment="Right" Margin="0,2,0.5,3" Width="202" />
+        <ListBox x:Name="listBoxSprites" HorizontalAlignment="Left" Margin="0,2,0,36" Width="155.5" SelectionChanged="listBoxSprites_SelectionChanged"/>
+		<Button x:Name="btnAdd" HorizontalAlignment="Left" Margin="95.5,0,0,4" VerticalAlignment="Bottom" Width="60" Height="28" Content="添加" Click="btnAdd_Click"/>
+	</Grid>
+</Window>
