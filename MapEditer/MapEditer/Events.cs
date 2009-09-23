@@ -19,6 +19,11 @@ namespace MapEditor
         public int Y { get; set; }
 
         /// <summary>
+        /// 需要开启的开关集
+        /// </summary>
+        public List<OnOff> onOffs = new List<OnOff>();
+
+        /// <summary>
         /// 事件集
         /// </summary>
         public List<IEvent> events = new List<IEvent>();
@@ -28,9 +33,24 @@ namespace MapEditor
         /// </summary>
         public void Execute()
         {
-            foreach (var singleEvent in events)
+            bool onOffsIsOn = false;
+            foreach (var onOff in onOffs)
             {
-                singleEvent.ExecuteEvent();
+                if (onOff.Value)
+                    onOffsIsOn = true;
+                else
+                {
+                    onOffsIsOn = false;
+                    break;
+                }
+                
+            }
+            if (onOffsIsOn)
+            {
+                foreach (var singleEvent in events)
+                {
+                    singleEvent.ExecuteEvent();
+                }
             }
         }
     }
