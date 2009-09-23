@@ -23,6 +23,47 @@ namespace MapEditor
         public string Directory;
 
         /// <summary>
+        /// Spirte集合
+        /// </summary>
+        [NonSerialized]
+        private List<Sprite> _sprites = new List<Sprite>();
+
+        /// <summary>
+        /// 获取或设置Sprite集合
+        /// </summary>
+        public List<Sprite> Sprites
+        {
+            get
+            {
+                return this._sprites;
+            }
+            set
+            {
+                this._sprites = value;
+            }
+        }
+
+        /// <summary>
+        /// SpriteInfo集合
+        /// </summary>
+        private List<SpriteInfo> _spriteInfos;
+
+        /// <summary>
+        /// 获取或设置SpriteInfo集合
+        /// </summary>
+        private List<SpriteInfo> SpriteInfo
+        {
+            get
+            {
+                return this._spriteInfos;
+            }
+            set
+            {
+                this._spriteInfos = value;
+            }
+        }
+
+        /// <summary>
         /// 所有地图
         /// </summary>
         private List<Map> _allMaps = new List<Map>();
@@ -60,6 +101,11 @@ namespace MapEditor
             {
                 this._globalOnOff = value;
             }
+        }
+
+        public Project()
+        {
+            ConvertSpriteInfoTOSprite();
         }
         /// <summary>
         /// 通过开关名获取开关
@@ -118,6 +164,23 @@ namespace MapEditor
                 BitmapImage bitmap = new BitmapImage(new Uri(this.Directory + "Map\\" + singleMap.ImageFileName));
                 var image = new Image() { Source = bitmap };
                 singleMap.MapImage = image;
+            }
+        }
+
+        public void ConvertSpriteInfoTOSprite()
+        {
+            this.Sprites = new List<Sprite>();
+            foreach (var sprintInfo in this.SpriteInfo)
+            {
+                this.Sprites.Add(new Sprite(sprintInfo.SpriteName, sprintInfo.ImageName, sprintInfo.FrameNum, sprintInfo.Speed, false));
+            }
+        }
+
+        public void ConvertSpriteToSpriteInfo()
+        {
+            foreach (var sprite in this.Sprites)
+            {
+                this.SpriteInfo.Add(new SpriteInfo(sprite.SpriteName, sprite.ImageName, sprite.FrameNum, sprite.Speed));
             }
         }
     }
