@@ -17,6 +17,11 @@ namespace MapEditor
         OnOff onOff { get; set; }
 
         /// <summary>
+        /// 事件名称
+        /// </summary>
+        string EventName { get; set; }
+
+        /// <summary>
         /// 执行事件
         /// </summary>
         void ExecuteEvent();

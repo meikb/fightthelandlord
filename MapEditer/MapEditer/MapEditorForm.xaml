@@ -46,7 +46,17 @@
             </MenuItem>
         </Menu>
         <ScrollViewer Width="805" Height="640" Canvas.Top="22" HorizontalContentAlignment="Stretch" VerticalContentAlignment="Stretch" HorizontalScrollBarVisibility="Auto" VerticalScrollBarVisibility="Auto" x:Name="svPanel">
-        	<Canvas x:Name="GameMain" Width="800" Height="600" MouseLeftButtonDown="GameMain_MouseLeftButtonDown" MouseLeftButtonUp="GameMain_MouseLeftButtonUp" MouseMove="GameMain_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto"/>
+            <Canvas x:Name="GameMain" Width="800" Height="600" MouseLeftButtonDown="GameMain_MouseLeftButtonDown" MouseLeftButtonUp="GameMain_MouseLeftButtonUp" MouseMove="GameMain_MouseMove" ScrollViewer.HorizontalScrollBarVisibility="Auto" ScrollViewer.VerticalScrollBarVisibility="Auto" MouseRightButtonDown="GameMain_MouseRightButtonDown">
+                <Canvas.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem x:Name="miEditEvents" Header="编辑事件" Click="miEditEvents_Click"/>
+                        <MenuItem x:Name="miCutEvents" Header="剪切" Click="miCutEvents_Click"/>
+                        <MenuItem x:Name="miCopyEvents" Header="复制" Click="miCopyEvents_Click" />
+                        <MenuItem x:Name="miPasteEvents" Header="粘贴" Click="miPasteEvents_Click" />
+                        <MenuItem x:Name="miDelEvents" Header="删除" Click="miDelEvents_Click"/>
+                    </ContextMenu>
+                </Canvas.ContextMenu>
+            </Canvas>
         </ScrollViewer>
     </Canvas>
 </Window>

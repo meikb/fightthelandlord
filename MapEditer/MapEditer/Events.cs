@@ -29,6 +29,11 @@ namespace MapEditor
         public List<IEvent> events = new List<IEvent>();
 
         /// <summary>
+        /// 事件显示精灵
+        /// </summary>
+        public Sprite sprite { get; set; }
+
+        /// <summary>
         /// 执行事件集
         /// </summary>
         public void Execute()

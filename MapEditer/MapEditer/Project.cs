@@ -183,5 +183,35 @@ namespace MapEditor
                 this.SpriteInfo.Add(new SpriteInfo(sprite.SpriteName, sprite.ImageName, sprite.FrameNum, sprite.Speed));
             }
         }
+
+        public Map GetMapByMapName(string mapName)
+        {
+            foreach (var singleMap in this.AllMaps)
+            {
+                if (singleMap.Name == mapName)
+                    return singleMap;
+            }
+            return null;
+        }
+
+        public OnOff GetOnOffByOnOffName(string onOffName)
+        {
+            foreach (var onOff in this.globalOnOff)
+            {
+                if (onOff.OnOffName == onOffName)
+                    return onOff;
+            }
+            return null;
+        }
+
+        public Sprite GetSpriteBySpriteName(string spriteName)
+        {
+            foreach (var singleSprite in this.Sprites)
+            {
+                if (singleSprite.SpriteName == spriteName)
+                    return singleSprite;
+            }
+            return null;
+        }
     }
 }

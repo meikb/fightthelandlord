@@ -74,6 +74,11 @@ namespace MapEditor
         private bool diagonals;
 
         /// <summary>
+        /// 记录每次鼠标右键的位置
+        /// </summary>
+        private Point MouseRightButtonPosition { get; set; }
+
+        /// <summary>
         /// 当前打开项目
         /// </summary>
         private Project _nowProject;
@@ -94,20 +99,15 @@ namespace MapEditor
         /// <summary>
         /// 当前编辑地图
         /// </summary>
-        private Map _selectedMap;
-
-        /// <summary>
-        /// 当前编辑地图
-        /// </summary>
         private Map SelectedMap
         {
             get
             {
-                return _selectedMap;
+                return StaticVar.SelectedMap;
             }
             set
             {
-                this._selectedMap = value;
+                StaticVar.SelectedMap = value;
                 this.GameMain.Width = value.Width;
                 this.GameMain.Height = value.Height;
                 Init();
@@ -774,6 +774,38 @@ namespace MapEditor
                 RePaintLine();
                 RefreshMatrix();
             }
+        }
+
+        private void miEditEvents_Click(object sender, RoutedEventArgs e)
+        {
+            var editEvents = new NewEvents(this.NowProject, (int)this.MouseRightButtonPosition.X, (int)this.MouseRightButtonPosition.Y);
+            editEvents.ShowDialog();
+        }
+
+        private void miCopyEvents_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void miPasteEvents_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void miDelEvents_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void miCutEvents_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void GameMain_MouseRightButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            var truePosition = e.GetPosition(this.GameMain);
+            this.MouseRightButtonPosition = GetPointByPoint(truePosition);
         }
     }
 }
