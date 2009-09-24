@@ -39,11 +39,25 @@ namespace MapEditor
                 ShowDialog(dialog);
             }
         }
+
+        public override string ToString()
+        {
+            if (Dialogs.Count > 0)
+            {
+                return "显示文章: " + Dialogs[0].Substring(0, 10);
+            }
+            else
+            {
+                return "空文章";
+            }
+        }
         #region IEvent 成员
 
         public bool needOnOff { get; set; }
 
         public OnOff onOff { get; set; }
+
+        public string EventName { get; set; }
 
         public void ExecuteEvent()
         {

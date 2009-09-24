@@ -16,11 +16,18 @@ namespace MapEditor
 
         public bool OnOffValue { get; set; }
 
+        public override string ToString()
+        {
+            return "更改开关 \"" + OnOffName + "\" 为" + OnOffValue.ToString();
+        }
+
         #region IEvent 成员
 
         public bool needOnOff { get; set; }
 
         public OnOff onOff { get; set; }
+
+        public string EventName { get; set; }
 
         public void ExecuteEvent()
         {
