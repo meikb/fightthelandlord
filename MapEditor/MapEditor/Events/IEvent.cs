@@ -8,13 +8,9 @@ namespace MapEditor
     public interface IEvent
     {
         /// <summary>
-        /// 是否需要开关
+        /// 事件ID
         /// </summary>
-        bool needOnOff { get; set; }
-        /// <summary>
-        /// 开关
-        /// </summary>
-        OnOff onOff { get; set; }
+        int ID { get; set; }
 
         /// <summary>
         /// 事件名称

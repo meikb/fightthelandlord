@@ -10,23 +10,14 @@ namespace MapEditor
     public class DialogEvent : IEvent
     {
         /// <summary>
-        /// 对话集
+        /// 对话
         /// </summary>
-        public List<string> Dialogs = new List<string>();
+        public string Dialog { get; set; }
 
         /// <summary>
         /// 显示对话方法
         /// </summary>
         public Action<string> ShowDialog { get; set; }
-
-        /// <summary>
-        /// 添加一段对话
-        /// </summary>
-        /// <param name="dialog"></param>
-        public void AddDialog(string dialog)
-        {
-            this.Dialogs.Add(dialog);
-        }
             
 
         /// <summary>
@@ -34,17 +25,14 @@ namespace MapEditor
         /// </summary>
         private void ShowDialogs()
         {
-            foreach (var dialog in Dialogs)
-            {
-                ShowDialog(dialog);
-            }
+            ShowDialog(Dialog);
         }
 
         public override string ToString()
         {
-            if (Dialogs.Count > 0)
+            if (Dialog.Length > 0)
             {
-                return "显示文章: " + Dialogs[0].Substring(0, 10);
+                return "事件ID: " + this.ID.ToString() + "，显示文章: " + Dialog.Substring(0, Dialog.Length > 10 ? 10 : Dialog.Length);
             }
             else
             {
@@ -53,24 +41,15 @@ namespace MapEditor
         }
         #region IEvent 成员
 
-        public bool needOnOff { get; set; }
-
-        public OnOff onOff { get; set; }
-
         public string EventName { get; set; }
 
         public void ExecuteEvent()
         {
-            if (needOnOff)
-            {
-                if (onOff.Value)
-                    ShowDialogs();
-            }
-            else
-            {
-                ShowDialogs();
-            }
+            ShowDialogs();
         }
+
+        public int ID { get; set; }
+
         #endregion
     }
 }

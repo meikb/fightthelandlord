@@ -55,23 +55,27 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Page Include="DialogEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
-    <Page Include="EventEditor.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
     <Page Include="MapEditorForm.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="NewEvents.xaml">
+    <Page Include="Events\NewChangeMapEvent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Events\NewDialogEvent.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Events\NewEvents.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="NewMap.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Events\NewOnOffEvent.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -93,28 +97,31 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DialogEvent.cs" />
-    <Compile Include="DialogEditor.xaml.cs">
-      <DependentUpon>DialogEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="Events.cs" />
-    <Compile Include="EventEditor.xaml.cs">
-      <DependentUpon>EventEditor.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="IEvent.cs" />
+    <Compile Include="Events\DialogEvent.cs" />
+    <Compile Include="Events\Events.cs" />
+    <Compile Include="Events\IEvent.cs" />
     <Compile Include="Map.cs" />
-    <Compile Include="MapChangeEvent.cs" />
-    <Compile Include="NewEvents.xaml.cs">
+    <Compile Include="Events\MapChangeEvent.cs" />
+    <Compile Include="Events\NewChangeMapEvent.xaml.cs">
+      <DependentUpon>NewChangeMapEvent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Events\NewDialogEvent.xaml.cs">
+      <DependentUpon>NewDialogEvent.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Events\NewEvents.xaml.cs">
       <DependentUpon>NewEvents.xaml</DependentUpon>
     </Compile>
     <Compile Include="NewMap.xaml.cs">
       <DependentUpon>NewMap.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\NewOnOffEvent.xaml.cs">
+      <DependentUpon>NewOnOffEvent.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NewSprite.xaml.cs">
       <DependentUpon>NewSprite.xaml</DependentUpon>
     </Compile>
-    <Compile Include="OnOff.cs" />
-    <Compile Include="OnOffEvent.cs" />
+    <Compile Include="Events\OnOff.cs" />
+    <Compile Include="Events\OnOffEvent.cs" />
     <Compile Include="Project.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

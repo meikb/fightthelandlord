@@ -29,6 +29,7 @@
             <Button x:Name="btnSingle" Height="27" Width="75" Canvas.Left="86.667" Canvas.Top="300.667" Content="一次单个" Click="btnSingle_Click"/>
             <TreeView x:Name="treeViewProject" Width="180" Height="201.667" SelectedItemChanged="treeViewProject_SelectedItemChanged"/>
             <Button x:Name="btnSelectImage" Height="27" Width="75" Canvas.Left="95.667" Canvas.Top="416.344" Content="选择图片" Click="btnSelectImage_Click"/>
+            <TextBlock x:Name="tbXY" Width="154.667" Height="32" Canvas.Left="8" Canvas.Top="205.667" TextWrapping="Wrap"/>
         </Canvas>
         <Menu Canvas.Left="0" Canvas.Top="0" Height="22" Name="menu1" Width="360" Background="{x:Null}">
             <MenuItem Header="文件" AllowDrop="True">

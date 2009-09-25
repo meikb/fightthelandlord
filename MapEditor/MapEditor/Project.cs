@@ -46,7 +46,7 @@ namespace MapEditor
         /// <summary>
         /// SpriteInfo集合
         /// </summary>
-        private List<SpriteInfo> _spriteInfos;
+        private List<SpriteInfo> _spriteInfos = new List<SpriteInfo>();
 
         /// <summary>
         /// 获取或设置SpriteInfo集合
@@ -106,6 +106,7 @@ namespace MapEditor
         public Project()
         {
             ConvertSpriteInfoTOSprite();
+            InitOnOff();
         }
         /// <summary>
         /// 通过开关名获取开关
@@ -212,6 +213,19 @@ namespace MapEditor
                     return singleSprite;
             }
             return null;
+        }
+
+        private void InitOnOff()
+        {
+            SetOnOffCount(100);
+        }
+
+        public void SetOnOffCount(int num)
+        {
+            for (int i = 0; i < num; i++)
+            {
+                this.globalOnOff.Add(new OnOff() { ID = i });
+            }
         }
     }
 }

@@ -16,11 +16,16 @@ namespace MapEditor
         /// <summary>
         /// 开关名
         /// </summary>
-        public string OnOffName;
+        public string OnOffName { get; set; }
         /// <summary>
         /// 开关值
         /// </summary>
-        public bool Value;
+        public bool Value { get; set; }
+
+        /// <summary>
+        /// 开关ID
+        /// </summary>
+        public int ID { get; set; }
 
         /// <summary>
         /// 构造一个新的开关
@@ -39,6 +44,11 @@ namespace MapEditor
         public OnOff()
         {
 
+        }
+
+        public override string ToString()
+        {
+            return string.Format("ID: {0}, Name: {1}", ID, OnOffName);
         }
     }
 }

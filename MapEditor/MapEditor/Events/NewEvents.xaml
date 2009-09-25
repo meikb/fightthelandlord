@@ -1,0 +1,24 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	x:Class="MapEditor.NewEvents"
+	x:Name="Window"
+	Title="NewEvents"
+	Width="405.5" Height="407.5" mc:Ignorable="d">
+
+	<Grid x:Name="LayoutRoot">
+		<ListBox x:Name="listBoxEvents" Margin="147.5,95,8,29" SelectionChanged="listBoxEvents_SelectionChanged"/>
+		<Canvas x:Name="canvasSpriteView" HorizontalAlignment="Left" Width="141" Margin="0,148.687,0,29" />
+		<ComboBox x:Name="cbSelectSprite" HorizontalAlignment="Left" Margin="0,125,0,0" Width="143.5" VerticalAlignment="Top" SelectionChanged="cbSelectSprite_SelectionChanged" Height="19.687" />
+		<ComboBox x:Name="cbOnOff" HorizontalAlignment="Left" Margin="5,41,0,0" VerticalAlignment="Top" Width="75" SelectionChanged="cbOnOff_SelectionChanged"/>
+		<TextBlock HorizontalAlignment="Left" Margin="87,44,0,0" VerticalAlignment="Top" Width="42" Height="16.687" Text="为ON" TextWrapping="Wrap"/>
+		<TextBlock HorizontalAlignment="Left" Margin="8,8,0,0" VerticalAlignment="Top" Width="104" Height="18" Text="事件执行条件:" TextWrapping="Wrap"/>
+		<TextBlock HorizontalAlignment="Left" Margin="5,95,0,0" VerticalAlignment="Top" Width="84" Height="18" TextWrapping="Wrap"><Run Text="事件精灵选择"/><Run Text=":"/></TextBlock>
+		<Button x:Name="tbAddDialogEvent" Margin="0,35.343,172.5,0" VerticalAlignment="Top" Height="31" Content="显示文章" HorizontalAlignment="Right" Width="67" Click="tbAddDialogEvent_Click"/>
+		<Button x:Name="btnMapChange" Margin="0,35.343,90.5,0" VerticalAlignment="Top" Height="31" Content="场所移动" HorizontalAlignment="Right" Width="63" Click="btnMapChange_Click"/>
+		<Button x:Name="btnEditOnOff" Margin="0,35.343,8,0" VerticalAlignment="Top" Height="31" Content="开关操作" HorizontalAlignment="Right" Width="63" Click="btnEditOnOff_Click"/>
+		<TextBlock Margin="158,8,72.5,0" VerticalAlignment="Top" Height="18" Text="单击以下按钮添加相应事件:" TextWrapping="Wrap"/>
+        <Button Height="23" HorizontalAlignment="Right" Margin="0,0,8,2" x:Name="btnDeleteEvent" VerticalAlignment="Bottom" Width="75" Click="btnDeleteEvent_Click">删除事件</Button>
+    </Grid>
+</Window>

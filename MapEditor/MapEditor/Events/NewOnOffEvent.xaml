@@ -1,0 +1,15 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="MapEditor.NewOnOffEvent"
+	x:Name="Window"
+	Title="NewOnOffEvent"
+	Width="243" Height="127">
+
+	<Grid x:Name="LayoutRoot">
+		<ComboBox x:Name="cbOnOff" Margin="89,8,26,0" VerticalAlignment="Top"/>
+		<TextBlock HorizontalAlignment="Left" Margin="20,11,0,0" VerticalAlignment="Top" Width="65" Height="14.687" TextWrapping="Wrap"><Run Text="开启开关"/><Run Text=":"/></TextBlock>
+		<Button x:Name="btnSave" HorizontalAlignment="Left" Margin="45,0,0,8" VerticalAlignment="Bottom" Width="60" Height="25" Content="保存" Click="btnSave_Click"/>
+		<Button x:Name="btnCancel" HorizontalAlignment="Right" Margin="0,0,43,8" VerticalAlignment="Bottom" Width="60" Height="25" Content="关闭" Click="btnCancel_Click"/>
+	</Grid>
+</Window>
