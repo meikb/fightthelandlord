@@ -4,15 +4,15 @@
 winexe
 C#
 .cs
-D:\My Documents\Visual Studio 2008\Projects\MapEditor\MapEditor\obj\Debug\
+F:\My Documents\Visual Studio 2008\Projects\MapEditor\MapEditor\obj\Debug\
 MapEditor
 none
 false
 DEBUG;TRACE
-D:\My Documents\Visual Studio 2008\Projects\MapEditor\MapEditor\App.xaml
-7423072813
+F:\My Documents\Visual Studio 2008\Projects\MapEditor\MapEditor\App.xaml
+8-270803193
 
-23-906417369
-9-941695865
-DialogEditor.xaml;EventEditor.xaml;MapEditorForm.xaml;NewEvents.xaml;NewMap.xaml;NewSprite.xaml;SpriteManager.xaml;
+24687325989
+9314880095
+MapEditorForm.xaml;Events\NewChangeMapEvent.xaml;Events\NewDialogEvent.xaml;Events\NewEvents.xaml;NewMap.xaml;Events\NewOnOffEvent.xaml;NewSprite.xaml;SpriteManager.xaml;
 

@@ -81,7 +81,19 @@ namespace MapEditor
         /// <summary>
         /// 事件集
         /// </summary>
-        public List<Events> Events = new List<Events>();
+        private List<Events> _events = new List<Events>();
+
+        public List<Events> Events
+        {
+            get
+            {
+                return this._events;
+            }
+            set
+            {
+                this._events = value;
+            }
+        }
 
         public Map(Image mapImage, double width, double height, string imageFileName)
         {
@@ -90,6 +102,7 @@ namespace MapEditor
             this.Height = height;
             this.ImageFileName = imageFileName;
         }
+
 
         public Map()
         {

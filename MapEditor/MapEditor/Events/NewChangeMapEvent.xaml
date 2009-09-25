@@ -1,0 +1,19 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="MapEditor.NewChangeMapEvent"
+	x:Name="Window"
+	Title="NewChangeMapEvent"
+	Width="157" Height="176">
+
+	<Grid x:Name="LayoutRoot">
+		<TextBlock Margin="14,6,36,0" VerticalAlignment="Top" Height="18" Text="目标地图名称:" TextWrapping="Wrap"/>
+		<TextBox x:Name="tbX" HorizontalAlignment="Right" Margin="0,0,86,45" Width="38" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="21"/>
+		<TextBox x:Name="tbY" HorizontalAlignment="Right" Margin="0,0,17,45" Width="38" TextWrapping="Wrap" VerticalAlignment="Bottom" Height="21"/>
+		<TextBlock Margin="6,0,0,45" TextWrapping="Wrap" HorizontalAlignment="Left" Width="14" VerticalAlignment="Bottom" Height="18"><Run Text="X"/><Run Text=":"/></TextBlock>
+		<TextBlock Margin="0,0,59,45" TextWrapping="Wrap" HorizontalAlignment="Right" Width="14" VerticalAlignment="Bottom" Height="18"><Run Text="Y"/><Run Text=":"/></TextBlock>
+		<Button x:Name="btnSave" HorizontalAlignment="Left" Margin="14,0,0,9" Width="55" Content="保存" Click="btnSave_Click" VerticalAlignment="Bottom" Height="27"/>
+		<Button x:Name="btnCalcel" HorizontalAlignment="Right" Margin="0,0,17,9" Width="55" Content="关闭" Click="btnCalcel_Click" VerticalAlignment="Bottom" Height="27"/>
+		<TextBox x:Name="tbTargetMapName" Margin="14,28,17,0" VerticalAlignment="Top" Height="25" TextWrapping="Wrap"/>
+	</Grid>
+</Window>

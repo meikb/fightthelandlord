@@ -31,7 +31,27 @@ namespace MapEditor
         /// <summary>
         /// 事件显示精灵
         /// </summary>
-        public Sprite sprite { get; set; }
+        [NonSerialized]
+        public Sprite _sprite;
+
+        /// <summary>
+        /// 获取或设置事件显示精灵
+        /// </summary>
+        public Sprite Sprite
+        {
+            get
+            {
+                StaticVar.ConvertSpriteInfoTOSprite(this.spriteInfo, this._sprite);
+                return this._sprite;
+            }
+            set
+            {
+                this._sprite = value;
+                StaticVar.ConvertSpriteToSpriteInfo(this._sprite, this.spriteInfo);
+            }
+        }
+
+        private SpriteInfo spriteInfo;
 
         /// <summary>
         /// 执行事件集
@@ -58,5 +78,27 @@ namespace MapEditor
                 }
             }
         }
+
+        public void AddEvent(IEvent singleEvent)
+        {
+            singleEvent.ID = this.events.Count + 1;
+            this.events.Add(singleEvent);
+        }
+
+        public void RemoveEventByID(int id)
+        {
+            IEvent tempEvent = null;
+            foreach (var singleEvent in events)
+            {
+                if (singleEvent.ID == id)
+                {
+                    tempEvent = singleEvent;
+                    break;
+                }
+            }
+            if (tempEvent != null)
+                this.events.Remove(tempEvent);
+        }
+
     }
 }

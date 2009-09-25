@@ -146,5 +146,11 @@ namespace MapEditor
                 this.SelectedSprite.Roll();
             }
         }
+
+        protected override void OnClosed(EventArgs e)
+        {
+            base.OnClosed(e);
+            this.canvasView.Children.Clear();
+        }
 	}
 }

@@ -91,8 +91,9 @@ namespace MapEditor
             }
             set
             {
-                this.Title = value.ProjectName;
+                this.Title = "Pig RPG Engine beta v0.01 --" + value.ProjectName;
                 this._nowProject = value;
+                StaticVar.SelectedProject = value;
             }
         }
 
@@ -332,6 +333,10 @@ namespace MapEditor
                     }
                 }
             }
+            if (this.SelectedMap != null)
+                this.tbXY.Text = string.Format("当前地图: {0}\r\n当前坐标: {1}, {2}", this.SelectedMap.Name, mousePoint.X, mousePoint.Y);
+            else
+                this.tbXY.Text = "没有打开地图";
         }
 
         private void ChangeNote(int column, int row, bool removeImpediment)
@@ -553,6 +558,14 @@ namespace MapEditor
                     {
                         AddRectangle(Colors.Green, x, y);
                     }
+                }
+            }
+
+            if (SelectedMap != null)
+            {
+                foreach (var singleEvents in this.SelectedMap.Events)
+                {
+                    AddRectangle(Colors.Red, singleEvents.X, singleEvents.Y);
                 }
             }
         }
@@ -778,7 +791,7 @@ namespace MapEditor
 
         private void miEditEvents_Click(object sender, RoutedEventArgs e)
         {
-            var editEvents = new NewEvents(this.NowProject, (int)this.MouseRightButtonPosition.X, (int)this.MouseRightButtonPosition.Y);
+            var editEvents = new NewEvents(this.NowProject, this.SelectedMap, (int)this.MouseRightButtonPosition.X, (int)this.MouseRightButtonPosition.Y);
             editEvents.ShowDialog();
         }
 

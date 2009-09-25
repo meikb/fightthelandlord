@@ -1,0 +1,15 @@
+﻿<Window
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	x:Class="MapEditor.NewDialogEvent"
+	x:Name="Window"
+	Title="NewDialogEvent"
+	Width="418" Height="225">
+
+	<Grid x:Name="LayoutRoot">
+		<TextBox x:Name="tbDialog" Margin="0,27,0,37" TextWrapping="Wrap"/>
+		<TextBlock HorizontalAlignment="Left" Margin="0,8,0,0" VerticalAlignment="Top" Width="172" Height="15" Text="请在下面的文本框输入文章:" TextWrapping="Wrap"/>
+		<Button x:Name="btnSave" HorizontalAlignment="Left" Margin="93,0,0,8" VerticalAlignment="Bottom" Width="79" Height="25" Content="保存" Click="btnSave_Click"/>
+		<Button x:Name="btnCancel" HorizontalAlignment="Right" Margin="0,0,93,8" VerticalAlignment="Bottom" Width="79" Height="25" Content="关闭" Click="btnCancel_Click"/>
+	</Grid>
+</Window>
