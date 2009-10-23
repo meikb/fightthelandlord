@@ -10,6 +10,8 @@
 #include <xlocale>
 #include <vector>
 #include <algorithm>
+#include <time.h>
+#include <stdlib.h>
 
 /* 无效？？？
 #define PRACTICABLE 0 ;
@@ -89,6 +91,7 @@ public:
 const string strSnakeHead = "O";
 const string strSnakeTail = "X";
 const string strSnakeVeer = "()";
+const string strSnakeFood = "F";
 const int array_row = 29;
 const int array_col = 50;
 const int speed = 500; //运行速度，值越大越慢
@@ -100,6 +103,7 @@ int SnakeX = 25;
 int SnakeY = 14;
 vector<SnakeTail> *bodys = new vector<SnakeTail>(10);
 vector<SnakeVeerPoint> *veerPoints = new vector<SnakeVeerPoint>();
+vector<SnakePoint> *foodPoints = new vector<SnakePoint>(3);
 bool GameOver = false;
 HANDLE cHandle;
 
@@ -126,6 +130,17 @@ int _tmain(int argc, _TCHAR* argv[])
 		(*bodys)[i].sp.x = SnakeX;
 		(*bodys)[i].sp.y = SnakeY + i + 1;
 		(*bodys)[i].Direction = 0;
+	}
+
+	//初始化食物
+	for (int i = 0; i != foodPoints->size(); ++i)
+	{
+		srand((unsigned)time(NULL));
+		int x = (rand()%(48-2+1)) + 2;
+		int y = (rand()%(28-2+1)) + 2;
+		(*foodPoints)[i].x = x;
+		(*foodPoints)[i].y = y;
+		Sleep(100);
 	}
 
 	while   (1)     
@@ -211,6 +226,10 @@ DWORD WINAPI RePaint(PVOID pvParam)
 		{
 			OutCharByPosition(strSnakeTail, i->sp.x, i->sp.y);
 		}
+		for (vector<SnakePoint>::iterator i = foodPoints->begin(); i != foodPoints->end(); ++i)
+		{
+			OutCharByPosition(strSnakeFood,i->x,i->y);
+		}
 		Sleep(speed);
 	}
 	return dwResult;
@@ -222,6 +241,23 @@ DWORD WINAPI FrameFunc(PVOID pvParam)
 	while(!GameOver)
 	{
 		Sleep(speed);
+		if (foodPoints->size() < 20)
+		{
+			srand((unsigned)time(NULL));
+			int x = rand()%((48-2+1))+2;
+			int y = rand()%((28-2+1))+2;
+			bool isIncluded = false;
+			for (vector<SnakePoint>::iterator i = foodPoints->begin(); i != foodPoints->end();++i) 
+			{
+				if (i->x == x && i->y == y)
+					isIncluded = true;
+			}
+			if (!isIncluded)
+			{
+				SnakePoint sp(x, y);
+				foodPoints->push_back(sp);
+			}
+		}
 		switch (Direction)
 		{
 			case 0:
@@ -294,6 +330,14 @@ DWORD WINAPI FrameFunc(PVOID pvParam)
 					if (vi == veerPoints->end())
 						break;
 				}
+			}
+		}
+		for (vector<SnakePoint>::iterator i = foodPoints->begin(); i != foodPoints->end();++i) 
+		{
+			if (i->x == SnakeX && i->y == SnakeY)
+			{
+				i = foodPoints->erase(i);
+				break;
 			}
 		}
 	}
