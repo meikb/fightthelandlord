@@ -1,0 +1,13 @@
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\Bin\Debug\AppManifest.xaml
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\Bin\Debug\SLFightTheLandLord.dll
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\Bin\Debug\SLFightTheLandLord.pdb
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\Bin\Debug\SLFightTheLandLord.xap
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\Bin\Debug\TestPage.html
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\App.g.cs
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\MainPage.g.cs
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\SLFightTheLandLord.g.resources
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\SLFightTheLandLord.dll
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\SLFightTheLandLord.pdb
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\XapCacheFile.xml
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord\obj\Debug\Ready.g.cs
