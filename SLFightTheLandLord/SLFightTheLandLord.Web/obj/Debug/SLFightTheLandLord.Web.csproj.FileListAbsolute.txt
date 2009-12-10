@@ -1,0 +1,5 @@
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord.Web\bin\SLFightTheLandLord.Web.dll
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord.Web\bin\SLFightTheLandLord.Web.pdb
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord.Web\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord.Web\obj\Debug\SLFightTheLandLord.Web.dll
+C:\Users\DavidLee\Documents\Visual Studio 2008\Projects\SLFightTheLandLord\SLFightTheLandLord.Web\obj\Debug\SLFightTheLandLord.Web.pdb

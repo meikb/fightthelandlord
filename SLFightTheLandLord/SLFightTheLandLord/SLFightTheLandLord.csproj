@@ -1,0 +1,170 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{19D81000-B44A-455A-87FF-ED7B022BFDBC}</ProjectGuid>
+    <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>SLFightTheLandLord</RootNamespace>
+    <AssemblyName>SLFightTheLandLord</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SilverlightApplication>true</SilverlightApplication>
+    <SupportedCultures>zh-Hans</SupportedCultures>
+    <XapOutputs>true</XapOutputs>
+    <GenerateSilverlightManifest>true</GenerateSilverlightManifest>
+    <XapFilename>SLFightTheLandLord.xap</XapFilename>
+    <SilverlightManifestTemplate>Properties\AppManifest.xml</SilverlightManifestTemplate>
+    <SilverlightAppEntry>SLFightTheLandLord.App</SilverlightAppEntry>
+    <TestPageFileName>TestPage.html</TestPageFileName>
+    <CreateTestPage>true</CreateTestPage>
+    <ValidateXaml>true</ValidateXaml>
+    <EnableOutOfBrowser>false</EnableOutOfBrowser>
+    <OutOfBrowserSettingsFile>Properties\OutOfBrowserSettings.xml</OutOfBrowserSettingsFile>
+    <UsePlatformExtensions>false</UsePlatformExtensions>
+    <ThrowErrorsInValidation>true</ThrowErrorsInValidation>
+    <LinkedServerProject>
+    </LinkedServerProject>
+    <ExpressionBlendVersion>3.0.1938.0</ExpressionBlendVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>Bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>Bin\Release</OutputPath>
+    <DefineConstants>TRACE;SILVERLIGHT</DefineConstants>
+    <NoStdLib>true</NoStdLib>
+    <NoConfig>true</NoConfig>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows" />
+    <Reference Include="mscorlib" />
+    <Reference Include="system" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Windows.Browser" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Converter.cs" />
+    <Compile Include="Enum.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Network.cs" />
+    <Compile Include="Poker.cs" />
+    <Compile Include="PokerGroup.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Ready.xaml.cs">
+      <DependentUpon>Ready.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="StaticVar.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+    </ApplicationDefinition>
+    <Page Include="MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+    </Page>
+    <Page Include="Ready.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\AppManifest.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="PokerImage\1.png" />
+    <Resource Include="PokerImage\10.png" />
+    <Resource Include="PokerImage\11.png" />
+    <Resource Include="PokerImage\12.png" />
+    <Resource Include="PokerImage\13.png" />
+    <Resource Include="PokerImage\14.png" />
+    <Resource Include="PokerImage\15.png" />
+    <Resource Include="PokerImage\16.png" />
+    <Resource Include="PokerImage\17.png" />
+    <Resource Include="PokerImage\18.png" />
+    <Resource Include="PokerImage\19.png" />
+    <Resource Include="PokerImage\2.png" />
+    <Resource Include="PokerImage\20.png" />
+    <Resource Include="PokerImage\21.png" />
+    <Resource Include="PokerImage\22.png" />
+    <Resource Include="PokerImage\23.png" />
+    <Resource Include="PokerImage\24.png" />
+    <Resource Include="PokerImage\25.png" />
+    <Resource Include="PokerImage\26.png" />
+    <Resource Include="PokerImage\27.png" />
+    <Resource Include="PokerImage\28.png" />
+    <Resource Include="PokerImage\29.png" />
+    <Resource Include="PokerImage\3.png" />
+    <Resource Include="PokerImage\30.png" />
+    <Resource Include="PokerImage\31.png" />
+    <Resource Include="PokerImage\32.png" />
+    <Resource Include="PokerImage\33.png" />
+    <Resource Include="PokerImage\34.png" />
+    <Resource Include="PokerImage\35.png" />
+    <Resource Include="PokerImage\36.png" />
+    <Resource Include="PokerImage\37.png" />
+    <Resource Include="PokerImage\38.png" />
+    <Resource Include="PokerImage\39.png" />
+    <Resource Include="PokerImage\4.png" />
+    <Resource Include="PokerImage\40.png" />
+    <Resource Include="PokerImage\41.png" />
+    <Resource Include="PokerImage\42.png" />
+    <Resource Include="PokerImage\43.png" />
+    <Resource Include="PokerImage\44.png" />
+    <Resource Include="PokerImage\45.png" />
+    <Resource Include="PokerImage\46.png" />
+    <Resource Include="PokerImage\47.png" />
+    <Resource Include="PokerImage\48.png" />
+    <Resource Include="PokerImage\49.png" />
+    <Resource Include="PokerImage\5.png" />
+    <Resource Include="PokerImage\50.png" />
+    <Resource Include="PokerImage\51.png" />
+    <Resource Include="PokerImage\52.png" />
+    <Resource Include="PokerImage\6.png" />
+    <Resource Include="PokerImage\7.png" />
+    <Resource Include="PokerImage\8.png" />
+    <Resource Include="PokerImage\9.png" />
+    <Resource Include="PokerImage\back1.png" />
+    <Resource Include="PokerImage\back2.png" />
+    <Resource Include="PokerImage\JesterA.png" />
+    <Resource Include="PokerImage\JesterB.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Silverlight\v3.0\Microsoft.Silverlight.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+  <ProjectExtensions>
+    <VisualStudio>
+      <FlavorProperties GUID="{A1591282-1198-4647-A2B1-27E5FF5F6F3B}">
+        <SilverlightProjectProperties />
+      </FlavorProperties>
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
