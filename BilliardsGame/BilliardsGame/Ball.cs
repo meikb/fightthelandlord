@@ -67,6 +67,8 @@ namespace BilliardsGame
 
         public void Update()
         {
+            this.Velocity.X *= GlobalVar.friction;
+            this.Velocity.Y *= GlobalVar.friction;
             this.CenterOfCircle = CalCulatePosition();
             this.BoardCheck();
         }

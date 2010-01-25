@@ -21,6 +21,13 @@ namespace BilliardsGame
         {
             InitializeComponent();
             Loaded += new RoutedEventHandler(MainPage_Loaded);
+            MouseLeftButtonDown += new MouseButtonEventHandler(MainPage_MouseLeftButtonDown);
+        }
+
+        void MainPage_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            Vector2 moment = oneBall.CenterOfCircle - new Vector2(e.GetPosition(null).X, e.GetPosition(null).Y);
+            oneBall.Velocity = moment;
         }
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)

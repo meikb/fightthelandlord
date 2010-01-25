@@ -15,5 +15,6 @@ namespace BilliardsGame
     {
         public static int Width = 800;
         public static int Height = 600;
+        public static double friction = 0.99;
     }
 }
