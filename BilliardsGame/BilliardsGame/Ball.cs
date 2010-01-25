@@ -11,18 +11,17 @@ using System.Windows.Shapes;
 
 namespace BilliardsGame
 {
-    public class Ball : Canvas, IVector2
+    public class Ball : Canvas
     {
         public double X
         {
             get
             {
-                return Canvas.GetLeft(this);
+                return CenterOfCircle.X;
             }
             set
             {
-                _vector2.X = value;
-                Canvas.SetLeft(this, value);
+                CenterOfCircle.X = value;
             }
         }
 
@@ -30,27 +29,63 @@ namespace BilliardsGame
         {
             get
             {
-                return Canvas.GetTop(this);
+                return CenterOfCircle.Y;
             }
             set
             {
-                _vector2.Y = value;
-                Canvas.SetTop(this, value);
+                CenterOfCircle.Y = value;
             }
         }
 
-        private Vector2 _vector2;
+        public const double Radius = 10;
+
+        public Vector2 CenterOfCircle { get; set; }
+
+        public Vector2 Velocity { get; set; }
 
         public Ball()
         {
-            _vector2 = new Vector2(0, 0);
+            CenterOfCircle = new Vector2(100, 100);
+            InitBall();
+        }
+
+        private void InitBall()
+        {
+            this.Children.Add(new Ellipse() { Width = Radius * 2, Height = Radius * 2, Fill = new SolidColorBrush(Colors.Black) });
         }
 
         public Ball(double x, double y)
         {
-            _vector2 = new Vector2(x, y);
-            X = x;
-            Y = y;
+            CenterOfCircle = new Vector2(x, y);
+        }
+
+        public void Draw()
+        {
+            Canvas.SetLeft(this, CenterOfCircle.X - Radius);
+            Canvas.SetTop(this, CenterOfCircle.Y - Radius);
+        }
+
+        public void Update()
+        {
+            this.CenterOfCircle = CalCulatePosition();
+            this.BoardCheck();
+        }
+
+        private void BoardCheck()
+        {
+            if (CenterOfCircle.X - Radius <= 0 || CenterOfCircle.X + Radius >= GlobalVar.Width)
+            {
+                Velocity.X = -Velocity.X;
+            }
+            if (CenterOfCircle.Y - Radius <= 0 || CenterOfCircle.Y + Radius >= GlobalVar.Height)
+            {
+                Velocity.Y = -Velocity.Y;
+            }
+        }
+
+        private Vector2 CalCulatePosition()
+        {
+            return this.CenterOfCircle + this.Velocity;
         }
     }
 }

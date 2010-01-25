@@ -16,7 +16,7 @@ namespace BilliardsGame
     public partial class MainPage : UserControl
     {
         private DispatcherTimer _gameLoop;
-
+        Ball oneBall;
         public MainPage()
         {
             InitializeComponent();
@@ -26,13 +26,19 @@ namespace BilliardsGame
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
             _gameLoop = new DispatcherTimer();
-            _gameLoop.Interval = TimeSpan.FromMilliseconds(1000 / 60);
+            _gameLoop.Interval = new TimeSpan(0, 0, 0, 0);
             _gameLoop.Tick += new EventHandler(OnGameLoop);
             _gameLoop.Start();
+            oneBall = new Ball();
+            this.LayoutRoot.Children.Add(oneBall);
+            oneBall.Velocity = new Vector2(1, 8);
+
         }
 
         void OnGameLoop(object sender, EventArgs e)
         {
+            oneBall.Update();
+            oneBall.Draw();
         }
     }
 }

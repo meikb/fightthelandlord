@@ -11,7 +11,7 @@ using System.Windows.Shapes;
 
 namespace BilliardsGame
 {
-    public class Vector2 : BilliardsGame.IVector2
+    public class Vector2
     {
         public double X { get; set; }
         public double Y { get; set; }
