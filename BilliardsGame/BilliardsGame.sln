@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BilliardsGame", "BilliardsGame\BilliardsGame.csproj", "{B8DE6F8C-C8A6-42E7-AFDE-4D8946E705C3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BilliardsGame.Web", "BilliardsGame.Web\BilliardsGame.Web.csproj", "{A01EB75C-1A0F-4155-A3B3-99BAAE8644C6}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B8DE6F8C-C8A6-42E7-AFDE-4D8946E705C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8DE6F8C-C8A6-42E7-AFDE-4D8946E705C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8DE6F8C-C8A6-42E7-AFDE-4D8946E705C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8DE6F8C-C8A6-42E7-AFDE-4D8946E705C3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A01EB75C-1A0F-4155-A3B3-99BAAE8644C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A01EB75C-1A0F-4155-A3B3-99BAAE8644C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A01EB75C-1A0F-4155-A3B3-99BAAE8644C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A01EB75C-1A0F-4155-A3B3-99BAAE8644C6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
