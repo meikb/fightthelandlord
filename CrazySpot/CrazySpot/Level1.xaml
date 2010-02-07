@@ -1,0 +1,18 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="CrazySpot.Level1"
+	d:DesignWidth="640" d:DesignHeight="480" Width="800" Height="600">
+
+	<Grid x:Name="LayoutRoot">
+		<Image Margin="24,110,25,117" Source="LevelImage/Level1.jpg" Stretch="Fill"/>
+		<Rectangle x:Name="spot1" Stroke="Black" Height="32" HorizontalAlignment="Right" Margin="0,146,184,0" VerticalAlignment="Top" Width="42" MouseLeftButtonDown="spot1_MouseLeftButtonDown" Fill="Black" Opacity="0"/>
+		<Rectangle x:Name="spot2" Stroke="Black" Height="37" HorizontalAlignment="Right" Margin="0,0,170,160" VerticalAlignment="Bottom" Width="56" MouseLeftButtonDown="spot2_MouseLeftButtonDown" Fill="Black" Opacity="0"/>
+		<Rectangle x:Name="spot3" Stroke="Black" HorizontalAlignment="Right" Margin="0,272,284,296" Width="42" MouseLeftButtonDown="spot3_MouseLeftButtonDown" Fill="Black" Opacity="0"/>
+		<Rectangle x:Name="spot4" Stroke="Black" HorizontalAlignment="Right" Margin="0,0,315,160" Width="77" Height="37" VerticalAlignment="Bottom" MouseLeftButtonDown="spot4_MouseLeftButtonDown" Fill="Black" Opacity="0"/>
+		<Rectangle x:Name="spot5" Stroke="Black" HorizontalAlignment="Right" Margin="0,266,153,294" Width="87" Height="40" MouseLeftButtonDown="spot5_MouseLeftButtonDown" Fill="Black" Opacity="0"/>
+	</Grid>
+</UserControl>
