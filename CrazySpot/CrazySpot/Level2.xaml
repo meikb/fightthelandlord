@@ -7,12 +7,12 @@
 	x:Class="CrazySpot.Level2"
 	d:DesignWidth="640" d:DesignHeight="480" Width="800" Height="600">
 
-	<Grid x:Name="LayoutRoot">
-		<Image Margin="24,110,25,117" Source="LevelImage/Level2.jpg" Stretch="Fill"/>
-		<Rectangle x:Name="spot1" Fill="White" Stroke="Black" Height="47" HorizontalAlignment="Right" Margin="0,141,186,0" VerticalAlignment="Top" Width="57" Opacity="0" MouseLeftButtonDown="spot1_MouseLeftButtonDown"/>
-		<Rectangle x:Name="spot2" Fill="White" Stroke="Black" Height="27" HorizontalAlignment="Right" Margin="0,0,319,260" VerticalAlignment="Bottom" Width="45" Opacity="0" MouseLeftButtonDown="spot2_MouseLeftButtonDown"/>
-		<Rectangle x:Name="spot3" Fill="White" Stroke="Black" Height="47" HorizontalAlignment="Right" Margin="0,0,135,185" VerticalAlignment="Bottom" Width="53" Opacity="0" MouseLeftButtonDown="spot3_MouseLeftButtonDown"/>
-		<Rectangle x:Name="spot4" Fill="White" Stroke="Black" Height="47" HorizontalAlignment="Right" Margin="0,141,43,0" VerticalAlignment="Top" Width="53" Opacity="0" MouseLeftButtonDown="spot4_MouseLeftButtonDown"/>
-		<Rectangle x:Name="spot5" Fill="White" Stroke="Black" Height="26" HorizontalAlignment="Right" Margin="0,0,217,210" VerticalAlignment="Bottom" Width="38" Opacity="0" MouseLeftButtonDown="spot5_MouseLeftButtonDown"/>
-	</Grid>
+	<Canvas x:Name="LayoutRoot">
+		<Image Source="LevelImage/Level2.jpg" Stretch="Fill" Height="373" Width="751" Canvas.Left="24" Canvas.Top="110"/>
+		<Rectangle x:Name="spot1" Fill="White" Stroke="Black" Height="43" Width="51" Opacity="0" MouseLeftButtonDown="spot1_MouseLeftButtonDown" Canvas.Left="558" Canvas.Top="141"/>
+		<Rectangle x:Name="spot2" Fill="White" Stroke="Black" Height="27" Width="45" Opacity="0" MouseLeftButtonDown="spot2_MouseLeftButtonDown" Canvas.Left="429" Canvas.Top="308"/>
+		<Rectangle x:Name="spot3" Fill="White" Stroke="Black" Height="47" Width="53" Opacity="0" MouseLeftButtonDown="spot3_MouseLeftButtonDown" Canvas.Left="605" Canvas.Top="362"/>
+		<Rectangle x:Name="spot4" Fill="White" Stroke="Black" Height="47" Width="53" Opacity="0" MouseLeftButtonDown="spot4_MouseLeftButtonDown" Canvas.Left="699" Canvas.Top="138"/>
+		<Rectangle x:Name="spot5" Fill="White" Stroke="Black" Height="26" Width="38" Opacity="0" MouseLeftButtonDown="spot5_MouseLeftButtonDown" Canvas.Left="541" Canvas.Top="359"/>
+	</Canvas>
 </UserControl>
