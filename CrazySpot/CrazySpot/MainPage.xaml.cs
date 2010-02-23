@@ -29,7 +29,7 @@ namespace CrazySpot
 
         void MainPage_Loaded(object sender, RoutedEventArgs e)
         {
-            this.LayoutRoot.Children.Add(new Level2());
+            this.LayoutRoot.Children.Add(new Level4());
         }
 
         public void SetGameState(GameState state)

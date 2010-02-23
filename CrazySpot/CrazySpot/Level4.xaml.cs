@@ -10,14 +10,14 @@ using System.Windows.Shapes;
 
 namespace CrazySpot
 {
-	public partial class Level2 : UserControl
+	public partial class Level4 : UserControl
 	{
         bool spot1Find;
         bool spot2Find;
         bool spot3Find;
         bool spot4Find;
         bool spot5Find;
-		public Level2()
+		public Level4()
 		{
 			// 为初始化变量所必需
 			InitializeComponent();
@@ -62,6 +62,8 @@ namespace CrazySpot
             spot5Find = true;
             Check();
         }
+
+
         private void ShowRightIcon(Rectangle rect)
         {
             Right rightIcon = new Right();
@@ -79,7 +81,7 @@ namespace CrazySpot
         {
             if (spot1Find && spot2Find && spot3Find && spot4Find && spot5Find)
             {
-                MessageBox.Show("成功");
+                //MessageBox.Show("成功");
             }
         }
 	}
