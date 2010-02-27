@@ -81,7 +81,7 @@ namespace CrazySpot
         {
             if (spot1Find && spot2Find && spot3Find && spot4Find && spot5Find)
             {
-                //MessageBox.Show("成功");
+                MainPage.Instance.ShowNextLevelIcon();
             }
         }
 	}
