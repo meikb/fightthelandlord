@@ -1,0 +1,317 @@
+﻿<UserControl x:Class="CrazySpot.Login"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600">
+    <UserControl.Resources>
+        <Storyboard x:Name="Storyboard1">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="#FFFFE800"/>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="5"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard2">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock1" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="#FFFDF500"/>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock1" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="5"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard3">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="Black"/>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="#FFFDF500"/>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="5"/>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="0"/>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard4">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#FFFDF500">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="Black">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="5">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard5">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock1" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#FFFFE800">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="Black">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock1" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="5">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard6">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#FFFFF700">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="Black">
+                    <EasingColorKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingColorKeyFrame.EasingFunction>
+                </EasingColorKeyFrame>
+            </ColorAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock2" Storyboard.TargetProperty="(UIElement.Effect).(DropShadowEffect.ShadowDepth)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.2000000" Value="5">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseIn"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard7">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#20FFFFFF"/>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="#8099AD29"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#20FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard8">
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[0].(GradientStop.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#8099AD29"/>
+                <EasingColorKeyFrame KeyTime="00:00:00.2000000" Value="#20FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+            <ColorAnimationUsingKeyFrames BeginTime="00:00:00" Duration="00:00:00.0010000" Storyboard.TargetName="stackPanel" Storyboard.TargetProperty="(Panel.Background).(GradientBrush.GradientStops)[1].(GradientStop.Color)">
+                <EasingColorKeyFrame KeyTime="00:00:00" Value="#20FFFFFF"/>
+            </ColorAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard9">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.7000000" Value="-33">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.7000000" Value="33">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock4" Storyboard.TargetProperty="(TextBlock.Foreground).(GradientBrush.GradientStops)[2].(GradientStop.Offset)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.7000000" Value="0.483">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock4" Storyboard.TargetProperty="(TextBlock.Foreground).(GradientBrush.GradientStops)[3].(GradientStop.Offset)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00.7000000" Value="0.927">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <QuinticEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+        <Storyboard x:Name="Storyboard10">
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock3" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="-33">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock4" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="33">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock4" Storyboard.TargetProperty="(TextBlock.Foreground).(GradientBrush.GradientStops)[3].(GradientStop.Offset)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.927">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.75900000333786011">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+            <DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="textBlock4" Storyboard.TargetProperty="(TextBlock.Foreground).(GradientBrush.GradientStops)[2].(GradientStop.Offset)">
+                <EasingDoubleKeyFrame KeyTime="00:00:00" Value="0.491">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+                <EasingDoubleKeyFrame KeyTime="00:00:00.5000000" Value="0.3059999942779541">
+                    <EasingDoubleKeyFrame.EasingFunction>
+                        <BounceEase EasingMode="EaseOut"/>
+                    </EasingDoubleKeyFrame.EasingFunction>
+                </EasingDoubleKeyFrame>
+            </DoubleAnimationUsingKeyFrames>
+        </Storyboard>
+    </UserControl.Resources>
+    <Canvas Height="600" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center" >
+        <Canvas.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFF9937" Offset="0"/>
+                <GradientStop Color="#FFFFCC4C" Offset="1"/>
+            </LinearGradientBrush>
+        </Canvas.Background>
+        <Grid x:Name="LayoutRoot" Height="600" Width="800" HorizontalAlignment="Center" VerticalAlignment="Center">
+
+	        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFF9937" Offset="0"/>
+                <GradientStop Color="#FFFFCC4C" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+            <TextBlock x:Name="textBlock3" Margin="172,78,198,0" VerticalAlignment="Top" Text="Crazy Spot" TextWrapping="Wrap" FontSize="64" TextAlignment="Center" FontFamily="Comic Sans MS" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" MouseEnter="textBlock3_MouseEnter" MouseLeave="textBlock3_MouseLeave">
+				<TextBlock.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform/>
+						<SkewTransform/>
+						<RotateTransform/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</TextBlock.RenderTransform>
+				<TextBlock.Effect>
+					<DropShadowEffect BlurRadius="22" Opacity="0.68" Color="#FF99988E" ShadowDepth="0"/>
+				</TextBlock.Effect>
+				<TextBlock.Foreground>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#FF393938" Offset="0"/>
+						<GradientStop Color="#FF70591B" Offset="1"/>
+					</LinearGradientBrush>
+				</TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock x:Name="textBlock4" Margin="172,158,197,0" VerticalAlignment="Top" Text="Crazy Spot" TextWrapping="Wrap" FontSize="64" FontFamily="Comic Sans MS" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" d:LayoutOverrides="VerticalAlignment" TextAlignment="Center" Height="89.188">
+				<TextBlock.Effect>
+					<BlurEffect Radius="6"/>
+				</TextBlock.Effect>
+				<TextBlock.RenderTransform>
+					<TransformGroup>
+						<ScaleTransform ScaleX="-1" ScaleY="0.75"/>
+						<SkewTransform AngleY="0"/>
+						<RotateTransform Angle="-180"/>
+						<TranslateTransform/>
+					</TransformGroup>
+				</TextBlock.RenderTransform>
+				<TextBlock.Foreground>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#004E5409" Offset="0"/>
+						<GradientStop Color="#FFC8C322" Offset="1"/>
+						<GradientStop Color="#00959606" Offset="0.306"/>
+						<GradientStop Color="#6C41341B" Offset="0.7"/>
+					</LinearGradientBrush>
+				</TextBlock.Foreground>
+            </TextBlock>
+        </Grid>
+        <StackPanel x:Name="stackPanel" Height="169" Width="147" Canvas.Left="323" Canvas.Top="292" MouseEnter="stackPanel_MouseEnter" MouseLeave="stackPanel_MouseLeave">
+            <StackPanel.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#20FFFFFF" Offset="0"/>
+                    <GradientStop Color="#20FFFFFF" Offset="1"/>
+                </LinearGradientBrush>
+            </StackPanel.Background>
+            <TextBlock x:Name="textBlock" Text="游戏开始" TextWrapping="Wrap" FontSize="18.667" TextAlignment="Center" LineHeight="13.333" Margin="35,20,35,10" MouseEnter="textBlock_MouseEnter" MouseLeave="textBlock_MouseLeave" MouseLeftButtonDown="textBlock_MouseLeftButtonDown">
+				<TextBlock.Effect>
+					<DropShadowEffect BlurRadius="12"/>
+				</TextBlock.Effect>
+				<TextBlock.Foreground>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#FFED6F02" Offset="0"/>
+						<GradientStop Color="White" Offset="1"/>
+					</LinearGradientBrush>
+				</TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock x:Name="textBlock1" Text="游戏帮助" TextWrapping="Wrap" Margin="35,10" FontSize="18.667" TextAlignment="Center" MouseEnter="textBlock1_MouseEnter" MouseLeave="textBlock1_MouseLeave" MouseLeftButtonDown="textBlock1_MouseLeftButtonDown">
+				<TextBlock.Effect>
+					<DropShadowEffect BlurRadius="12"/>
+				</TextBlock.Effect>
+				<TextBlock.Foreground>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#FFED6F02" Offset="0"/>
+						<GradientStop Color="White" Offset="1"/>
+					</LinearGradientBrush>
+				</TextBlock.Foreground>
+            </TextBlock>
+            <TextBlock x:Name="textBlock2" Text="游戏退出" TextWrapping="Wrap" Margin="35,10" TextAlignment="Center" FontSize="18.667" MouseEnter="textBlock2_MouseEnter" MouseLeave="textBlock2_MouseLeave" MouseLeftButtonDown="textBlock2_MouseLeftButtonDown">
+				<TextBlock.Effect>
+					<DropShadowEffect BlurRadius="12"/>
+				</TextBlock.Effect>
+				<TextBlock.Foreground>
+					<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+						<GradientStop Color="#FFED6F02" Offset="0"/>
+						<GradientStop Color="White" Offset="1"/>
+					</LinearGradientBrush>
+				</TextBlock.Foreground>
+            </TextBlock>
+        </StackPanel>
+    </Canvas>
+</UserControl>

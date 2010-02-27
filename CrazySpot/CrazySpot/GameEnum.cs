@@ -13,12 +13,14 @@ namespace CrazySpot
 {
     public enum GameState
     {
+        GameMenu,
         GameStart,
+        GameOver,
+        Help,
         Level1,
         Level2,
         Level3,
         Level4,
-        Level5,
-        GameOver
+        Result,
     }
 }

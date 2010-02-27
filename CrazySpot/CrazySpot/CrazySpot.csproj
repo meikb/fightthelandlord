@@ -65,20 +65,34 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameEnum.cs" />
+    <Compile Include="Help.xaml.cs">
+      <DependentUpon>Help.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Level1.xaml.cs">
       <DependentUpon>Level1.xaml</DependentUpon>
     </Compile>
     <Compile Include="Level2.xaml.cs">
       <DependentUpon>Level2.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Login.xaml.cs">
+      <DependentUpon>Login.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="Help.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Level1.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Level2.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Login.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -149,6 +163,12 @@
     <Resource Include="LevelImage\Level7.jpg" />
     <Resource Include="LevelImage\Level8.jpg" />
     <Resource Include="LevelImage\Level9.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LevelImage\NextLevel.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LevelImage\Result.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\V3.0\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

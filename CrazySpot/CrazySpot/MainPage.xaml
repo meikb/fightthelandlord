@@ -3,8 +3,42 @@
 	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 	x:Class="CrazySpot.MainPage"
 	Width="800" Height="600">
+	<UserControl.Resources>
+		<Storyboard x:Name="sbNextLevel">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="imageNextLevel" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[3].(TranslateTransform.Y)">
+				<EasingDoubleKeyFrame KeyTime="00:00:00" Value="-133.5">
+					<EasingDoubleKeyFrame.EasingFunction>
+						<ElasticEase EasingMode="EaseOut"/>
+					</EasingDoubleKeyFrame.EasingFunction>
+				</EasingDoubleKeyFrame>
+				<EasingDoubleKeyFrame KeyTime="00:00:00.7000000" Value="99">
+					<EasingDoubleKeyFrame.EasingFunction>
+						<ElasticEase EasingMode="EaseOut"/>
+					</EasingDoubleKeyFrame.EasingFunction>
+				</EasingDoubleKeyFrame>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+	</UserControl.Resources>
 
-    <Grid x:Name="LayoutRoot" Background="White">
-        <Grid x:Name="GameMain" />
+    <Grid x:Name="LayoutRoot">
+	        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFFF9937" Offset="0"/>
+                <GradientStop Color="#FFFFCC4C" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+        <Border x:Name="GameMain" Margin="0"/>
+    	<ProgressBar x:Name="pbTimer" Height="22" Margin="30,0,24,18" VerticalAlignment="Bottom" Value="100"/>
+    	<Image x:Name="imageNextLevel" Margin="261,100,269,0" Source="LevelImage/NextLevel.png" Stretch="Fill" Height="160" VerticalAlignment="Top" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="imageNextLevel_MouseLeftButtonDown">
+    		<Image.RenderTransform>
+    			<TransformGroup>
+    				<ScaleTransform/>
+    				<SkewTransform/>
+    				<RotateTransform/>
+    				<TranslateTransform/>
+    			</TransformGroup>
+    		</Image.RenderTransform>
+    	</Image>
+    	<Image x:Name="imageResult" Margin="286,228,288,219" Source="LevelImage/Result.png" Stretch="Fill" MouseLeftButtonDown="imageResult_MouseLeftButtonDown"/>
     </Grid>
 </UserControl>
