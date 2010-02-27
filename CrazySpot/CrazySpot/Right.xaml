@@ -8,6 +8,6 @@
 	d:DesignWidth="640" d:DesignHeight="480" Width="32" Height="32">
 
 	<Border x:Name="LayoutRoot">
-		<Ellipse Stroke="#FFEEFD06" StrokeThickness="6"/>
+		<Ellipse Stroke="Red" StrokeThickness="6"/>
 	</Border>
 </UserControl>

@@ -65,6 +65,9 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="GameEnum.cs" />
+    <Compile Include="GameOver.xaml.cs">
+      <DependentUpon>GameOver.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Help.xaml.cs">
       <DependentUpon>Help.xaml</DependentUpon>
     </Compile>
@@ -80,6 +83,10 @@
     <Compile Include="MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="GameOver.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Help.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
@@ -112,6 +119,30 @@
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Level5.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Level6.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Level7.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Level8.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Level9.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Level10.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <None Include="favicon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <Visible>false</Visible>
@@ -125,6 +156,24 @@
     </Compile>
     <Compile Include="Level4.xaml.cs">
       <DependentUpon>Level4.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level5.xaml.cs">
+      <DependentUpon>Level5.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level6.xaml.cs">
+      <DependentUpon>Level6.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level7.xaml.cs">
+      <DependentUpon>Level7.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level8.xaml.cs">
+      <DependentUpon>Level8.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level9.xaml.cs">
+      <DependentUpon>Level9.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Level10.xaml.cs">
+      <DependentUpon>Level10.xaml</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -169,6 +218,9 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="LevelImage\Result.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="LevelImage\forg.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Microsoft\Silverlight\V3.0\Microsoft.Silverlight.CSharp.targets" />
   <ProjectExtensions>

@@ -30,6 +30,7 @@ namespace CrazySpot
         public Login()
         {
             InitializeComponent();
+            help.Visibility = Visibility.Collapsed;
         }
 
         private void textBlock_MouseEnter(object sender, MouseEventArgs e)
@@ -59,7 +60,7 @@ namespace CrazySpot
 
         private void textBlock1_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            MainPage.Instance.SetGameState(GameState.Help);
+            help.PlayAni();
         }
 
         private void textBlock2_MouseEnter(object sender, MouseEventArgs e)
