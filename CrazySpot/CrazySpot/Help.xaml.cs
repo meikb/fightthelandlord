@@ -41,7 +41,13 @@ namespace CrazySpot
 
         public void PlayAni()
         {
+            Visibility = Visibility.Visible;
             Storyboard2.Begin();
+        }
+
+        private void Storyboard1_Completed(object sender, EventArgs e)
+        {
+            //Visibility= Visibility.Collapsed;
         }
     }
 }

@@ -1,0 +1,14 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="CrazySpot.GameOver"
+	d:DesignWidth="640" d:DesignHeight="480" Width="320" Height="240">
+
+	<Canvas>
+		<Image Height="217" Width="291" Canvas.Left="12" Canvas.Top="11" Source="LevelImage/forg.png" Stretch="Fill"/>
+		<TextBlock Canvas.Left="8" Canvas.Top="53" FontSize="26.667" Foreground="#FF429517" TextWrapping="Wrap" Height="123" Width="121"><Run Text="闯关失败!"/><LineBreak/><Run Text="点击重新开始"/></TextBlock>
+	</Canvas>
+</UserControl>

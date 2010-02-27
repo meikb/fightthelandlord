@@ -42,6 +42,7 @@ namespace CrazySpot
             dtGameLoop.Interval = new TimeSpan(0, 0, 0, 0);
             imageNextLevel.Visibility = Visibility.Collapsed;
             imageResult.Visibility = Visibility.Collapsed;
+            gameOver.Visibility = Visibility.Collapsed;
 		}
 
         void dtGameLoop_Tick(object sender, EventArgs e)
@@ -95,20 +96,52 @@ namespace CrazySpot
                     dtGameLoop.Start();
                     startTime = DateTime.Now;
                     break;
-                //case GameState.Level5:
-                //    dtGameLoop.Start();
-                //    startTime = DateTime.Now;
-                //    break;
+                case GameState.Level5:
+                    GameMain.Child = new Level5();
+                    dtGameLoop.Start();
+                    startTime = DateTime.Now;
+                    break;
+                case GameState.Level6:
+                    GameMain.Child = new Level6();
+                    dtGameLoop.Start();
+                    startTime = DateTime.Now;
+                    break;
+                case GameState.Level7:
+                    GameMain.Child = new Level7();
+                    dtGameLoop.Start();
+                    startTime = DateTime.Now;
+                    break;
+                case GameState.Level8:
+                    GameMain.Child = new Level8();
+                    dtGameLoop.Start();
+                    startTime = DateTime.Now;
+                    break;
+                case GameState.Level9:
+                    GameMain.Child = new Level9();
+                    dtGameLoop.Start();
+                    startTime = DateTime.Now;
+                    break;
+                case GameState.Level10:
+                    GameMain.Child = new Level10();
+                    dtGameLoop.Start();
+                    startTime = DateTime.Now;
+                    break;
                 case GameState.GameOver:
-                    MessageBox.Show("GameOver");
+                    GameOver();
                     dtGameLoop.Stop();
                     break;
                 case GameState.Result:
                     imageResult.Visibility = Visibility.Visible;
+                    dtGameLoop.Stop();
                     break;
                 default:
                     break;
             }
+        }
+
+        public void GameOver()
+        {
+            gameOver.Visibility = Visibility.Visible;
         }
 
         public void ShowNextLevelIcon()
@@ -120,6 +153,7 @@ namespace CrazySpot
                 imageNextLevel.Visibility = Visibility.Visible;
                 sbNextLevel.Begin();
             }
+            dtGameLoop.Stop();
         }
 
         private void NextLevel()
@@ -136,6 +170,17 @@ namespace CrazySpot
         private void imageResult_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             SetGameState(GameState.GameMenu); //通关,返回主菜单
+        }
+
+        private void gameOver_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            SetGameState(GameState.Level1);
+            gameOver.Visibility = Visibility.Collapsed;
+        }
+
+        private void TextBlock_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+			SetGameState(GameState.GameMenu);
         }
 	}
 }
