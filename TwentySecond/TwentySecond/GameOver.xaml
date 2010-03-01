@@ -1,0 +1,16 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="TwentySecond.GameOver"
+	d:DesignWidth="640" d:DesignHeight="480" Width="320" Height="240">
+
+	<Grid x:Name="LayoutRoot">
+		<Rectangle Stroke="White" Height="47" Margin="43,49,45,0" VerticalAlignment="Top" StrokeDashArray="1 0 1"/>
+		<TextBlock x:Name="tbTimer" Margin="59,64,64,0" VerticalAlignment="Top" Text="TextBlock" TextWrapping="Wrap" Foreground="White" TextAlignment="Center" HorizontalAlignment="Center"/>
+		<TextBlock x:Name="tbEnterRestart" Height="24" Margin="95,0,95,70" VerticalAlignment="Bottom" Text="点击这里重新开始" TextWrapping="Wrap" Foreground="White" FontSize="16"/>
+		<Rectangle x:Name="clickTouch" Fill="White" Stroke="Black" Height="24" Margin="95,0,95,70" VerticalAlignment="Bottom" Opacity="0"/>
+	</Grid>
+</UserControl>
