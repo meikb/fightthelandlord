@@ -75,7 +75,7 @@ namespace CrazySpot
 
         private void textBlock2_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            //Page.currentState = GameState.Stop;
+
         }
 
         private void stackPanel_MouseEnter(object sender, MouseEventArgs e)

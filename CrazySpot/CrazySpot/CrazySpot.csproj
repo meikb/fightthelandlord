@@ -188,26 +188,6 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="LevelImage\Level10.jpg" />
-    <Resource Include="LevelImage\Level11.jpg" />
-    <Resource Include="LevelImage\Level12.jpg" />
-    <Resource Include="LevelImage\Level13.jpg" />
-    <Resource Include="LevelImage\Level14.jpg" />
-    <Resource Include="LevelImage\Level15.jpg" />
-    <Resource Include="LevelImage\Level16.jpg" />
-    <Resource Include="LevelImage\Level17.jpg" />
-    <Resource Include="LevelImage\Level18.jpg" />
-    <Resource Include="LevelImage\Level19.jpg" />
-    <Resource Include="LevelImage\Level20.jpg" />
-    <Resource Include="LevelImage\Level21.jpg" />
-    <Resource Include="LevelImage\Level22.jpg" />
-    <Resource Include="LevelImage\Level23.jpg" />
-    <Resource Include="LevelImage\Level24.jpg" />
-    <Resource Include="LevelImage\Level25.jpg" />
-    <Resource Include="LevelImage\Level26.jpg" />
-    <Resource Include="LevelImage\Level27.jpg" />
-    <Resource Include="LevelImage\Level28.jpg" />
-    <Resource Include="LevelImage\Level29.jpg" />
-    <Resource Include="LevelImage\Level30.jpg" />
     <Resource Include="LevelImage\Level6.jpg" />
     <Resource Include="LevelImage\Level7.jpg" />
     <Resource Include="LevelImage\Level8.jpg" />

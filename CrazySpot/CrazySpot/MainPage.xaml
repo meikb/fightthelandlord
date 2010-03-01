@@ -22,7 +22,7 @@
 		</Storyboard>
 	</UserControl.Resources>
 
-	<Grid x:Name="LayoutRoot">
+	<Grid x:Name="LayoutRoot" Width="800" Height=" 600">
 		<Grid.Background>
 			<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
 				<GradientStop Color="#FFFF9937" Offset="0"/>
