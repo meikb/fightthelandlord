@@ -1,0 +1,23 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="TwentySecond.GameMenu"
+	d:DesignWidth="320" d:DesignHeight="240">
+
+	<Canvas x:Name="LayoutRoot" Width="320" Height="240">
+		<TextBlock x:Name="tbStart" Canvas.Left="98" Canvas.Top="55" Text="开始游戏" TextWrapping="Wrap" FontSize="29.333" Foreground="White">
+			<TextBlock.Effect>
+				<DropShadowEffect BlurRadius="46" ShadowDepth="7" Direction="312"/>
+			</TextBlock.Effect>
+		</TextBlock>
+		<TextBlock x:Name="tbExplain" Canvas.Left="98" Canvas.Top="131" FontSize="29.333" Foreground="White" Text="游戏说明" TextWrapping="Wrap">
+			<TextBlock.Effect>
+				<DropShadowEffect BlurRadius="46" Direction="312" ShadowDepth="7"/>
+			</TextBlock.Effect>
+		</TextBlock>
+		
+	</Canvas>
+</UserControl>

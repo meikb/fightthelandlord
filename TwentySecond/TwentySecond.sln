@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentySecond", "TwentySecond\TwentySecond.csproj", "{8FE31E37-582B-4A4B-8039-65DA1F967961}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TwentySecond.Web", "TwentySecond.Web\TwentySecond.Web.csproj", "{B5327F1A-11E7-4938-89E5-E3DD137A45B0}"
+EndProject
+Global
+	GlobalSection(SubversionScc) = preSolution
+		Svn-Managed = True
+		Manager = AnkhSVN - Subversion Support for Visual Studio
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8FE31E37-582B-4A4B-8039-65DA1F967961}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8FE31E37-582B-4A4B-8039-65DA1F967961}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8FE31E37-582B-4A4B-8039-65DA1F967961}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8FE31E37-582B-4A4B-8039-65DA1F967961}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5327F1A-11E7-4938-89E5-E3DD137A45B0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5327F1A-11E7-4938-89E5-E3DD137A45B0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5327F1A-11E7-4938-89E5-E3DD137A45B0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5327F1A-11E7-4938-89E5-E3DD137A45B0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

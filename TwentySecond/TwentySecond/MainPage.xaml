@@ -1,0 +1,15 @@
+﻿<UserControl x:Class="TwentySecond.MainPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="600">
+    <Canvas x:Name="LayoutRoot" Width=" 800" Height=" 600">
+    <Canvas x:Name="GameCanvas" Width=" 800" Height=" 600" Background="Black" >
+            <Canvas.Clip>
+                <RectangleGeometry Rect="0,0,800,600"/>
+            </Canvas.Clip>
+            <TextBlock x:Name="tbTimer" Canvas.Left="675" Text="您已坚持:XXX秒" TextWrapping="Wrap" Foreground="White" Canvas.ZIndex="10000"/>
+
+    </Canvas>
+    </Canvas>
+</UserControl>
