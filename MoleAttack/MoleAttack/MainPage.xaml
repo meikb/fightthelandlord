@@ -1,0 +1,14 @@
+﻿<UserControl
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="d" xmlns:local="clr-namespace:MoleAttack" x:Class="MoleAttack.MainPage"
+    d:DesignWidth="640" d:DesignHeight="480" Width="800" Height="600">
+  <Canvas x:Name="LayoutRoot" Width="800" Height="600" >
+        <Canvas.Clip>
+            <RectangleGeometry Rect="0,0,800,600"/>
+        </Canvas.Clip>
+            <local:GameMain d:LayoutOverrides="Width, Height"/>
+            <local:MouseCursor x:Name="monseCursor" Canvas.Top="27" Height="95" Width="166" Canvas.Left="29"/>
+  </Canvas>
+</UserControl>
