@@ -69,6 +69,9 @@
     <Compile Include="GameOver.xaml.cs">
       <DependentUpon>GameOver.xaml</DependentUpon>
     </Compile>
+    <Compile Include="GameStart.xaml.cs">
+      <DependentUpon>GameStart.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Hole.xaml.cs">
       <DependentUpon>Hole.xaml</DependentUpon>
     </Compile>
@@ -97,6 +100,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="GameOver.xaml">
+      <Generator>MSBuild:MarkupCompilePass1</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="GameStart.xaml">
       <Generator>MSBuild:MarkupCompilePass1</Generator>
       <SubType>Designer</SubType>
     </Page>
