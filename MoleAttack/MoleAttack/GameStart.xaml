@@ -1,0 +1,31 @@
+﻿<UserControl
+	xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+	xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+	xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+	xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+	mc:Ignorable="d"
+	x:Class="MoleAttack.GameStart"
+	d:DesignWidth="640" Width="320" Height="79">
+		<UserControl.Resources>
+		<Storyboard x:Name="sbRock" AutoReverse="True" Completed="sbRock_Completed">
+			<DoubleAnimationUsingKeyFrames BeginTime="00:00:00" Storyboard.TargetName="tbStart" Storyboard.TargetProperty="(UIElement.RenderTransform).(TransformGroup.Children)[2].(RotateTransform.Angle)">
+				<EasingDoubleKeyFrame KeyTime="00:00:00" Value="-10"/>
+				<EasingDoubleKeyFrame KeyTime="00:00:00.3000000" Value="10"/>
+				<EasingDoubleKeyFrame KeyTime="00:00:00.6000000" Value="-10"/>
+			</DoubleAnimationUsingKeyFrames>
+		</Storyboard>
+		</UserControl.Resources>
+	<TextBlock x:Name="tbStart" FontFamily="Comic Sans MS" FontSize="48" Text="Game Start" TextAlignment="Center" TextWrapping="Wrap" Foreground="#FFFCC650" FontWeight="Bold" RenderTransformOrigin="0.5,0.5" MouseLeftButtonDown="tbStart_MouseLeftButtonDown">
+				<TextBlock.Effect>
+				<DropShadowEffect Color="White" ShadowDepth="0" BlurRadius="20"/>
+			</TextBlock.Effect>
+			<TextBlock.RenderTransform>
+				<TransformGroup>
+					<ScaleTransform/>
+					<SkewTransform/>
+					<RotateTransform/>
+					<TranslateTransform/>
+				</TransformGroup>
+			</TextBlock.RenderTransform>
+	</TextBlock>
+</UserControl>

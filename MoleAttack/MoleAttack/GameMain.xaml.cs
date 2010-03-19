@@ -53,6 +53,7 @@ namespace MoleAttack
             Loaded += new RoutedEventHandler(GameMain_Loaded);
             gameOver.Visibility = Visibility.Collapsed;
             gameOver.Click += new RoutedEventHandler(gameOver_Click);
+            gameStart.Click += new Action(gameStart_Click);
 		}
 
         void gameOver_Click(object sender, RoutedEventArgs e)
@@ -69,8 +70,7 @@ namespace MoleAttack
         {
             gameLoop.Tick += new EventHandler(gameLoop_Tick);
             gameLoop.Interval = TimeSpan.FromMilliseconds(currentSpeed);
-            gameLoop.Start();
-            startTime = DateTime.Now;
+            //gameLoop.Start();
             foreach (var uie in gridHoles.Children)
             {
                 if (uie is Hole)
@@ -137,6 +137,13 @@ namespace MoleAttack
             long tick = DateTime.Now.Ticks;
             Random r = new Random((int)(tick & 0xffffffffL) | (int)(tick >> 32));
             return r.Next(0, holes.Count);
+        }
+
+        private void gameStart_Click()
+        {
+            gameLoop.Start();
+            startTime = DateTime.Now;
+            gridHoles.Children.Remove(gameStart);
         }
 	}
 }
