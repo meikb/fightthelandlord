@@ -43,7 +43,7 @@ namespace MoleAttack
 
         void MainPage_MouseMove(object sender, MouseEventArgs e)
         {
-            Point nowPoint = e.GetPosition(this);
+            Point nowPoint = e.GetPosition(LayoutRoot);
             Canvas.SetLeft(monseCursor, nowPoint.X - 100);
             Canvas.SetTop(monseCursor, nowPoint.Y - 70);
         }
