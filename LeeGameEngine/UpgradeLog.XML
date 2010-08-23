@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="LeeGameEngine">
+</Property><Property Name="Solution File" Value="E:\Code\LeeGameEngine\LeeGameEngine.sln">
+</Property><Property Name="Date" Value="2010年8月23日">
+</Property><Property Name="Time" Value="10:26:24">
+</Property></Properties><Event ErrorLevel="0" Project="LeeGameEngine" Source="LeeGameEngine.csproj" Description="Project file successfully backed up as E:\Code\LeeGameEngine\Backup\LeeGameEngine.csproj">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="LeeGameEngine.csproj.user" Description="Project user file successfully backed up as E:\Code\LeeGameEngine\Backup\LeeGameEngine.csproj.user">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="App.xaml.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\App.xaml.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Base\BaseObject.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Base\BaseObject.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Base\BaseSprite.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Base\BaseSprite.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Base\GameRoot.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Base\GameRoot.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Base\GameSound.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Base\GameSound.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Base\SceneManager.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Base\SceneManager.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Base\SoundManager.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Base\SoundManager.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="MainPage.xaml.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\MainPage.xaml.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Properties\AssemblyInfo.cs" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Properties\AssemblyInfo.cs">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="Properties\AppManifest.xml" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\Properties\AppManifest.xml">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="App.xaml" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\App.xaml">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="MainPage.xaml" Description="File successfully backed up as E:\Code\LeeGameEngine\Backup\MainPage.xaml">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="LeeGameEngine.csproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="LeeGameEngine" Source="LeeGameEngine.csproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="LeeGameEngine" Source="LeeGameEngine.csproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>
